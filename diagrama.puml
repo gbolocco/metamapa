@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+class Administrador{
+-usuario:String
+-password:String
++crearColeccion()
+}
+
+class Contribuyente{
+-nombre:String
+-apellido:String
+-edad:Integer
++navegarHechos()
++navegarHechosSegunfiltros()
++solicitarEliminarHecho()
+
+}
+
+class Hecho{
+-titulo:String
+-descripcion:String
+-categoria:String
+-ubicacion:Ubicacion
+-fechaAcontecimiento:LocalDate
+-fechaDeCarga:LocalDate
+-originHecho:OriginHecho
+}
+
+class Ubicacion{
+-latitud:Integer
+-longitud:Interger
+
+}
+
+class Coleccion{
+-titulo:String
+-descripcion:String
+-criteriosDePertenencia:List<CriterioDePertenencia>
+-fuente:Fuente
+-hechos:List<Hechos>
+
+}
+
+
+
+@enduml
