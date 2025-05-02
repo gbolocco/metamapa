@@ -1,6 +1,4 @@
-package ar.edu.utn.frba.dds;
-import java.util.ArrayList;
-import java.util.List;
+package ar.edu.utn.frba.dds.usuarios;
 
 
 public class Administrador {
@@ -12,8 +10,8 @@ public class Administrador {
     this.Password = Password;
 
   }
-
+/*
   public void crearColeccion(){
     ColectionManager.crearColeccion();
-  }
+  }*/
 }

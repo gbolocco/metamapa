@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds;
 
 public class Ubicacion {
-  private Integer latitud;
-  private Integer longitud;
+  private Double latitud;
+  private Double longitud;
 
-  public Ubicacion(Integer latitud, Integer longitud) {
+  public Ubicacion(Double latitud, Double longitud) {
     if(esCoordenadaValida(latitud, longitud)){
 
     this.latitud = latitud;
@@ -15,5 +15,13 @@ public class Ubicacion {
   public boolean esCoordenadaValida(double latitud, double longitud) {
     return (latitud >= -90 && latitud <= 90) &&
         (longitud >= -180 && longitud <= 180);
+  }
+
+  public Double getLatitud() {
+    return latitud;
+  }
+
+  public Double getLongitud() {
+    return longitud;
   }
 }

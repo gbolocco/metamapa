@@ -1,7 +1,7 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.usuarios;
 
 public class Contribuyente {
-  private String nombre;
+  /*private String nombre;
   private String apellido;
   private Integer edad;
 
@@ -25,6 +25,6 @@ public class Contribuyente {
     coleccion.verHechos(filtros);
   }
 
-
+*/
 }
 
