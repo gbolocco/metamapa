@@ -1,0 +1,11 @@
+un visitante puede eliminar un hecho sin estar logeado/registrada
+Respecto a sí mantener una única o múltiples fuentes, lo ideal sería que mantengas una fuente para cada archivo, dado que cada uno representa un conjunto de datos distinto.
+Otra duda es sobre los roles, el visualizador y el contribuyente pueden hacer lo mismo?
+
+Ambos roles describen a una persona que navega el sitio, pero utilizamos el término visualizador para describir a aquellas personas que sólo navegan, mientras que usamos contribuyente para aquellas que además aportan hechos.
+
+Por otro lado, ambos roles pueden solicitar eliminar hechos: no es necesario que hayas dado de alta un hecho antes.
+
+Y el administrador, puede navegar los hechos y generar solicitudes de eliminacion?
+
+Sí, cualquiera puede realizar estas acciones, aún sin estar la persona registrada.
