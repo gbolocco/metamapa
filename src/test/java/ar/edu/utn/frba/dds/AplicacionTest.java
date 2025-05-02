@@ -5,13 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import ar.edu.utn.frba.dds.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroContieneTexto;
+import ar.edu.utn.frba.dds.filtros.FiltroFecha;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AplicacionTest {
-
 
   @Test
   public void navegarHechosPorColeccionSegunFiltros() {
@@ -22,12 +23,13 @@ public class AplicacionTest {
     hechos =lector.leerHechosDesdeCSV(fuente.getPathArchivo());
     FiltroContieneTexto filtro1 = new FiltroContieneTexto("La Rioja", CampoDeHecho.TITULO);
     FiltroContieneTexto filtro2 = new FiltroContieneTexto("Vientos huracanados", CampoDeHecho.DESCRIPCION);
-
+    LocalDate fecha1 =  LocalDate.of(2014,1,1);
+    LocalDate fecha2 =  LocalDate.of(2015,1,1);
+    FiltroFecha filtroFecha= new FiltroFecha(fecha1,fecha2);
     List<Filtro> criterioDePertenencia= new ArrayList<>();
 
     criterioDePertenencia.add(filtro1);
-    criterioDePertenencia.add(filtro2);
-
+    criterioDePertenencia.add(filtroFecha);
 
     Coleccion coleccion= new Coleccion("Vientos","Devastador Vientos",criterioDePertenencia,fuente,hechos);
     coleccion.imprimirHechosFiltrados(criterioDePertenencia);

@@ -22,7 +22,6 @@ public class Hecho {
     this.originHecho=originHecho;
   }
 
-
   public void eliminarHecho (){
     this.fueEliminado=true;
   }

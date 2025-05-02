@@ -13,12 +13,9 @@ public class LectorCSV {
 
   public static List<Hecho> leerHechosDesdeCSV(String rutaArchivo) {
     List<Hecho> hechos = new ArrayList<>();
-
-
     LocalDate fechaCarga = LocalDate.now();
+
     OriginHecho origen = OriginHecho.FUENTE;
-
-
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     try (CSVReader reader = new CSVReader(new FileReader(rutaArchivo))) {
@@ -28,16 +25,13 @@ public class LectorCSV {
       String[] fila;
       while ((fila = reader.readNext()) != null) {
         try {
-
           if (fila.length >= 6) {
-
             String titulo = fila[0].trim();
             String descripcion = fila[1].trim();
             String categoria = fila[2].trim();
             double latitud = Double.parseDouble(fila[3].trim());
             double longitud = Double.parseDouble(fila[4].trim());
             LocalDate fechaHecho = LocalDate.parse(fila[5].trim(), formatter);
-
 
             Hecho hecho = new Hecho(
                 titulo,
