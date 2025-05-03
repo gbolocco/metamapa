@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds;
 
+import ar.edu.utn.frba.dds.Lectores.Lector;
+import ar.edu.utn.frba.dds.Lectores.LectorFactory;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class Coleccion {
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
   private List<Hecho> hechos;
-
+  //constructor
   public Coleccion(String titulo, String descripcion, List<Filtro> criteriosDePertenencia, Fuente fuente) {
     this.titulo = titulo;
     this.descripcion = descripcion;
@@ -19,17 +21,35 @@ public class Coleccion {
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
   }
+  //geterss
 
-  public Coleccion visualizarHechos(List<Filtro> filtros) {
+  public String nombre() {
+    return this.titulo;
+  }
+  public List<Hecho> getHechos() {
+    return this.hechos;
+  }
+
+  //metodos relacionados a los hechos
+
+  public void visualizarHechos(List<Filtro> filtros) {
     System.out.println("\n=== HECHOS CARGADOS ===");
     imprimirHechosFiltrados(filtros);
-    return null;
   }
 
-  public void cargarHechosDesdeFuente() {//despues lector csv habria que instanciarlo y vendria dado en la fuente el tipo de lector que deberia usarse con una interfaz
+  public void cargarHechosDesdeFuente() {
+    String ruta = this.fuente.getPathArchivo();
+    TipoArchivo tipo = this.fuente.getTipoArchivo();
 
-    LectorCSV.leerHechosDesdeCSV(this.fuente.getPathArchivo()).forEach(hecho -> {if (this.aplicarFiltrosAUnHecho(criteriosDePertenencia, hecho)) {this.hechos.add(hecho);}});
+    Lector lector = LectorFactory.crearLector(tipo); // Usa la fábrica que vimos antes
+
+    lector.leer(ruta).forEach(hecho -> {
+      if (this.aplicarFiltrosAUnHecho(criteriosDePertenencia, hecho)) {
+        this.hechos.add(hecho);
+      }
+    });
   }
+
 
   private void imprimirHecho(Hecho hecho){
   System.out.println("  Título: " + hecho.getTitulo());
@@ -42,12 +62,7 @@ public class Coleccion {
     System.out.println("  Fecha de carga: " + hecho.getFechaDeCarga());
     System.out.println("  Origen: " + hecho.getOriginHecho());
     }
-  public String nombre() {
-    return this.titulo;
-  }
-  public List<Hecho> getHechos() {
-    return this.hechos;
-  }
+
   public void imprimirHechosFiltrados(List<Filtro> filtros) {
     long total = this.hechos.stream()
         .filter(hecho -> filtros.isEmpty() || this.aplicarFiltrosAUnHecho(filtros, hecho))

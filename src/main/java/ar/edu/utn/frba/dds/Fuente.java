@@ -11,6 +11,10 @@ public class Fuente {
   public String getPathArchivo() {
     return pathArchivo;
   }
+
+  public TipoArchivo getTipoArchivo() {
+    return tipoArchivo;
+  }
 }
 
 
