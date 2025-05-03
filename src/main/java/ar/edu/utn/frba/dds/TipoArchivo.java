@@ -1,5 +1,5 @@
 package ar.edu.utn.frba.dds;
 
-enum TipoArchivo {
+public enum TipoArchivo {
   CSV
 }

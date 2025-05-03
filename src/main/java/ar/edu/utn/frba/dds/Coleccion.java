@@ -12,21 +12,23 @@ public class Coleccion {
   private Fuente fuente;
   private List<Hecho> hechos;
 
-  public Coleccion(String titulo, String descripcion, List<Filtro> criteriosDePertenencia, Fuente fuente,List<Hecho> hechos) {
+  public Coleccion(String titulo, String descripcion, List<Filtro> criteriosDePertenencia, Fuente fuente) {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.criteriosDePertenencia = criteriosDePertenencia;
     this.fuente = fuente;
-    this.hechos = hechos;
+    this.hechos = new ArrayList<>();
   }
 
-  public void visualizarHechos() {
+  public Coleccion visualizarHechos(List<Filtro> filtros) {
     System.out.println("\n=== HECHOS CARGADOS ===");
-    System.out.println("Total: " + hechos.size() + " hechos\n");
-    this.hechos.forEach(hecho-> {
-      this.imprimirHecho(hecho);
-      System.out.println();
-    });
+    imprimirHechosFiltrados(filtros);
+    return null;
+  }
+
+  public void cargarHechosDesdeFuente() {//despues lector csv habria que instanciarlo y vendria dado en la fuente el tipo de lector que deberia usarse con una interfaz
+
+    LectorCSV.leerHechosDesdeCSV(this.fuente.getPathArchivo()).forEach(hecho -> {if (this.aplicarFiltrosAUnHecho(criteriosDePertenencia, hecho)) {this.hechos.add(hecho);}});
   }
 
   private void imprimirHecho(Hecho hecho){
@@ -40,16 +42,26 @@ public class Coleccion {
     System.out.println("  Fecha de carga: " + hecho.getFechaDeCarga());
     System.out.println("  Origen: " + hecho.getOriginHecho());
     }
+  public String nombre() {
+    return this.titulo;
+  }
+  public List<Hecho> getHechos() {
+    return this.hechos;
+  }
+  public void imprimirHechosFiltrados(List<Filtro> filtros) {
+    long total = this.hechos.stream()
+        .filter(hecho -> filtros.isEmpty() || this.aplicarFiltrosAUnHecho(filtros, hecho))
+        .peek(hecho -> {
+          this.imprimirHecho(hecho);
+          System.out.println();
+        })
+        .count();
 
-
-  public void imprimirHechosFiltrados(List<Filtro> filtros){
-    this.hechos.stream().forEach(hecho -> {
-      if(this.aplicarFiltrosAUnHecho(filtros,hecho) ){
-        this.imprimirHecho(hecho);
-      }});
+    System.out.println("Total de hechos: " + total);
   }
 
+
   private boolean aplicarFiltrosAUnHecho(List<Filtro> filtros,Hecho hecho){
-    return filtros.stream().allMatch(filtro->filtro.cumpleFiltro(hecho));
+    return filtros.stream().allMatch(filtro->filtro.cumpleFiltro(hecho)) && ColectionManager.hechosEliminados.stream().noneMatch(eliminado->eliminado.getTitulo().equals(hecho.getTitulo()));
   }
 }

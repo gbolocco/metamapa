@@ -1,7 +1,13 @@
 package ar.edu.utn.frba.dds.usuarios;
 
+import ar.edu.utn.frba.dds.Coleccion;
+import ar.edu.utn.frba.dds.ColectionManager;
+import ar.edu.utn.frba.dds.Hecho;
+import ar.edu.utn.frba.dds.filtros.Filtro;
+import java.util.List;
+
 public class Contribuyente {
-  /*private String nombre;
+  private String nombre;
   private String apellido;
   private Integer edad;
 
@@ -17,14 +23,15 @@ public class Contribuyente {
   private boolean esMayorDeEdad(){
     return this.edad != null && this.edad >=18 ;
   }
-  public void navegarHechosPorColeccion(Coleccion coleccion) {
-      coleccion.verHechos(null);
+  public void navegarHechosPorColeccionSegunFiltros(Coleccion coleccion, List<Filtro> filtros) {
+    coleccion.visualizarHechos(filtros);
   }
-  public void navegarHechosPorColeccionSegunFiltros(Coleccion coleccion, Filtros Filtros) {
+  public void solicitarEliminacionHecho(String nombreHecho) {
+    Hecho hecho = ColectionManager.buscarHechoPorNombreDentroDeColecciones(nombreHecho);
+    ColectionManager.solicitudEliminacionHecho(nombreHecho);
+    System.out.println("Solicitud de eliminacion pendiente de confirmacion del Hecho: "+ hecho.getTitulo());
 
-    coleccion.verHechos(filtros);
   }
 
-*/
 }
 
