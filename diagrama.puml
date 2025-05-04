@@ -1,46 +1,218 @@
 @startuml
 'https://plantuml.com/sequence-diagram
 
-class Administrador{
--usuario:String
--password:String
-+crearColeccion()
-}
-
-class Contribuyente{
--nombre:String
--apellido:String
--edad:Integer
-+navegarHechos()
-+navegarHechosSegunfiltros()
-+solicitarEliminarHecho()
-
-}
-
-class Hecho{
--titulo:String
--descripcion:String
--categoria:String
--ubicacion:Ubicacion
--fechaAcontecimiento:LocalDate
--fechaDeCarga:LocalDate
--originHecho:OriginHecho
-}
-
-class Ubicacion{
--latitud:Integer
--longitud:Interger
+class Coleccion {
+    - titulo: String
+    - descripcion: String
+    - criteriosDePertenencia: List<Filtro>
+    - fuente: Fuente
+    - hechos: List<Hecho>
+    + Coleccion(String, String, List<Filtro>, Fuente)
+    + nombre(): String
+    + getHechos(): List<Hecho>
+    + visualizarHechos(List<Filtro>): void
+    + cargarHechosDesdeFuente(): void
+    + imprimirHechosFiltrados(List<Filtro>): void
 
 }
 
-class Coleccion{
--titulo:String
--descripcion:String
--criteriosDePertenencia:List<CriterioDePertenencia>
--fuente:Fuente
--hechos:List<Hechos>
+class ColectionManager {
+  - colecciones: List<Coleccion>
+  - hechosEliminados: List<Hecho>
+  - solicitudesEliminacionHechos: List<SolicitudEliminacion>
 
+  + ColectionManager()
+  + crearColeccion(nombre: String, descripcion: String, filtros: List<Filtro>, fuente: Fuente): void
+  + getColeccion(nombre: String): Coleccion
+  + solicitudEliminacionHecho(nombreHecho: String, justificacion: String): void
+  + buscarHechoPorNombreDentroDeColecciones(nombreHecho: String): Hecho
+  + fueAceptada(solicitudEliminacion: SolicitudEliminacion): void
+  + fueRechazada(solicitudEliminacion: SolicitudEliminacion): void
+  + getSolicitudesEliminacionHechos(): List<SolicitudEliminacion>
 }
+
+enum EstadoSolicitud {
+  PENDIENTE
+  ACEPTADA
+  RECHAZADA
+}
+
+class Fuente {
+  - tipoArchivo: TipoArchivo
+  - pathArchivo: String
+
+  + Fuente(tipoArchivo: TipoArchivo, pathArchivo: String)
+  + getPathArchivo(): String
+  + getTipoArchivo(): TipoArchivo
+}
+
+enum TipoArchivo {
+  CSV
+}
+
+class Hecho {
+  - titulo: String
+  - descripcion: String
+  - categoria: String
+  - ubicacion: Ubicacion
+  - fechaAcontecimiento: LocalDate
+  - fechaDeCarga: LocalDate
+  - originHecho: OriginHecho
+  - fueEliminado: Boolean = false
+
+  + Hecho(titulo: String, descripcion: String, categoria: String, ubicacion: Ubicacion, fechaAcontecimiento: LocalDate, fechaDeCarga: LocalDate, originHecho: OriginHecho)
+  + eliminarHecho(): void
+  + getFueEliminado(): Boolean
+  + getTitulo(): String
+  + getDescripcion(): String
+  + getCategoria(): String
+  + getUbicacion(): Ubicacion
+  + getFechaAcontecimiento(): LocalDate
+  + getFechaDeCarga(): LocalDate
+  + getOriginHecho(): OriginHecho
+}
+
+class Ubicacion {
+  - latitud: Double
+  - longitud: Double
+  + Ubicacion(latitud: Double, longitud: Double)
+  + esCoordenadaValida(latitud: Double, longitud: Double): boolean
+  + getLatitud(): Double
+  + getLongitud(): Double
+}
+
+enum OriginHecho {
+  CARGAMANUAL
+  FUENTE
+  PROVISTO_POR_CONTRIBUYENTE
+}
+
+class SolicitudEliminacion {
+  - hecho: Hecho
+  - justificacion: String
+  - estado: EstadoSolicitud
+  - fechaSolicitud: Date
+
+  + SolicitudEliminacion(hecho: Hecho, justificacion: String)
+  + aceptar(): void
+  + rechazar(): void
+  + getHecho(): Hecho
+}
+
+'filtros:'
+
+package "filtros" {
+      '### Clase Abstracta Principal
+      abstract class Filtro {
+        {abstract} + cumpleFiltro(hecho: Hecho): boolean
+      }
+
+    class Filtro {
+      + cumpleFiltro(hecho: Hecho): boolean
+    }
+
+    class FiltroFecha {
+      - fechaDesde: LocalDate
+      - fechaHasta: LocalDate
+      - campoDeHechoAplicado: CampoDeHecho = FECHA_ACONTECIMIENTO
+      + FiltroFecha(fechaDesde: LocalDate, fechaHasta: LocalDate)
+      + cumpleFiltro(hecho: Hecho): boolean
+    }
+
+    class FiltroContieneTexto {
+      - textoClave: String
+      - campoDeHechoAplicado: CampoDeHecho
+      + FiltroContieneTexto(textoClave: String, campoDeHechoAplicado: CampoDeHecho)
+      + cumpleFiltro(hecho: Hecho): boolean
+    }
+}
+
+enum CampoDeHecho {
+  TITULO
+  DESCRIPCION
+  CATEGORIA
+  FECHA_ACONTECIMIENTO
+  UBICACION
+  + obtenerValor(hecho: Hecho): T
+}
+
+'Usuarios:'
+
+package "usuarios" {
+    class Administrador {
+        - Usuario: String
+        - Password: String
+        + Administrador(Usuario: String, Password: String)
+        + crearColeccion(nombre: String, descripcion: String, pathArchivo: String, filtros: List<Filtro>, tipoArchivo: TipoArchivo): void
+        + importarDatosDeFuenteAColeccion(nombreColeccion: String): void
+        + verSolicitudesEliminacion(): void
+        + aceptarSolicitudEliminacion(nombreHecho: String): void
+        + obtenerSolicitudesEliminacion(): List<SolicitudEliminacion>
+    }
+
+    class Contribuyente {
+        - nombre: String
+        - apellido: String
+        - edad: Integer
+        + Contribuyente(nombre: String, apellido: String, edad: Integer)
+        - esMayorDeEdad(): boolean
+        + navegarHechosPorColeccionSegunFiltros(coleccion: Coleccion, filtros: List<Filtro>): void
+        + solicitarEliminacionHecho(nombreHecho: String, justificacion: String): void
+    }
+}
+
+'Lectores:'
+package "lectores" {
+    interface Lector {
+        + leer(rutaArchivo: String): List<Hecho>
+    }
+
+    class LectorCSV {
+        + leer(rutaArchivo: String): List<Hecho>
+    }
+
+    class LectorFactory {
+        + crearLector(tipo: TipoArchivo): Lector
+    }
+}
+
+' === RELACIONES ACTUALIZADAS Y LIMPIAS ===
+
+' === COLECTIONMANAGER ===
+ColectionManager --> Coleccion
+ColectionManager -->"*" SolicitudEliminacion
+
+' === COLECCION ===
+Coleccion --> Hecho
+Coleccion --> Fuente
+
+' === FUENTE ===
+Fuente --> TipoArchivo
+
+' === HECHO ===
+Hecho --> Ubicacion
+Hecho --> OriginHecho
+
+' === SOLICITUD ELIMINACION ===
+SolicitudEliminacion --> EstadoSolicitud
+
+' === FILTROS ===
+Filtro <|-- FiltroContieneTexto
+Filtro <|-- FiltroFecha
+FiltroContieneTexto --> CampoDeHecho
+FiltroFecha --> CampoDeHecho
+
+' === USUARIOS ===
+Contribuyente --> Filtro
+Contribuyente --> SolicitudEliminacion
+Contribuyente <|-- Administrador
+Administrador --> ColectionManager
+
+' === LECTORES ===
+Lector <|.. LectorCSV
+LectorFactory --> Lector
+LectorFactory --> TipoArchivo
+LectorCSV --> Hecho
 
 
 
