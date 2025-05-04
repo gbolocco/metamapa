@@ -8,9 +8,17 @@ public class SolicitudEliminacion {
   EstadoSolicitud estadoSolicitud;
   Date fechaSolicitud;
 
-  public SolicitudEliminacion(Hecho hecho) {
+  public SolicitudEliminacion(Hecho hecho, String justificacion) {
+
+    if (justificacion == null) {
+      throw new IllegalArgumentException("La justificación no puede ser nula");
+    }
+    if (justificacion.length() > 500) {
+      throw new IllegalArgumentException("La justificación no puede superar los 500 caracteres");
+    }
+
     this.hecho=hecho;
-    this.justificacion="";
+    this.justificacion=justificacion;
     this.estadoSolicitud=EstadoSolicitud.PENDIENTE;
     this.fechaSolicitud=new Date();
   }

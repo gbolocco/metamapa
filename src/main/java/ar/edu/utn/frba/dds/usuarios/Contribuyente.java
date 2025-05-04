@@ -26,9 +26,9 @@ public class Contribuyente {
   public void navegarHechosPorColeccionSegunFiltros(Coleccion coleccion, List<Filtro> filtros) {
     coleccion.visualizarHechos(filtros);
   }
-  public void solicitarEliminacionHecho(String nombreHecho) {
+  public void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
     Hecho hecho = ColectionManager.buscarHechoPorNombreDentroDeColecciones(nombreHecho);
-    ColectionManager.solicitudEliminacionHecho(nombreHecho);
+    ColectionManager.solicitudEliminacionHecho(nombreHecho, justificacion);
     System.out.println("Solicitud de eliminacion pendiente de confirmacion del Hecho: "+ hecho.getTitulo());
 
   }

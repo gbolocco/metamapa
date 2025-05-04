@@ -24,11 +24,11 @@ public class ColectionManager {
         .findFirst()
         .orElse(null); // lanzar excepción en el caso de que no este
   }
-  public static void solicitudEliminacionHecho(String nombreHecho){
+  public static void solicitudEliminacionHecho(String nombreHecho, String justificacion){
     if (buscarHechoPorNombreDentroDeColecciones(nombreHecho)==null){
       throw new IllegalArgumentException("No existe un hecho con el nombre: "+nombreHecho);
     }else {
-      SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(buscarHechoPorNombreDentroDeColecciones(nombreHecho));
+      SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(buscarHechoPorNombreDentroDeColecciones(nombreHecho), justificacion);
       solicitudesEliminacionHechos.add(nuevaSolicitud);
     }
 
