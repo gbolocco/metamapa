@@ -9,7 +9,6 @@ class Coleccion {
     - hechos: List<Hecho>
     + Coleccion(String, String, List<Filtro>, Fuente)
     + nombre(): String
-    + getHechos(): List<Hecho>
     + visualizarHechos(List<Filtro>): void
     + cargarHechosDesdeFuente(): void
     + imprimirHechosFiltrados(List<Filtro>): void
@@ -23,12 +22,11 @@ class ColectionManager {
 
   + ColectionManager()
   + crearColeccion(nombre: String, descripcion: String, filtros: List<Filtro>, fuente: Fuente): void
-  + getColeccion(nombre: String): Coleccion
   + solicitudEliminacionHecho(nombreHecho: String, justificacion: String): void
   + buscarHechoPorNombreDentroDeColecciones(nombreHecho: String): Hecho
   + fueAceptada(solicitudEliminacion: SolicitudEliminacion): void
   + fueRechazada(solicitudEliminacion: SolicitudEliminacion): void
-  + getSolicitudesEliminacionHechos(): List<SolicitudEliminacion>
+
 }
 
 enum EstadoSolicitud {
@@ -42,8 +40,6 @@ class Fuente {
   - pathArchivo: String
 
   + Fuente(tipoArchivo: TipoArchivo, pathArchivo: String)
-  + getPathArchivo(): String
-  + getTipoArchivo(): TipoArchivo
 }
 
 enum TipoArchivo {
@@ -62,14 +58,7 @@ class Hecho {
 
   + Hecho(titulo: String, descripcion: String, categoria: String, ubicacion: Ubicacion, fechaAcontecimiento: LocalDate, fechaDeCarga: LocalDate, originHecho: OriginHecho)
   + eliminarHecho(): void
-  + getFueEliminado(): Boolean
-  + getTitulo(): String
-  + getDescripcion(): String
-  + getCategoria(): String
-  + getUbicacion(): Ubicacion
-  + getFechaAcontecimiento(): LocalDate
-  + getFechaDeCarga(): LocalDate
-  + getOriginHecho(): OriginHecho
+
 }
 
 class Ubicacion {
@@ -77,8 +66,7 @@ class Ubicacion {
   - longitud: Double
   + Ubicacion(latitud: Double, longitud: Double)
   + esCoordenadaValida(latitud: Double, longitud: Double): boolean
-  + getLatitud(): Double
-  + getLongitud(): Double
+
 }
 
 enum OriginHecho {
@@ -96,7 +84,6 @@ class SolicitudEliminacion {
   + SolicitudEliminacion(hecho: Hecho, justificacion: String)
   + aceptar(): void
   + rechazar(): void
-  + getHecho(): Hecho
 }
 
 'filtros:'
@@ -106,10 +93,6 @@ package "filtros" {
       abstract class Filtro {
         {abstract} + cumpleFiltro(hecho: Hecho): boolean
       }
-
-    class Filtro {
-      + cumpleFiltro(hecho: Hecho): boolean
-    }
 
     class FiltroFecha {
       - fechaDesde: LocalDate
@@ -179,40 +162,80 @@ package "lectores" {
 ' === RELACIONES ACTUALIZADAS Y LIMPIAS ===
 
 ' === COLECTIONMANAGER ===
-ColectionManager --> Coleccion
+'=== Asociaciones ==='
+ColectionManager --> "*" Coleccion
+ColectionManager --> "*" Hecho
 ColectionManager -->"*" SolicitudEliminacion
+'=== Dependencias ==='
+ColectionManager ..> Filtro
+ColectionManager ..> Fuente
 
 ' === COLECCION ===
-Coleccion --> Hecho
+'=== Asociaciones ==='
+Coleccion -->"*"Filtro
+Coleccion --> "*"Hecho
 Coleccion --> Fuente
+'=== Dependencias ==='
+Coleccion ..> TipoArchivo
+Coleccion ..> Lector
 
 ' === FUENTE ===
+'=== Asociaciones ==='
 Fuente --> TipoArchivo
 
 ' === HECHO ===
+'=== Asociaciones ==='
 Hecho --> Ubicacion
 Hecho --> OriginHecho
 
 ' === SOLICITUD ELIMINACION ===
+'=== Asociaciones ==='
+SolicitudEliminacion --> Hecho
 SolicitudEliminacion --> EstadoSolicitud
+'=== Dependencias ==='
+SolicitudEliminacion ..> ColectionManager
 
-' === FILTROS ===
+' === FILTRO ===
+'=== Implementaciones ==='
 Filtro <|-- FiltroContieneTexto
 Filtro <|-- FiltroFecha
+'=== Dependencias ==='
+Filtro ..> Hecho
+
+' === FILTROCONTIENETEXTO ===
+'=== Asociaciones ==='
 FiltroContieneTexto --> CampoDeHecho
+
+' === FILTROFECHA ===
 FiltroFecha --> CampoDeHecho
 
-' === USUARIOS ===
-Contribuyente --> Filtro
-Contribuyente --> SolicitudEliminacion
-Contribuyente <|-- Administrador
-Administrador --> ColectionManager
 
-' === LECTORES ===
+' === USUARIOS ===
+'=== Dependencias ==='
+Contribuyente ..> Filtro
+Contribuyente ..> ColectionManager
+Contribuyente ..> Hecho
+Contribuyente ..> Coleccion
+Administrador ..> ColectionManager
+Administrador ..> SolicitudEliminacion
+Administrador ..> Filtro
+Administrador ..> TipoArchivo
+
+
+' === LECTOR ===
+' === Implementaciones ===
 Lector <|.. LectorCSV
-LectorFactory --> Lector
-LectorFactory --> TipoArchivo
-LectorCSV --> Hecho
+' === Asociaciones ===
+Lector --> Hecho
+
+' === LECTORCSV ===
+' === Dependecias ===
+LectorCSV ..> Hecho
+
+' === LECTORFACTORY ===
+' === Dependecias ===
+LectorFactory ..> Lector
+LectorFactory ..> TipoArchivo
 
 
 
