@@ -44,8 +44,10 @@ public class ColectionManager {
     return null;
   }
   public static void fueAceptada(SolicitudEliminacion solicitudEliminacion) {
+    Hecho hechoEliminado = solicitudEliminacion.getHecho();
+    hechoEliminado.eliminarHecho();
     solicitudesEliminacionHechos.remove(solicitudEliminacion);
-    hechosEliminados.add(solicitudEliminacion.getHecho());
+    hechosEliminados.add(hechoEliminado);
     System.out.println("Hecho eliminado: " + solicitudEliminacion.getHecho().getTitulo());
   }
   public static void fueRechazada(SolicitudEliminacion solicitudEliminacion) {
@@ -54,5 +56,10 @@ public class ColectionManager {
   }
   public static List<SolicitudEliminacion> getSolicitudesEliminacionHechos() {
     return solicitudesEliminacionHechos;
+  }
+
+  public void visualizarHechosEliminados() {
+    System.out.println("=== Hechos Eliminados ===");
+    this.hechosEliminados.stream().forEach(hecho -> hecho.imprimirHecho());
   }
 }

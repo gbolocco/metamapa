@@ -17,55 +17,39 @@ import java.util.List;
 
 public class AplicacionTest {
 
-  Administrador administrador = new Administrador("admin","admin");
-  ColectionManager colectionManager= new ColectionManager();
-  Fuente fuente = new Fuente(CSV,"desastres_naturales_argentina.csv");
-  Contribuyente contribuyente = new Contribuyente("Juan","Luengo",20);
-  List<Filtro> filtros = new ArrayList<>();
-
-  FiltroContieneTexto filtro1 = new FiltroContieneTexto("La Rioja", CampoDeHecho.TITULO);
-  FiltroContieneTexto filtro2 = new FiltroContieneTexto("Vientos huracanados", CampoDeHecho.DESCRIPCION);
-  LocalDate fecha1 =  LocalDate.of(2014,1,1);
-  LocalDate fecha2 =  LocalDate.of(2014,3,3);
-  FiltroFecha filtroFecha= new FiltroFecha(fecha1,fecha2);
-  List<Filtro> criterioDePertenencia= new ArrayList<>();
-
   @Test
-  public void crearUnaColeccionYVisualizarla() {
+  public void navegarHechosPorColeccionSegunFiltros() {
+    Administrador administrador = new Administrador("admin","admin");
+    ColectionManager colectionManager= new ColectionManager();
+    Fuente fuente = new Fuente(CSV,"desastres_naturales_argentina.csv");
+    Contribuyente contribuyente = new Contribuyente("Juan","Luengo",20);
+    List<Filtro> filtros = new ArrayList<>();
 
-    criterioDePertenencia.add(filtroFecha);
-    filtros.add(filtro1);
-    //criterioDePertenencia.add(filtro1);
-    administrador.crearColeccion("Vientos","Devastador Vientos",fuente.getPathArchivo(),criterioDePertenencia,CSV);
-    administrador.importarDatosDeFuenteAColeccion("Vientos");
-    Coleccion coleccion= colectionManager.getColeccion("Vientos");
 
-  }
+    FiltroContieneTexto filtro1 = new FiltroContieneTexto("La Rioja", CampoDeHecho.TITULO);
+    FiltroContieneTexto filtro2 = new FiltroContieneTexto("Vientos huracanados", CampoDeHecho.DESCRIPCION);
+    LocalDate fecha1 =  LocalDate.of(2014,1,1);
+    LocalDate fecha2 =  LocalDate.of(2014,3,3);
+    FiltroFecha filtroFecha= new FiltroFecha(fecha1,fecha2);
+    List<Filtro> criterioDePertenencia= new ArrayList<>();
 
-  @Test
-  public void crearUnaSolicitudYAceptarla() {
     criterioDePertenencia.add(filtro1);
+    criterioDePertenencia.add(filtroFecha);
+    //filtros.add(filtro1);
     administrador.crearColeccion("Vientos","Devastador Vientos",fuente.getPathArchivo(),criterioDePertenencia,CSV);
     administrador.importarDatosDeFuenteAColeccion("Vientos");
     Coleccion coleccion= colectionManager.getColeccion("Vientos");
 
-    contribuyente.solicitarEliminacionHecho("Equipos de emergencia atienden Precipitación de material volcánico en La Rioja, La Rioja","porque no me gusta");
+    coleccion.imprimirHechosSegunFiltros(filtros);
+
+    contribuyente.solicitarEliminacionHecho("Equipos de emergencia atienden Precipitación de material volcánico en La Rioja, La Rioja","abc");
     administrador.verSolicitudesEliminacion();
     administrador.aceptarSolicitudEliminacion("Equipos de emergencia atienden Precipitación de material volcánico en La Rioja, La Rioja");
     administrador.verSolicitudesEliminacion();
-  }
 
-  @Test
-  public void navergarPorHechosFiltrados(){
-    criterioDePertenencia.add(filtroFecha);
-    filtros.add(filtro2);
-    //filtros.add(filtro1);
+    coleccion.imprimirHechosSegunFiltros(filtros);
 
-    administrador.crearColeccion("Vientos","Devastador Vientos",fuente.getPathArchivo(),criterioDePertenencia,CSV);
-    administrador.importarDatosDeFuenteAColeccion("Vientos");
-    Coleccion coleccion= colectionManager.getColeccion("Vientos");
 
-    contribuyente.navegarHechosPorColeccionSegunFiltros(coleccion,filtros);
   }
 
   @Test

@@ -12,8 +12,8 @@ public class Contribuyente {
   private Integer edad;
 
   public Contribuyente(String nombre, String apellido, Integer edad) {
-    if(nombre ==null){
-      throw new IllegalArgumentException("Nombre es obligatorio");//TODO HACER EXCEPCION PERSONALIZADA
+    if(nombre ==null || apellido==null || edad==null){
+      throw new IllegalArgumentException("falta completar algun campo");
     }
     this.nombre = nombre;
     this.apellido = apellido;
@@ -29,7 +29,7 @@ public class Contribuyente {
   public void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
     Hecho hecho = ColectionManager.buscarHechoPorNombreDentroDeColecciones(nombreHecho);
     ColectionManager.solicitudEliminacionHecho(nombreHecho, justificacion);
-    System.out.println("Solicitud de eliminacion pendiente de confirmacion del Hecho: "+ hecho.getTitulo());
+    System.out.println("[-] Solicitud de eliminacion pendiente de confirmacion del Hecho: "+ hecho.getTitulo());
 
   }
 

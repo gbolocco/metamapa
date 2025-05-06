@@ -39,8 +39,8 @@ public class Administrador {
     });
   }
   public void aceptarSolicitudEliminacion(String nombreHecho){
-    List<SolicitudEliminacion> listaEliminaciones = obtenerSolicitudesEliminacion();
-    SolicitudEliminacion solicitudEliminacion = listaEliminaciones.stream()
+    List<SolicitudEliminacion> listaSolicitudesEliminacion = obtenerSolicitudesEliminacion();
+    SolicitudEliminacion solicitudEliminacion = listaSolicitudesEliminacion.stream()
         .filter(solicitud -> solicitud.getHecho().getTitulo().equals(nombreHecho))
         .findFirst()
         .orElse(null);

@@ -33,8 +33,37 @@ public class Coleccion {
   //metodos relacionados a los hechos
 
   public void visualizarHechos(List<Filtro> filtros) {
+
     System.out.println("\n=== HECHOS CARGADOS ===");
-    imprimirHechosFiltrados(filtros);
+    if(filtros != null){
+      imprimirHechosSegunFiltros(filtros);
+    }else{
+      List<Hecho> hechosSinEliminar = this.hechos.stream()
+          .filter(hecho -> !hecho.fueEliminado())
+          .toList();
+
+      hechosSinEliminar.forEach(hecho -> {
+        hecho.imprimirHecho();
+        System.out.println();
+      });
+
+      System.out.println("Total de hechos: " + hechosSinEliminar.size());
+    }
+  }
+
+  public void imprimirHechosSegunFiltros(List<Filtro> filtros) {
+
+    List<Hecho> hechosFiltrados = this.hechos.stream()
+        .filter(hecho -> this.aplicarFiltrosAUnHecho(filtros, hecho) || !hecho.fueEliminado())
+        .toList();
+
+    hechosFiltrados.forEach(hecho -> {
+      hecho.imprimirHecho();
+      System.out.println();
+    });
+
+    System.out.println("Total de hechos: " + hechosFiltrados.size());
+
   }
 
   public void cargarHechosDesdeFuente() {
@@ -51,32 +80,7 @@ public class Coleccion {
   }
 
 
-  private void imprimirHecho(Hecho hecho){
-  System.out.println("  Título: " + hecho.getTitulo());
-    System.out.println("  Descripción: " + hecho.getDescripcion());
-    System.out.println("  Categoría: " + hecho.getCategoria());
-    System.out.println("  Ubicación: " +
-                           "Lat " + hecho.getUbicacion().getLatitud() +
-    ", Lon " + hecho.getUbicacion().getLongitud());
-    System.out.println("  Fecha del hecho: " + hecho.getFechaAcontecimiento());
-    System.out.println("  Fecha de carga: " + hecho.getFechaDeCarga());
-    System.out.println("  Origen: " + hecho.getOriginHecho());
-    }
-
-  public void imprimirHechosFiltrados(List<Filtro> filtros) {
-    long total = this.hechos.stream()
-        .filter(hecho -> filtros.isEmpty() || this.aplicarFiltrosAUnHecho(filtros, hecho))
-        .peek(hecho -> {
-          this.imprimirHecho(hecho);
-          System.out.println();
-        })
-        .count();
-
-    System.out.println("Total de hechos: " + total);
-  }
-
-
   private boolean aplicarFiltrosAUnHecho(List<Filtro> filtros,Hecho hecho){
-    return filtros.stream().allMatch(filtro->filtro.cumpleFiltro(hecho)) && ColectionManager.hechosEliminados.stream().noneMatch(eliminado->eliminado.getTitulo().equals(hecho.getTitulo()));
+    return filtros.stream().allMatch(filtro->filtro.cumpleFiltro(hecho));
   }
 }

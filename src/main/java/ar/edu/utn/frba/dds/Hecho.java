@@ -25,7 +25,7 @@ public class Hecho {
   public void eliminarHecho (){
     this.fueEliminado=true;
   }
-  public boolean getFueEliminado(){
+  public boolean fueEliminado(){
     return this.fueEliminado;
   }
 
@@ -55,6 +55,18 @@ public class Hecho {
 
   public OriginHecho getOriginHecho() {
     return originHecho;
+  }
+
+  public void imprimirHecho(){
+    System.out.println("[-]  Título: " + this.titulo);
+    System.out.println("[-]  Descripción: " + this.descripcion);
+    System.out.println("[-]  Categoría: " + this.categoria);
+    System.out.println("[-]  Ubicación: " +
+        "Lat " + this.ubicacion.getLatitud() +
+        ", Lon " + this.ubicacion.getLongitud());
+    System.out.println("[-]  Fecha del hecho: " + this.fechaAcontecimiento);
+    System.out.println("[-]  Fecha de carga: " + this.fechaDeCarga);
+    System.out.println("[-]  Origen: " + this.originHecho);
   }
 }
 
