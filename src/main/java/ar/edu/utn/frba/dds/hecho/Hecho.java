@@ -10,22 +10,31 @@ public class Hecho {
   private LocalDate fechaAcontecimiento;
   private LocalDate fechaDeCarga;
   private OriginHecho originHecho;
-  private Boolean fueEliminado=false;
+  private Boolean fueEliminado = false;
 
-  public Hecho(String titulo,String descripcion,String categoria,Ubicacion ubicacion,LocalDate fechaAcontecimiento,LocalDate fechaDeCarga,OriginHecho originHecho) {
-    this.titulo=titulo;
-    this.descripcion=descripcion;
-    this.categoria=categoria;
-    this.ubicacion=ubicacion;
-    this.fechaAcontecimiento=fechaAcontecimiento;
-    this.fechaDeCarga=fechaDeCarga;
-    this.originHecho=originHecho;
+  public Hecho(
+      String titulo,
+      String descripcion,
+      String categoria,
+      Ubicacion ubicacion,
+      LocalDate fechaAcontecimiento,
+      LocalDate fechaDeCarga,
+      OriginHecho originHecho
+  ) {
+    this.titulo = titulo;
+    this.descripcion = descripcion;
+    this.categoria = categoria;
+    this.ubicacion = ubicacion;
+    this.fechaAcontecimiento = fechaAcontecimiento;
+    this.fechaDeCarga = fechaDeCarga;
+    this.originHecho = originHecho;
   }
 
-  public void eliminarHecho (){
-    this.fueEliminado=true;
+  public void eliminarHecho() {
+    this.fueEliminado = true;
   }
-  public boolean fueEliminado(){
+
+  public boolean fueEliminado() {
     return this.fueEliminado;
   }
 
@@ -57,13 +66,15 @@ public class Hecho {
     return originHecho;
   }
 
-  public void imprimirHecho(){
+  public void imprimirHecho() {
     System.out.println("[-]  Título: " + this.titulo);
     System.out.println("[-]  Descripción: " + this.descripcion);
     System.out.println("[-]  Categoría: " + this.categoria);
-    System.out.println("[-]  Ubicación: " +
-        "Lat " + this.ubicacion.getLatitud() +
-        ", Lon " + this.ubicacion.getLongitud());
+    System.out.println(
+        "[-]  Ubicación: " + "Lat "
+            + this.ubicacion.getLatitud()
+            + ", Lon " + this.ubicacion.getLongitud()
+    );
     System.out.println("[-]  Fecha del hecho: " + this.fechaAcontecimiento);
     System.out.println("[-]  Fecha de carga: " + this.fechaDeCarga);
     System.out.println("[-]  Origen: " + this.originHecho);

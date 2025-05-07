@@ -41,10 +41,10 @@ public class CrearColeccionYFiltradoDeHechos {
     //Admin crea una coleccion en base al criterio de pertenencia
     administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero",fuente.getPathArchivo(),criterioDePertenencia,CSV);
     //Se importan los hechos desde la fuente
-    administrador.importarDatosDeFuenteAColeccion("Hechos de enero");
+    administrador.importarDatosDeFuente("Hechos de enero");
 
     //Los mostramos por pantalla
-    Coleccion coleccion= colectionManager.getColeccion("Hechos de enero");
+    Coleccion coleccion= ColectionManager.getColeccion("Hechos de enero");
     coleccion.visualizarHechos(null);
   }
 
@@ -55,8 +55,8 @@ public class CrearColeccionYFiltradoDeHechos {
     List<Filtro> criterioDePertenencia= new ArrayList<>();
     criterioDePertenencia.add(filtroFecha);
     administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero",fuente.getPathArchivo(),criterioDePertenencia,CSV);
-    administrador.importarDatosDeFuenteAColeccion("Hechos de enero");
-    Coleccion coleccion= colectionManager.getColeccion("Hechos de enero");
+    administrador.importarDatosDeFuente("Hechos de enero");
+    Coleccion coleccion= ColectionManager.getColeccion("Hechos de enero");
 
     //Creamos lista de filtros y las mostramos por pantalla
     List<Filtro> filtros = new ArrayList<>();

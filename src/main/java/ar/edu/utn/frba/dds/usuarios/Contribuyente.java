@@ -2,8 +2,8 @@ package ar.edu.utn.frba.dds.usuarios;
 
 import ar.edu.utn.frba.dds.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
-import ar.edu.utn.frba.dds.hecho.Hecho;
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import ar.edu.utn.frba.dds.hecho.Hecho;
 import java.util.List;
 
 public class Contribuyente {
@@ -12,7 +12,8 @@ public class Contribuyente {
   private Integer edad;
 
   public Contribuyente(String nombre, String apellido, Integer edad) {
-    if(nombre ==null || apellido==null || edad==null){
+
+    if (nombre == null || apellido == null || edad == null) {
       throw new IllegalArgumentException("falta completar algun campo");
     }
     this.nombre = nombre;
@@ -20,18 +21,21 @@ public class Contribuyente {
     this.edad = edad;
   }
 
-  private boolean esMayorDeEdad(){
-    return this.edad != null && this.edad >=18 ;
+  private boolean esMayorDeEdad() {
+    return this.edad != null && this.edad >= 18;
   }
+
   public void navegarHechosPorColeccionSegunFiltros(Coleccion coleccion, List<Filtro> filtros) {
     coleccion.visualizarHechos(filtros);
   }
-  public void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
-    Hecho hecho = ColectionManager.buscarHechoPorNombreDentroDeColecciones(nombreHecho);
-    ColectionManager.solicitudEliminacionHecho(nombreHecho, justificacion);
-    System.out.println("[-] Solicitud de eliminacion pendiente de confirmacion del Hecho: "+ hecho.getTitulo());
 
+  public void solicitarEliminacionHecho(
+      String nombreHecho,
+      String justificacion
+  ) {
+    Hecho hecho = ColectionManager.buscarHechoPorNombre(nombreHecho);
+    ColectionManager.solicitarEliminacionHecho(nombreHecho, justificacion);
+    System.out.println("[-] Nueva solicitud pendiente | Hecho: " + hecho.getTitulo());
   }
-
 }
 

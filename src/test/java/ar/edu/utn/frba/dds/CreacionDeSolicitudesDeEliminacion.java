@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SolicitudesDeEliminacion {
+public class CreacionDeSolicitudesDeEliminacion {
 
   Administrador administrador = new Administrador("admin","admin");
   ColectionManager colectionManager= new ColectionManager();

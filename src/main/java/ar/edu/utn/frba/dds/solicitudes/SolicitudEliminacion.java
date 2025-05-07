@@ -19,19 +19,22 @@ public class SolicitudEliminacion {
       throw new IllegalArgumentException("La justificación no puede superar los 500 caracteres");
     }
 
-    this.hecho=hecho;
-    this.justificacion=justificacion;
-    this.estadoSolicitud=EstadoSolicitud.PENDIENTE;
-    this.fechaSolicitud=new Date();
+    this.hecho = hecho;
+    this.justificacion = justificacion;
+    this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
+    this.fechaSolicitud = new Date();
   }
-  public void aceptar(){
-    this.estadoSolicitud=estadoSolicitud.ACEPTADA;
+
+  public void aceptar() {
+    this.estadoSolicitud = estadoSolicitud.ACEPTADA;
     ColectionManager.fueAceptada(this);
   }
-  public void rechazar(){
-    this.estadoSolicitud=estadoSolicitud.RECHAZADA;
+
+  public void rechazar() {
+    this.estadoSolicitud = estadoSolicitud.RECHAZADA;
     ColectionManager.fueRechazada(this);
   }
+
   public Hecho getHecho() {
     return this.hecho;
   }
