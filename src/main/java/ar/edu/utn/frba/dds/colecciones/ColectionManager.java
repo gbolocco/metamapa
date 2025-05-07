@@ -1,5 +1,8 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.colecciones;
 
+import ar.edu.utn.frba.dds.Lectores.Fuente;
+import ar.edu.utn.frba.dds.hecho.Hecho;
+import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +18,7 @@ public class ColectionManager {
     this.hechosEliminados = new ArrayList<>();
     this.solicitudesEliminacionHechos = new ArrayList<>();
   }
-  public static void crearColeccion(String nombre,String descripcion,List<Filtro> filtros,Fuente fuente){
+  public static void crearColeccion(String nombre, String descripcion, List<Filtro> filtros, Fuente fuente){
     colecciones.add(new Coleccion(nombre,descripcion,filtros,fuente));
   }
   public static Coleccion getColeccion(String nombre) {
@@ -43,6 +46,7 @@ public class ColectionManager {
     }
     return null;
   }
+
   public static void fueAceptada(SolicitudEliminacion solicitudEliminacion) {
     Hecho hechoEliminado = solicitudEliminacion.getHecho();
     hechoEliminado.eliminarHecho();

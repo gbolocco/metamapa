@@ -1,5 +1,7 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.solicitudes;
 
+import ar.edu.utn.frba.dds.colecciones.ColectionManager;
+import ar.edu.utn.frba.dds.hecho.Hecho;
 import java.util.Date;
 
 public class SolicitudEliminacion {

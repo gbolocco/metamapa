@@ -1,7 +1,11 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.colecciones;
 
+import ar.edu.utn.frba.dds.Lectores.Fuente;
+import ar.edu.utn.frba.dds.colecciones.excepciones.ColectionException;
+import ar.edu.utn.frba.dds.hecho.Hecho;
 import ar.edu.utn.frba.dds.Lectores.Lector;
 import ar.edu.utn.frba.dds.Lectores.LectorFactory;
+import ar.edu.utn.frba.dds.Lectores.TipoArchivo;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 
 import java.util.ArrayList;
@@ -15,6 +19,11 @@ public class Coleccion {
   private List<Hecho> hechos;
   //constructor
   public Coleccion(String titulo, String descripcion, List<Filtro> criteriosDePertenencia, Fuente fuente) {
+    //this.validarTitulo(titulo)
+    //this.validarDescripcion(descripcion)
+    //this.validarCriteriosDePertenencia(criteriosDePertenencia)
+    //this.validarFuente(fuente)
+
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.criteriosDePertenencia = criteriosDePertenencia;

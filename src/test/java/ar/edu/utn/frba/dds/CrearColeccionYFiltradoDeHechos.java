@@ -1,6 +1,10 @@
 package ar.edu.utn.frba.dds;
 
-import static ar.edu.utn.frba.dds.TipoArchivo.CSV;
+import static ar.edu.utn.frba.dds.Lectores.TipoArchivo.CSV;
+
+import ar.edu.utn.frba.dds.Lectores.Fuente;
+import ar.edu.utn.frba.dds.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroContieneTexto;

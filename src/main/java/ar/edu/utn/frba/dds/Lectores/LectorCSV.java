@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.Lectores;
 
-import ar.edu.utn.frba.dds.Hecho;
-import ar.edu.utn.frba.dds.OriginHecho;
-import ar.edu.utn.frba.dds.Ubicacion;
+import ar.edu.utn.frba.dds.hecho.Hecho;
+import ar.edu.utn.frba.dds.hecho.OriginHecho;
+import ar.edu.utn.frba.dds.hecho.Ubicacion;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 

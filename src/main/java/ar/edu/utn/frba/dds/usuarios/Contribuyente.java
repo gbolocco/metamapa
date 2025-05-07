@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.usuarios;
 
-import ar.edu.utn.frba.dds.Coleccion;
-import ar.edu.utn.frba.dds.ColectionManager;
-import ar.edu.utn.frba.dds.Hecho;
+import ar.edu.utn.frba.dds.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.colecciones.ColectionManager;
+import ar.edu.utn.frba.dds.hecho.Hecho;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import java.util.List;
 

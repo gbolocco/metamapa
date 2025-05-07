@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.filtros;
 
-import ar.edu.utn.frba.dds.Hecho;
+import ar.edu.utn.frba.dds.hecho.Hecho;
 
 public class FiltroContieneTexto extends Filtro{
   private String textoClave;
