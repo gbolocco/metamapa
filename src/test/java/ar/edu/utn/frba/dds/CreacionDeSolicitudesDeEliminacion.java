@@ -41,7 +41,7 @@ public class SolicitudesDeEliminacion {
     criterioDePertenencia.add(filtroTexto2);
     criterioDePertenencia.add(filtroFecha);
     administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero",fuente.getPathArchivo(),criterioDePertenencia,CSV);
-    administrador.importarDatosDeFuenteAColeccion("Hechos de enero");
+    administrador.importarDatosDeFuente("Hechos de enero");
     Coleccion coleccion = colectionManager.getColeccion("Hechos de enero");
 
     //Coleccion antes de eliminar un hecho
