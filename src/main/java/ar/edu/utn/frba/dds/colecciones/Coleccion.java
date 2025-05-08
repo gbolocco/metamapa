@@ -22,7 +22,7 @@ public class Coleccion {
   public Coleccion(String titulo, String descripcion, List<Filtro> criteriosDePertenencia, Fuente fuente) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción");
-    Validacion.validarListaNoNulaNiConElementosNulos(criteriosDePertenencia, "criterios de pertenencia");
+    Validacion.validarListaNoNulaNiConElementosNulos(criteriosDePertenencia, "criteriosDePertenencia");
     Validacion.validarNoNulo(fuente, "fuente");
 
     this.titulo = titulo;
