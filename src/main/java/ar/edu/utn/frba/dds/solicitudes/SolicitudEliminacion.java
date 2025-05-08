@@ -10,13 +10,13 @@ public class SolicitudEliminacion {
   String justificacion;
   EstadoSolicitud estadoSolicitud;
   Date fechaSolicitud;
-  Integer max = 500;
+  Integer min = 500;
 
   public SolicitudEliminacion(Hecho hecho, String justificacion) {
 
     Validacion.validarNoNulo(hecho, "hecho");
     Validacion.validarNoNulo(justificacion, "justificacion");
-    Validacion.validarLongitudMaxima(justificacion, max, "justificacion");
+    Validacion.validarLongitudMinima(justificacion, min, "justificacion");
 
     this.hecho = hecho;
     this.justificacion = justificacion;

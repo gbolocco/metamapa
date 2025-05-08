@@ -3,42 +3,46 @@ import ar.edu.utn.frba.dds.hecho.Excepciones.CoordenadaInvalidaException;
 import ar.edu.utn.frba.dds.Validaciones.Validacion;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ValidacionTest {
 
   @Test
   public void testValidarNoNulo_OK() {
-    assertDoesNotThrow(() -> Validacion.validarNoNulo("valor", "campo"));
+    assertDoesNotThrow(() -> Validacion.validarNoNulo("desatres naturales", "descripcion"));
   }
 
   @Test
   public void testValidarNoNulo_Falla() {
     Exception ex = assertThrows(IllegalArgumentException.class, () ->
-        Validacion.validarNoNulo(null, "campo"));
-    assertEquals("El campo 'campo' no puede ser nulo.", ex.getMessage());
+        Validacion.validarNoNulo(null, "descripcion"));
+    assertEquals("El campo 'descripcion' no puede ser nulo.", ex.getMessage());
   }
 
   @Test
   public void testValidarStringNoVacio_OK() {
-    assertDoesNotThrow(() -> Validacion.validarStringNoVacio("texto", "campo"));
+    assertDoesNotThrow(() -> Validacion.validarStringNoVacio("Desastres", "titulo"));
   }
 
   @Test
   public void testValidarStringNoVacio_FallaPorVacio() {
     Exception ex = assertThrows(IllegalArgumentException.class, () ->
-        Validacion.validarStringNoVacio("   ", "nombre"));
-    assertEquals("El campo 'nombre' no puede ser nulo ni estar vacío.", ex.getMessage());
+        Validacion.validarStringNoVacio("   ", "titulo"));
+    assertEquals("El campo 'titulo' no puede ser nulo ni estar vacío.", ex.getMessage());
   }
 
   @Test
   public void testValidarLongitudMaxima_OK() {
-    assertDoesNotThrow(() -> Validacion.validarLongitudMaxima("abc", 5, "desc"));
+    assertDoesNotThrow(() -> Validacion.validarLongitudMinima("abc", 2, "justificacion"));
   }
 
   @Test
   public void testValidarLongitudMaxima_Falla() {
     Exception ex = assertThrows(IllegalArgumentException.class, () ->
-        Validacion.validarLongitudMaxima("texto demasiado largo", 10, "comentario"));
-    assertTrue(ex.getMessage().contains("no puede superar"));
+        Validacion.validarLongitudMinima("texto", 10, "justificacion"));
+    assertTrue(ex.getMessage().contains("debe superar"));
   }
 
   @Test
@@ -65,5 +69,11 @@ public class ValidacionTest {
   public void testValidarCoordenadas_FallaPorRango() {
     assertThrows(CoordenadaInvalidaException.class, () ->
         Validacion.validarCoordenadas(100.0, 0.0));
+  }
+
+  @Test
+  public void testValidarListaNoNulaNiConElementosNulos_ListaVacia_OK() {
+    List<String> listaVacia = new ArrayList<>();
+    assertDoesNotThrow(() -> Validacion.validarListaNoNulaNiConElementosNulos(listaVacia, "criteriosDePertenencia"));
   }
 }

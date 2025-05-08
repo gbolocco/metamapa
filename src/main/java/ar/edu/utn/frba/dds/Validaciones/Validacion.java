@@ -25,9 +25,9 @@ public class Validacion {
     }
   }
 
-  public static void validarLongitudMaxima(String valor, int max, String nombreCampo) {
-    if (valor != null && valor.length() > max) {
-      throw new IllegalArgumentException("El campo '" + nombreCampo + "' no puede superar los " + max + " caracteres.");
+  public static void validarLongitudMinima(String valor, int min, String nombreCampo) {
+    if (valor != null && valor.length() < min) {
+      throw new IllegalArgumentException("El campo '" + nombreCampo + "' debe superar los " + min + " caracteres.");
     }
   }
 
