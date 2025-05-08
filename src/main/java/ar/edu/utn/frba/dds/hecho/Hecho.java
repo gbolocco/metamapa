@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.hecho;
 
 import java.time.LocalDate;
+import ar.edu.utn.frba.dds.Validaciones.Validacion;
 
 public class Hecho {
   private String titulo;
@@ -21,6 +22,13 @@ public class Hecho {
       LocalDate fechaDeCarga,
       OriginHecho originHecho
   ) {
+    Validacion.validarStringNoVacio(titulo, "título");
+    Validacion.validarNoNulo(descripcion, "descripción");
+    Validacion.validarStringNoVacio(categoria, "categoria");
+    Validacion.validarNoNulo(ubicacion, "ubicacion");
+    Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
+    Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
+    Validacion.validarNoNulo(originHecho, "originHecho");
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;

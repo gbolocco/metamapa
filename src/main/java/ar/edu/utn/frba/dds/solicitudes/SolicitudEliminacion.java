@@ -3,21 +3,20 @@ package ar.edu.utn.frba.dds.solicitudes;
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.hecho.Hecho;
 import java.util.Date;
+import ar.edu.utn.frba.dds.Validaciones.Validacion;
 
 public class SolicitudEliminacion {
   Hecho hecho;
   String justificacion;
   EstadoSolicitud estadoSolicitud;
   Date fechaSolicitud;
+  Integer max = 500;
 
   public SolicitudEliminacion(Hecho hecho, String justificacion) {
 
-    if (justificacion == null) {
-      throw new IllegalArgumentException("La justificación no puede ser nula");
-    }
-    if (justificacion.length() > 500) {
-      throw new IllegalArgumentException("La justificación no puede superar los 500 caracteres");
-    }
+    Validacion.validarNoNulo(hecho, "hecho");
+    Validacion.validarNoNulo(justificacion, "justificacion");
+    Validacion.validarLongitudMaxima(justificacion, max, "justificacion");
 
     this.hecho = hecho;
     this.justificacion = justificacion;
