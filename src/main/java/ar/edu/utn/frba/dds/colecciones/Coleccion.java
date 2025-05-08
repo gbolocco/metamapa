@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.Lectores.Lector;
 import ar.edu.utn.frba.dds.Lectores.LectorFactory;
 import ar.edu.utn.frba.dds.Lectores.TipoArchivo;
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import ar.edu.utn.frba.dds.Validaciones.Validacion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,10 @@ public class Coleccion {
   private List<Hecho> hechos;
   //constructor
   public Coleccion(String titulo, String descripcion, List<Filtro> criteriosDePertenencia, Fuente fuente) {
-    //this.validarTitulo(titulo)
-    //this.validarDescripcion(descripcion)
-    //this.validarCriteriosDePertenencia(criteriosDePertenencia)
-    //this.validarFuente(fuente)
+    Validacion.validarStringNoVacio(titulo, "título");
+    Validacion.validarNoNulo(descripcion, "descripción");
+    Validacion.validarListaNoNulaNiConElementosNulos(criteriosDePertenencia, "criterios de pertenencia");
+    Validacion.validarNoNulo(fuente, "fuente");
 
     this.titulo = titulo;
     this.descripcion = descripcion;
