@@ -3,6 +3,10 @@ import ar.edu.utn.frba.dds.hecho.Excepciones.CoordenadaInvalidaException;
 import ar.edu.utn.frba.dds.Validaciones.Validacion;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ValidacionTest {
 
   @Test
@@ -31,14 +35,14 @@ public class ValidacionTest {
 
   @Test
   public void testValidarLongitudMaxima_OK() {
-    assertDoesNotThrow(() -> Validacion.validarLongitudMaxima("abc", 5, "desc"));
+    assertDoesNotThrow(() -> Validacion.validarLongitudMinima("abc", 2, "desc"));
   }
 
   @Test
   public void testValidarLongitudMaxima_Falla() {
     Exception ex = assertThrows(IllegalArgumentException.class, () ->
-        Validacion.validarLongitudMaxima("texto demasiado largo", 10, "comentario"));
-    assertTrue(ex.getMessage().contains("no puede superar"));
+        Validacion.validarLongitudMinima("texto", 10, "comentario"));
+    assertTrue(ex.getMessage().contains("debe superar"));
   }
 
   @Test
@@ -65,5 +69,11 @@ public class ValidacionTest {
   public void testValidarCoordenadas_FallaPorRango() {
     assertThrows(CoordenadaInvalidaException.class, () ->
         Validacion.validarCoordenadas(100.0, 0.0));
+  }
+
+  @Test
+  public void testValidarListaNoNulaNiConElementosNulos_ListaVacia_OK() {
+    List<String> listaVacia = new ArrayList<>();
+    assertDoesNotThrow(() -> Validacion.validarListaNoNulaNiConElementosNulos(listaVacia, "nombres"));
   }
 }
