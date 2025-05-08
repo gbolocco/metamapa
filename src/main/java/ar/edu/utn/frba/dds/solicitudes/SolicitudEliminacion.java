@@ -7,9 +7,9 @@ import java.util.Date;
 
 public class SolicitudEliminacion {
   Hecho hecho;
-  String justificacion;
+  //String justificacion;
   EstadoSolicitud estadoSolicitud;
-  Date fechaSolicitud;
+  //Date fechaSolicitud;
   Integer min = 500;
 
   public SolicitudEliminacion(Hecho hecho, String justificacion) {
@@ -19,9 +19,9 @@ public class SolicitudEliminacion {
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
 
     this.hecho = hecho;
-    this.justificacion = justificacion;
+    //this.justificacion = justificacion;
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
-    this.fechaSolicitud = new Date();
+    //this.fechaSolicitud = new Date();
   }
 
   public void aceptar() {

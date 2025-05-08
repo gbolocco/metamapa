@@ -7,8 +7,8 @@ import ar.edu.utn.frba.dds.hecho.Hecho;
 import java.util.List;
 
 public class Contribuyente {
-  private String nombre;
-  private String apellido;
+  //private String nombre;
+  //private String apellido;
   private Integer edad;
 
   public Contribuyente(String nombre, String apellido, Integer edad) {
@@ -16,8 +16,8 @@ public class Contribuyente {
     if (nombre == null || apellido == null || edad == null) {
       throw new IllegalArgumentException("falta completar algun campo");
     }
-    this.nombre = nombre;
-    this.apellido = apellido;
+    //this.nombre = nombre;
+    //this.apellido = apellido;
     this.edad = edad;
   }
 

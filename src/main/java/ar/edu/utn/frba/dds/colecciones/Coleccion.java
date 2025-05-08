@@ -33,7 +33,7 @@ public class Coleccion {
 
     this.titulo = titulo;
     this.descripcion = descripcion;
-    this.criteriosDePertenencia = criteriosDePertenencia;
+    this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
   }
@@ -43,8 +43,12 @@ public class Coleccion {
     return this.titulo;
   }
 
+  public String descripcion() {
+    return this.descripcion;
+  }
+
   public List<Hecho> getHechos() {
-    return this.hechos;
+    return new ArrayList<>(this.hechos);
   }
 
   //metodos relacionados a los hechos

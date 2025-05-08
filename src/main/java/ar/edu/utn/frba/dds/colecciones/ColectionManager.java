@@ -9,73 +9,81 @@ import java.util.List;
 import java.util.Objects;
 
 public class ColectionManager {
-  static List<Coleccion> colecciones;
-  static List<Hecho> hechosEliminados;
-  static List<SolicitudEliminacion> solicitudesEliminacionHechos;
 
+  // Se inicializan los campos estáticos de forma estática
+  private static final List<Coleccion> COLECCIONES = new ArrayList<>();
+  private static final List<Hecho> HECHOS_ELIMINADOS = new ArrayList<>();
+  private static final List<SolicitudEliminacion>
+      SOLICITUDES_ELIMINACION_HECHOS = new ArrayList<>();
+
+  // Constructor vacío
   public ColectionManager() {
-    this.colecciones = new ArrayList<>();
-    this.hechosEliminados = new ArrayList<>();
-    this.solicitudesEliminacionHechos = new ArrayList<>();
+    // No es necesario inicializar colecciones estáticas aquí
   }
 
+  // Método para crear una nueva colección
   public static void crearColeccion(
       String nombre,
       String descripcion,
       List<Filtro> filtros,
       Fuente fuente
   ) {
-    colecciones.add(new Coleccion(nombre, descripcion, filtros, fuente));
+    COLECCIONES.add(new Coleccion(nombre, descripcion, filtros, fuente));
   }
 
+  // Obtener colección por nombre
   public static Coleccion getColeccion(String nombre) {
-    return colecciones.stream()
+    return COLECCIONES.stream()
         .filter(coleccion -> Objects.equals(nombre, coleccion.nombre()))
         .findFirst()
-        .orElse(null); // lanzar excepción en el caso de que no este
+        .orElse(null); // Podrías lanzar una excepción aquí si es necesario
   }
 
+  // Solicitar eliminación de un hecho
   public static void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
-    if (buscarHechoPorNombre(nombreHecho) == null) {
+    Hecho hecho = buscarHechoPorNombre(nombreHecho);
+    if (hecho == null) {
       throw new IllegalArgumentException("No existe un hecho con el nombre: " + nombreHecho);
-    } else {
-      SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(
-          buscarHechoPorNombre(nombreHecho),
-          justificacion
-      );
-      solicitudesEliminacionHechos.add(nuevaSolicitud);
     }
+    SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(hecho, justificacion);
+    SOLICITUDES_ELIMINACION_HECHOS.add(nuevaSolicitud);
   }
 
+  // Buscar hecho por nombre
   public static Hecho buscarHechoPorNombre(String nombreHecho) {
-    return colecciones.stream()
+    return COLECCIONES.stream()
         .flatMap(coleccion -> coleccion.getHechos().stream())
         .filter(hecho -> Objects.equals(hecho.getTitulo(), nombreHecho))
         .findFirst()
         .orElse(null);
   }
 
+  // Aceptar la solicitud de eliminación
   public static void fueAceptada(SolicitudEliminacion solicitudEliminacion) {
     Hecho hechoEliminado = solicitudEliminacion.getHecho();
     hechoEliminado.eliminarHecho();
-    solicitudesEliminacionHechos.remove(solicitudEliminacion);
-    hechosEliminados.add(hechoEliminado);
-    System.out.println("Hecho eliminado: " + solicitudEliminacion.getHecho().getTitulo());
+    SOLICITUDES_ELIMINACION_HECHOS.remove(solicitudEliminacion);
+    HECHOS_ELIMINADOS.add(hechoEliminado);
+    System.out.println("Hecho eliminado: " + solicitudEliminacion
+        .getHecho().getTitulo());
   }
 
+  // Rechazar la solicitud de eliminación
   public static void fueRechazada(SolicitudEliminacion solicitudEliminacion) {
-    solicitudesEliminacionHechos.remove(solicitudEliminacion);
-    System.out.println("Solicitud de eliminacion rechazada: "
+    SOLICITUDES_ELIMINACION_HECHOS.remove(solicitudEliminacion);
+    System.out.println("Solicitud de eliminación rechazada: "
         + solicitudEliminacion.getHecho().getTitulo());
   }
 
+  // Obtener las solicitudes de eliminación
   public static List<SolicitudEliminacion> getSolicitudesEliminacionHechos() {
-    return solicitudesEliminacionHechos;
+    return new ArrayList<>(SOLICITUDES_ELIMINACION_HECHOS);
   }
 
+  // Visualizar hechos eliminados
   public void visualizarHechosEliminados() {
     System.out.println("=== Hechos Eliminados ===");
-    hechosEliminados.forEach(Hecho::imprimirHecho);
+    HECHOS_ELIMINADOS.forEach(Hecho::imprimirHecho);
     System.out.println("=========================");
   }
 }

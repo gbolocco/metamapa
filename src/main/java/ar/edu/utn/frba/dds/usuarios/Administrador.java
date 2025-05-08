@@ -9,12 +9,12 @@ import java.util.List;
 
 public class Administrador {
 
-  private String usuario;
-  private String password;
+  //private String usuario;
+  //private String password;
 
   public Administrador(String usuario, String password) {
-    this.usuario = usuario;
-    this.password = password;
+    //this.usuario = usuario;
+    //this.password = password;
   }
 
   public void crearColeccion(
@@ -54,6 +54,7 @@ public class Administrador {
         .orElse(null);
     if (solicitudEliminacion == null) {
       System.out.println("No existe una solicitud de eliminacion con el nombre: " + nombreHecho);
+      return;
     }
     solicitudEliminacion.aceptar();
   }
