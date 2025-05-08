@@ -29,10 +29,7 @@ public class Contribuyente {
     coleccion.visualizarHechos(filtros);
   }
 
-  public void solicitarEliminacionHecho(
-      String nombreHecho,
-      String justificacion
-  ) {
+  public void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
     Hecho hecho = ColectionManager.buscarHechoPorNombre(nombreHecho);
     ColectionManager.solicitarEliminacionHecho(nombreHecho, justificacion);
     System.out.println("[-] Nueva solicitud pendiente | Hecho: " + hecho.getTitulo());

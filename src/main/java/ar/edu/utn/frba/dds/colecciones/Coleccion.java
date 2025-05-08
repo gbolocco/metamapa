@@ -1,14 +1,12 @@
 package ar.edu.utn.frba.dds.colecciones;
 
-import ar.edu.utn.frba.dds.Lectores.Fuente;
-import ar.edu.utn.frba.dds.colecciones.excepciones.ColectionException;
-import ar.edu.utn.frba.dds.hecho.Hecho;
-import ar.edu.utn.frba.dds.Lectores.Lector;
-import ar.edu.utn.frba.dds.Lectores.LectorFactory;
-import ar.edu.utn.frba.dds.Lectores.TipoArchivo;
 import ar.edu.utn.frba.dds.filtros.Filtro;
-import ar.edu.utn.frba.dds.Validaciones.Validacion;
-
+import ar.edu.utn.frba.dds.hecho.Hecho;
+import ar.edu.utn.frba.dds.lectores.Fuente;
+import ar.edu.utn.frba.dds.lectores.Lector;
+import ar.edu.utn.frba.dds.lectores.LectorFactory;
+import ar.edu.utn.frba.dds.lectores.TipoArchivo;
+import ar.edu.utn.frba.dds.validaciones.Validacion;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +16,19 @@ public class Coleccion {
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
   private List<Hecho> hechos;
-  //constructor
-  public Coleccion(String titulo, String descripcion, List<Filtro> criteriosDePertenencia, Fuente fuente) {
+
+  public Coleccion(
+      String titulo,
+      String descripcion,
+      List<Filtro> criteriosDePertenencia,
+      Fuente fuente
+  ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción");
-    Validacion.validarListaNoNulaNiConElementosNulos(criteriosDePertenencia, "criteriosDePertenencia");
+    Validacion.validarListaNoNulaNiConElementosNulos(
+        criteriosDePertenencia,
+        "criteriosDePertenencia"
+    );
     Validacion.validarNoNulo(fuente, "fuente");
 
     this.titulo = titulo;
@@ -36,6 +42,7 @@ public class Coleccion {
   public String nombre() {
     return this.titulo;
   }
+
   public List<Hecho> getHechos() {
     return this.hechos;
   }
@@ -45,9 +52,9 @@ public class Coleccion {
   public void visualizarHechos(List<Filtro> filtros) {
 
     System.out.println("\n=== HECHOS CARGADOS ===");
-    if(filtros != null){
+    if (filtros != null) {
       this.imprimirHechosSegunFiltros(filtros);
-    }else{
+    } else {
       List<Hecho> hechosSinEliminar = this.hechos.stream()
           .filter(hecho -> !hecho.fueEliminado())
           .toList();
@@ -64,7 +71,7 @@ public class Coleccion {
   public void imprimirHechosSegunFiltros(List<Filtro> filtros) {
 
     List<Hecho> hechosFiltrados = this.hechos.stream()
-        .filter(hecho -> this.aplicarFiltrosAUnHecho(filtros, hecho) && !hecho.fueEliminado())
+        .filter(hecho -> this.aplicarFiltrosHecho(filtros, hecho) && !hecho.fueEliminado())
         .toList();
 
     hechosFiltrados.forEach(hecho -> {
@@ -73,11 +80,10 @@ public class Coleccion {
     });
 
     System.out.println("Total de hechos: " + hechosFiltrados.size());
-
   }
 
-  private boolean aplicarFiltrosAUnHecho(List<Filtro> filtros,Hecho hecho){
-    return filtros.stream().allMatch(filtro->filtro.cumpleFiltro(hecho));
+  private boolean aplicarFiltrosHecho(List<Filtro> filtros, Hecho hecho) {
+    return filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho));
   }
 
   public void cargarHechosDesdeFuente() {
@@ -87,7 +93,7 @@ public class Coleccion {
     Lector lector = LectorFactory.crearLector(tipo); // Usa la fábrica que vimos antes
 
     lector.leer(ruta).forEach(hecho -> {
-      if (this.aplicarFiltrosAUnHecho(criteriosDePertenencia, hecho)) {
+      if (this.aplicarFiltrosHecho(criteriosDePertenencia, hecho)) {
         this.hechos.add(hecho);
       }
     });

@@ -1,9 +1,9 @@
 package ar.edu.utn.frba.dds;
 
-import static ar.edu.utn.frba.dds.Lectores.TipoArchivo.CSV;
+import static ar.edu.utn.frba.dds.lectores.TipoArchivo.CSV;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import ar.edu.utn.frba.dds.Lectores.Fuente;
+import ar.edu.utn.frba.dds.lectores.Fuente;
 import ar.edu.utn.frba.dds.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.filtros.CampoDeHecho;

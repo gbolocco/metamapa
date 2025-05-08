@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.Lectores;
+package ar.edu.utn.frba.dds.lectores;
 
 import ar.edu.utn.frba.dds.hecho.Hecho;
 import java.util.List;

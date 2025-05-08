@@ -2,8 +2,8 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.hecho.Hecho;
+import ar.edu.utn.frba.dds.validaciones.Validacion;
 import java.util.Date;
-import ar.edu.utn.frba.dds.Validaciones.Validacion;
 
 public class SolicitudEliminacion {
   Hecho hecho;

@@ -1,9 +1,9 @@
 package ar.edu.utn.frba.dds.usuarios;
 
-import ar.edu.utn.frba.dds.Lectores.Fuente;
-import ar.edu.utn.frba.dds.Lectores.TipoArchivo;
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import ar.edu.utn.frba.dds.lectores.Fuente;
+import ar.edu.utn.frba.dds.lectores.TipoArchivo;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import java.util.List;
 

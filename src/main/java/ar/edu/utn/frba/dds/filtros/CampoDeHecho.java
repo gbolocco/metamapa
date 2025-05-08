@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.filtros;
 
 import ar.edu.utn.frba.dds.hecho.Hecho;
 import ar.edu.utn.frba.dds.hecho.Ubicacion;
-
 import java.time.LocalDate;
 import java.util.function.Function;
 

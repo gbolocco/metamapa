@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.hecho;
 
+import ar.edu.utn.frba.dds.validaciones.Validacion;
 import java.time.LocalDate;
-import ar.edu.utn.frba.dds.Validaciones.Validacion;
 
 public class Hecho {
   private String titulo;

@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.colecciones;
 
-import ar.edu.utn.frba.dds.Lectores.Fuente;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.hecho.Hecho;
+import ar.edu.utn.frba.dds.lectores.Fuente;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,10 @@ public class ColectionManager {
     if (buscarHechoPorNombre(nombreHecho) == null) {
       throw new IllegalArgumentException("No existe un hecho con el nombre: " + nombreHecho);
     } else {
-      SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(buscarHechoPorNombre(nombreHecho), justificacion);
+      SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(
+          buscarHechoPorNombre(nombreHecho),
+          justificacion
+      );
       solicitudesEliminacionHechos.add(nuevaSolicitud);
     }
   }
@@ -62,7 +65,8 @@ public class ColectionManager {
 
   public static void fueRechazada(SolicitudEliminacion solicitudEliminacion) {
     solicitudesEliminacionHechos.remove(solicitudEliminacion);
-    System.out.println("Solicitud de eliminacion rechazada: " + solicitudEliminacion.getHecho().getTitulo());
+    System.out.println("Solicitud de eliminacion rechazada: "
+        + solicitudEliminacion.getHecho().getTitulo());
   }
 
   public static List<SolicitudEliminacion> getSolicitudesEliminacionHechos() {

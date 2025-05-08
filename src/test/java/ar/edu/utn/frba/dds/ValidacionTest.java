@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds;
-import ar.edu.utn.frba.dds.hecho.Excepciones.CoordenadaInvalidaException;
-import ar.edu.utn.frba.dds.Validaciones.Validacion;
+import ar.edu.utn.frba.dds.hecho.excepciones.CoordenadaInvalidaException;
+import ar.edu.utn.frba.dds.validaciones.Validacion;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

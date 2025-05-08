@@ -1,12 +1,13 @@
-package ar.edu.utn.frba.dds.Validaciones;
+package ar.edu.utn.frba.dds.validaciones;
 
-import ar.edu.utn.frba.dds.hecho.Excepciones.CoordenadaInvalidaException;
+import ar.edu.utn.frba.dds.hecho.excepciones.CoordenadaInvalidaException;
 import java.util.List;
 
 public class Validacion {
   public static void validarStringNoVacio(String valor, String nombreCampo) {
     if (valor == null || valor.trim().isEmpty()) {
-      throw new IllegalArgumentException("El campo '" + nombreCampo + "' no puede ser nulo ni estar vacío.");
+      throw new IllegalArgumentException("El campo '"
+          + nombreCampo + "' no puede ser nulo ni estar vacío.");
     }
   }
 
@@ -21,13 +22,15 @@ public class Validacion {
       throw new IllegalArgumentException("La lista '" + nombreCampo + "' no puede ser nula.");
     }
     if (lista.contains(null)) {
-      throw new IllegalArgumentException("La lista '" + nombreCampo + "' no puede contener elementos nulos.");
+      throw new IllegalArgumentException("La lista '"
+          + nombreCampo + "' no puede contener elementos nulos.");
     }
   }
 
   public static void validarLongitudMinima(String valor, int min, String nombreCampo) {
     if (valor != null && valor.length() < min) {
-      throw new IllegalArgumentException("El campo '" + nombreCampo + "' debe superar los " + min + " caracteres.");
+      throw new IllegalArgumentException("El campo '" + nombreCampo
+          + "' debe superar los " + min + " caracteres.");
     }
   }
 

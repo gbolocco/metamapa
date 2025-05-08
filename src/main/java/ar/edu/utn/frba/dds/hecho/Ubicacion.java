@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.hecho;
-import ar.edu.utn.frba.dds.Validaciones.Validacion;
+
+import ar.edu.utn.frba.dds.validaciones.Validacion;
 
 public class Ubicacion {
   private Double latitud;

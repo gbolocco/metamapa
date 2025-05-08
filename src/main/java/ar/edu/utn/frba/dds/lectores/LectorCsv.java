@@ -1,11 +1,10 @@
-package ar.edu.utn.frba.dds.Lectores;
+package ar.edu.utn.frba.dds.lectores;
 
 import ar.edu.utn.frba.dds.hecho.Hecho;
 import ar.edu.utn.frba.dds.hecho.OriginHecho;
 import ar.edu.utn.frba.dds.hecho.Ubicacion;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -13,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LectorCSV implements Lector {
+public class LectorCsv implements Lector {
 
   @Override
   public List<Hecho> leer(String rutaArchivo) {
