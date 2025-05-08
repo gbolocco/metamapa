@@ -1,5 +1,8 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.lectores;
 
+import ar.edu.utn.frba.dds.hecho.Hecho;
+import ar.edu.utn.frba.dds.hecho.OriginHecho;
+import ar.edu.utn.frba.dds.hecho.Ubicacion;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import java.io.FileReader;
@@ -9,9 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LectorCSV {
+public class LectorCsv implements Lector {
 
-  public static List<Hecho> leerHechosDesdeCSV(String rutaArchivo) {
+  @Override
+  public List<Hecho> leer(String rutaArchivo) {
     List<Hecho> hechos = new ArrayList<>();
     LocalDate fechaCarga = LocalDate.now();
 
@@ -19,9 +23,7 @@ public class LectorCSV {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     try (CSVReader reader = new CSVReader(new FileReader(rutaArchivo))) {
-
       reader.skip(1);
-
       String[] fila;
       while ((fila = reader.readNext()) != null) {
         try {
@@ -59,6 +61,4 @@ public class LectorCSV {
 
     return hechos;
   }
-
-  }
-
+}

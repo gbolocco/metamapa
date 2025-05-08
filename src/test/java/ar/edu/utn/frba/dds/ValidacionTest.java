@@ -1,0 +1,79 @@
+package ar.edu.utn.frba.dds;
+import ar.edu.utn.frba.dds.hecho.excepciones.CoordenadaInvalidaException;
+import ar.edu.utn.frba.dds.validaciones.Validacion;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ValidacionTest {
+
+  @Test
+  public void testValidarNoNulo_OK() {
+    assertDoesNotThrow(() -> Validacion.validarNoNulo("desatres naturales", "descripcion"));
+  }
+
+  @Test
+  public void testValidarNoNulo_Falla() {
+    Exception ex = assertThrows(IllegalArgumentException.class, () ->
+        Validacion.validarNoNulo(null, "descripcion"));
+    assertEquals("El campo 'descripcion' no puede ser nulo.", ex.getMessage());
+  }
+
+  @Test
+  public void testValidarStringNoVacio_OK() {
+    assertDoesNotThrow(() -> Validacion.validarStringNoVacio("Desastres", "titulo"));
+  }
+
+  @Test
+  public void testValidarStringNoVacio_FallaPorVacio() {
+    Exception ex = assertThrows(IllegalArgumentException.class, () ->
+        Validacion.validarStringNoVacio("   ", "titulo"));
+    assertEquals("El campo 'titulo' no puede ser nulo ni estar vacío.", ex.getMessage());
+  }
+
+  @Test
+  public void testValidarLongitudMaxima_OK() {
+    assertDoesNotThrow(() -> Validacion.validarLongitudMinima("abc", 2, "justificacion"));
+  }
+
+  @Test
+  public void testValidarLongitudMaxima_Falla() {
+    Exception ex = assertThrows(IllegalArgumentException.class, () ->
+        Validacion.validarLongitudMinima("texto", 10, "justificacion"));
+    assertTrue(ex.getMessage().contains("debe superar"));
+  }
+
+  @Test
+  public void testValidarCoordenadas_OK() {
+    assertDoesNotThrow(() ->
+        Validacion.validarCoordenadas(45.0, 90.0)
+    );
+  }
+  @Test
+  public void testValidarCoordenadas_fueraDeRango() {
+    assertThrows(CoordenadaInvalidaException.class, () ->
+        Validacion.validarCoordenadas(Double.valueOf(-100.0), Double.valueOf(20.0)));
+    assertThrows(CoordenadaInvalidaException.class, () ->
+        Validacion.validarCoordenadas(Double.valueOf(10.0), Double.valueOf(200.0)));
+  }
+
+  @Test
+  public void testValidarCoordenadas_FallaPorNulo() {
+    assertThrows(IllegalArgumentException.class, () ->
+        Validacion.validarCoordenadas(null, 0.0));
+  }
+
+  @Test
+  public void testValidarCoordenadas_FallaPorRango() {
+    assertThrows(CoordenadaInvalidaException.class, () ->
+        Validacion.validarCoordenadas(100.0, 0.0));
+  }
+
+  @Test
+  public void testValidarListaNoNulaNiConElementosNulos_ListaVacia_OK() {
+    List<String> listaVacia = new ArrayList<>();
+    assertDoesNotThrow(() -> Validacion.validarListaNoNulaNiConElementosNulos(listaVacia, "criteriosDePertenencia"));
+  }
+}
