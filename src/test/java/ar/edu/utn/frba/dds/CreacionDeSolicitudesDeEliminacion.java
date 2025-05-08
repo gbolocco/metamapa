@@ -50,7 +50,10 @@ public class CreacionDeSolicitudesDeEliminacion {
     //Creamos un usuario contribuyente
     Contribuyente contribuyente = new Contribuyente("Juan","Luengo",20);
 
-    contribuyente.solicitarEliminacionHecho("Nevada histórica deja múltiples daños en Colón","Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.");
+    // justificacion de al menos 500 caracteres
+    String justificacionLarga = new String(new char[501]).replace('\0', 'a');
+
+    contribuyente.solicitarEliminacionHecho("Nevada histórica deja múltiples daños en Colón", justificacionLarga);
     administrador.verSolicitudesEliminacion();
     administrador.aceptarSolicitudEliminacion("Nevada histórica deja múltiples daños en Colón");
     administrador.verSolicitudesEliminacion();

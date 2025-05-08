@@ -28,10 +28,10 @@ public class AplicacionTest {
   public void testValidarJustificacionSolicitud() { // para probar validaciones
     Hecho hecho = new Hecho("Prueba", "Prueba", "Prueba", new Ubicacion(1.1,1.1),LocalDate.now(),LocalDate.now(), OriginHecho.FUENTE);
 
-    String justificacionLarga = new String(new char[501]).replace('\0', 'a');
+    String justificacionCorta = "no se";
 
     assertThrows(IllegalArgumentException.class, () -> {
-      new SolicitudEliminacion(hecho, justificacionLarga); // justificacion larga
+      new SolicitudEliminacion(hecho, justificacionCorta); // justificacion larga
     });
     assertThrows(IllegalArgumentException.class, () -> {
       new SolicitudEliminacion(hecho, null); // sin justificacion

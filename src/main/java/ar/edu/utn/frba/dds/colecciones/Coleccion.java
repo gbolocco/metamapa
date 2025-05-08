@@ -46,7 +46,7 @@ public class Coleccion {
 
     System.out.println("\n=== HECHOS CARGADOS ===");
     if(filtros != null){
-      imprimirHechosSegunFiltros(filtros);
+      this.imprimirHechosSegunFiltros(filtros);
     }else{
       List<Hecho> hechosSinEliminar = this.hechos.stream()
           .filter(hecho -> !hecho.fueEliminado())
@@ -64,7 +64,7 @@ public class Coleccion {
   public void imprimirHechosSegunFiltros(List<Filtro> filtros) {
 
     List<Hecho> hechosFiltrados = this.hechos.stream()
-        .filter(hecho -> this.aplicarFiltrosAUnHecho(filtros, hecho) || !hecho.fueEliminado())
+        .filter(hecho -> this.aplicarFiltrosAUnHecho(filtros, hecho) && !hecho.fueEliminado())
         .toList();
 
     hechosFiltrados.forEach(hecho -> {
@@ -74,6 +74,10 @@ public class Coleccion {
 
     System.out.println("Total de hechos: " + hechosFiltrados.size());
 
+  }
+
+  private boolean aplicarFiltrosAUnHecho(List<Filtro> filtros,Hecho hecho){
+    return filtros.stream().allMatch(filtro->filtro.cumpleFiltro(hecho));
   }
 
   public void cargarHechosDesdeFuente() {
@@ -87,10 +91,5 @@ public class Coleccion {
         this.hechos.add(hecho);
       }
     });
-  }
-
-
-  private boolean aplicarFiltrosAUnHecho(List<Filtro> filtros,Hecho hecho){
-    return filtros.stream().allMatch(filtro->filtro.cumpleFiltro(hecho));
   }
 }
