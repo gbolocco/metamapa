@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.filtros.FiltroFecha;
 import ar.edu.utn.frba.dds.usuarios.Administrador;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -20,7 +21,6 @@ public class CrearColeccionYFiltradoDeHechos {
 
   //Creamos usuario administrador y el colection manager
   Administrador administrador = new Administrador("admin","admin");
-  ColectionManager colectionManager = ColectionManager.getInstance();
 
   Fuente fuente = new Fuente(CSV,"desastres_naturales_argentina.csv");
 
@@ -32,6 +32,7 @@ public class CrearColeccionYFiltradoDeHechos {
   FiltroFecha filtroFecha= new FiltroFecha(fecha1,fecha2);
 
   @Test
+  @DisplayName("Creacion de una coleccion")
   void crearUnaColeccion(){
 
     //Agregamos filtros al criterio de pertenencia
@@ -49,6 +50,7 @@ public class CrearColeccionYFiltradoDeHechos {
   }
 
   @Test
+  @DisplayName("Filtrado de hechos")
   void filtradoDeHechos(){
 
     // Misma coleccion anterior

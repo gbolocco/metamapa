@@ -12,6 +12,8 @@ import ar.edu.utn.frba.dds.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.filtros.FiltroFecha;
 import ar.edu.utn.frba.dds.usuarios.Administrador;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -34,10 +36,11 @@ public class CreacionDeSolicitudesDeEliminacion {
 
 
   @Test
+  @DisplayName("Solicitud de eliminacion de un hecho")
   void solicitarEliminacionDeUnHecho(){
 
     //Creamos una coleccion
-    List<Filtro> criterioDePertenencia= new ArrayList<>();
+    List<Filtro> criterioDePertenencia = new ArrayList<>();
     criterioDePertenencia.add(filtroTexto2);
     criterioDePertenencia.add(filtroFecha);
     administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero",fuente.getPathArchivo(),criterioDePertenencia,CSV);

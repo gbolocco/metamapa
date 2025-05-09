@@ -37,7 +37,7 @@ public class Coleccion {
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
   }
-  //geterss
+  //getters
 
   public String nombre() {
     return this.titulo;
