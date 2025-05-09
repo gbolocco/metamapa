@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.filtros.FiltroFecha;
 import ar.edu.utn.frba.dds.usuarios.Administrador;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -20,7 +21,6 @@ public class CrearColeccionYFiltradoDeHechos {
 
   //Creamos usuario administrador y el colection manager
   Administrador administrador = new Administrador("admin","admin");
-  ColectionManager colectionManager= new ColectionManager();
 
   Fuente fuente = new Fuente(CSV,"desastres_naturales_argentina.csv");
 
@@ -32,6 +32,7 @@ public class CrearColeccionYFiltradoDeHechos {
   FiltroFecha filtroFecha= new FiltroFecha(fecha1,fecha2);
 
   @Test
+  @DisplayName("Creacion de una coleccion")
   void crearUnaColeccion(){
 
     //Agregamos filtros al criterio de pertenencia
@@ -44,11 +45,12 @@ public class CrearColeccionYFiltradoDeHechos {
     administrador.importarDatosDeFuente("Hechos de enero");
 
     //Los mostramos por pantalla
-    Coleccion coleccion= ColectionManager.getColeccion("Hechos de enero");
+    Coleccion coleccion= ColectionManager.getInstance().getColeccion("Hechos de enero");
     coleccion.visualizarHechos(null);
   }
 
   @Test
+  @DisplayName("Filtrado de hechos")
   void filtradoDeHechos(){
 
     // Misma coleccion anterior
@@ -56,7 +58,7 @@ public class CrearColeccionYFiltradoDeHechos {
     criterioDePertenencia.add(filtroFecha);
     administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero",fuente.getPathArchivo(),criterioDePertenencia,CSV);
     administrador.importarDatosDeFuente("Hechos de enero");
-    Coleccion coleccion= ColectionManager.getColeccion("Hechos de enero");
+    Coleccion coleccion= ColectionManager.getInstance().getColeccion("Hechos de enero");
 
     //Creamos lista de filtros y las mostramos por pantalla
     List<Filtro> filtros = new ArrayList<>();

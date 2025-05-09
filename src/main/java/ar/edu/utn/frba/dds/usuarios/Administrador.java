@@ -9,12 +9,12 @@ import java.util.List;
 
 public class Administrador {
 
-  private String usuario;
-  private String password;
+  //private String usuario;
+  //private String password;
 
   public Administrador(String usuario, String password) {
-    this.usuario = usuario;
-    this.password = password;
+    //this.usuario = usuario;
+    //this.password = password;
   }
 
   public void crearColeccion(
@@ -26,11 +26,11 @@ public class Administrador {
   ) {
 
     Fuente fuente = new Fuente(tipoArchivo, pathArchivo);
-    ColectionManager.crearColeccion(nombre, descripcion, filtros, fuente);
+    ColectionManager.getInstance().crearColeccion(nombre, descripcion, filtros, fuente);
   }
 
   public void importarDatosDeFuente(String nombreColeccion) {
-    ColectionManager.getColeccion(nombreColeccion).cargarHechosDesdeFuente();
+    ColectionManager.getInstance().getColeccion(nombreColeccion).cargarHechosDesdeFuente();
   }
 
   public void verSolicitudesEliminacion() {
@@ -54,11 +54,12 @@ public class Administrador {
         .orElse(null);
     if (solicitudEliminacion == null) {
       System.out.println("No existe una solicitud de eliminacion con el nombre: " + nombreHecho);
+      return;
     }
     solicitudEliminacion.aceptar();
   }
 
   public List<SolicitudEliminacion> obtenerSolicitudesEliminacion() {
-    return ColectionManager.getSolicitudesEliminacionHechos();
+    return ColectionManager.getInstance().getSolicitudesEliminacionHechos();
   }
 }
