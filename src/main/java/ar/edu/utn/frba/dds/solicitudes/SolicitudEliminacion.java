@@ -26,12 +26,12 @@ public class SolicitudEliminacion {
 
   public void aceptar() {
     this.estadoSolicitud = estadoSolicitud.ACEPTADA;
-    ColectionManager.fueAceptada(this);
+    ColectionManager.getInstance().fueAceptada(this);
   }
 
   public void rechazar() {
     this.estadoSolicitud = estadoSolicitud.RECHAZADA;
-    ColectionManager.fueRechazada(this);
+    ColectionManager.getInstance().fueRechazada(this);
   }
 
   public Hecho getHecho() {

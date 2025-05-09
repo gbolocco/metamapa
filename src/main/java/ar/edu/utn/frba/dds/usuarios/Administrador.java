@@ -26,11 +26,11 @@ public class Administrador {
   ) {
 
     Fuente fuente = new Fuente(tipoArchivo, pathArchivo);
-    ColectionManager.crearColeccion(nombre, descripcion, filtros, fuente);
+    ColectionManager.getInstance().crearColeccion(nombre, descripcion, filtros, fuente);
   }
 
   public void importarDatosDeFuente(String nombreColeccion) {
-    ColectionManager.getColeccion(nombreColeccion).cargarHechosDesdeFuente();
+    ColectionManager.getInstance().getColeccion(nombreColeccion).cargarHechosDesdeFuente();
   }
 
   public void verSolicitudesEliminacion() {
@@ -60,6 +60,6 @@ public class Administrador {
   }
 
   public List<SolicitudEliminacion> obtenerSolicitudesEliminacion() {
-    return ColectionManager.getSolicitudesEliminacionHechos();
+    return ColectionManager.getInstance().getSolicitudesEliminacionHechos();
   }
 }

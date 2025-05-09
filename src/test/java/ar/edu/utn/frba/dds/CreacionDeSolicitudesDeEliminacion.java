@@ -21,7 +21,7 @@ import java.util.List;
 public class CreacionDeSolicitudesDeEliminacion {
 
   Administrador administrador = new Administrador("admin","admin");
-  ColectionManager colectionManager= new ColectionManager();
+  ColectionManager colectionManager = ColectionManager.getInstance();
 
   Fuente fuente = new Fuente(CSV,"desastres_naturales_argentina.csv");
 

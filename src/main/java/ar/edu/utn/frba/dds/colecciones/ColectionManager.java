@@ -10,48 +10,62 @@ import java.util.Objects;
 
 public class ColectionManager {
 
-  // Se inicializan los campos estáticos de forma estática
-  private static final List<Coleccion> COLECCIONES = new ArrayList<>();
-  private static final List<Hecho> HECHOS_ELIMINADOS = new ArrayList<>();
-  private static final List<SolicitudEliminacion>
-      SOLICITUDES_ELIMINACION_HECHOS = new ArrayList<>();
+  private List<Coleccion> colecciones = new ArrayList<>();
+  private List<Hecho> hechosEliminados = new ArrayList<>();
+  private List<SolicitudEliminacion> solicitudesEliminacionHechos = new ArrayList<>();
+  private static ColectionManager instance = new ColectionManager();
 
-  // Constructor vacío
-  public ColectionManager() {
-    // No es necesario inicializar colecciones estáticas aquí
+  private ColectionManager() {
+  }
+
+  //getters
+  public static ColectionManager getInstance() {
+    return instance;
+  }
+
+  public List<Coleccion> getColecciones() {
+    return new ArrayList<>(this.colecciones);
+  }
+
+  public List<Hecho> getHechosEliminados() {
+    return new ArrayList<>(this.hechosEliminados);
+  }
+
+  public List<SolicitudEliminacion> getSolicitudesEliminacionHechos() {
+    return new ArrayList<>(this.solicitudesEliminacionHechos);
   }
 
   // Método para crear una nueva colección
-  public static void crearColeccion(
+  public void crearColeccion(
       String nombre,
       String descripcion,
       List<Filtro> filtros,
       Fuente fuente
   ) {
-    COLECCIONES.add(new Coleccion(nombre, descripcion, filtros, fuente));
+    this.getColecciones().add(new Coleccion(nombre, descripcion, filtros, fuente));
   }
 
   // Obtener colección por nombre
-  public static Coleccion getColeccion(String nombre) {
-    return COLECCIONES.stream()
+  public Coleccion getColeccion(String nombre) {
+    return this.getColecciones().stream()
         .filter(coleccion -> Objects.equals(nombre, coleccion.nombre()))
         .findFirst()
         .orElse(null); // Podrías lanzar una excepción aquí si es necesario
   }
 
   // Solicitar eliminación de un hecho
-  public static void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
+  public void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
     Hecho hecho = buscarHechoPorNombre(nombreHecho);
     if (hecho == null) {
       throw new IllegalArgumentException("No existe un hecho con el nombre: " + nombreHecho);
     }
     SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(hecho, justificacion);
-    SOLICITUDES_ELIMINACION_HECHOS.add(nuevaSolicitud);
+    this.getSolicitudesEliminacionHechos().add(nuevaSolicitud);
   }
 
   // Buscar hecho por nombre
-  public static Hecho buscarHechoPorNombre(String nombreHecho) {
-    return COLECCIONES.stream()
+  public Hecho buscarHechoPorNombre(String nombreHecho) {
+    return this.getColecciones().stream()
         .flatMap(coleccion -> coleccion.getHechos().stream())
         .filter(hecho -> Objects.equals(hecho.getTitulo(), nombreHecho))
         .findFirst()
@@ -59,31 +73,26 @@ public class ColectionManager {
   }
 
   // Aceptar la solicitud de eliminación
-  public static void fueAceptada(SolicitudEliminacion solicitudEliminacion) {
+  public void fueAceptada(SolicitudEliminacion solicitudEliminacion) {
     Hecho hechoEliminado = solicitudEliminacion.getHecho();
     hechoEliminado.eliminarHecho();
-    SOLICITUDES_ELIMINACION_HECHOS.remove(solicitudEliminacion);
-    HECHOS_ELIMINADOS.add(hechoEliminado);
+    this.getSolicitudesEliminacionHechos().remove(solicitudEliminacion);
+    this.getHechosEliminados().add(hechoEliminado);
     System.out.println("Hecho eliminado: " + solicitudEliminacion
         .getHecho().getTitulo());
   }
 
   // Rechazar la solicitud de eliminación
-  public static void fueRechazada(SolicitudEliminacion solicitudEliminacion) {
-    SOLICITUDES_ELIMINACION_HECHOS.remove(solicitudEliminacion);
+  public void fueRechazada(SolicitudEliminacion solicitudEliminacion) {
+    this.getSolicitudesEliminacionHechos().remove(solicitudEliminacion);
     System.out.println("Solicitud de eliminación rechazada: "
         + solicitudEliminacion.getHecho().getTitulo());
-  }
-
-  // Obtener las solicitudes de eliminación
-  public static List<SolicitudEliminacion> getSolicitudesEliminacionHechos() {
-    return new ArrayList<>(SOLICITUDES_ELIMINACION_HECHOS);
   }
 
   // Visualizar hechos eliminados
   public void visualizarHechosEliminados() {
     System.out.println("=== Hechos Eliminados ===");
-    HECHOS_ELIMINADOS.forEach(Hecho::imprimirHecho);
+    this.getHechosEliminados().forEach(Hecho::imprimirHecho);
     System.out.println("=========================");
   }
 }

@@ -30,8 +30,8 @@ public class Contribuyente {
   }
 
   public void solicitarEliminacionHecho(String nombreHecho, String justificacion) {
-    Hecho hecho = ColectionManager.buscarHechoPorNombre(nombreHecho);
-    ColectionManager.solicitarEliminacionHecho(nombreHecho, justificacion);
+    Hecho hecho = ColectionManager.getInstance().buscarHechoPorNombre(nombreHecho);
+    ColectionManager.getInstance().solicitarEliminacionHecho(nombreHecho, justificacion);
     System.out.println("[-] Nueva solicitud pendiente | Hecho: " + hecho.getTitulo());
   }
 }
