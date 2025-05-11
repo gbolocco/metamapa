@@ -17,13 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LectorCsv implements Lector {
+  private static final LectorCsv instance = new LectorCsv();
+  private LectorCsv() {}
 
+  public static LectorCsv getInstancia() {
+    return instance;
+  }
   @Override
   public List<Hecho> leer(String rutaArchivo) {
+    if (!rutaArchivo.toLowerCase().endsWith(".csv")) {
+      throw new IllegalArgumentException("El archivo debe tener extensión .csv");
+    }
     List<Hecho> hechos = new ArrayList<>();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     LocalDate fechaCarga = LocalDate.now();
     OriginHecho origen = OriginHecho.FUENTE;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
     try (
         Reader fileReader = new InputStreamReader(

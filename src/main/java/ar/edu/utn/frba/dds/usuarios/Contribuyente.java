@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.usuarios;
 import ar.edu.utn.frba.dds.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import ar.edu.utn.frba.dds.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.hecho.Hecho;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class Contribuyente {
     return this.edad != null && this.edad >= 18;
   }
 
-  public void navegarHechosPorColeccionSegunFiltros(Coleccion coleccion, List<Filtro> filtros) {
-    coleccion.visualizarHechos(filtros);
+  public void navegarHechosPorColeccionSegunFiltros(Coleccion coleccion, List<Filtro> filtros, TipoCombinacion tipo) {
+    coleccion.visualizarHechos(filtros, tipo);
   }
 
   public void solicitarEliminacionHecho(String nombreHecho, String justificacion) {

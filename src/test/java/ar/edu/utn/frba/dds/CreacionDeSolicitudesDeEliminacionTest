@@ -1,9 +1,6 @@
 package ar.edu.utn.frba.dds;
-
-import static ar.edu.utn.frba.dds.lectores.TipoArchivo.CSV;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import ar.edu.utn.frba.dds.lectores.Fuente;
 import ar.edu.utn.frba.dds.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.filtros.CampoDeHecho;
@@ -25,8 +22,6 @@ public class CreacionDeSolicitudesDeEliminacion {
   Administrador administrador = new Administrador("admin","admin");
   ColectionManager colectionManager = ColectionManager.getInstance();
 
-  Fuente fuente = new Fuente(CSV,"desastres_naturales_argentina.csv");
-
   FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("Buenos Aires", CampoDeHecho.TITULO);
   FiltroContieneTexto filtroTexto2 = new FiltroContieneTexto("nevada", CampoDeHecho.DESCRIPCION);
   LocalDate fecha1 =  LocalDate.of(2014,1,1);
@@ -43,7 +38,7 @@ public class CreacionDeSolicitudesDeEliminacion {
     List<Filtro> criterioDePertenencia = new ArrayList<>();
     criterioDePertenencia.add(filtroTexto2);
     criterioDePertenencia.add(filtroFecha);
-    administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero",fuente.getPathArchivo(),criterioDePertenencia,CSV);
+    administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero","desastres_naturales_argentina.csv",criterioDePertenencia,CSV);
     administrador.importarDatosDeFuente("Hechos de enero");
     Coleccion coleccion = colectionManager.getColeccion("Hechos de enero");
 

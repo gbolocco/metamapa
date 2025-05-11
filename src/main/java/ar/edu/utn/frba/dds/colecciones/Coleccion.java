@@ -1,11 +1,9 @@
 package ar.edu.utn.frba.dds.colecciones;
 
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import ar.edu.utn.frba.dds.filtros.TipoCombinacion;
+import ar.edu.utn.frba.dds.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.hecho.Hecho;
-import ar.edu.utn.frba.dds.lectores.Fuente;
-import ar.edu.utn.frba.dds.lectores.Lector;
-import ar.edu.utn.frba.dds.lectores.LectorFactory;
-import ar.edu.utn.frba.dds.lectores.TipoArchivo;
 import ar.edu.utn.frba.dds.validaciones.Validacion;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +12,14 @@ public class Coleccion {
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
-  private Fuente fuente;
+  private String rutaArchivo;
   private List<Hecho> hechos;
 
   public Coleccion(
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      Fuente fuente
+      String rutaArchivo
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción");
@@ -29,13 +27,14 @@ public class Coleccion {
         criteriosDePertenencia,
         "criteriosDePertenencia"
     );
-    Validacion.validarNoNulo(fuente, "fuente");
 
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
-    this.fuente = fuente;
+    this.rutaArchivo = rutaArchivo;
     this.hechos = new ArrayList<>();
+    this.cargarHechosDesdeFuente();
+    this.cargarColeccion();
   }
   //getters
 
@@ -50,14 +49,24 @@ public class Coleccion {
   public List<Hecho> getHechos() {
     return new ArrayList<>(this.hechos);
   }
-
+  public void cargarColeccion(){
+    ColeccionesRepository.getInstancia().agregarColeccion(this);
+  }
   //metodos relacionados a los hechos
+  public void cargarHechosDesdeFuente() {
+    LectorCsv lector = LectorCsv.getInstancia();
+    lector.leer(this.rutaArchivo).forEach(hecho -> {
+      if (this.aplicarFiltrosHecho(criteriosDePertenencia, hecho, TipoCombinacion.AND)) {
+        this.hechos.add(hecho);
+      }
+    });
+  }
 
-  public void visualizarHechos(List<Filtro> filtros) {
+  public void visualizarHechos(List<Filtro> filtros, TipoCombinacion tipo) {
 
     System.out.println("\n=== HECHOS CARGADOS ===");
     if (filtros != null) {
-      this.imprimirHechosSegunFiltros(filtros);
+      this.imprimirHechosSegunFiltros(filtros, tipo );
     } else {
       List<Hecho> hechosSinEliminar = this.hechos.stream()
           .filter(hecho -> !hecho.fueEliminado())
@@ -72,10 +81,10 @@ public class Coleccion {
     }
   }
 
-  public void imprimirHechosSegunFiltros(List<Filtro> filtros) {
+  public void imprimirHechosSegunFiltros(List<Filtro> filtros, TipoCombinacion tipo) {
 
     List<Hecho> hechosFiltrados = this.hechos.stream()
-        .filter(hecho -> this.aplicarFiltrosHecho(filtros, hecho) && !hecho.fueEliminado())
+        .filter(hecho -> this.aplicarFiltrosHecho(filtros, hecho, tipo) && !hecho.fueEliminado())
         .toList();
 
     hechosFiltrados.forEach(hecho -> {
@@ -86,20 +95,11 @@ public class Coleccion {
     System.out.println("Total de hechos: " + hechosFiltrados.size());
   }
 
-  private boolean aplicarFiltrosHecho(List<Filtro> filtros, Hecho hecho) {
-    return filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho));
-  }
-
-  public void cargarHechosDesdeFuente() {
-    String ruta = this.fuente.getPathArchivo();
-    TipoArchivo tipo = this.fuente.getTipoArchivo();
-
-    Lector lector = LectorFactory.crearLector(tipo); // Usa la fábrica que vimos antes
-
-    lector.leer(ruta).forEach(hecho -> {
-      if (this.aplicarFiltrosHecho(criteriosDePertenencia, hecho)) {
-        this.hechos.add(hecho);
-      }
-    });
+  private boolean aplicarFiltrosHecho(List<Filtro> filtros, Hecho hecho, TipoCombinacion tipo) {
+    if (tipo == TipoCombinacion.AND) {
+      return filtros.stream().allMatch(f -> f.cumpleFiltro(hecho));
+    } else {
+      return filtros.stream().anyMatch(f -> f.cumpleFiltro(hecho));
+    }
   }
 }

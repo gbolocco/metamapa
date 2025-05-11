@@ -1,8 +1,4 @@
 package ar.edu.utn.frba.dds;
-
-import static ar.edu.utn.frba.dds.lectores.TipoArchivo.CSV;
-
-import ar.edu.utn.frba.dds.lectores.Fuente;
 import ar.edu.utn.frba.dds.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.colecciones.ColectionManager;
 import ar.edu.utn.frba.dds.filtros.CampoDeHecho;
@@ -22,7 +18,6 @@ public class CrearColeccionYFiltradoDeHechos {
   //Creamos usuario administrador y el colection manager
   Administrador administrador = new Administrador("admin","admin");
 
-  Fuente fuente = new Fuente(CSV,"desastres_naturales_argentina.csv");
 
   // Creamos una serie de filtros para el criterio de pertenencia y/o filtros
   FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("Buenos Aires", CampoDeHecho.TITULO);
@@ -40,9 +35,7 @@ public class CrearColeccionYFiltradoDeHechos {
     criterioDePertenencia.add(filtroFecha);
 
     //Admin crea una coleccion en base al criterio de pertenencia
-    administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero",fuente.getPathArchivo(),criterioDePertenencia,CSV);
-    //Se importan los hechos desde la fuente
-    administrador.importarDatosDeFuente("Hechos de enero");
+    administrador.crearColeccion("Hechos de enero","hechos ocurridos en el mes de enero","desastres_naturales_argentina.csv",criterioDePertenencia);
 
     //Los mostramos por pantalla
     Coleccion coleccion= ColectionManager.getInstance().getColeccion("Hechos de enero");

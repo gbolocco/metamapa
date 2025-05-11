@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.colecciones;
 
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.hecho.Hecho;
-import ar.edu.utn.frba.dds.lectores.Fuente;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,30 +26,10 @@ public class ColectionManager {
     return new ArrayList<>(this.colecciones);
   }
 
-  public List<Hecho> getHechosEliminados() {
-    return new ArrayList<>(this.hechosEliminados);
-  }
+
 
   public List<SolicitudEliminacion> getSolicitudesEliminacionHechos() {
     return new ArrayList<>(this.solicitudesEliminacionHechos);
-  }
-
-  // Método para crear una nueva colección
-  public void crearColeccion(
-      String nombre,
-      String descripcion,
-      List<Filtro> filtros,
-      Fuente fuente
-  ) {
-    this.getColecciones().add(new Coleccion(nombre, descripcion, filtros, fuente));
-  }
-
-  // Obtener colección por nombre
-  public Coleccion getColeccion(String nombre) {
-    return this.getColecciones().stream()
-        .filter(coleccion -> Objects.equals(nombre, coleccion.nombre()))
-        .findFirst()
-        .orElse(null); // Podrías lanzar una excepción aquí si es necesario
   }
 
   // Solicitar eliminación de un hecho
@@ -61,15 +40,6 @@ public class ColectionManager {
     }
     SolicitudEliminacion nuevaSolicitud = new SolicitudEliminacion(hecho, justificacion);
     this.getSolicitudesEliminacionHechos().add(nuevaSolicitud);
-  }
-
-  // Buscar hecho por nombre
-  public Hecho buscarHechoPorNombre(String nombreHecho) {
-    return this.getColecciones().stream()
-        .flatMap(coleccion -> coleccion.getHechos().stream())
-        .filter(hecho -> Objects.equals(hecho.getTitulo(), nombreHecho))
-        .findFirst()
-        .orElse(null);
   }
 
   // Aceptar la solicitud de eliminación
@@ -87,12 +57,5 @@ public class ColectionManager {
     this.getSolicitudesEliminacionHechos().remove(solicitudEliminacion);
     System.out.println("Solicitud de eliminación rechazada: "
         + solicitudEliminacion.getHecho().getTitulo());
-  }
-
-  // Visualizar hechos eliminados
-  public void visualizarHechosEliminados() {
-    System.out.println("=== Hechos Eliminados ===");
-    this.getHechosEliminados().forEach(Hecho::imprimirHecho);
-    System.out.println("=========================");
   }
 }
