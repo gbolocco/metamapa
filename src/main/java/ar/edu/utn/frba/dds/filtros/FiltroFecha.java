@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.filtros;
 import ar.edu.utn.frba.dds.hecho.Hecho;
 import java.time.LocalDate;
 
-public class FiltroFecha extends Filtro {
+public class FiltroFecha implements Filtro {
   private LocalDate fechaDesde;
   private LocalDate fechaHasta;
   private CampoDeHecho campoDeHechoAplicado;
