@@ -2,10 +2,10 @@ package ar.edu.utn.frba.dds;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import ar.edu.utn.frba.dds.hecho.Hecho;
-import ar.edu.utn.frba.dds.hecho.OriginHecho;
-import ar.edu.utn.frba.dds.hecho.Ubicacion;
-import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OriginHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
