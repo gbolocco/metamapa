@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudEliminacionRepositoryMemory;
 import java.util.Date;
 
 public class SolicitudEliminacion {
@@ -26,6 +27,7 @@ public class SolicitudEliminacion {
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     hecho.marcarComoEliminado();
+    SolicitudEliminacionRepositoryMemory.getInstancia().eliminar(this);
   }
 
   public void rechazar() {

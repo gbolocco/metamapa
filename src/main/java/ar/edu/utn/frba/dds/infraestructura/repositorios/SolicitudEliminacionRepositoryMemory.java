@@ -12,6 +12,13 @@ public class SolicitudEliminacionRepositoryMemory implements SolicitudEliminacio
     solicitudesEliminacion.add(solicitud);
   }
 
+  private static final SolicitudEliminacionRepositoryMemory instance = new SolicitudEliminacionRepositoryMemory();
+
+  public static SolicitudEliminacionRepositoryMemory getInstancia(){
+    return instance;
+  }
+
+
   public List<SolicitudEliminacion> pendientes() {
     return solicitudesEliminacion.stream()
         .filter(SolicitudEliminacion::estaPendiente)

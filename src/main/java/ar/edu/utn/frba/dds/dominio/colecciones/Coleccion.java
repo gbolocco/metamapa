@@ -52,7 +52,7 @@ public class Coleccion {
   }
   public String getDescripcion() {return this.descripcion;}
   public List<Hecho> mostrarHechos() {
-    return new ArrayList<>(this.hechos);
+    return new ArrayList<>(this.hechos.stream().filter(hecho -> hecho.estaEliminado() == false).toList());
   }
 
   public void cargarColeccion(){
