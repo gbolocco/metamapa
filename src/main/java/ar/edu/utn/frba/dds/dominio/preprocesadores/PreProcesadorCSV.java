@@ -85,12 +85,10 @@ public class PreProcesadorCSV {
           String mes = filaMapeada.getOrDefault("Start Month", "").trim();
           String dia = filaMapeada.getOrDefault("Start Day", "").trim();
 
-          if (!año.isEmpty() && !mes.isEmpty() && !dia.isEmpty()) {
-            dia = String.format("%02d", Integer.parseInt(dia));
+          if (!año.isEmpty() && !mes.isEmpty()) {
+            dia  = !dia.isEmpty() ? String.format("%02d", Integer.parseInt(dia)) : String.format("%02d", 1);
             mes = String.format("%02d", Integer.parseInt(mes));
             newRow.add(año + "-" + mes + "-" + dia);
-          } else {
-            newRow.add("");
           }
           break;
         case "categoria":
