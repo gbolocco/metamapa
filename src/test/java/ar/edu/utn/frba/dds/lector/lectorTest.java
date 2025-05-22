@@ -15,7 +15,7 @@ public class lectorTest {
   @BeforeEach
   void setUp() {
     lector = new LectorCsv();
-    hechos=lector.leer("D:\\facultad\\TERCER AÑO\\Diseño de Sistemas\\tpa-2025-02\\datos\\desastres_naturales_processed.csv");
+    hechos=lector.leer("datos/desastres_naturales_processed.csv");
   }
   @Test
   void testLectorCsv() {

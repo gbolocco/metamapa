@@ -18,7 +18,7 @@ import java.util.Map;
 import ar.edu.utn.frba.dds.dominio.hechos.CampoEsperado;
 
 public class LectorCsv implements Lector {
-
+  private int errores = 0;
   public List<Hecho> leer(String rutaArchivo) {
     if (!rutaArchivo.toLowerCase().endsWith(".csv")) {
       throw new IllegalArgumentException("Solo se permiten archivos con extensión .csv");
@@ -31,19 +31,19 @@ public class LectorCsv implements Lector {
     CSVReader lector = null;
     String[] encabezados = null;
 
-      try {
-        lector = new CSVReaderBuilder(new FileReader(rutaArchivo))
-            .withCSVParser(new CSVParserBuilder()
-                .withSeparator(';')
-                .build())
-            .build();
+    try {
+      lector = new CSVReaderBuilder(new FileReader(rutaArchivo))
+          .withCSVParser(new CSVParserBuilder()
+              .withSeparator(';')
+              .build())
+          .build();
 
-        encabezados = lector.readNext();
-        System.out.println("Encabezados: " + encabezados[1]);
+      encabezados = lector.readNext();
+      System.out.println("Encabezados: " + encabezados[1]);
 
-      } catch (Exception e) {
-        System.out.println("Error al intentar con separador '" + ";" + "': " + e.getMessage());
-      }
+    } catch (Exception e) {
+      System.out.println("Error al intentar con separador '" + ";" + "': " + e.getMessage());
+    }
 
     if (lector == null || encabezados == null) {
       throw new RuntimeException("No se pudo leer el archivo: separador inválido o archivo mal formado.");
@@ -57,7 +57,7 @@ public class LectorCsv implements Lector {
     try {
       Map<CampoEsperado, Integer> indices = new HashMap<>();
       for (int posicionDeCampo = 0; posicionDeCampo < encabezados.length; posicionDeCampo++) {
-        CampoEsperado campo =      CampoEsperado.buscarPorEncabezado(encabezados[posicionDeCampo]);
+        CampoEsperado campo = CampoEsperado.buscarPorEncabezado(encabezados[posicionDeCampo]);
         if (campo != null) {
           indices.put(campo, posicionDeCampo);
         }
@@ -71,33 +71,43 @@ public class LectorCsv implements Lector {
       }
 
       String[] fila;
+
       while ((fila = lector.readNext()) != null) {
-        String titulo = getCampo(fila, indices.get(CampoEsperado.TITULO));
-        String descripcion = getCampo(fila, indices.get(CampoEsperado.DESCRIPCION));
-        String categoria = getCampo(fila, indices.get(CampoEsperado.CATEGORIA));
-        Double latitud = Double.parseDouble(getCampo(fila, indices.get(CampoEsperado.LATITUD)));
-        Double longitud = Double.parseDouble(getCampo(fila, indices.get(CampoEsperado.LONGITUD)));
-        LocalDate fechaHecho = LocalDate.parse(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)), formatter);
+        try {
+          String titulo = getCampo(fila, indices.get(CampoEsperado.TITULO));
+          String descripcion = getCampo(fila, indices.get(CampoEsperado.DESCRIPCION));
+          String categoria = getCampo(fila, indices.get(CampoEsperado.CATEGORIA));
+          Double latitud = 0.0;
+          Double longitud = 0.0;
+          LocalDate fechaHecho = LocalDate.parse(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)), formatter);
+          // TODO validar latitud y longitud que existan
+          // TODO filtro por titulo unico
+          Hecho hecho = new Hecho(
+              titulo,
+              descripcion,
+              categoria,
+              new Ubicacion(latitud, longitud),
+              fechaHecho,
+              fechaCarga,
+              origen
+          );
 
-
-        Hecho hecho = new Hecho(
-            titulo,
-            descripcion,
-            categoria,
-            new Ubicacion(latitud, longitud),
-            fechaHecho,
-            fechaCarga,
-            origen
-        );
-
-        hechos.add(hecho);
+          hechos.add(hecho);
+        } catch (Exception e) {
+          errores ++;
+          continue;
+        }
       }
-    } catch (Exception e) {
-      System.out.println("Error al procesar el archivo: " + e.getMessage());
-      e.printStackTrace();
+    }catch(Exception e){
+        System.out.println("Error al procesar el archivo: " + e.getMessage());
+        e.printStackTrace();
+      }
+    System.out.println("Cantidad de Errores " + errores);
+    for (Hecho hecho : hechos) {
+      System.out.println(hecho.getTitulo());
     }
     return hechos;
-  }
+    }
 
   private static String getCampo(String[] fila, Integer indice) {
 
