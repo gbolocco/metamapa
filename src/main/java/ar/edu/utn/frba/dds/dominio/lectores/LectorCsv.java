@@ -93,6 +93,7 @@ public class LectorCsv implements Lector {
 
         } catch (Exception e) {
           errores ++;
+          System.out.println("Error archivo: " + e.getMessage());
           continue;
         }
       }

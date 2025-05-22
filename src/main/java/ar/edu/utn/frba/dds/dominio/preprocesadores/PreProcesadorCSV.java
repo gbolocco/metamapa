@@ -81,14 +81,14 @@ public class PreProcesadorCSV {
           newRow.add(inputFileName + "_" + filaMapeada.getOrDefault("Location", ""));
           break;
         case "fecha_acontecimiento":
-          String año = filaMapeada.getOrDefault("Start Year", "").trim();
+          String anio = filaMapeada.getOrDefault("Start Year", "").trim();
           String mes = filaMapeada.getOrDefault("Start Month", "").trim();
           String dia = filaMapeada.getOrDefault("Start Day", "").trim();
 
-          if (!año.isEmpty() && !mes.isEmpty()) {
+          if (!anio.isEmpty() && !mes.isEmpty()) {
             dia  = !dia.isEmpty() ? String.format("%02d", Integer.parseInt(dia)) : String.format("%02d", 1);
             mes = String.format("%02d", Integer.parseInt(mes));
-            newRow.add(año + "-" + mes + "-" + dia);
+            newRow.add(dia + "/" + mes + "/" + anio);
           }
           break;
         case "categoria":

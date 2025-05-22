@@ -15,7 +15,7 @@ public class lectorTest {
   @BeforeEach
   void setUp() {
     lector = new LectorCsv();
-    hechos=lector.leer("datos/desastres_naturales_first_8 (1).csv");
+    hechos=lector.leer("datos/desastres_naturales_processed.csv");
   }
   @Test
   void testLectorCsv() {
