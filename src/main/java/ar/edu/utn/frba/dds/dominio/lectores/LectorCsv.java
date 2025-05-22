@@ -49,11 +49,6 @@ public class LectorCsv implements Lector {
       throw new RuntimeException("No se pudo leer el archivo: separador inválido o archivo mal formado.");
     }
 
-    /*boolean noEsElFormatoAdecuado = ( encabezados.length < CampoEsperado.listado().size());
-    if (noEsElFormatoAdecuado) {
-      throw new RuntimeException("El archivo está vacío o tiene menos columnas de las requeridas.");
-    }*/
-
     try {
       Map<CampoEsperado, Integer> indices = new HashMap<>();
       for (int posicionDeCampo = 0; posicionDeCampo < encabezados.length; posicionDeCampo++) {
@@ -62,7 +57,6 @@ public class LectorCsv implements Lector {
           indices.put(campo, posicionDeCampo);
         }
       }
-      System.out.println("indices" + indices);
 
       for (CampoEsperado campo : CampoEsperado.listado()) {
         if (!indices.containsKey(campo)) {
@@ -74,13 +68,15 @@ public class LectorCsv implements Lector {
 
       while ((fila = lector.readNext()) != null) {
         try {
+          if (!validarCamposObligatorios(fila, indices)) {
+            continue;
+          };
           String titulo = getCampo(fila, indices.get(CampoEsperado.TITULO));
           String descripcion = getCampo(fila, indices.get(CampoEsperado.DESCRIPCION));
           String categoria = getCampo(fila, indices.get(CampoEsperado.CATEGORIA));
           Double latitud = 0.0;
           Double longitud = 0.0;
           LocalDate fechaHecho = LocalDate.parse(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)), formatter);
-          // TODO validar latitud y longitud que existan
           // TODO filtro por titulo unico
           Hecho hecho = new Hecho(
               titulo,
@@ -116,6 +112,16 @@ public class LectorCsv implements Lector {
       return null;
     }
     return fila[indice].trim();
+  }
+
+  private boolean validarCamposObligatorios(String[] fila, Map<CampoEsperado, Integer> indices) {
+    if(getCampo(fila, indices.get(CampoEsperado.TITULO)).isEmpty()
+        || getCampo(fila, indices.get(CampoEsperado.LONGITUD)).isEmpty()
+        || getCampo(fila, indices.get(CampoEsperado.LATITUD)).isEmpty() ) {
+
+      return true;
+    }
+    return false;
   }
 
 }
