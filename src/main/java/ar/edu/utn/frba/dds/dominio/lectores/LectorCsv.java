@@ -12,10 +12,12 @@ import java.io.FileReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import ar.edu.utn.frba.dds.dominio.hechos.CampoEsperado;
+import java.util.Objects;
 
 public class LectorCsv implements Lector {
   private int errores = 0;
@@ -39,7 +41,7 @@ public class LectorCsv implements Lector {
           .build();
 
       encabezados = lector.readNext();
-      System.out.println("Encabezados: " + encabezados[1]);
+
 
     } catch (Exception e) {
       System.out.println("Error al intentar con separador '" + ";" + "': " + e.getMessage());
@@ -62,37 +64,48 @@ public class LectorCsv implements Lector {
           indices.put(campo, posicionDeCampo);
         }
       }
-      System.out.println("indices" + indices);
-
-      for (CampoEsperado campo : CampoEsperado.listado()) {
+      /*for (CampoEsperado campo : CampoEsperado.listado()) {
         if (!indices.containsKey(campo)) {
           throw new RuntimeException("Falta el campo obligatorio: " + campo.name());
         }
-      }
+      }*/
 
       String[] fila;
 
-      while ((fila = lector.readNext()) != null) {
+      while ((fila = lector.readNext()) != null ) {
         try {
+          if(validarCamposObligatorios(fila,indices)){
+            throw new RuntimeException("Faltan campos obligatorios");
+          }
+
           String titulo = getCampo(fila, indices.get(CampoEsperado.TITULO));
           String descripcion = getCampo(fila, indices.get(CampoEsperado.DESCRIPCION));
           String categoria = getCampo(fila, indices.get(CampoEsperado.CATEGORIA));
-          Double latitud = 0.0;
-          Double longitud = 0.0;
-          LocalDate fechaHecho = LocalDate.parse(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)), formatter);
+          String latitud = getCampo(fila, indices.get(CampoEsperado.LATITUD));
+          String longitud = getCampo(fila, indices.get(CampoEsperado.LONGITUD));
+          System.out.println(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)));
+
           // TODO validar latitud y longitud que existan
           // TODO filtro por titulo unico
+
+          String latitudLimpia = latitud.trim().replace(",", "."); // Por si viene con coma decimal
+
+          Double latitudDouble = Double.parseDouble(latitudLimpia);
+
+
+          String longitudLimpia = longitud.trim().replace(",", ".");
+          Double longitudDouble = Double.parseDouble(longitudLimpia);
           Hecho hecho = new Hecho(
               titulo,
               descripcion,
               categoria,
-              new Ubicacion(latitud, longitud),
-              fechaHecho,
+              new Ubicacion(latitudDouble, longitudDouble),
+              null,
               fechaCarga,
               origen
           );
-
           hechos.add(hecho);
+
         } catch (Exception e) {
           errores ++;
           continue;
@@ -104,7 +117,7 @@ public class LectorCsv implements Lector {
       }
     System.out.println("Cantidad de Errores " + errores);
     for (Hecho hecho : hechos) {
-      System.out.println(hecho.getTitulo());
+      System.out.println(hecho.getTitulo() + ' ' + hecho.getUbicacion());
     }
     return hechos;
     }
@@ -117,6 +130,12 @@ public class LectorCsv implements Lector {
     }
     return fila[indice].trim();
   }
+  private static boolean validarCamposObligatorios(String[] fila, Map<CampoEsperado, Integer> indices){
+    return Objects.requireNonNull(getCampo(fila, indices.get(CampoEsperado.TITULO))).isEmpty()
+        || Objects.requireNonNull(getCampo(fila, indices.get(CampoEsperado.LATITUD))).isEmpty()
+        || Objects.requireNonNull(getCampo(fila, indices.get(CampoEsperado.LONGITUD))).isEmpty();
+  }
+
 
 }
 
