@@ -15,10 +15,11 @@ public class lectorTest {
   @BeforeEach
   void setUp() {
     lector = new LectorCsv();
-    hechos=lector.leer("datos/desastres_naturales_processed.csv");
+    hechos=lector.leer("datos/desastres_naturales_first_8 (1).csv");
   }
   @Test
   void testLectorCsv() {
+    System.out.println(hechos.size());
     assertTrue(hechos.size()>0);
   }
 }
