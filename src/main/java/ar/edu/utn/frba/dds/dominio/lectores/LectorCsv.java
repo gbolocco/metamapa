@@ -24,7 +24,7 @@ public class LectorCsv implements Lector {
       throw new IllegalArgumentException("Solo se permiten archivos con extensión .csv");
     }
     List<Hecho> hechos = new ArrayList<>();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     LocalDate fechaCarga = LocalDate.now();
     OriginHecho origen = OriginHecho.FUENTE;
 
@@ -71,7 +71,8 @@ public class LectorCsv implements Lector {
           String categoria = getCampo(fila, indices.get(CampoEsperado.CATEGORIA));
           String latitud = getCampo(fila, indices.get(CampoEsperado.LATITUD));
           String longitud = getCampo(fila, indices.get(CampoEsperado.LONGITUD));
-          System.out.println(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)));
+          LocalDate fechaHecho = LocalDate.parse(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)), formatter);
+
           // TODO filtro por titulo unico
 
           String latitudLimpia = latitud.trim().replace(",", "."); // Por si viene con coma decimal
@@ -84,7 +85,7 @@ public class LectorCsv implements Lector {
               descripcion,
               categoria,
               new Ubicacion(latitudDouble, longitudDouble),
-              null,
+              fechaHecho,
               fechaCarga,
               origen
           );
