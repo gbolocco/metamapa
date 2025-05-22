@@ -38,4 +38,6 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
   public List<Coleccion> mostrarColecciones() {
     return new ArrayList<>(this.colecciones);
   }
+
+  public void vaciar() {this.colecciones.clear();}
 }

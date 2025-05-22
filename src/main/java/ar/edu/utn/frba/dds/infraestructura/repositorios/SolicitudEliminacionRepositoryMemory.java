@@ -32,4 +32,6 @@ public class SolicitudEliminacionRepositoryMemory implements SolicitudEliminacio
   public List<SolicitudEliminacion> mostrarSolicitudes() {
     return new ArrayList<>(solicitudesEliminacion);
   }
+
+  public void vaciar() {this.solicitudesEliminacion.clear();}
 }

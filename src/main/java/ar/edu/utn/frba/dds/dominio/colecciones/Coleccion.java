@@ -52,13 +52,15 @@ public class Coleccion {
   }
   public String getDescripcion() {return this.descripcion;}
   public List<Hecho> mostrarHechos() {
-    return new ArrayList<>(this.hechos.stream().filter(hecho -> hecho.estaEliminado() == false).toList());
+    return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
   }
 
   public void cargarColeccion(){
     ColeccionRepositoryMemory.getInstancia().agregarColeccion(this);
   }
+
   //metodos relacionados a los hechos
+
   public void cargarHechosDesdeFuente() {
     List<Hecho> hechosLeidos = lector.leer(this.rutaArchivo);
     hechosLeidos.stream()

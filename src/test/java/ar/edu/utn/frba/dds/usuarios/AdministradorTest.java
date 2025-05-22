@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import ar.edu.utn.frba.dds.AppLogger;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.colecciones.contratos.ColeccionRepository;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -24,46 +25,64 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
+import org.slf4j.Logger;
 
 
 public class AdministradorTest {
 
+  private static final Logger logger = AppLogger.getLogger(AdministradorTest.class);
+
   private Coleccion coleccion;
+  private Hecho hecho;
   private List<Hecho> hechos= new ArrayList<Hecho>();
   private ColeccionRepository colectionRep;
   private SolicitudEliminacionRepositoryMemory solicitudRep;
 
   private SolicitudEliminacion solicitud;
 
+  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho) {
+    String justificacionLarga = "a".repeat(501);
+    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga);
+    SolicitudEliminacionRepositoryMemory.getInstancia().agregar(s);
+    return s;
+  }
+
+  private Coleccion crearUnaColeccionParaTest() {
+    return new Coleccion(
+        "Incendios 2025",
+        "Hechos de incendios",
+        List.of(mock(Filtro.class)),  // Lista con un mock de Filtro
+        "ruta.csv",
+        TipoCombinacion.AND,
+        mock(LectorCsv.class)
+    );
+  }
+
+
   @BeforeEach
   void setUp() {
-    List<Filtro> filtros = List.of(
-        new FiltroContieneTexto("Incendio", CampoDeHecho.CATEGORIA)
-    );
+
+    // Limpieza de estado antes de cada test
+    ColeccionRepositoryMemory.getInstancia().vaciar();
+    SolicitudEliminacionRepositoryMemory.getInstancia().vaciar();
+
+    logger.info("Iniciando test de Administrador");
+
+    // Repositorios en memoria
     colectionRep = ColeccionRepositoryMemory.getInstancia();
     solicitudRep = SolicitudEliminacionRepositoryMemory.getInstancia();
 
-    LectorCsv lectorMock = mock(LectorCsv.class);
-    when(lectorMock.leer(any())).thenReturn(hechos);
+    // Crear mock de Hecho
+    hecho = mock(Hecho.class);
 
-    Hecho hecho = mock(Hecho.class);
-    String justificacion = "a".repeat(501);
-    solicitud = new SolicitudEliminacion(
-        hecho,
-        justificacion
-    );
-    solicitudRep.agregar(solicitud);
-    coleccion = new Coleccion(
-        "Incendios 2025",
-        "Hechos de incendios",
-        filtros,
-        "ruta.csv",
-        TipoCombinacion.AND,
-        lectorMock);
+    solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho);
+
   }
-
   @Test
   void puedeCrearUnaColeccionyAgregarlaALaListaDeColecciones() {
+
+    coleccion = crearUnaColeccionParaTest();
+
     assertEquals("Incendios 2025", coleccion.getTitulo());
     assertEquals("Hechos de incendios", coleccion.getDescripcion());
     coleccion.cargarColeccion();
@@ -71,11 +90,16 @@ public class AdministradorTest {
   }
   @Test
   void puedeCargarHechosDesdeFuente() {
+
+    coleccion = crearUnaColeccionParaTest();
+    
     coleccion.cargarHechosDesdeFuente();
     assertTrue(coleccion.mostrarHechos().isEmpty());
   }
+
   @Test
-  void seAceptaUnaSolicitudDeEliminacion() {
+  void puedeAceptarUnaSolicitudDeEliminacion() {
+
     assertTrue(solicitud.estaPendiente());
     assertTrue(solicitudRep.mostrarSolicitudes().contains(solicitud));
     solicitud.aceptar();
