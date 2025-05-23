@@ -1,7 +1,10 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
+import ar.edu.utn.frba.dds.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import java.time.LocalDate;
+import org.slf4j.Logger;
 
 public class Hecho {
   private String titulo;
@@ -12,6 +15,8 @@ public class Hecho {
   private LocalDate fechaDeCarga;
   private OriginHecho originHecho;
   private Boolean eliminado = false;
+
+  private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   public Hecho(
       String titulo,
@@ -72,6 +77,18 @@ public class Hecho {
 
   public OriginHecho getOriginHecho() {
     return originHecho;
+  }
+
+  public void imprimirHecho(){
+    logger.info("Título: {}", this.titulo);
+    logger.info("Descripción: {}", this.descripcion);
+    logger.info("Categoría: {}", this.categoria);
+    logger.info("Ubicación: {}", this.ubicacion);
+    logger.info("Fecha del hecho: {}", this.fechaAcontecimiento);
+    logger.info("Fecha de carga: {}", this.fechaDeCarga);
+    logger.info("Origen: {}", this.originHecho);
+    logger.info("-------------------------------------------");
+
   }
 
   /*public void imprimirHecho() {
