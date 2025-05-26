@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds;
-import ar.edu.utn.frba.dds.hecho.excepciones.CoordenadaInvalidaException;
-import ar.edu.utn.frba.dds.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.hechos.excepciones.CoordenadaInvalidaException;
+import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,6 +74,6 @@ public class ValidacionTest {
   @Test
   public void testValidarListaNoNulaNiConElementosNulos_ListaVacia_OK() {
     List<String> listaVacia = new ArrayList<>();
-    assertDoesNotThrow(() -> Validacion.validarListaNoNulaNiConElementosNulos(listaVacia, "criteriosDePertenencia"));
+    assertDoesNotThrow(() -> Validacion.validarListaNoNula(listaVacia, "criteriosDePertenencia"));
   }
 }
