@@ -1,7 +1,10 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
+import ar.edu.utn.frba.dds.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import java.time.LocalDate;
+import org.slf4j.Logger;
 
 public class Hecho {
   private String titulo;
@@ -13,6 +16,8 @@ public class Hecho {
   private OriginHecho originHecho;
   private Boolean eliminado = false;
 
+  private static final Logger logger = AppLogger.getLogger(Hecho.class);
+
   public Hecho(
       String titulo,
       String descripcion,
@@ -22,13 +27,13 @@ public class Hecho {
       LocalDate fechaDeCarga,
       OriginHecho originHecho
   ) {
-    Validacion.validarStringNoVacio(titulo, "título");
-    Validacion.validarNoNulo(descripcion, "descripción");
-    Validacion.validarStringNoVacio(categoria, "categoria");
-    Validacion.validarNoNulo(ubicacion, "ubicacion");
-    Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
-    Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    Validacion.validarNoNulo(originHecho, "originHecho");
+    //Validacion.validarStringNoVacio(titulo, "título");
+    //Validacion.validarNoNulo(descripcion, "descripción");
+    //Validacion.validarStringNoVacio(categoria, "categoria");
+    //Validacion.validarNoNulo(ubicacion, "ubicacion");
+    //Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
+    //Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
+    //Validacion.validarNoNulo(originHecho, "originHecho");
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
@@ -72,6 +77,18 @@ public class Hecho {
 
   public OriginHecho getOriginHecho() {
     return originHecho;
+  }
+
+  public void imprimirHecho(){
+    logger.info("Título: {}", this.titulo);
+    logger.info("Descripción: {}", this.descripcion);
+    logger.info("Categoría: {}", this.categoria);
+    logger.info("Ubicación: {}", this.ubicacion);
+    logger.info("Fecha del hecho: {}", this.fechaAcontecimiento);
+    logger.info("Fecha de carga: {}", this.fechaDeCarga);
+    logger.info("Origen: {}", this.originHecho);
+    logger.info("-------------------------------------------");
+
   }
 
   /*public void imprimirHecho() {

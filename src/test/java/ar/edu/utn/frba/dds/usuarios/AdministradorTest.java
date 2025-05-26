@@ -92,7 +92,7 @@ public class AdministradorTest {
   void puedeCargarHechosDesdeFuente() {
 
     coleccion = crearUnaColeccionParaTest();
-    
+
     coleccion.cargarHechosDesdeFuente();
     assertTrue(coleccion.mostrarHechos().isEmpty());
   }
