@@ -4,7 +4,11 @@ package ar.edu.utn.frba.dds.dominio.colecciones;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
+<<<<<<< Updated upstream
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
+=======
+import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
+>>>>>>> Stashed changes
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
@@ -16,11 +20,10 @@ import ar.edu.utn.frba.dds.AppLogger;
 
 
 public class Coleccion {
-  private final Lector lector;
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
-  private String rutaArchivo;
+  private FuenteEstatica fuente;
   private List<Hecho> hechos;
   private TipoCombinacion tipoCombinacion;
 
@@ -31,9 +34,9 @@ public class Coleccion {
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      String rutaArchivo,
-      TipoCombinacion tipoCombinacion,
-      Lector lector
+      FuenteEstatica fuente,
+      TipoCombinacion tipoCombinacion
+
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?
@@ -45,11 +48,10 @@ public class Coleccion {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.criteriosDePertenencia = criteriosDePertenencia;
-    this.rutaArchivo = rutaArchivo;
+    this.fuente = fuente;
     this.hechos = new ArrayList<>();
     this.tipoCombinacion = tipoCombinacion;
-    this.lector = lector;
-    this.cargarHechosDesdeFuente();
+    this.cargarHechos();
     this.cargarColeccion();
   }
   //getters
@@ -68,8 +70,8 @@ public class Coleccion {
 
   //metodos relacionados a los hechos
 
-  public void cargarHechosDesdeFuente() {
-    List<Hecho> hechosLeidos = lector.leer(this.rutaArchivo);
+  public void cargarHechos() {
+    List<Hecho> hechosLeidos = fuente.cargarHechos();
     hechosLeidos.stream()
         .filter(this::cumpleCriterio)
         .forEach(hechos::add);
@@ -83,6 +85,7 @@ public class Coleccion {
     }
   }
 
+<<<<<<< Updated upstream
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion){
     logger.info("Coleccion: {}", this.titulo);
     logger.info("Descripcion: {}", this.descripcion);
@@ -156,4 +159,6 @@ public class Coleccion {
 //
 //    System.out.println("Total de hechos: " + hechosFiltrados.size());
 //  }
+=======
+>>>>>>> Stashed changes
 }

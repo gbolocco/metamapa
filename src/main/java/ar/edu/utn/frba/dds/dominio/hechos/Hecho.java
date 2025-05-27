@@ -27,13 +27,11 @@ public class Hecho {
       LocalDate fechaDeCarga,
       OriginHecho originHecho
   ) {
-    //Validacion.validarStringNoVacio(titulo, "título");
-    //Validacion.validarNoNulo(descripcion, "descripción");
-    //Validacion.validarStringNoVacio(categoria, "categoria");
-    //Validacion.validarNoNulo(ubicacion, "ubicacion");
-    //Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
-    //Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    //Validacion.validarNoNulo(originHecho, "originHecho");
+    Validacion.validarStringNoVacio(titulo, "título");
+    Validacion.validarNoNulo(ubicacion, "ubicacion");
+    Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
+    Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
+    Validacion.validarNoNulo(originHecho, "originHecho");
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
@@ -79,6 +77,7 @@ public class Hecho {
     return originHecho;
   }
 
+<<<<<<< Updated upstream
   public void imprimirHecho(){
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
@@ -104,6 +103,8 @@ public class Hecho {
     System.out.println("[-]  Fecha de carga: " + this.fechaDeCarga);
     System.out.println("[-]  Origen: " + this.originHecho);
   }*/
+=======
+>>>>>>> Stashed changes
 }
 
 
