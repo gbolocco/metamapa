@@ -8,6 +8,10 @@ public class FuenteEstatica {
   private final Lector lector;
   private String rutaArchivo;
 
+  public String getRutaArchivo() {
+    return rutaArchivo;
+  }
+
   public FuenteEstatica(String rutaArchivo, Lector lector) {
     this.rutaArchivo = rutaArchivo;
     this.lector = lector;

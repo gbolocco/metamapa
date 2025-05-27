@@ -90,13 +90,8 @@ public class AdministradorTest {
   void puedeCargarHechosDesdeFuente() {
 
     coleccion = crearUnaColeccionParaTest();
-<<<<<<< Updated upstream
-
-    coleccion.cargarHechosDesdeFuente();
-=======
-    
     coleccion.cargarHechos();
->>>>>>> Stashed changes
+
     assertTrue(coleccion.mostrarHechos().isEmpty());
   }
 

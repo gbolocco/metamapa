@@ -1,14 +1,8 @@
 package ar.edu.utn.frba.dds.dominio.colecciones;
 
-//import static jdk.internal.org.jline.utils.Colors.h;
-
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
-<<<<<<< Updated upstream
-import ar.edu.utn.frba.dds.dominio.lectores.Lector;
-=======
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
->>>>>>> Stashed changes
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
@@ -16,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
-import ar.edu.utn.frba.dds.AppLogger;
+import ar.edu.utn.frba.dds.compartido.AppLogger;
 
 
 public class Coleccion {
@@ -85,7 +79,6 @@ public class Coleccion {
     }
   }
 
-<<<<<<< Updated upstream
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion){
     logger.info("Coleccion: {}", this.titulo);
     logger.info("Descripcion: {}", this.descripcion);
@@ -93,7 +86,7 @@ public class Coleccion {
     this.criteriosDePertenencia.forEach(filtro -> {
       logger.info(filtro.toString());
     });
-    logger.info("Ruta del archivo: {}", this.rutaArchivo);
+    logger.info("Ruta del archivo: {}", fuente.getRutaArchivo());
     logger.info("Tipo de combinación: {}", this.tipoCombinacion);
     logger.info("Hechos: ");
     imprimirHechosDeColeccion(filtros, tipoCombinacion);
@@ -126,39 +119,4 @@ public class Coleccion {
         .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))
         .collect(Collectors.toList());
   }
-
-  //public void visualizarHechos(List<Filtro> filtros, TipoCombinacion tipo) {
-//
-//    System.out.println("\n=== HECHOS CARGADOS ===");
-//    if (filtros != null) {
-//      this.imprimirHechosSegunFiltros(filtros, tipo );
-//    } else {
-//      List<Hecho> hechosSinEliminar = this.hechos.stream()
-//          .filter(hecho -> !hecho.fueEliminado())
-//          .toList();
-//
-//      hechosSinEliminar.forEach(hecho -> {
-//        hecho.imprimirHecho();
-//        System.out.println();
-//      });
-//
-//      System.out.println("Total de hechos: " + hechosSinEliminar.size());
-//    }
-//  }
-//
-//  public void imprimirHechosSegunFiltros(List<Filtro> filtros, TipoCombinacion tipo) {
-//
-//    List<Hecho> hechosFiltrados = this.hechos.stream()
-//        .filter(hecho -> this.cumpleCriterio( hecho) && !hecho.fueEliminado())
-//        .toList();
-//
-//    hechosFiltrados.forEach(hecho -> {
-//      hecho.imprimirHecho();
-//      System.out.println();
-//    });
-//
-//    System.out.println("Total de hechos: " + hechosFiltrados.size());
-//  }
-=======
->>>>>>> Stashed changes
 }

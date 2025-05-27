@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
-import ar.edu.utn.frba.dds.AppLogger;
+import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import java.time.LocalDate;
@@ -77,7 +77,6 @@ public class Hecho {
     return originHecho;
   }
 
-<<<<<<< Updated upstream
   public void imprimirHecho(){
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
@@ -89,22 +88,6 @@ public class Hecho {
     logger.info("-------------------------------------------");
 
   }
-
-  /*public void imprimirHecho() {
-    System.out.println("[-]  Título: " + this.titulo);
-    System.out.println("[-]  Descripción: " + this.descripcion);
-    System.out.println("[-]  Categoría: " + this.categoria);
-    System.out.println(
-        "[-]  Ubicación: " + "Lat "
-            + this.ubicacion.getLatitud()
-            + ", Lon " + this.ubicacion.getLongitud()
-    );
-    System.out.println("[-]  Fecha del hecho: " + this.fechaAcontecimiento);
-    System.out.println("[-]  Fecha de carga: " + this.fechaDeCarga);
-    System.out.println("[-]  Origen: " + this.originHecho);
-  }*/
-=======
->>>>>>> Stashed changes
 }
 
 
