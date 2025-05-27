@@ -3,6 +3,7 @@
 
 # Log file
 *.log
+logs/
 
 # BlueJ files
 *.ctxt
@@ -28,3 +29,4 @@ target/**
 # IJ files
 *.iml
 .idea/**
+.DS_Store
