@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroFecha;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
+import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
@@ -30,17 +31,16 @@ public class VisualizadorTest {
   void setUp() {
 
     lector = new LectorCsv();
-
+    FuenteEstatica fuente = new FuenteEstatica("datos/desastres_naturales_processed.csv", lector);
     coleccion = new Coleccion(
         "Incendios 2025",
         "Hechos de incendios",
         List.of(),  // Lista vacía
-        "datos/desastres_naturales_processed.csv",
-        TipoCombinacion.AND,
-        new LectorCsv()
+        fuente,
+        TipoCombinacion.AND
     );
 
-    coleccion.cargarHechosDesdeFuente();
+    coleccion.cargarHechos();
 
     filtroTexto1 = new FiltroContieneTexto("Geophysical", CampoDeHecho.CATEGORIA);
     filtroTexto2 = new FiltroContieneTexto("Earthquake", CampoDeHecho.CATEGORIA);
