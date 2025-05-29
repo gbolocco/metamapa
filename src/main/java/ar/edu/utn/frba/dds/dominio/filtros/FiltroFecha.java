@@ -8,7 +8,11 @@ public class FiltroFecha implements Filtro {
   private LocalDate fechaHasta;
   private CampoDeHecho campoDeHechoAplicado;
   
-  public FiltroFecha(LocalDate fechaDesde, LocalDate fechaHasta, CampoDeHecho campoDeHechoAplicado) {
+  public FiltroFecha(
+      LocalDate fechaDesde,
+      LocalDate fechaHasta,
+      CampoDeHecho campoDeHechoAplicado
+  ) {
     this.fechaDesde = fechaDesde;
     this.fechaHasta = fechaHasta;
     this.campoDeHechoAplicado = campoDeHechoAplicado;

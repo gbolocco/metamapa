@@ -12,9 +12,10 @@ public class SolicitudEliminacionRepositoryMemory implements SolicitudEliminacio
     solicitudesEliminacion.add(solicitud);
   }
 
-  private static final SolicitudEliminacionRepositoryMemory instance = new SolicitudEliminacionRepositoryMemory();
+  private static final SolicitudEliminacionRepositoryMemory instance =
+      new SolicitudEliminacionRepositoryMemory();
 
-  public static SolicitudEliminacionRepositoryMemory getInstancia(){
+  public static SolicitudEliminacionRepositoryMemory getInstancia() {
     return instance;
   }
 
@@ -33,5 +34,7 @@ public class SolicitudEliminacionRepositoryMemory implements SolicitudEliminacio
     return new ArrayList<>(solicitudesEliminacion);
   }
 
-  public void vaciar() {this.solicitudesEliminacion.clear();}
+  public void vaciar() {
+    this.solicitudesEliminacion.clear();
+  }
 }

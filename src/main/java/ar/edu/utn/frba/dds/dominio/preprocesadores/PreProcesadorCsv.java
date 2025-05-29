@@ -1,11 +1,31 @@
 package ar.edu.utn.frba.dds.dominio.preprocesadores;
-import com.opencsv.*;
+
+import ar.edu.utn.frba.dds.compartido.AppLogger;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.slf4j.Logger;
 
-import java.io.*;
-import java.util.*;
 
-public class PreProcesadorCSV {
+public class PreProcesadorCsv {
+
+  private static final Logger logger = AppLogger.getLogger(PreProcesadorCsv.class);
 
   public File preprocesar(String inputPath) throws IOException, CsvException {
 
@@ -13,20 +33,33 @@ public class PreProcesadorCSV {
     File inputFile = new File(inputPath);
     String inputFileName = inputFile.getName().replaceFirst("\\.csv$", "");
     // 1. Renombrando columnas
-    Map<String, String> columnasARenombrar = Map.of(
+    Map<String, String> columnasParaRenombrar = Map.of(
         "Latitude", "latitud",
         "Longitude", "longitud"
     );
 
     // 2. Columnas nuevas que van al inicio
-    List<String> extraColumns = List.of("titulo","descripcion", "categoria", "fecha_acontecimiento");
+    List<String> extraColumns = List.of(
+        "titulo",
+        "descripcion",
+        "categoria",
+        "fecha_acontecimiento"
+    );
 
     try (
-        CSVReader reader = new CSVReaderBuilder(new FileReader(inputFile))
+        CSVReader reader = new CSVReaderBuilder(
+            new InputStreamReader(
+                new FileInputStream(inputFile),
+                StandardCharsets.UTF_8
+            ))
             .withCSVParser(new CSVParserBuilder().withSeparator(';').build())
             .build();
+
         CSVWriter writer = new CSVWriter(
-            new FileWriter(outputPath),
+            new OutputStreamWriter(
+                new FileOutputStream(outputPath),
+                StandardCharsets.UTF_8
+            ),
             ';',
             CSVWriter.NO_QUOTE_CHARACTER,
             CSVWriter.DEFAULT_ESCAPE_CHARACTER,
@@ -34,12 +67,14 @@ public class PreProcesadorCSV {
         );
     ) {
       String[] encabezadoOriginal = reader.readNext();
-      if (encabezadoOriginal == null) throw new IOException("Archivo CSV vacío");
+      if (encabezadoOriginal == null) {
+        throw new IOException("Archivo CSV vacío");
+      }
 
       // 3. Construimos el encabezado nuevo: columnas nuevas al inicio, luego renombradas
       List<String> nuevoEncabezado = new ArrayList<>(extraColumns);
       for (String encabezadoNombre : encabezadoOriginal) {
-        nuevoEncabezado.add(columnasARenombrar.getOrDefault(encabezadoNombre, encabezadoNombre));
+        nuevoEncabezado.add(columnasParaRenombrar.getOrDefault(encabezadoNombre, encabezadoNombre));
       }
       writer.writeNext(nuevoEncabezado.toArray(new String[0]));
 
@@ -50,14 +85,16 @@ public class PreProcesadorCSV {
       while ((row = reader.readNext()) != null) {
         numeroFila++;
         if (row.length < encabezadoOriginal.length) {
-          System.out.println("⚠️ Fila incompleta (línea " + numeroFila + "): " + Arrays.toString(row));
-          System.out.println("→ Se esperaban " + encabezadoOriginal.length + " columnas, pero hay " + row.length);
+          logger.info("Fila incompleta (línea {}): {}", numeroFila, Arrays.toString(row));
+          logger.info(
+              "Se esperaban {} columnas, pero hay {}", encabezadoOriginal.length, row.length
+          );
           continue;
         }
         Map<String, String> filaMapeada = new HashMap<>();
         for (int i = 0; i < encabezadoOriginal.length; i++) {
           String originalCol = encabezadoOriginal[i];
-          String renamedCol = columnasARenombrar.getOrDefault(originalCol, originalCol);
+          String renamedCol = columnasParaRenombrar.getOrDefault(originalCol, originalCol);
           filaMapeada.put(renamedCol, row[i]);
         }
         List<String> filaConstruida = construirFila(nuevoEncabezado, filaMapeada, inputFileName);
@@ -86,8 +123,12 @@ public class PreProcesadorCSV {
           String dia = filaMapeada.getOrDefault("Start Day", "").trim();
 
           if (!anio.isEmpty() && !mes.isEmpty()) {
-            dia  = !dia.isEmpty() ? String.format("%02d", Integer.parseInt(dia)) : String.format("%02d", 1);
+
+            dia  = !dia.isEmpty()
+                ? String.format("%02d", Integer.parseInt(dia)) : String.format("%02d", 1);
+
             mes = String.format("%02d", Integer.parseInt(mes));
+
             newRow.add(dia + "/" + mes + "/" + anio);
           }
           break;

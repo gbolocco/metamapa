@@ -1,15 +1,21 @@
 package ar.edu.utn.frba.dds.lector;
 
+import ar.edu.utn.frba.dds.compartido.AppLogger;
+import org.slf4j.Logger;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class lectorTest {
+public class LectorTest {
+
+  private static AppLogger AppLogger;
+  private static final Logger logger = AppLogger.getLogger(LectorTest.class);
+
   Lector lector;
   List<Hecho> hechos;
   @BeforeEach
@@ -19,7 +25,7 @@ public class lectorTest {
   }
   @Test
   void testLectorCsv() {
-    System.out.println(hechos.size());
-    assertTrue(hechos.size()>0);
+    logger.info(String.valueOf(hechos.size()));
+    assertFalse(hechos.isEmpty());
   }
 }

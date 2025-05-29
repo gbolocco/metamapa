@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
-import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudEliminacionRepositoryMemory;
 import java.util.Date;
 
@@ -37,7 +37,17 @@ public class SolicitudEliminacion {
   public boolean estaPendiente() {
     return estadoSolicitud == EstadoSolicitud.PENDIENTE;
   }
+
   public Hecho getHecho() {
     return this.hecho;
   }
+
+  public String getJustificacion() {
+    return justificacion;
+  }
+
+  public Date getFechaSolicitud() {
+    return (fechaSolicitud == null) ? null : new Date(fechaSolicitud.getTime());
+  }
+
 }

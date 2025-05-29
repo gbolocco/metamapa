@@ -77,7 +77,7 @@ public class Hecho {
     return originHecho;
   }
 
-  public void imprimirHecho(){
+  public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
     logger.info("Categoría: {}", this.categoria);
