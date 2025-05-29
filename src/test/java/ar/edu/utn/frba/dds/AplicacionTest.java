@@ -7,7 +7,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.OriginHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import org.slf4j.Logger;
-import ar.edu.utn.frba.dds.AppLogger;
+import ar.edu.utn.frba.dds.compartido.AppLogger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

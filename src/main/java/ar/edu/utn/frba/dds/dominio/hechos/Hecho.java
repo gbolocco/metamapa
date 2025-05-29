@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
-import ar.edu.utn.frba.dds.AppLogger;
+import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import java.time.LocalDate;
@@ -27,13 +27,11 @@ public class Hecho {
       LocalDate fechaDeCarga,
       OriginHecho originHecho
   ) {
-    //Validacion.validarStringNoVacio(titulo, "título");
-    //Validacion.validarNoNulo(descripcion, "descripción");
-    //Validacion.validarStringNoVacio(categoria, "categoria");
-    //Validacion.validarNoNulo(ubicacion, "ubicacion");
-    //Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
-    //Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    //Validacion.validarNoNulo(originHecho, "originHecho");
+    Validacion.validarStringNoVacio(titulo, "título");
+    Validacion.validarNoNulo(ubicacion, "ubicacion");
+    Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
+    Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
+    Validacion.validarNoNulo(originHecho, "originHecho");
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
@@ -90,20 +88,6 @@ public class Hecho {
     logger.info("-------------------------------------------");
 
   }
-
-  /*public void imprimirHecho() {
-    System.out.println("[-]  Título: " + this.titulo);
-    System.out.println("[-]  Descripción: " + this.descripcion);
-    System.out.println("[-]  Categoría: " + this.categoria);
-    System.out.println(
-        "[-]  Ubicación: " + "Lat "
-            + this.ubicacion.getLatitud()
-            + ", Lon " + this.ubicacion.getLongitud()
-    );
-    System.out.println("[-]  Fecha del hecho: " + this.fechaAcontecimiento);
-    System.out.println("[-]  Fecha de carga: " + this.fechaDeCarga);
-    System.out.println("[-]  Origen: " + this.originHecho);
-  }*/
 }
 
 
