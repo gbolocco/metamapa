@@ -1,4 +1,5 @@
 package ar.edu.utn.frba.dds;
+import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.hechos.excepciones.CoordenadaInvalidaException;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import org.junit.jupiter.api.Test;
@@ -76,4 +77,26 @@ public class ValidacionTest {
     List<String> listaVacia = new ArrayList<>();
     assertDoesNotThrow(() -> Validacion.validarListaNoNula(listaVacia, "criteriosDePertenencia"));
   }
+
+  @Test
+  void testStringAlfanumericoValido() {
+    assertDoesNotThrow(() -> Validacion.validarStringAlfanumericoSinEspacios("Coleccion123"));
+  }
+
+  @Test
+  void testStringAlfanumericoConEspacios() {
+    assertThrows(IllegalArgumentException.class, () -> Validacion.validarStringAlfanumericoSinEspacios("Coleccion 123"));
+  }
+
+  @Test
+  void testStringAlfanumericoConGuionBajo() {
+    assertThrows(IllegalArgumentException.class, () -> Validacion.validarStringAlfanumericoSinEspacios("coleccion_123"));
+  }
+
+  @Test
+  void testStringAlafanumericoConTilde() {
+    assertThrows(IllegalArgumentException.class, () -> Validacion.validarStringAlfanumericoSinEspacios("colección"));
+  }
+
+
 }

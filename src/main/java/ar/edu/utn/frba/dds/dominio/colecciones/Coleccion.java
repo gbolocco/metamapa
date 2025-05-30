@@ -20,6 +20,7 @@ public class Coleccion {
   private Fuente fuente;
   private List<Hecho> hechos;
   private TipoCombinacion tipoCombinacion;
+  String handle;
 
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
 
@@ -30,7 +31,6 @@ public class Coleccion {
       List<Filtro> criteriosDePertenencia,
       Fuente fuente,
       TipoCombinacion tipoCombinacion
-
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?
@@ -38,6 +38,7 @@ public class Coleccion {
         criteriosDePertenencia,
         "criteriosDePertenencia"
     );
+   // Validacion.validarStringAlfanumericoSinEspacios(handle);
 
     this.titulo = titulo;
     this.descripcion = descripcion;
