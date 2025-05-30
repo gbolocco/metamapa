@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
-import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
+import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class Coleccion {
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
-  private FuenteEstatica fuente;
+  private Fuente fuente;
   private List<Hecho> hechos;
   private TipoCombinacion tipoCombinacion;
 
@@ -28,7 +28,7 @@ public class Coleccion {
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      FuenteEstatica fuente,
+      Fuente fuente,
       TipoCombinacion tipoCombinacion
 
   ) {
@@ -90,7 +90,6 @@ public class Coleccion {
     this.criteriosDePertenencia.forEach(filtro -> {
       logger.info(filtro.toString());
     });
-    logger.info("Ruta del archivo: {}", fuente.getRutaArchivo());
     logger.info("Tipo de combinación: {}", this.tipoCombinacion);
     logger.info("Hechos: ");
     imprimirHechosDeColeccion(filtros, tipoCombinacion);
