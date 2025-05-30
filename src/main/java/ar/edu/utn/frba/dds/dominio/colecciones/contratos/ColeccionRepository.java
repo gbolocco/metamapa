@@ -6,8 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ColeccionRepository {
+
   List<Coleccion> mostrarColecciones();
+
   void agregarColeccion(Coleccion coleccion);
+
   Optional<Coleccion> buscarColeccionPor(String titulo);
+
   Optional<Hecho> buscarHechoPor(String tituloHecho);
+
 }

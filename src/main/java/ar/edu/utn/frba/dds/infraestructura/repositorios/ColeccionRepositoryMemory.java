@@ -9,11 +9,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ColeccionRepositoryMemory implements ColeccionRepository {
+
   private static final ColeccionRepositoryMemory instance = new ColeccionRepositoryMemory();
+
   private List<Coleccion> colecciones = new ArrayList<>();
 
-  private ColeccionRepositoryMemory(){}
-  public static ColeccionRepositoryMemory getInstancia(){
+  private ColeccionRepositoryMemory() {}
+
+  public static ColeccionRepositoryMemory getInstancia() {
     return instance;
   }
 
@@ -39,5 +42,7 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
     return new ArrayList<>(this.colecciones);
   }
 
-  public void vaciar() {this.colecciones.clear();}
+  public void vaciar() {
+    this.colecciones.clear();
+  }
 }

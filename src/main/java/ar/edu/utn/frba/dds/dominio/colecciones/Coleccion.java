@@ -1,16 +1,16 @@
 package ar.edu.utn.frba.dds.dominio.colecciones;
 
+import ar.edu.utn.frba.dds.compartido.AppLogger;
+import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
-import ar.edu.utn.frba.dds.compartido.AppLogger;
 
 
 public class Coleccion {
@@ -41,24 +41,28 @@ public class Coleccion {
 
     this.titulo = titulo;
     this.descripcion = descripcion;
-    this.criteriosDePertenencia = criteriosDePertenencia;
+    this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
     this.tipoCombinacion = tipoCombinacion;
     this.cargarHechos();
     this.cargarColeccion();
   }
-  //getters
 
+  //getters
   public String getTitulo() {
     return this.titulo;
   }
-  public String getDescripcion() {return this.descripcion;}
+
+  public String getDescripcion() {
+    return this.descripcion;
+  }
+
   public List<Hecho> mostrarHechos() {
     return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
   }
 
-  public void cargarColeccion(){
+  public void cargarColeccion() {
     ColeccionRepositoryMemory.getInstancia().agregarColeccion(this);
   }
 
@@ -79,7 +83,7 @@ public class Coleccion {
     }
   }
 
-  public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion){
+  public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     logger.info("Coleccion: {}", this.titulo);
     logger.info("Descripcion: {}", this.descripcion);
     logger.info("Criterios de pertenencia: ");
@@ -99,21 +103,21 @@ public class Coleccion {
       logger.info("Cantidad de hechos filtrados: {}", hechosFiltrados.size());
       hechosFiltrados.forEach(Hecho::imprimirHecho);
 
-    }else{
+    } else {
       logger.info("Cantidad de hechos: {}", this.mostrarHechos().size());
       this.mostrarHechos().forEach(Hecho::imprimirHecho);
     }
   }
 
-  public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion){
+  public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     if (this.tipoCombinacion == TipoCombinacion.AND) {
       return filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho));
-    }else{
+    } else {
       return filtros.stream().anyMatch(filtro -> filtro.cumpleFiltro(hecho));
     }
   }
 
-  public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion){
+  public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()
         .stream()
         .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))

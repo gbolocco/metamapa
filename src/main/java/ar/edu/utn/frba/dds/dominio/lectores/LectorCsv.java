@@ -1,24 +1,38 @@
 package ar.edu.utn.frba.dds.dominio.lectores;
 
+import ar.edu.utn.frba.dds.compartido.AppLogger;
+import ar.edu.utn.frba.dds.dominio.hechos.CampoEsperado;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OriginHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-
+import com.opencsv.exceptions.CsvValidationException;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ar.edu.utn.frba.dds.dominio.hechos.CampoEsperado;
 import java.util.Objects;
+import org.slf4j.Logger;
+
+
 
 public class LectorCsv implements Lector {
+
+  private static final Logger logger = AppLogger.getLogger(LectorCsv.class);
+
   private int errores = 0;
+
   public List<Hecho> leer(String rutaArchivo) {
     if (!rutaArchivo.toLowerCase().endsWith(".csv")) {
       throw new IllegalArgumentException("Solo se permiten archivos con extensión .csv");
@@ -32,7 +46,11 @@ public class LectorCsv implements Lector {
     String[] encabezados = null;
 
     try {
-      lector = new CSVReaderBuilder(new FileReader(rutaArchivo))
+      lector = new CSVReaderBuilder(
+          new InputStreamReader(
+              new FileInputStream(rutaArchivo),
+              StandardCharsets.UTF_8
+          ))
           .withCSVParser(new CSVParserBuilder()
               .withSeparator(';')
               .build())
@@ -42,28 +60,30 @@ public class LectorCsv implements Lector {
 
 
     } catch (Exception e) {
-      System.out.println("Error al intentar con separador '" + ";" + "': " + e.getMessage());
+      logger.info("Error al intentar con separador '" + ";" + "': " + e.getMessage());
     }
 
     if (lector == null || encabezados == null) {
-      throw new RuntimeException("No se pudo leer el archivo: separador inválido o archivo mal formado.");
+      throw new RuntimeException(
+          "No se pudo leer el archivo: separador inválido o archivo mal formado."
+      );
     }
 
     try {
       Map<CampoEsperado, Integer> indices = new HashMap<>();
-      for (int posicionDeCampo = 0; posicionDeCampo < encabezados.length; posicionDeCampo++) {
-        CampoEsperado campo = CampoEsperado.buscarPorEncabezado(encabezados[posicionDeCampo]);
+      for (int i = 0; i < encabezados.length; i++) {
+        CampoEsperado campo = CampoEsperado.buscarPorEncabezado(encabezados[i]);
         if (campo != null) {
-          indices.put(campo, posicionDeCampo);
+          indices.put(campo, i);
         }
       }
 
       String[] fila;
 
-      while ((fila = lector.readNext()) != null ) {
+      while ((fila = lector.readNext()) != null) {
         try {
-          if(validarCamposObligatorios(fila,indices)){
-            throw new RuntimeException("Faltan campos obligatorios");
+          if (validarCamposObligatorios(fila, indices)) {
+            throw new IllegalArgumentException("Faltan campos obligatorios");
           }
 
           String titulo = getCampo(fila, indices.get(CampoEsperado.TITULO));
@@ -71,15 +91,16 @@ public class LectorCsv implements Lector {
           String categoria = getCampo(fila, indices.get(CampoEsperado.CATEGORIA));
           String latitud = getCampo(fila, indices.get(CampoEsperado.LATITUD));
           String longitud = getCampo(fila, indices.get(CampoEsperado.LONGITUD));
-          LocalDate fechaHecho = LocalDate.parse(getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO)), formatter);
+          String fecha = getCampo(fila, indices.get(CampoEsperado.FECHA_ACONTECIMIENTO));
 
-          // TODO filtro por titulo unico
-
-          String latitudLimpia = latitud.trim().replace(",", "."); // Por si viene con coma decimal
+          String latitudLimpia = latitud.trim().replace(",", ".");
           Double latitudDouble = Double.parseDouble(latitudLimpia);
 
           String longitudLimpia = longitud.trim().replace(",", ".");
           Double longitudDouble = Double.parseDouble(longitudLimpia);
+
+          LocalDate fechaHecho = LocalDate.parse(fecha, formatter);
+
           Hecho hecho = new Hecho(
               titulo,
               descripcion,
@@ -91,22 +112,24 @@ public class LectorCsv implements Lector {
           );
           hechos.add(hecho);
 
-        } catch (Exception e) {
-          errores ++;
-          System.out.println("Error archivo: " + e.getMessage());
-          continue;
+        } catch (IllegalArgumentException
+                 | IndexOutOfBoundsException
+                 | DateTimeParseException e) {
+          errores++;
+          logger.warn("Error procesando fila: {} - {}", Arrays.toString(fila), e.getMessage());
         }
       }
-    }catch(Exception e){
-        System.out.println("Error al procesar el archivo: " + e.getMessage());
-        e.printStackTrace();
-      }
-    System.out.println("Cantidad de Errores " + errores);
+    } catch (IOException | CsvValidationException e) {
+      logger.error("Error al procesar el archivo CSV: {}", e.getMessage(), e);
+      throw new RuntimeException("Error en la lectura del archivo CSV", e);
+    }
+
+    logger.info("Cantidad de Errores {}", errores);
     for (Hecho hecho : hechos) {
-      System.out.println(hecho.getTitulo() + ' ' + hecho.getUbicacion());
+      logger.info("{} {}", hecho.getTitulo(), hecho.getUbicacion());
     }
     return hechos;
-    }
+  }
 
   private static String getCampo(String[] fila, Integer indice) {
 
@@ -117,11 +140,14 @@ public class LectorCsv implements Lector {
     return fila[indice].trim();
   }
 
-  private static boolean validarCamposObligatorios(String[] fila, Map<CampoEsperado, Integer> indices){
+  private static boolean validarCamposObligatorios(
+      String[] fila,
+      Map<CampoEsperado,
+          Integer> indices
+  ) {
     return Objects.requireNonNull(getCampo(fila, indices.get(CampoEsperado.TITULO))).isEmpty()
         || Objects.requireNonNull(getCampo(fila, indices.get(CampoEsperado.LATITUD))).isEmpty()
         || Objects.requireNonNull(getCampo(fila, indices.get(CampoEsperado.LONGITUD))).isEmpty();
   }
-
 }
 

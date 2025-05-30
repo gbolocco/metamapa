@@ -6,7 +6,7 @@ import java.util.List;
 public enum CampoEsperado {
   TITULO("titulo"),
   DESCRIPCION("descripcion"),
-  CATEGORIA("categoria" ),
+  CATEGORIA("categoria"),
   LATITUD("latitud"),
   LONGITUD("longitud"),
   FECHA_ACONTECIMIENTO("fecha_acontecimiento");
