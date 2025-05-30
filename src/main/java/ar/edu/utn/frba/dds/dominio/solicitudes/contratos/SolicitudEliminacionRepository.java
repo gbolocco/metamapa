@@ -9,7 +9,7 @@ public interface SolicitudEliminacionRepository {
 
   List<SolicitudEliminacion> pendientes();
 
-  void eliminar(SolicitudEliminacion solicitud);
+  void eliminarSolicitud(SolicitudEliminacion solicitud);
 
   List<SolicitudEliminacion> mostrarSolicitudes();
 }

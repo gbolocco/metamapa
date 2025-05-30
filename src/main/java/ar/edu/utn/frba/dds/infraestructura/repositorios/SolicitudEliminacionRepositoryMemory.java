@@ -26,7 +26,7 @@ public class SolicitudEliminacionRepositoryMemory implements SolicitudEliminacio
         .toList();
   }
 
-  public void eliminar(SolicitudEliminacion solicitud) {
+  public void eliminarSolicitud(SolicitudEliminacion solicitud) {
     solicitudesEliminacion.remove(solicitud);
   }
 

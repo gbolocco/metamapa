@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 
 public class Coleccion {
+
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
