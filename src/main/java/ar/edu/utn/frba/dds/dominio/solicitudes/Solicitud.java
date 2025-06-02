@@ -8,6 +8,7 @@ public abstract class Solicitud {
   protected EstadoSolicitud estadoSolicitud;
   protected Hecho hecho;
   protected Date fechaSolicitud;
+  protected TipoSolicitud tipoSolicitud;
 
   public Solicitud(Hecho hecho){
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
@@ -31,6 +32,9 @@ public abstract class Solicitud {
     return estadoSolicitud == EstadoSolicitud.PENDIENTE;
   }
 
+  public TipoSolicitud getTipoSolicitud() {
+    return tipoSolicitud;
+  }
   public abstract void aceptar();
 
   public abstract void rechazar();

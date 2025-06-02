@@ -2,32 +2,31 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosYSolicitudesRepository;
-import java.util.Date;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
 public class SolicitudDeCargaHecho extends Solicitud {
 
   public SolicitudDeCargaHecho(Hecho hecho) {
     super(hecho);
+    this.tipoSolicitud = TipoSolicitud.CARGA_HECHO;
     Validacion.validarNoNulo(hecho, "hecho");
-    HechosYSolicitudesRepository.getInstancia().cargarSolicitud(this);
+    SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    HechosYSolicitudesRepository.getInstancia().seAceptoUnaSolicitud(this);
+    HechosRepository.getInstancia().cargarHecho(this.hecho);
+    SolicitudesRepositoryMemory.getInstancia().eliminarSolicitud(this);
   }
 
   @Override
   public void rechazar() {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
-    HechosYSolicitudesRepository.getInstancia().eliminarSolicitud(this);
+    SolicitudesRepositoryMemory.getInstancia().eliminarSolicitud(this);
   }
 
-  public void aceptarConSugerenciaDeCambios() {
-    estadoSolicitud = EstadoSolicitud.ACEPTADA_CON_SUGERENCIA;
-    HechosYSolicitudesRepository.getInstancia().cargarHecho(hecho);
-  }
+
 
 }

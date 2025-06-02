@@ -4,7 +4,8 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosYSolicitudesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.time.LocalDate;
 
 public class Contribuyente {
@@ -32,7 +33,7 @@ public class Contribuyente {
   public SolicitudDeCargaHecho generarSolicitudDeCreacion(Hecho hecho){
 
     SolicitudDeCargaHecho solicitud = new SolicitudDeCargaHecho(hecho);
-    HechosYSolicitudesRepository.getInstancia().cargarSolicitud(solicitud);
+    SolicitudesRepositoryMemory.getInstancia().agregar(solicitud);
     return solicitud;
   }
 

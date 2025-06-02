@@ -2,8 +2,7 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudEliminacionRepositoryMemory;
-import java.util.Date;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
 public class SolicitudEliminacion  extends Solicitud{
 
@@ -12,7 +11,7 @@ public class SolicitudEliminacion  extends Solicitud{
 
   public SolicitudEliminacion(Hecho hecho, String justificacion) {
     super(hecho);
-
+    this.tipoSolicitud = TipoSolicitud.ELIMINACION_HECHO;
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
@@ -22,7 +21,7 @@ public class SolicitudEliminacion  extends Solicitud{
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     hecho.marcarComoEliminado();
-    SolicitudEliminacionRepositoryMemory.getInstancia().eliminarSolicitud(this);
+    SolicitudesRepositoryMemory.getInstancia().eliminarSolicitud(this);
   }
 
   @Override
