@@ -12,7 +12,7 @@ public class Hecho {
   private Ubicacion ubicacion;
   private LocalDate fechaAcontecimiento;
   private LocalDate fechaDeCarga;
-  private OrigenHecho originHecho;
+  private OrigenHecho origenHecho;
   private Boolean eliminado = false;
 
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
@@ -24,20 +24,20 @@ public class Hecho {
       Ubicacion ubicacion,
       LocalDate fechaAcontecimiento,
       LocalDate fechaDeCarga,
-      OrigenHecho originHecho
+      OrigenHecho origenHecho
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(ubicacion, "ubicacion");
     Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
     Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    Validacion.validarNoNulo(originHecho, "originHecho");
+    Validacion.validarNoNulo(origenHecho, "origenHecho");
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
     this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
-    this.originHecho = originHecho;
+    this.origenHecho = origenHecho;
   }
 
   public void marcarComoEliminado() {
@@ -72,8 +72,8 @@ public class Hecho {
     return fechaDeCarga;
   }
 
-  public OrigenHecho getOriginHecho() {
-    return originHecho;
+  public OrigenHecho getOrigenHecho() {
+    return origenHecho;
   }
 
   public void imprimirHecho() {
@@ -83,7 +83,7 @@ public class Hecho {
     logger.info("Ubicación: {}", this.ubicacion);
     logger.info("Fecha del hecho: {}", this.fechaAcontecimiento);
     logger.info("Fecha de carga: {}", this.fechaDeCarga);
-    logger.info("Origen: {}", this.originHecho);
+    logger.info("Origen: {}", this.origenHecho);
     logger.info("-------------------------------------------");
 
   }

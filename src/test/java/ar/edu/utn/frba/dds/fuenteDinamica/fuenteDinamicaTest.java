@@ -2,8 +2,11 @@ package ar.edu.utn.frba.dds.fuenteDinamica;
 
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
+import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosYSolicitudesRepository;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +46,23 @@ public class fuenteDinamicaTest {
     List<Hecho> lista = fuente.cargarHechos();
     Assertions.assertFalse(lista.isEmpty());
   }
+
+  @Test
+  void contribuyenteRegistradoPuedeCargarHechoAFuenteDinamica(){
+
+
+    Contribuyente contribuyente = new Contribuyente("juan", 21);
+    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa","incendio forestal en la pampa","incendios forestales", mock(Ubicacion.class), mock(LocalDate.class));
+
+    SolicitudDeCargaHecho solicitudContribuyente = contribuyente.generarSolicitudDeCreacion(hechoContribuyente);
+
+    solicitudContribuyente.aceptar();
+
+    Assertions.assertTrue(HechosYSolicitudesRepository.getInstancia().mostrarHechos().contains(hechoContribuyente)); // se acepto correctamente y se agrego
+    Assertions.assertTrue(contribuyente == hechoContribuyente.getOrigenHecho().getContribuyenteHecho());
+
+  }
+
 
 
 

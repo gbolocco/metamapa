@@ -1,0 +1,45 @@
+package ar.edu.utn.frba.dds.dominio.usuario;
+
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosYSolicitudesRepository;
+import java.time.LocalDate;
+
+public class Contribuyente {
+
+  private String nombre;
+  private Integer edad;
+
+  public Contribuyente(String nombre, Integer edad) {
+    if (edad <= 18){
+      throw new IllegalArgumentException("El usuario debe ser mayor de edad");
+    }
+    this.nombre = nombre;
+    this.edad = edad;
+  }
+  public Hecho crearHecho(String titulo, String descripcion, String categoria, Ubicacion ubicacion, LocalDate fechaAcontecimiento) {
+
+    // TODO validad creacion de hechos, que campos son obligatorios y cuales no? se poria aplicar un patron builder, borrador de un hecho
+
+    OrigenHecho origenContribuyente = OrigenHecho.PROVISTO_POR_CONTRIBUYENTE;
+    origenContribuyente.setContribuyenteHecho(this);
+
+    return new Hecho(titulo, descripcion, categoria, ubicacion, fechaAcontecimiento,LocalDate.now(), origenContribuyente);
+  }
+
+  public SolicitudDeCargaHecho generarSolicitudDeCreacion(Hecho hecho){
+
+    SolicitudDeCargaHecho solicitud = new SolicitudDeCargaHecho(hecho);
+    HechosYSolicitudesRepository.getInstancia().cargarSolicitud(solicitud);
+    return solicitud;
+  }
+
+  public void modificarHecho(Hecho hechoParaModificar, Hecho hechoActualizado){
+
+    SolicitudDeCargaHecho solicitud = new SolicitudDeCargaHecho(hechoActualizado);
+
+
+  }
+}

@@ -18,7 +18,7 @@ public class HechosYSolicitudesRepository {
   private static final HechosYSolicitudesRepository instance = new HechosYSolicitudesRepository();
 
   private final List<Hecho> hechos = new ArrayList<>();
-  private final List<SolicitudDeCargaHecho> solicitudes = new ArrayList<>();
+  private final List<Solicitud> solicitudes = new ArrayList<>();
 
   public static HechosYSolicitudesRepository getInstancia() {
     return instance;
@@ -40,7 +40,7 @@ public class HechosYSolicitudesRepository {
     this.solicitudes.remove(unaSolicitud);
   }
 
-  public List<SolicitudDeCargaHecho> mostrarSolicitudes() {
+  public List<Solicitud> mostrarSolicitudes() {
     return new ArrayList<>(this.solicitudes);
   }
 

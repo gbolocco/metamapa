@@ -1,22 +1,24 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
+import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
+
 public enum OrigenHecho {
   FUENTE_ESTATICA,
   FUENTE_PROXY,
   PROVISTO_POR_CONTRIBUYENTE;
 
-  private Integer idUsuario;
+  private Contribuyente contribuyente;
 
-  public void setIdUsuario(Integer idUsuario) {
+  public void setContribuyenteHecho(Contribuyente contribuyente) {
     if (this == PROVISTO_POR_CONTRIBUYENTE) {
-      this.idUsuario = idUsuario;
+      this.contribuyente = contribuyente;
     } else {
       throw new UnsupportedOperationException("Unicamente se puede asignar a un usuario el origen PROVISTO_POR_CONTRIBUYENTE");
     }
   }
-  public Integer getIDusuario() {
+  public Contribuyente getContribuyenteHecho() {
     if (this == PROVISTO_POR_CONTRIBUYENTE) {
-      return idUsuario;
+      return contribuyente;
     }
     return null;
   }
