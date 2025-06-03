@@ -30,7 +30,7 @@ public class FuenteMetaMapaAdapter {
     return response.body();
   }
 
-  public List<Hecho> obtenerHechosColeccion(String id, Map<String, String> filtros)
+  public List<Hecho> obtenerHechosDeUnaColeccion(String id, Map<String, String> filtros)
       throws IOException {
     Call<List<Hecho>> call = fuenteMetaMapaApiService.getHechosColeccion(id, filtros);
     Response<List<Hecho>> response = call.execute();

@@ -10,9 +10,9 @@ import java.util.Map;
 public class FuenteMetaMapa extends FuenteProxy {
   private final FuenteMetaMapaAdapter adapter;
   private List<Hecho> hechos;
-
+  private String url;
   public FuenteMetaMapa(FuenteMetaMapaAdapter adapter, String url) {
-    super(url);
+    this.url=url;
     this.adapter = adapter;
     this.hechos = new ArrayList<>();
   }
@@ -26,8 +26,8 @@ public class FuenteMetaMapa extends FuenteProxy {
     return this.hechos;
   }
 
-  public List<Hecho> obtenerHechosColeccion(Map<String, String> filtros) throws IOException {
-    this.hechos = adapter.obtenerHechos(filtros);
+  public List<Hecho> obtenerHechosDeUnaColeccion(String id,Map<String, String> filtros) throws IOException {
+    this.hechos = adapter.obtenerHechosDeUnaColeccion(id,filtros);
     return this.hechos;
   }
 

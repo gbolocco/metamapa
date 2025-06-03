@@ -96,7 +96,6 @@ public class Coleccion {
   }
 
   public void imprimirHechosDeColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
-
     if (filtros != null) {
       List<Hecho> hechosFiltrados = this.filtrarHechos(filtros, tipoCombinacion);
       logger.info("Cantidad de hechos filtrados: {}", hechosFiltrados.size());
