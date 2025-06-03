@@ -1,12 +1,17 @@
 package ar.edu.utn.frba.dds.dominio.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import java.util.ArrayList;
 import java.util.List;
 
+public class FuenteDemo extends FuenteProxy {
+  private Conexion conexion;
 
-public class FuenteDinamica implements Fuente {
+  public FuenteDemo(String url) {
+    super(url);
+  }
+
+  @Override
   public List<Hecho> cargarHechos() {
-    return new ArrayList<>();
+    return List.of();
   }
 }

@@ -31,7 +31,7 @@ public class VisualizadorTest {
   void setUp() {
 
     lector = new LectorCsv();
-    FuenteEstatica fuente = new FuenteEstatica("datos/desastres_naturales_processed.csv", lector);
+    FuenteEstatica fuente = new FuenteEstatica("datos/desastres_naturales_first_8 (1).csv", lector);
     coleccion = new Coleccion(
         "Incendios 2025",
         "Hechos de incendios",
@@ -49,7 +49,6 @@ public class VisualizadorTest {
         LocalDate.of(2024, 5, 20),
         CampoDeHecho.FECHA_ACONTECIMIENTO
     );
-
   }
 
   @Test
