@@ -22,7 +22,7 @@ public class LectorTest {
   @BeforeEach
   void setUp() {
     lector = new LectorCsv();
-    hechos=lector.leer("datos/desastres_naturales_first_8 (1).csv");
+    hechos=lector.leer("datos/desastres_naturales.csv");
   }
   @Test
   void testLectorCsv() {
