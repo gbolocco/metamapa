@@ -3,7 +3,9 @@ package ar.edu.utn.frba.dds.fuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
+import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
@@ -30,7 +32,7 @@ public class fuenteDinamicaTest {
   }
 
   @Test
-  void contribuyentePuedeGenerarUnaSolicitud(){
+  void contribuyentePuedeGenerarUnaSolicitudCreacion(){
 
     SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hecho);
     Assertions.assertTrue(
@@ -39,9 +41,9 @@ public class fuenteDinamicaTest {
 
 
   @Test
-  void administradorPuedeAceptarUnaSolicitud(){
+  void administradorPuedeAceptarUnaSolicitudCreacion(){
     solicitud.aceptar();
-    Assertions.assertFalse(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitud));
+    Assertions.assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
   }
 
   @Test
@@ -53,9 +55,8 @@ public class fuenteDinamicaTest {
   @Test
   void contribuyenteRegistradoPuedeCargarHechoAFuenteDinamica(){
 
-
     Contribuyente contribuyente = new Contribuyente("juan", 21);
-    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa","incendio forestal en la pampa","incendios forestales", mock(Ubicacion.class), mock(LocalDate.class));
+    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa","incendio forestal en la pampa","incendios forestales", mock(Ubicacion.class), mock(LocalDate.class),mock(LocalDate.class));
 
     SolicitudDeCargaHecho solicitudContribuyente = contribuyente.generarSolicitudDeCreacion(hechoContribuyente);
 
@@ -66,7 +67,47 @@ public class fuenteDinamicaTest {
 
   }
 
+  @Test
+  void contribuyenteRegistradoPuedeModificarHechoAFuenteDinamica() {
+    Contribuyente contribuyente = new Contribuyente("juan", 21);
+    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa", "incendio forestal en la pampa", "incendios forestales", mock(Ubicacion.class), mock(LocalDate.class), LocalDate.now());
+    SolicitudDeCargaHecho solicitudContribuyente = contribuyente.generarSolicitudDeCreacion(hechoContribuyente);
+
+    solicitudContribuyente.aceptar();
+    Assertions.assertTrue(HechosRepository.getInstancia().mostrarHechos().contains(hechoContribuyente));
+
+    SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoContribuyente,hecho,contribuyente);
 
 
+    solicitudModificacion.aceptar();
 
+    Assertions.assertTrue(HechosRepository.getInstancia().mostrarHechos().contains(hecho));
+    Assertions.assertFalse(HechosRepository.getInstancia().mostrarHechos().contains(hechoContribuyente));
+  }
+
+  @Test
+  void contribuyenteNoPuedeModificarHechoAFuenteDinamicaFueCreadoHaceMasDeSieteDias() {
+    Contribuyente contribuyente = new Contribuyente("juan", 21);
+    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa", "incendio forestal en la pampa", "incendios forestales", mock(Ubicacion.class), mock(LocalDate.class), LocalDate.of(2025,5,20));
+    SolicitudDeCargaHecho solicitudContribuyente = contribuyente.generarSolicitudDeCreacion(hechoContribuyente);
+
+    solicitudContribuyente.aceptar();
+    Assertions.assertTrue(HechosRepository.getInstancia().mostrarHechos().contains(hechoContribuyente));
+
+    Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(hechoContribuyente,hecho,contribuyente));
+  }
+
+  @Test
+  void contribuyenteQuiereSolicitaModificarUnHechoQueNoEsSuyo(){
+    Contribuyente contribuyente1 = new Contribuyente("juan", 21);
+    Contribuyente contribuyenteChorro = new Contribuyente("gian", 21);
+
+    Hecho hechoContribuyente = contribuyente1.crearHecho("incendio en la pampa", "incendio forestal en la pampa", "incendios forestales", mock(Ubicacion.class), mock(LocalDate.class), LocalDate.of(2025,5,20));
+
+    SolicitudDeCargaHecho solicitudContribuyente1 = contribuyente1.generarSolicitudDeCreacion(hechoContribuyente);
+
+    solicitudContribuyente1.aceptar();
+
+    Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(hechoContribuyente,hecho,contribuyenteChorro));
+  }
 }

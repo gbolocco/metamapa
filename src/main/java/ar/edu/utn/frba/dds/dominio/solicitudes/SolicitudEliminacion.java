@@ -15,13 +15,13 @@ public class SolicitudEliminacion  extends Solicitud{
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
+    SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     hecho.marcarComoEliminado();
-    SolicitudesRepositoryMemory.getInstancia().eliminarSolicitud(this);
   }
 
   @Override

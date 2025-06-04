@@ -117,6 +117,14 @@ public class Coleccion {
     }
   }
 
+  public boolean contieneHecho(Hecho hecho) {
+    return this.hechos.contains(hecho);
+  }
+
+  public void modificarHecho(Hecho hechoAmodificar, Hecho hechoModificado) {
+    this.hechos.set(hechos.indexOf(hechoAmodificar), hechoModificado);
+  }
+
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()
         .stream()

@@ -27,5 +27,11 @@ public class HechosRepository {
     return new ArrayList<>(this.hechos);
   }
 
+  public void modificarHecho (Hecho hechoAModificar,Hecho hechoModificado) {
+    if(!hechos.contains(hechoAModificar)) {
+      throw new IllegalArgumentException("El hecho no existe en la fuenta dinamica");
+    }
+    this.hechos.set(hechos.indexOf(hechoAModificar), hechoModificado);
+  }
 
 }

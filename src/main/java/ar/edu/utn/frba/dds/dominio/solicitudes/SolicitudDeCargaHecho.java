@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMem
 
 public class SolicitudDeCargaHecho extends Solicitud {
 
+
   public SolicitudDeCargaHecho(Hecho hecho) {
     super(hecho);
     this.tipoSolicitud = TipoSolicitud.CARGA_HECHO;
@@ -18,15 +19,17 @@ public class SolicitudDeCargaHecho extends Solicitud {
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     HechosRepository.getInstancia().cargarHecho(this.hecho);
-    SolicitudesRepositoryMemory.getInstancia().eliminarSolicitud(this);
+
   }
 
   @Override
   public void rechazar() {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
-    SolicitudesRepositoryMemory.getInstancia().eliminarSolicitud(this);
   }
 
-
+  public String aceptarConSugerencia(String sugerencia) {
+    this.aceptar();
+    return sugerencia;
+  }
 
 }
