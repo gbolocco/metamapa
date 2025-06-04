@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 
 public class Coleccion {
+
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
@@ -113,6 +114,14 @@ public class Coleccion {
     } else {
       return filtros.stream().anyMatch(filtro -> filtro.cumpleFiltro(hecho));
     }
+  }
+
+  public boolean contieneHecho(Hecho hecho) {
+    return this.hechos.contains(hecho);
+  }
+
+  public void modificarHecho(Hecho hechoAmodificar, Hecho hechoModificado) {
+    this.hechos.set(hechos.indexOf(hechoAmodificar), hechoModificado);
   }
 
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {

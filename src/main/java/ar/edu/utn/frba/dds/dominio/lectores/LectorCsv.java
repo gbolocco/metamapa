@@ -3,14 +3,13 @@ package ar.edu.utn.frba.dds.dominio.lectores;
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.hechos.CampoEsperado;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.hechos.OriginHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -40,7 +39,7 @@ public class LectorCsv implements Lector {
     List<Hecho> hechos = new ArrayList<>();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     LocalDate fechaCarga = LocalDate.now();
-    OriginHecho origen = OriginHecho.FUENTE;
+    OrigenHecho origen = OrigenHecho.FUENTE_ESTATICA;
 
     CSVReader lector = null;
     String[] encabezados = null;

@@ -17,8 +17,9 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudEliminacionRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,16 +33,12 @@ public class AdministradorTest {
 
   private Coleccion coleccion;
   private Hecho hecho;
-  private List<Hecho> hechos= new ArrayList<Hecho>();
-  private ColeccionRepository colectionRep;
-  private SolicitudEliminacionRepositoryMemory solicitudRep;
-
   private SolicitudEliminacion solicitud;
 
   private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho) {
     String justificacionLarga = "a".repeat(501);
     SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga);
-    SolicitudEliminacionRepositoryMemory.getInstancia().agregar(s);
+    SolicitudesRepositoryMemory.getInstancia().agregar(s);
     return s;
   }
 
@@ -62,13 +59,9 @@ public class AdministradorTest {
 
     // Limpieza de estado antes de cada test
     ColeccionRepositoryMemory.getInstancia().vaciar();
-    SolicitudEliminacionRepositoryMemory.getInstancia().vaciar();
+    SolicitudesRepositoryMemory.getInstancia().vaciar();
 
     logger.info("Iniciando test de Administrador");
-
-    // Repositorios en memoria
-    colectionRep = ColeccionRepositoryMemory.getInstancia();
-    solicitudRep = SolicitudEliminacionRepositoryMemory.getInstancia();
 
     // Crear mock de Hecho
     hecho = mock(Hecho.class);
@@ -84,7 +77,7 @@ public class AdministradorTest {
     assertEquals("Incendios 2025", coleccion.getTitulo());
     assertEquals("Hechos de incendios", coleccion.getDescripcion());
     coleccion.cargarColeccion();
-    assertTrue(colectionRep.mostrarColecciones().contains(coleccion));
+    assertTrue(ColeccionRepositoryMemory.getInstancia().mostrarColecciones().contains(coleccion));
   }
   @Test
   void puedeCargarHechosDesdeFuente() {
@@ -99,9 +92,9 @@ public class AdministradorTest {
   void puedeAceptarUnaSolicitudDeEliminacion() {
 
     assertTrue(solicitud.estaPendiente());
-    assertTrue(solicitudRep.mostrarSolicitudes().contains(solicitud));
+    assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     solicitud.aceptar();
     assertFalse(solicitud.estaPendiente());
-    assertTrue(solicitudRep.mostrarSolicitudes().isEmpty());
+    assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).isEmpty());
   }
 }
