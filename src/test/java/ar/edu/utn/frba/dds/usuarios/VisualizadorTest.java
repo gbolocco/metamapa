@@ -36,8 +36,7 @@ public class VisualizadorTest {
         "Incendios 2025",
         "Hechos de incendios",
         List.of(),  // Lista vacía
-        fuente,
-        TipoCombinacion.AND
+        fuente
     );
 
     coleccion.cargarHechos();

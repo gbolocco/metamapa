@@ -1,8 +1,10 @@
 package ar.edu.utn.frba.dds.dominio.fuentes;
 
+import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FuenteEstatica implements Fuente {
   private final Lector lector;
@@ -17,8 +19,15 @@ public class FuenteEstatica implements Fuente {
     this.lector = lector;
   }
 
-  public List<Hecho> cargarHechos() {
+  public List<Hecho> obtenerHechos(List<Filtro> criteriosDePertenencia) {
+    List<Hecho> hechosLeidos = lector.leer(rutaArchivo);
 
-    return lector.leer(rutaArchivo);
+    return hechosLeidos.stream()
+        .filter(hecho -> cumpleCriterio(hecho, criteriosDePertenencia))
+        .collect(Collectors.toList());
+  }
+
+  private boolean cumpleCriterio(Hecho hecho, List<Filtro> criterios) {
+    return criterios.stream().allMatch(f -> f.cumpleFiltro(hecho));
   }
 }

@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
 public class SolicitudDeCargaHecho extends Solicitud {
@@ -18,8 +18,7 @@ public class SolicitudDeCargaHecho extends Solicitud {
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    HechosRepository.getInstancia().cargarHecho(this.hecho);
-
+    HechosRepositoryMemory.getInstancia().cargarHecho(this.hecho);
   }
 
   @Override

@@ -48,8 +48,7 @@ public class AdministradorTest {
         "Incendios 2025",
         "Hechos de incendios",
         List.of(mock(Filtro.class)),  // Lista con un mock de Filtro
-        fuente,
-        TipoCombinacion.AND
+        fuente
     );
   }
 

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.fuentes;
 
+import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import java.io.IOException;
@@ -17,7 +18,9 @@ public class FuenteMetaMapa extends FuenteProxy {
     this.hechos = new ArrayList<>();
   }
 
-  public List<Hecho> obtenerHechos(Map<String, String> filtros) throws IOException {
+  public List<Hecho> obtenerHechos(List<Filtro> filtros) throws IOException {
+    filtros.
+
     this.hechos = adapter.obtenerHechos(filtros);
     return this.hechos;
   }

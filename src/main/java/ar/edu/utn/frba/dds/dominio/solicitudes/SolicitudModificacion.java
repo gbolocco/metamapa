@@ -3,11 +3,10 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 public class SolicitudModificacion extends Solicitud {
 
@@ -42,7 +41,7 @@ public class SolicitudModificacion extends Solicitud {
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
     ColeccionRepositoryMemory.getInstancia().modificarHecho(this.hecho,this.hechoModificado);
-    HechosRepository.getInstancia().modificarHecho(this.hecho,this.hechoModificado);
+    HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho,this.hechoModificado);
   }
   @Override
   public void rechazar() {

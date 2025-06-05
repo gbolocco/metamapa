@@ -29,8 +29,7 @@ public class Coleccion {
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      Fuente fuente,
-      TipoCombinacion tipoCombinacion
+      Fuente fuente
 
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
@@ -70,18 +69,8 @@ public class Coleccion {
   //metodos relacionados a los hechos
 
   public void cargarHechos() {
-    List<Hecho> hechosLeidos = fuente.cargarHechos();
-    hechosLeidos.stream()
-        .filter(this::cumpleCriterio)
-        .forEach(hechos::add);
-  }
+    hechos = fuente.obtenerHechos(criteriosDePertenencia);
 
-  private boolean cumpleCriterio(Hecho hecho) {
-    if (this.tipoCombinacion == TipoCombinacion.AND) {
-      return criteriosDePertenencia.stream().allMatch(f -> f.cumpleFiltro(hecho));
-    } else {
-      return criteriosDePertenencia.stream().anyMatch(f -> f.cumpleFiltro(hecho));
-    }
   }
 
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {

@@ -18,6 +18,18 @@ public class FiltroFecha implements Filtro {
     this.campoDeHechoAplicado = campoDeHechoAplicado;
   }
 
+  public LocalDate getFechaDesde() {
+    return fechaDesde;
+  }
+
+  public LocalDate getFechaHasta() {
+    return fechaHasta;
+  }
+
+  public CampoDeHecho getCampoDeHechoAplicado() {
+    return campoDeHechoAplicado;
+  }
+
   public boolean cumpleFiltro(Hecho hecho) {
     return this.fechaDesde
         .isBefore(this.campoDeHechoAplicado.obtenerValor(hecho))

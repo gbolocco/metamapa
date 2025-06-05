@@ -1,21 +1,19 @@
 package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
-import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HechosRepository {
+public class HechosRepositoryMemory {
 
-  private HechosRepository() {
+  private HechosRepositoryMemory() {
   }
 
-  private static final HechosRepository instance = new HechosRepository();
+  private static final HechosRepositoryMemory instance = new HechosRepositoryMemory();
 
   private final List<Hecho> hechos = new ArrayList<>();
 
-  public static HechosRepository getInstancia() {
+  public static HechosRepositoryMemory getInstancia() {
     return instance;
   }
 

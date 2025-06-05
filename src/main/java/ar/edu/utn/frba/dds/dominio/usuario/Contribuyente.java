@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.time.LocalDate;
 
@@ -29,21 +28,5 @@ public class Contribuyente {
     origenContribuyente.setContribuyenteHecho(this);
 
     return new Hecho(titulo, descripcion, categoria, ubicacion, fechaAcontecimiento, fechaDeCarga, origenContribuyente);
-  }
-
-  public SolicitudDeCargaHecho generarSolicitudDeCreacion(Hecho hecho){
-
-    SolicitudDeCargaHecho solicitud = new SolicitudDeCargaHecho(hecho);
-    SolicitudesRepositoryMemory.getInstancia().agregar(solicitud);
-    return solicitud;
-  }
-
-  public SolicitudModificacion generarSolicitudDeModificacion(Hecho hechoParaModificar, Hecho hechoActualizado){
-
-    //oriigen y contribuyente del hecho actualizado tiene asociado el contribuyente?
-
-    return new SolicitudModificacion(hechoParaModificar,hechoActualizado,this);
-
-    //[(CAMPO, Modificacion),...]
   }
 }

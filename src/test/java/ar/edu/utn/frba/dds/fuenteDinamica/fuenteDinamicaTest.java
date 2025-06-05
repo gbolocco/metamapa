@@ -8,7 +8,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,7 +28,7 @@ public class fuenteDinamicaTest {
     hecho = mock(Hecho.class);
     solicitud = new SolicitudDeCargaHecho(hecho); // ya se carga en el repositorio por el constructor
     fuente = new FuenteDinamica();
-    HechosRepository.getInstancia().cargarHecho(hecho);
+    HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
   }
 
   @Test
@@ -48,7 +48,7 @@ public class fuenteDinamicaTest {
 
   @Test
   void fuenteDinamicaPuedeCargarHechosDesdeFuente(){
-    List<Hecho> lista = fuente.cargarHechos();
+    List<Hecho> lista = fuente.obtenerHechos();
     Assertions.assertFalse(lista.isEmpty());
   }
 
@@ -62,7 +62,7 @@ public class fuenteDinamicaTest {
 
     solicitudContribuyente.aceptar();
 
-    Assertions.assertTrue(HechosRepository.getInstancia().mostrarHechos().contains(hechoContribuyente)); // se acepto correctamente y se agrego
+    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente)); // se acepto correctamente y se agrego
     Assertions.assertTrue(contribuyente == hechoContribuyente.getOrigenHecho().getContribuyenteHecho());
 
   }
@@ -74,15 +74,15 @@ public class fuenteDinamicaTest {
     SolicitudDeCargaHecho solicitudContribuyente = contribuyente.generarSolicitudDeCreacion(hechoContribuyente);
 
     solicitudContribuyente.aceptar();
-    Assertions.assertTrue(HechosRepository.getInstancia().mostrarHechos().contains(hechoContribuyente));
+    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
 
     SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoContribuyente,hecho,contribuyente);
 
 
     solicitudModificacion.aceptar();
 
-    Assertions.assertTrue(HechosRepository.getInstancia().mostrarHechos().contains(hecho));
-    Assertions.assertFalse(HechosRepository.getInstancia().mostrarHechos().contains(hechoContribuyente));
+    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hecho));
+    Assertions.assertFalse(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
   }
 
   @Test
@@ -92,7 +92,7 @@ public class fuenteDinamicaTest {
     SolicitudDeCargaHecho solicitudContribuyente = contribuyente.generarSolicitudDeCreacion(hechoContribuyente);
 
     solicitudContribuyente.aceptar();
-    Assertions.assertTrue(HechosRepository.getInstancia().mostrarHechos().contains(hechoContribuyente));
+    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
 
     Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(hechoContribuyente,hecho,contribuyente));
   }
