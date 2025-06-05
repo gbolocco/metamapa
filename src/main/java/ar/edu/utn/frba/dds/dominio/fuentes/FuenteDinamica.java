@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.List;
 
 
-public abstract class FuenteDinamica implements Fuente {
+public class FuenteDinamica implements Fuente {
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
       return HechosRepositoryMemory.getInstancia().mostrarHechos();
 

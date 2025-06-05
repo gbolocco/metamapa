@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
 import java.time.LocalDate;
 
-public class FiltroFechaHasta {
+public class FiltroFechaHasta implements Filtro {
   private LocalDate fechaHasta;
   private CampoDeHecho campoDeHechoAplicado;
 
