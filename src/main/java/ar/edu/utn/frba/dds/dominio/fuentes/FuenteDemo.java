@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FuenteDemo implements Fuente {
   private Conexion conexion;
@@ -49,10 +50,19 @@ public class FuenteDemo implements Fuente {
     );
   }
 
-  //TODO hay q traerse los hechos filtrados segun el criterio de pertenencia del HechosRepository
+  private boolean cumpleCriterio(Hecho hecho, List<Filtro> criterios) {
+    return criterios.stream().allMatch(f -> f.cumpleFiltro(hecho));
+  }
+
   @Override
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
-    return List.of();
+    List<Hecho> hechos = HechosRepositoryMemory.getInstancia().mostrarHechos()
+        .stream()
+        .filter(h->h.getOrigenHecho()==OrigenHecho.FUENTE_PROXY).toList();
+
+    return hechos.stream()
+        .filter(hecho -> cumpleCriterio(hecho, criterios))
+        .collect(Collectors.toList());
   }
 }
 
