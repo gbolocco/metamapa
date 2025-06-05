@@ -40,7 +40,7 @@ public class SolicitudModificacion extends Solicitud {
   @Override
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    ColeccionRepositoryMemory.getInstancia().modificarHecho(this.hecho,this.hechoModificado);
+    this.hechoModificado.marcarComoEditado();
     HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho,this.hechoModificado);
   }
   @Override
@@ -48,4 +48,10 @@ public class SolicitudModificacion extends Solicitud {
     this.estadoSolicitud = EstadoSolicitud.RECHAZADA;
   }
 
+
+  public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
+    hechoSugerido.marcarComoEditado();
+    this.hecho = hechoSugerido;
+    this.aceptar();
+  }
 }

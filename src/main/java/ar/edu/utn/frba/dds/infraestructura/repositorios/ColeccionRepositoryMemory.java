@@ -20,12 +20,6 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
     return instance;
   }
 
-  public void modificarHecho(Hecho hechoAmodificar, Hecho hechoModificado) {
-
-    List <Coleccion> coleccionesParaModificar = colecciones.stream().filter( coleccion -> coleccion.contieneHecho(hechoAmodificar)).toList();
-    coleccionesParaModificar.forEach( coleccion -> { coleccion.modificarHecho(hechoAmodificar, hechoModificado); });
-  }
-
   public void agregarColeccion(Coleccion coleccion) {
     this.colecciones.add(coleccion);
   }

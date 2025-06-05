@@ -108,9 +108,6 @@ public class Coleccion {
     return this.hechos.contains(hecho);
   }
 
-  public void modificarHecho(Hecho hechoAmodificar, Hecho hechoModificado) {
-    this.hechos.set(hechos.indexOf(hechoAmodificar), hechoModificado);
-  }
 
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()

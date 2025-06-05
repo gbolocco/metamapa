@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.fuenteDinamica;
 
+import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
@@ -11,6 +12,7 @@ import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 
 public class fuenteDinamicaTest {
-
+  List<Filtro> filtros;
   Hecho hecho;
   SolicitudDeCargaHecho solicitud;
   FuenteDinamica fuente;
@@ -29,6 +31,7 @@ public class fuenteDinamicaTest {
     solicitud = new SolicitudDeCargaHecho(hecho); // ya se carga en el repositorio por el constructor
     fuente = new FuenteDinamica();
     HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
+    filtros = new ArrayList<>();
   }
 
   @Test
@@ -113,4 +116,17 @@ public class fuenteDinamicaTest {
 
     Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(hechoContribuyente,hecho,contribuyenteChorro));
   }
+
+  @Test
+  void administradorPuedeAceptarConSugerenciaDeCambios(){
+      Contribuyente contribuyente = new Contribuyente("juan", 21);
+      Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa", "incendio forestal en la pampa", "incendios forestales", mock(Ubicacion.class), mock(LocalDate.class), LocalDate.of(2025,5,20));
+
+      SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
+      solicitudContribuyente.aceptarConSugerenciaDeCambio(hecho);
+
+      Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hecho));
+      Assertions.assertFalse(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
+  }
+
 }

@@ -14,7 +14,7 @@ public class Hecho {
   private LocalDate fechaDeCarga;
   private OrigenHecho origenHecho;
   private Boolean eliminado = false;
-
+  private Boolean editado = false;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   public Hecho(
@@ -38,6 +38,14 @@ public class Hecho {
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
     this.origenHecho = origenHecho;
+  }
+
+  public void marcarComoEditado() {
+    editado = true;
+  }
+
+  public boolean getEditado() {
+    return editado;
   }
 
   public void marcarComoEliminado() {
@@ -87,6 +95,7 @@ public class Hecho {
     logger.info("-------------------------------------------");
 
   }
+
 }
 
 
