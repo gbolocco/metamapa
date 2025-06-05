@@ -20,7 +20,6 @@ public class Coleccion {
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
   private List<Hecho> hechos;
-  private TipoCombinacion tipoCombinacion;
 
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
 
@@ -44,7 +43,6 @@ public class Coleccion {
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
-    this.tipoCombinacion = tipoCombinacion;
     this.cargarHechos();
     this.cargarColeccion();
   }

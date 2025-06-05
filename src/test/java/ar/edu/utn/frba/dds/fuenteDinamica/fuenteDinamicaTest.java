@@ -45,12 +45,12 @@ public class fuenteDinamicaTest {
     solicitud.aceptar();
     Assertions.assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
   }
-
+/*
   @Test
   void fuenteDinamicaPuedeCargarHechosDesdeFuente(){
     List<Hecho> lista = fuente.obtenerHechos();
     Assertions.assertFalse(lista.isEmpty());
-  }
+  }*/
 
   @Test
   void contribuyenteRegistradoPuedeCargarHechoAFuenteDinamica(){

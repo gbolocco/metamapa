@@ -39,7 +39,7 @@ public class FuenteMetaMapaAdapter {
 
   public void crearSolicitudEliminacion(SolicitudEliminacion solicitud) throws IOException {
     Call<Void> call = fuenteMetaMapaApiService.createSolicitudEliminacion(solicitud);
-    Response<Void> response = call.execute();
+    call.execute();
 
   }
 
