@@ -18,6 +18,7 @@ public class LectorTest {
 
   Lector lector;
   List<Hecho> hechos;
+
   @BeforeEach
   void setUp() {
     lector = new LectorCsv();
