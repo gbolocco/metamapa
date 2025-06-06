@@ -11,6 +11,14 @@ public class FiltroContieneTexto implements Filtro {
     this.campoDeHechoAplicado = campoDeHechoAplicado;
   }
 
+  public CampoDeHecho getCampoDeHechoAplicado() {
+    return campoDeHechoAplicado;
+  }
+
+  public String getTextoClave() {
+    return textoClave;
+  }
+
   @Override
   public boolean cumpleFiltro(Hecho hecho) {
 

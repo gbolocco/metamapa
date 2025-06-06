@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.dominio.filtros;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.function.Function;
 
 public enum CampoDeHecho {
@@ -11,8 +12,8 @@ public enum CampoDeHecho {
   DESCRIPCION(Hecho::getDescripcion, String.class),
   CATEGORIA(Hecho::getCategoria, String.class),
   FECHA_ACONTECIMIENTO(Hecho::getFechaAcontecimiento, LocalDate.class),
-  UBICACION(Hecho::getUbicacion, Ubicacion.class);
-
+  UBICACION(Hecho::getUbicacion, Ubicacion.class),
+  FECHA_DE_CARGA(Hecho::getFechaDeCarga, LocalDateTime.class);
   private final Function<Hecho, ?> extractor;
   private final Class<?> tipoRetorno;
 

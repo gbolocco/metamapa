@@ -18,14 +18,18 @@ public class LectorTest {
 
   Lector lector;
   List<Hecho> hechos;
+
   @BeforeEach
   void setUp() {
     lector = new LectorCsv();
     hechos=lector.leer("datos/desastres_naturales_processed.csv");
   }
+
   @Test
   void testLectorCsv() {
     logger.info(String.valueOf(hechos.size()));
     assertFalse(hechos.isEmpty());
   }
+
+
 }

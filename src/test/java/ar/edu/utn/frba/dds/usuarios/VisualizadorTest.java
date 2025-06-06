@@ -7,12 +7,13 @@ import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
-import ar.edu.utn.frba.dds.dominio.filtros.FiltroFecha;
+import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaHasta;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,32 +25,29 @@ public class VisualizadorTest {
   Coleccion coleccion;
   Filtro filtroTexto1;
   Filtro filtroTexto2;
-  FiltroFecha filtroFecha;
+  FiltroFechaHasta filtroFechaHasta;
 
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws IOException {
 
     lector = new LectorCsv();
-    FuenteEstatica fuente = new FuenteEstatica("datos/desastres_naturales_processed.csv", lector);
+    FuenteEstatica fuente = new FuenteEstatica("datos/desastres_naturales_first_8 (1).csv", lector);
     coleccion = new Coleccion(
         "Incendios 2025",
         "Hechos de incendios",
         List.of(),  // Lista vacía
-        fuente,
-        TipoCombinacion.AND
+        fuente
     );
 
     coleccion.cargarHechos();
 
     filtroTexto1 = new FiltroContieneTexto("Geophysical", CampoDeHecho.CATEGORIA);
     filtroTexto2 = new FiltroContieneTexto("Earthquake", CampoDeHecho.CATEGORIA);
-    filtroFecha = new FiltroFecha(
+    filtroFechaHasta = new FiltroFechaHasta(
         LocalDate.of(2024, 5, 1),
-        LocalDate.of(2024, 5, 20),
         CampoDeHecho.FECHA_ACONTECIMIENTO
     );
-
   }
 
   @Test
@@ -61,7 +59,7 @@ public class VisualizadorTest {
   @Test
   void visualizadorPuedeAplicarUnaListaDeFiltros() {
 
-    List<Filtro> filtros = List.of(filtroTexto1, filtroTexto2, filtroFecha);
+    List<Filtro> filtros = List.of(filtroTexto1, filtroTexto2, filtroFechaHasta);
 
     List<Hecho> coleccionSinFiltrar = coleccion.mostrarHechos();
 
