@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.dominio.hechos;
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 
 public class Hecho {
@@ -11,10 +12,10 @@ public class Hecho {
   private String categoria;
   private Ubicacion ubicacion;
   private LocalDate fechaAcontecimiento;
-  private LocalDate fechaDeCarga;
+  private LocalDateTime fechaDeCarga;
   private OrigenHecho origenHecho;
   private Boolean eliminado = false;
-
+  private Boolean editado = false;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   public Hecho(
@@ -23,7 +24,7 @@ public class Hecho {
       String categoria,
       Ubicacion ubicacion,
       LocalDate fechaAcontecimiento,
-      LocalDate fechaDeCarga,
+      LocalDateTime fechaDeCarga,
       OrigenHecho origenHecho
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
@@ -38,6 +39,14 @@ public class Hecho {
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
     this.origenHecho = origenHecho;
+  }
+
+  public void marcarComoEditado() {
+    editado = true;
+  }
+
+  public boolean getEditado() {
+    return editado;
   }
 
   public void marcarComoEliminado() {
@@ -68,12 +77,12 @@ public class Hecho {
     return fechaAcontecimiento;
   }
 
-  public LocalDate getFechaDeCarga() {
+  public LocalDateTime getFechaDeCarga() {
     return fechaDeCarga;
   }
 
   public OrigenHecho getOrigenHecho() {
-    return origenHecho;
+    return this.origenHecho;
   }
 
   public void imprimirHecho() {
@@ -87,6 +96,7 @@ public class Hecho {
     logger.info("-------------------------------------------");
 
   }
+
 }
 
 

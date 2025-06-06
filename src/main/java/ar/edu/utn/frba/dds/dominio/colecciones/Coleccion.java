@@ -72,6 +72,14 @@ public class Coleccion {
 
   }
 
+  public List<Filtro> getCriteriosDePertenencia() {
+    return new ArrayList<>(criteriosDePertenencia);
+  }
+
+  public List<Hecho> getHechos() {
+    return new ArrayList<>(hechos);
+  }
+
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     logger.info("Coleccion: {}", this.titulo);
     logger.info("Descripcion: {}", this.descripcion);
@@ -108,9 +116,6 @@ public class Coleccion {
     return this.hechos.contains(hecho);
   }
 
-  public void modificarHecho(Hecho hechoAmodificar, Hecho hechoModificado) {
-    this.hechos.set(hechos.indexOf(hechoAmodificar), hechoModificado);
-  }
 
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()
