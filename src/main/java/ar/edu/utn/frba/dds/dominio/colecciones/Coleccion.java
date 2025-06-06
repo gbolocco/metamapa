@@ -21,7 +21,6 @@ public class Coleccion {
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
   private List<Hecho> hechos;
-  private TipoCombinacion tipoCombinacion;
   String handle;
 
 
@@ -32,8 +31,7 @@ public class Coleccion {
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      Fuente fuente,
-      TipoCombinacion tipoCombinacion
+      Fuente fuente
   ) throws IOException {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?

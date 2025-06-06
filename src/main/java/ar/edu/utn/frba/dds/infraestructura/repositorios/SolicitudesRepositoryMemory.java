@@ -10,10 +10,6 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository {
 
   private final List<Solicitud> solicitudes = new ArrayList<>();
 
-  public void agregar(Solicitud solicitud) {
-    solicitudes.add(solicitud);
-  }
-
   private static final SolicitudesRepositoryMemory instance =
       new SolicitudesRepositoryMemory();
 
@@ -21,6 +17,9 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository {
     return instance;
   }
 
+  public void agregar(Solicitud solicitud) {
+    solicitudes.add(solicitud);
+  }
 
   public List<Solicitud> pendientes() {
     return solicitudes.stream()
@@ -33,7 +32,10 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository {
   }
 
   public List<Solicitud> mostrarSolicitudes(TipoSolicitud tipoSolicitud) {
-    return this.solicitudes.stream().filter(s -> s.getTipoSolicitud() == tipoSolicitud && s.estaPendiente()).toList();
+    return this.solicitudes
+        .stream()
+        .filter(s -> s.getTipoSolicitud() == tipoSolicitud && s.estaPendiente())
+        .toList();
   }
 
   public void vaciar() {
