@@ -20,12 +20,12 @@ public class Contribuyente {
   }
 
   public Hecho crearHecho(
-  String titulo,
-  String descripcion,
-  String categoria,
-  Ubicacion ubicacion,
-  LocalDate fechaAcontecimiento,
-  LocalDateTime fechaDeCarga) {
+      String titulo,
+      String descripcion,
+      String categoria,
+      Ubicacion ubicacion,
+      LocalDate fechaAcontecimiento,
+      LocalDateTime fechaDeCarga) {
 
     OrigenHecho origenContribuyente = OrigenHecho.PROVISTO_POR_CONTRIBUYENTE;
     origenContribuyente.setContribuyenteHecho(this);

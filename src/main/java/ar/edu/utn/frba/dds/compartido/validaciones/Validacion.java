@@ -43,7 +43,7 @@ public class Validacion {
 
   public static void validarStringAlfanumericoSinEspacios(String texto) {
     validarStringNoVacio(texto, "handle");
-    if(!texto.matches("^[a-zA-Z0-9]+$")){
+    if (!texto.matches("^[a-zA-Z0-9]+$")) {
       throw new IllegalArgumentException("El valor del String no cumple las condiciones");
     }
   }

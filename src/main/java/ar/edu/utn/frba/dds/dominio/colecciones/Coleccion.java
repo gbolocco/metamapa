@@ -39,8 +39,6 @@ public class Coleccion {
         criteriosDePertenencia,
         "criteriosDePertenencia"
     );
-   // Validacion.validarStringAlfanumericoSinEspacios(handle);
-
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);

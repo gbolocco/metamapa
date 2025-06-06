@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
-public class SolicitudEliminacion  extends Solicitud{
+public class SolicitudEliminacion  extends Solicitud {
   DetectorDeSpam detector = new DetectorDeSpam();
   String justificacion;
   Integer min = 500;
@@ -21,7 +21,7 @@ public class SolicitudEliminacion  extends Solicitud{
   }
 
   public void verificarSpam() {
-    if(detector.esSpam(justificacion)){
+    if (detector.esSpam(justificacion)) {
       rechazar();
     }
   }

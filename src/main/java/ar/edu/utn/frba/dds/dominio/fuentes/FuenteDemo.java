@@ -41,7 +41,7 @@ public class FuenteDemo implements Fuente {
         .getOrDefault("fechaDeCarga", LocalDate.now());
 
 
-  Ubicacion ubicacion=new Ubicacion(latitud,longitud);
+    Ubicacion ubicacion = new Ubicacion(latitud, longitud);
     return new Hecho(
         titulo,
         descripcion,

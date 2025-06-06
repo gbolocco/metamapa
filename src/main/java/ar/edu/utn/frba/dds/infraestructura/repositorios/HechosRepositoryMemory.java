@@ -32,7 +32,9 @@ public class HechosRepositoryMemory implements HechosRepository {
     return hechos.stream().filter(
         hecho -> filtros
             .stream()
-            .allMatch(filtro -> filtro.cumpleFiltro(hecho) && hecho.getOrigenHecho().equals(origenHecho)))
+            .allMatch(
+                filtro -> filtro.cumpleFiltro(hecho)
+                    && hecho.getOrigenHecho().equals(origenHecho)))
         .toList();
   }
 
