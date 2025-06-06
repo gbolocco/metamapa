@@ -13,11 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
-import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.io.IOException;
@@ -35,10 +36,11 @@ public class AdministradorTest {
   private Coleccion coleccion;
   private Hecho hecho;
   private SolicitudEliminacion solicitud;
+  private DetectorDeSpam detectorDeSpam ;
 
-  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho) {
+  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho, DetectorDeSpam detectorDeSpam) {
     String justificacionLarga = "a".repeat(501);
-    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga);
+    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
     SolicitudesRepositoryMemory.getInstancia().agregar(s);
     return s;
   }
@@ -65,8 +67,8 @@ public class AdministradorTest {
 
     // Crear mock de Hecho
     hecho = mock(Hecho.class);
-
-    solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho);
+    detectorDeSpam = mock(DetectorDeSpam.class);
+    solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho, detectorDeSpam);
 
   }
   @Test
@@ -101,24 +103,16 @@ public class AdministradorTest {
 
   @Test
   void solicitudEliminacionRechazadaPorSpam() {
-      solicitud.setJustificacion("¡Gana un millón de dólares ahora! Clic aquí");
-      solicitud.verificarSpam();
-      assertEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
+    when(detectorDeSpam.esSpam(any())).thenReturn(true);
+    solicitud.verificarSpam();
+    assertEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
 
-      solicitud.setJustificacion("Oferta exclusiva gratis para ti");
-      solicitud.verificarSpam();
-      assertEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
   }
 
   @Test
   void solicitudEliminacionNoRechazadaPorSpam() {
-    solicitud.setJustificacion("Hola como estas?");
-    solicitud.verificarSpam();
-    assertNotEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
-
-    solicitud.setJustificacion("Lorem ipsum dolor sit amet consectetur adipiscing elit vestibulum, lectus netus");
+    when(detectorDeSpam.esSpam(any())).thenReturn(false);
     solicitud.verificarSpam();
     assertNotEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
   }
-
 }

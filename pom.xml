@@ -61,12 +61,6 @@
       <artifactId>lucene-core</artifactId>
       <version>8.11.2</version>
     </dependency>
-    <!-- Para cálculos matemáticos (logaritmos, etc.) -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-math3</artifactId>
-      <version>3.6.1</version>
-    </dependency>
   </dependencies>
 
   <build>

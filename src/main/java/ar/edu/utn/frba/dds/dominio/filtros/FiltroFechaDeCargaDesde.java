@@ -1,11 +1,9 @@
 package ar.edu.utn.frba.dds.dominio.filtros;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-
-
 import java.time.LocalDateTime;
 
-public class FiltroFechaDeCargaDesde implements Filtro{
+public class FiltroFechaDeCargaDesde implements Filtro {
   private LocalDateTime fechaCargaDesde;
   private CampoDeHecho campoDeHechoAplicado;
 

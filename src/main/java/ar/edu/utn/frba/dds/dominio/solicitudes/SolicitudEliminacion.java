@@ -5,23 +5,25 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
+
 public class SolicitudEliminacion  extends Solicitud {
-  DetectorDeSpam detector = new DetectorDeSpam();
   String justificacion;
   Integer min = 500;
+  DetectorDeSpam detectorDeSpam;
 
-  public SolicitudEliminacion(Hecho hecho, String justificacion) {
+  public SolicitudEliminacion(Hecho hecho, String justificacion, DetectorDeSpam detectorDeSpam) {
     super(hecho);
     this.tipoSolicitud = TipoSolicitud.ELIMINACION_HECHO;
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
+    this.detectorDeSpam = detectorDeSpam;
     verificarSpam();
   }
 
   public void verificarSpam() {
-    if (detector.esSpam(justificacion)) {
+    if (detectorDeSpam.esSpam(justificacion)) {
       rechazar();
     }
   }

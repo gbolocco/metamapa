@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
+import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.colecciones.contratos.ColeccionRepository;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
@@ -28,12 +29,12 @@ public class ContribuyenteTest {
   private Coleccion coleccion;
   private ColeccionRepository colectionRep;
   private SolicitudesRepositoryMemory solicitudRep;
-
+  private DetectorDeSpam detectorDeSpam;
   private SolicitudEliminacion solicitud;
 
-  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho) {
+  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho, DetectorDeSpam detectorDeSpam) {
     String justificacionLarga = "a".repeat(501);
-    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga);
+    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
     SolicitudesRepositoryMemory.getInstancia().agregar(s);
     return s;
   }
@@ -48,16 +49,18 @@ public class ContribuyenteTest {
 
     // Crear mock de Hecho
     hecho = mock(Hecho.class);
-
+	
+    // Mockeo el detector
+    detectorDeSpam = mock(DetectorDeSpam.class);
   }
 
   @Test
   void puedeCrearUnaSolicitudDeEliminacion() {
 
-    solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho);
+    //solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho, detectorDeSpam);
 
     String justificacionLarga = "a".repeat(501);
-    solicitud = new SolicitudEliminacion(hecho, justificacionLarga);
+    solicitud = new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
     logger.info("Solicitud creada");
     solicitudRep.agregar(solicitud);
     logger.info("Solicitud agregada al repositorio de solicitudes");
