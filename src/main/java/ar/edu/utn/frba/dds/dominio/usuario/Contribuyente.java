@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Contribuyente {
 
@@ -20,7 +21,7 @@ public class Contribuyente {
 
   public Hecho crearHecho(String titulo, String descripcion,
                           String categoria, Ubicacion ubicacion,
-                          LocalDate fechaAcontecimiento, LocalDate fechaDeCarga) {
+                          LocalDate fechaAcontecimiento, LocalDateTime fechaDeCarga) {
 
 
 
