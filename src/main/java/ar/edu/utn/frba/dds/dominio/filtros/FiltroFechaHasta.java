@@ -25,7 +25,7 @@ public class FiltroFechaHasta implements Filtro {
   }
 
   public boolean cumpleFiltro(Hecho hecho) {
-    return this.fechaHasta.isBefore(this.campoDeHechoAplicado.obtenerValor(hecho));
+    return this.fechaHasta.isAfter(this.campoDeHechoAplicado.obtenerValor(hecho));
   }
 
 }
