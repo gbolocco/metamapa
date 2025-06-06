@@ -33,8 +33,7 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository {
   }
 
   public List<Solicitud> mostrarSolicitudes(TipoSolicitud tipoSolicitud) {
-    return this.solicitudes.stream().filter(s -> s.getTipoSolicitud()
-        == tipoSolicitud).toList();
+    return this.solicitudes.stream().filter(s -> s.getTipoSolicitud() == tipoSolicitud && s.estaPendiente()).toList();
   }
 
   public void vaciar() {

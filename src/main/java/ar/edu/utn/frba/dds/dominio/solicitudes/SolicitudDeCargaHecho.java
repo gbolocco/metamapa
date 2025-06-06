@@ -26,9 +26,9 @@ public class SolicitudDeCargaHecho extends Solicitud {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
   }
 
-  public String aceptarConSugerencia(String sugerencia) {
+  public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
+    hechoSugerido.marcarComoEditado();
+    this.hecho = hechoSugerido;
     this.aceptar();
-    return sugerencia;
   }
-
 }

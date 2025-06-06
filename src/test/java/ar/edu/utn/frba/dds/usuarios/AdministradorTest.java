@@ -97,6 +97,6 @@ public class AdministradorTest {
     solicitud.aceptar();
     assertFalse(solicitud.estaPendiente());
     assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
-    assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud)); // no se borra, solo cambia el estado
+
   }
 }
