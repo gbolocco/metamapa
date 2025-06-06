@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
-import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.contratos.SolicitudesRepository;
 import java.util.ArrayList;

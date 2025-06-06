@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class LectorCsv implements Lector {
     }
     List<Hecho> hechos = new ArrayList<>();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    LocalDate fechaCarga = LocalDate.now();
+    LocalDateTime fechaCarga = LocalDateTime.now();
     OrigenHecho origen = OrigenHecho.FUENTE_ESTATICA;
 
     CSVReader lector = null;

@@ -14,6 +14,7 @@ public enum OrigenHecho {
       this.contribuyente = contribuyente;
     } else {
       throw new UnsupportedOperationException("Unicamente se puede asignar a un usuario");
+
     }
   }
 

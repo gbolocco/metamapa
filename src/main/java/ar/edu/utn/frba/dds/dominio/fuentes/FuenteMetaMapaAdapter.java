@@ -15,7 +15,7 @@ public class FuenteMetaMapaAdapter {
   private Retrofit retrofit;
   private FuenteMetaMapaApiService fuenteMetaMapaApiService;
 
-  private FuenteMetaMapaAdapter(String url) {
+  public FuenteMetaMapaAdapter(String url) {
     this.url = url;
     this.retrofit = new Retrofit.Builder()
         .baseUrl(url)

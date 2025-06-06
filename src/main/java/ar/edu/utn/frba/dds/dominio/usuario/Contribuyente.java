@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Contribuyente {
 
@@ -19,19 +20,15 @@ public class Contribuyente {
   }
 
   public Hecho crearHecho(
-      String titulo,
-      String descripcion,
-      String categoria,
-      Ubicacion ubicacion,
-      LocalDate fechaAcontecimiento,
-      LocalDate fechaDeCarga
-  ) {
-    // TODO: validar creación de hechos, ¿qué campos son obligatorios y cuáles no?
-    // Se podría aplicar un patrón Builder o borrador de un hecho.
+  String titulo,
+  String descripcion,
+  String categoria,
+  Ubicacion ubicacion,
+  LocalDate fechaAcontecimiento,
+  LocalDateTime fechaDeCarga) {
 
     OrigenHecho origenContribuyente = OrigenHecho.PROVISTO_POR_CONTRIBUYENTE;
     origenContribuyente.setContribuyenteHecho(this);
-
     return new Hecho(
         titulo,
         descripcion,
@@ -41,6 +38,7 @@ public class Contribuyente {
         fechaDeCarga,
         origenContribuyente
     );
+
   }
 }
 

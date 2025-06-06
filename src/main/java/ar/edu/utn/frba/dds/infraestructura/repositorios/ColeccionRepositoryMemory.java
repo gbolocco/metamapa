@@ -14,7 +14,8 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
 
   private List<Coleccion> colecciones = new ArrayList<>();
 
-  private ColeccionRepositoryMemory() {}
+  private ColeccionRepositoryMemory() {
+  }
 
   public static ColeccionRepositoryMemory getInstancia() {
     return instance;

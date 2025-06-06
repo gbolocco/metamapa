@@ -13,6 +13,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,9 +60,13 @@ public class fuenteDinamicaTest {
   void contribuyenteRegistradoPuedeCargarHechoAFuenteDinamica(){
 
     Contribuyente contribuyente = new Contribuyente("juan", 21);
-    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa","incendio forestal en la pampa","incendios forestales", mock(Ubicacion.class), mock(LocalDate.class),mock(LocalDate.class));
-
-
+    Hecho hechoContribuyente = contribuyente.crearHecho(
+        "incendio en la pampa",
+        "incendio forestal en la pampa",
+        "incendios forestales",
+        mock(Ubicacion.class),
+        mock(LocalDate.class),
+        LocalDateTime.now());
 
     SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
 
@@ -75,7 +80,13 @@ public class fuenteDinamicaTest {
   @Test
   void contribuyenteRegistradoPuedeModificarHechoAFuenteDinamica() {
     Contribuyente contribuyente = new Contribuyente("juan", 21);
-    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa", "incendio forestal en la pampa", "incendios forestales", mock(Ubicacion.class), mock(LocalDate.class), LocalDate.now());
+    Hecho hechoContribuyente = contribuyente.crearHecho(
+        "incendio en la pampa",
+        "incendio forestal en la pampa",
+        "incendios forestales",
+        mock(Ubicacion.class),
+        mock(LocalDate.class),
+        LocalDateTime.now());
     SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
 
 
@@ -94,7 +105,13 @@ public class fuenteDinamicaTest {
   @Test
   void contribuyenteNoPuedeModificarHechoAFuenteDinamicaFueCreadoHaceMasDeSieteDias() {
     Contribuyente contribuyente = new Contribuyente("juan", 21);
-    Hecho hechoContribuyente = contribuyente.crearHecho("incendio en la pampa", "incendio forestal en la pampa", "incendios forestales", mock(Ubicacion.class), mock(LocalDate.class), LocalDate.of(2025,5,20));
+    Hecho hechoContribuyente = contribuyente.crearHecho(
+        "incendio en la pampa",
+        "incendio forestal en la pampa",
+        "incendios forestales",
+        mock(Ubicacion.class),
+        mock(LocalDate.class),
+        LocalDateTime.of(2025,5,20, 13,00,00));
     SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
 
     solicitudContribuyente.aceptar();
@@ -108,7 +125,13 @@ public class fuenteDinamicaTest {
     Contribuyente contribuyente1 = new Contribuyente("juan", 21);
     Contribuyente contribuyenteChorro = new Contribuyente("gian", 21);
 
-    Hecho hechoContribuyente = contribuyente1.crearHecho("incendio en la pampa", "incendio forestal en la pampa", "incendios forestales", mock(Ubicacion.class), mock(LocalDate.class), LocalDate.of(2025,5,20));
+    Hecho hechoContribuyente = contribuyente1.crearHecho(
+        "incendio en la pampa",
+        "incendio forestal en la pampa",
+        "incendios forestales",
+        mock(Ubicacion.class),
+        mock(LocalDate.class),
+        LocalDateTime.of(2025,5,20, 13,00,00));
 
     SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
 

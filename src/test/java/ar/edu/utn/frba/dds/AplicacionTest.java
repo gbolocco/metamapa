@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AplicacionTest {
 
@@ -32,7 +33,13 @@ public class AplicacionTest {
   @Test
   @DisplayName("Validaciones de justificacion de solicitud")
   public void testValidarJustificacionSolicitud() { // para probar validaciones
-    Hecho hecho = new Hecho("Prueba", "Prueba", "Prueba", new Ubicacion(1.1,1.1),LocalDate.now(),LocalDate.now(), OrigenHecho.FUENTE_ESTATICA);
+    Hecho hecho = new Hecho(
+        "Prueba",
+        "Prueba",
+        "Prueba",
+        new Ubicacion(1.1,1.1),
+        LocalDate.now(),
+        LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
 
     String justificacionCorta = "no se";
 

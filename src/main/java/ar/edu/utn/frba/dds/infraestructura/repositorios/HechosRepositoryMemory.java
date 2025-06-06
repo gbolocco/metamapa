@@ -30,11 +30,11 @@ public class HechosRepositoryMemory {
     return hechos.stream().filter(hecho -> filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho))).toList();
   }
 
-  public void modificarHecho (Hecho hechoAModificar,Hecho hechoModificado) {
-    if(!hechos.contains(hechoAModificar)) {
+  public void modificarHecho(Hecho hechoaModificar, Hecho hechoModificado) {
+    if (!hechos.contains(hechoaModificar)) {
       throw new IllegalArgumentException("El hecho no existe en la fuenta dinamica");
     }
-    this.hechos.set(hechos.indexOf(hechoAModificar), hechoModificado);
+    this.hechos.set(hechos.indexOf(hechoaModificar), hechoModificado);
   }
 
 }
