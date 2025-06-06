@@ -19,11 +19,13 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 public class FuenteProxyTest {
 
-  public Coleccion crearColeccionConFuenteMetaMapa(Fuente fuente) throws IOException {
+  public Coleccion crearColeccionConFuenteProxy(Fuente fuente) throws IOException {
     FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja",
         CampoDeHecho.TITULO);
     FiltroFechaHasta filtroFechaHasta = new FiltroFechaHasta(
@@ -85,7 +87,7 @@ public class FuenteProxyTest {
 
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
-    Coleccion coleccion = crearColeccionConFuenteMetaMapa(fuente);
+    Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
     coleccion.cargarHechos();
     Assertions.assertEquals(3, coleccion.getHechos().size());
 
@@ -95,7 +97,7 @@ public class FuenteProxyTest {
   void seEnvianCorrectamenteLosFiltrosComoUnMapParaLaQuary() throws IOException {
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
-    Coleccion coleccion = crearColeccionConFuenteMetaMapa(fuente);
+    Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
 
     Map<String, String> filtrosQuary = FiltroUtils
         .convertirfiltrosaMap(coleccion.getCriteriosDePertenencia());
@@ -105,7 +107,7 @@ public class FuenteProxyTest {
 
   @Test
   void fuenteDemo() throws IOException {
-    List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
+    //List<Hecho> listaDeHechos = listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Conexion conexion = mock(Conexion.class);
 
     Map<String, Object> datosHecho = new HashMap<>();
@@ -115,14 +117,24 @@ public class FuenteProxyTest {
     datosHecho.put("latitud", 54.25);
     datosHecho.put("longitud", -54.25);
     datosHecho.put("fechaAcontecimiento", LocalDate.of(2023, 11, 15));
-    datosHecho.put("fechaDeCarga", LocalDate.of(2023, 11, 16));
+    datosHecho.put("fechaDeCarga", LocalDateTime.of(2023, 11, 16, 13,00,00));
 
-    FuenteDemo fuente = new FuenteDemo("URL", conexion);
+    FuenteDemo fuente = new FuenteDemo(conexion);
 
-    Coleccion coleccion = crearColeccionConFuenteMetaMapa(fuente);
-    when(conexion.siguienteHecho(anyString(), any(LocalDate.class))).thenReturn(datosHecho).thenReturn(null);
 
-    conexion.siguienteHecho("hola",LocalDate.of(2023, 11, 16));
+    when(conexion.siguienteHecho(anyString(), any(LocalDateTime.class))).thenReturn(datosHecho).thenReturn(null);
+    TimerTask tarea = new TimerTask() {
+      @Override
+      public void run() {
+        try {
+          fuente.incorporarNuevosHechosSiLosHay(LocalDateTime.now());
+        } catch (Exception e) {
+          System.err.println("Error durante tarea ficticia: " + e.getMessage());
+          e.printStackTrace();
+        }
+      }
+    };
+    tarea.run();
 
     /*
     System.out.println(datosHecho);
@@ -132,7 +144,7 @@ public class FuenteProxyTest {
     System.out.println(HechosRepositoryMemory.getInstancia().mostrarHechos().size());
 */
 
-    fuente.incorporarNuevosHechosSiLosHay(LocalDate.of(2023, 11, 16));
+    Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
     coleccion.getHechos();
     Assertions.assertEquals(1, coleccion.getHechos().size());
 

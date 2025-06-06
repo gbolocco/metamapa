@@ -6,20 +6,20 @@ import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FuenteDemo implements Fuente {
   private Conexion conexion;
-  private String url;
+  private String url = "URL";
 
-  public FuenteDemo(String url, Conexion conexion) {
-    this.url = url;
+  public FuenteDemo(Conexion conexion) {
     this.conexion = conexion;
   }
 
-  public void incorporarNuevosHechosSiLosHay(LocalDate fecha) {
+  public void incorporarNuevosHechosSiLosHay(LocalDateTime fecha) {
     Map<String, Object> datosHecho;
     while ((datosHecho = conexion.siguienteHecho(this.url, fecha)) != null) {
       Hecho hecho = this.crearHechoDesdeMap(datosHecho);
