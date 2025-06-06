@@ -40,4 +40,12 @@ public class Validacion {
       throw new CoordenadaInvalidaException("La longitud debe estar entre -180 y 180 grados.");
     }
   }
+
+  public static void validarStringAlfanumericoSinEspacios(String texto) {
+    validarStringNoVacio(texto, "handle");
+    if(!texto.matches("^[a-zA-Z0-9]+$")){
+      throw new IllegalArgumentException("El valor del String no cumple las condiciones");
+    }
+  }
+
 }

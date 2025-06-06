@@ -21,6 +21,9 @@ public class Coleccion {
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
   private List<Hecho> hechos;
+  private TipoCombinacion tipoCombinacion;
+  String handle;
+
 
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
 
@@ -29,8 +32,8 @@ public class Coleccion {
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      Fuente fuente
-
+      Fuente fuente,
+      TipoCombinacion tipoCombinacion
   ) throws IOException {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?
@@ -38,6 +41,7 @@ public class Coleccion {
         criteriosDePertenencia,
         "criteriosDePertenencia"
     );
+   // Validacion.validarStringAlfanumericoSinEspacios(handle);
 
     this.titulo = titulo;
     this.descripcion = descripcion;
