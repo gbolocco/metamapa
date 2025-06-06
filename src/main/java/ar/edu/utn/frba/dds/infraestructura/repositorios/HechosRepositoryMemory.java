@@ -25,7 +25,7 @@ public class HechosRepositoryMemory implements HechosRepository {
   }
 
   public List<Hecho> mostrarHechos() {
-    return hechos;
+    return new ArrayList<>(hechos);
   }
 
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {

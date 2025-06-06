@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FuenteMetaMapaAdapter {
-  private String url;
+  private final String url;
   private Retrofit retrofit;
   private FuenteMetaMapaApiService fuenteMetaMapaApiService;
 

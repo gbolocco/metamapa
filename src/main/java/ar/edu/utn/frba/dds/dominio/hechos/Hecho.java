@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import org.slf4j.Logger;
 
 public class Hecho {
@@ -13,7 +14,7 @@ public class Hecho {
   private Ubicacion ubicacion;
   private LocalDate fechaAcontecimiento;
   private LocalDateTime fechaDeCarga;
-  private OrigenHecho origenHecho;
+  private final OrigenHecho origenHecho;
   private Boolean eliminado = false;
   private Boolean editado = false;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
@@ -38,7 +39,7 @@ public class Hecho {
     this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
-    this.origenHecho = origenHecho;
+    this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
   }
 
   public void marcarComoEditado() {
@@ -82,7 +83,7 @@ public class Hecho {
   }
 
   public OrigenHecho getOrigenHecho() {
-    return this.origenHecho;
+    return OrigenHecho.valueOf(this.origenHecho.name());
   }
 
   public void imprimirHecho() {

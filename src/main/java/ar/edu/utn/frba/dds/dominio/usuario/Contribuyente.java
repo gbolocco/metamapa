@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 public class Contribuyente {
 
-  private String nombre;
-  private Integer edad;
+  private final String nombre;
+  private final Integer edad;
 
   public Contribuyente(String nombre, Integer edad) {
     if (edad <= 18) {
