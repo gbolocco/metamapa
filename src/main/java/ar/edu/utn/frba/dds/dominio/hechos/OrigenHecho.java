@@ -13,9 +13,11 @@ public enum OrigenHecho {
     if (this == PROVISTO_POR_CONTRIBUYENTE) {
       this.contribuyente = contribuyente;
     } else {
-      throw new UnsupportedOperationException("Unicamente se puede asignar a un usuario el origen PROVISTO_POR_CONTRIBUYENTE");
+      throw new UnsupportedOperationException("Unicamente se puede asignar a un usuario "
+          + "el origen PROVISTO_POR_CONTRIBUYENTE");
     }
   }
+
   public Contribuyente getContribuyenteHecho() {
     if (this == PROVISTO_POR_CONTRIBUYENTE) {
       return contribuyente;

@@ -16,7 +16,7 @@ public class SolicitudModificacion extends Solicitud {
   public SolicitudModificacion(Hecho hecho, Hecho hechoModificado, Contribuyente contribuyente) {
     super(hecho);
     this.contribuyente = contribuyente;
-    if( !this.sePuedeModificar() || contribuyente == null ){
+    if (!this.sePuedeModificar() || contribuyente == null) {
       throw new UnsupportedOperationException("No se puede modificar el hecho");
     }
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
@@ -24,8 +24,9 @@ public class SolicitudModificacion extends Solicitud {
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
-  public boolean sePuedeModificar(){
-    return (hecho.getOrigenHecho().getContribuyenteHecho() == this.contribuyente && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDate.now()));
+  public boolean sePuedeModificar() {
+    return (hecho.getOrigenHecho().getContribuyenteHecho() == this.contribuyente
+        && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDate.now()));
   }
 
   public boolean cumpleCondicionDias(LocalDate fechaInicial, LocalDate fechaFinal) {
@@ -40,9 +41,10 @@ public class SolicitudModificacion extends Solicitud {
   @Override
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    ColeccionRepositoryMemory.getInstancia().modificarHecho(this.hecho,this.hechoModificado);
-    HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho,this.hechoModificado);
+    ColeccionRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
+    HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
   }
+
   @Override
   public void rechazar() {
     this.estadoSolicitud = EstadoSolicitud.RECHAZADA;

@@ -73,7 +73,7 @@ public class Hecho {
   }
 
   public OrigenHecho getOrigenHecho() {
-    return origenHecho;
+    return this.origenHecho;
   }
 
   public void imprimirHecho() {

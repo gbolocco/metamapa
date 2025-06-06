@@ -72,6 +72,14 @@ public class Coleccion {
 
   }
 
+  public List<Filtro> getCriteriosDePertenencia() {
+    return new ArrayList<>(criteriosDePertenencia);
+  }
+
+  public List<Hecho> getHechos() {
+    return new ArrayList<>(hechos);
+  }
+
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     logger.info("Coleccion: {}", this.titulo);
     logger.info("Descripcion: {}", this.descripcion);

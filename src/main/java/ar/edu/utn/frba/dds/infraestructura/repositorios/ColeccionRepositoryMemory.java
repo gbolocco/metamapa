@@ -14,7 +14,8 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
 
   private List<Coleccion> colecciones = new ArrayList<>();
 
-  private ColeccionRepositoryMemory() {}
+  private ColeccionRepositoryMemory() {
+  }
 
   public static ColeccionRepositoryMemory getInstancia() {
     return instance;
@@ -22,8 +23,11 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
 
   public void modificarHecho(Hecho hechoAmodificar, Hecho hechoModificado) {
 
-    List <Coleccion> coleccionesParaModificar = colecciones.stream().filter( coleccion -> coleccion.contieneHecho(hechoAmodificar)).toList();
-    coleccionesParaModificar.forEach( coleccion -> { coleccion.modificarHecho(hechoAmodificar, hechoModificado); });
+    List<Coleccion> coleccionesParaModificar = colecciones.stream()
+        .filter(coleccion -> coleccion.contieneHecho(hechoAmodificar)).toList();
+    coleccionesParaModificar.forEach(coleccion -> {
+      coleccion.modificarHecho(hechoAmodificar, hechoModificado);
+    });
   }
 
   public void agregarColeccion(Coleccion coleccion) {

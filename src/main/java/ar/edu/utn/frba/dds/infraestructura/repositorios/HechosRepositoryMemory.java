@@ -25,11 +25,11 @@ public class HechosRepositoryMemory {
     return new ArrayList<>(this.hechos);
   }
 
-  public void modificarHecho (Hecho hechoAModificar,Hecho hechoModificado) {
-    if(!hechos.contains(hechoAModificar)) {
+  public void modificarHecho(Hecho hechoaModificar, Hecho hechoModificado) {
+    if (!hechos.contains(hechoaModificar)) {
       throw new IllegalArgumentException("El hecho no existe en la fuenta dinamica");
     }
-    this.hechos.set(hechos.indexOf(hechoAModificar), hechoModificado);
+    this.hechos.set(hechos.indexOf(hechoaModificar), hechoModificado);
   }
 
 }
