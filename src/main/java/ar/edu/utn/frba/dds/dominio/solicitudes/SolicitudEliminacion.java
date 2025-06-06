@@ -2,10 +2,11 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
 public class SolicitudEliminacion  extends Solicitud{
-
+  DetectorDeSpam detector = new DetectorDeSpam();
   String justificacion;
   Integer min = 500;
 
@@ -16,6 +17,13 @@ public class SolicitudEliminacion  extends Solicitud{
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
+    verificarSpam();
+  }
+
+  public void verificarSpam() {
+    if(detector.esSpam(justificacion)){
+      rechazar();
+    }
   }
 
   @Override
@@ -33,4 +41,7 @@ public class SolicitudEliminacion  extends Solicitud{
     return justificacion;
   }
 
+  public void setJustificacion(String justificacion) {
+    this.justificacion = justificacion;
+  }
 }

@@ -1,9 +1,5 @@
 package ar.edu.utn.frba.dds.usuarios;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.colecciones.contratos.ColeccionRepository;
@@ -12,11 +8,14 @@ import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
@@ -99,4 +98,27 @@ public class AdministradorTest {
     assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
     assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud)); // no se borra, solo cambia el estado
   }
+
+  @Test
+  void solicitudEliminacionRechazadaPorSpam() {
+      solicitud.setJustificacion("¡Gana un millón de dólares ahora! Clic aquí");
+      solicitud.verificarSpam();
+      assertEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
+
+      solicitud.setJustificacion("Oferta exclusiva gratis para ti");
+      solicitud.verificarSpam();
+      assertEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
+  }
+
+  @Test
+  void solicitudEliminacionNoRechazadaPorSpam() {
+    solicitud.setJustificacion("Hola como estas?");
+    solicitud.verificarSpam();
+    assertNotEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
+
+    solicitud.setJustificacion("Lorem ipsum dolor sit amet consectetur adipiscing elit vestibulum, lectus netus");
+    solicitud.verificarSpam();
+    assertNotEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
+  }
+
 }
