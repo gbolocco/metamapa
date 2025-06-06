@@ -10,7 +10,7 @@ public abstract class Solicitud {
   protected Date fechaSolicitud;
   protected TipoSolicitud tipoSolicitud;
 
-  public Solicitud(Hecho hecho){
+  public Solicitud(Hecho hecho) {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
     this.hecho = hecho;
     this.fechaSolicitud = new Date();
@@ -35,6 +35,7 @@ public abstract class Solicitud {
   public TipoSolicitud getTipoSolicitud() {
     return tipoSolicitud;
   }
+
   public abstract void aceptar();
 
   public abstract void rechazar();

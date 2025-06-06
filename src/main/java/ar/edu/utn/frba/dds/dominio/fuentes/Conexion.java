@@ -5,8 +5,7 @@ import java.util.Map;
 
 public interface Conexion {
 
-  public Map<String, Object> siguienteHecho(String URL, LocalDate fechaUltimaConsulta);
-
+  public Map<String, Object> siguienteHecho(String url, LocalDate fechaUltimaConsulta);
 
 
 }

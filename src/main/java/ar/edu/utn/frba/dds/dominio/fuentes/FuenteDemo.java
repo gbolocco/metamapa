@@ -1,38 +1,73 @@
 package ar.edu.utn.frba.dds.dominio.fuentes;
 
+import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class FuenteDemo extends FuenteProxy {
+public class FuenteDemo implements Fuente {
   private Conexion conexion;
-  private List<Hecho> hechos;
   private String url;
 
-  public FuenteDemo(String url,Conexion conexion) {
-    this.url=url;
-    this.hechos = new ArrayList<>();
-  }
-  public void IncorporarNuevosHechosSiLosHay(LocalDate fecha) {
-    if(conexion.siguienteHecho(this.url,fecha)==null){
-      throw new RuntimeException("No hay nuevos hechos");
-    }else{
-      Hecho hecho= (Hecho) conexion.siguienteHecho(this.url,fecha);
-      this.hechos.add(hecho);
-    }
+  public FuenteDemo(String url, Conexion conexion) {
+    this.url = url;
+    this.conexion = conexion;
   }
 
-  public List<Hecho> getHechos() {
-    return hechos;
+  public void incorporarNuevosHechosSiLosHay(LocalDate fecha) {
+    Map<String, Object> datosHecho;
+    while ((datosHecho = conexion.siguienteHecho(this.url, fecha)) != null) {
+      Hecho hecho = this.crearHechoDesdeMap(datosHecho);
+      HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
+    }
+    /*if (conexion.siguienteHecho(this.url, fecha) == null) {
+      throw new RuntimeException("No hay nuevos hechos");
+    }*/
+  }
+
+  public Hecho crearHechoDesdeMap(Map<String, Object> datosHecho) {
+    String titulo = (String) datosHecho.getOrDefault("titulo", "");
+    String descripcion = (String) datosHecho.getOrDefault("descripcion", "");
+    String categoria = (String) datosHecho.getOrDefault("categoria", "");
+    Double latitud = (Double) datosHecho.get("latitud");
+    Double longitud = (Double) datosHecho.get("longitud");
+    LocalDate fechaAcontecimiento = (LocalDate) datosHecho.get("fechaAcontecimiento");
+    LocalDate fechaDeCarga = (LocalDate) datosHecho
+        .getOrDefault("fechaDeCarga", LocalDate.now());
+
+
+  Ubicacion ubicacion=new Ubicacion(latitud,longitud);
+    return new Hecho(
+        titulo,
+        descripcion,
+        categoria,
+        ubicacion,
+        fechaAcontecimiento,
+        fechaDeCarga,
+        OrigenHecho.FUENTE_PROXY
+    );
+  }
+
+  private boolean cumpleCriterio(Hecho hecho, List<Filtro> criterios) {
+    return criterios.stream().allMatch(f -> f.cumpleFiltro(hecho));
   }
 
   @Override
-  public List<Hecho> cargarHechos() {
-    return this.getHechos();
-  }
+  public List<Hecho> obtenerHechos(List<Filtro> criterios) {
+    List<Hecho> hechos = HechosRepositoryMemory.getInstancia().mostrarHechos()
+        .stream()
+        .filter(h -> h.getOrigenHecho() == OrigenHecho.FUENTE_PROXY).toList();
 
+    return hechos.stream()
+        .filter(hecho -> cumpleCriterio(hecho, criterios))
+        .collect(Collectors.toList());
+  }
 }
+
+
+

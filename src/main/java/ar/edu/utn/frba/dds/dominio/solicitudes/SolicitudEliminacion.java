@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
-public class SolicitudEliminacion  extends Solicitud{
+public class SolicitudEliminacion extends Solicitud {
 
   String justificacion;
   Integer min = 500;

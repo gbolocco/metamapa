@@ -15,7 +15,7 @@ public class FuenteMetaMapaAdapter {
   private Retrofit retrofit;
   private FuenteMetaMapaApiService fuenteMetaMapaApiService;
 
-  private FuenteMetaMapaAdapter(String url) {
+  public FuenteMetaMapaAdapter(String url) {
     this.url = url;
     this.retrofit = new Retrofit.Builder()
         .baseUrl(url)
@@ -39,7 +39,7 @@ public class FuenteMetaMapaAdapter {
 
   public void crearSolicitudEliminacion(SolicitudEliminacion solicitud) throws IOException {
     Call<Void> call = fuenteMetaMapaApiService.createSolicitudEliminacion(solicitud);
-    Response<Void> response = call.execute();
+    call.execute();
 
   }
 

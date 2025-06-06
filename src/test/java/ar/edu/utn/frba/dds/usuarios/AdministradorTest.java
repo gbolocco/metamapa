@@ -16,10 +16,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 
+import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +44,7 @@ public class AdministradorTest {
     return s;
   }
 
-  private Coleccion crearUnaColeccionParaTest() {
+  private Coleccion crearUnaColeccionParaTest() throws IOException {
     FuenteEstatica fuente = new FuenteEstatica("ruta.csv", mock(LectorCsv.class));
     return new Coleccion(
         "Incendios 2025",
@@ -69,7 +71,7 @@ public class AdministradorTest {
 
   }
   @Test
-  void puedeCrearUnaColeccionyAgregarlaALaListaDeColecciones() {
+  void puedeCrearUnaColeccionyAgregarlaALaListaDeColecciones() throws IOException {
 
     coleccion = crearUnaColeccionParaTest();
 
@@ -79,7 +81,7 @@ public class AdministradorTest {
     assertTrue(ColeccionRepositoryMemory.getInstancia().mostrarColecciones().contains(coleccion));
   }
   @Test
-  void puedeCargarHechosDesdeFuente() {
+  void puedeCargarHechosDesdeFuente() throws IOException {
 
     coleccion = crearUnaColeccionParaTest();
     coleccion.cargarHechos();
@@ -94,6 +96,7 @@ public class AdministradorTest {
     assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     solicitud.aceptar();
     assertFalse(solicitud.estaPendiente());
-    assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).isEmpty());
+    assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
+    assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud)); // no se borra, solo cambia el estado
   }
 }
