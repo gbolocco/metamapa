@@ -19,16 +19,26 @@ public class Contribuyente {
     this.edad = edad;
   }
 
-  public Hecho crearHecho(String titulo, String descripcion,
-                          String categoria, Ubicacion ubicacion,
-                          LocalDate fechaAcontecimiento, LocalDateTime fechaDeCarga) {
-
-
+  public Hecho crearHecho(
+  String titulo,
+  String descripcion,
+  String categoria,
+  Ubicacion ubicacion,
+  LocalDate fechaAcontecimiento,
+  LocalDateTime fechaDeCarga) {
 
     OrigenHecho origenContribuyente = OrigenHecho.PROVISTO_POR_CONTRIBUYENTE;
     origenContribuyente.setContribuyenteHecho(this);
+    return new Hecho(
+        titulo,
+        descripcion,
+        categoria,
+        ubicacion,
+        fechaAcontecimiento,
+        fechaDeCarga,
+        origenContribuyente
+    );
 
-    return new Hecho(titulo, descripcion, categoria,
-        ubicacion, fechaAcontecimiento, fechaDeCarga, origenContribuyente);
   }
 }
+

@@ -8,7 +8,6 @@ import java.util.List;
 
 public class FuenteDinamica implements Fuente {
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
-    return HechosRepositoryMemory.getInstancia().mostrarHechos();
-
+    return HechosRepositoryMemory.getInstancia().filtrarHechos(criterios);
   }
 }

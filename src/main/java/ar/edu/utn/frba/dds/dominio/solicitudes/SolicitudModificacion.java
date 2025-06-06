@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import java.time.LocalDate;
@@ -28,6 +27,7 @@ public class SolicitudModificacion extends Solicitud {
   public boolean sePuedeModificar() {
     return (hecho.getOrigenHecho().getContribuyenteHecho() == this.contribuyente
         && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now()));
+
   }
 
   public boolean cumpleCondicionDias(LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
@@ -42,7 +42,7 @@ public class SolicitudModificacion extends Solicitud {
   @Override
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    ColeccionRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
+    this.hechoModificado.marcarComoEditado();
     HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
   }
 
@@ -51,4 +51,9 @@ public class SolicitudModificacion extends Solicitud {
     this.estadoSolicitud = EstadoSolicitud.RECHAZADA;
   }
 
+  public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
+    hechoSugerido.marcarComoEditado();
+    this.hecho = hechoSugerido;
+    this.aceptar();
+  }
 }
