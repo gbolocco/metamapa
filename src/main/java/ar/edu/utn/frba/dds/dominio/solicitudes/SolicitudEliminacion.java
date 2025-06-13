@@ -2,52 +2,48 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudEliminacionRepositoryMemory;
-import java.util.Date;
+import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
-public class SolicitudEliminacion {
-  Hecho hecho;
+
+public class SolicitudEliminacion  extends Solicitud {
   String justificacion;
-  EstadoSolicitud estadoSolicitud;
-  Date fechaSolicitud;
   Integer min = 500;
+  DetectorDeSpam detectorDeSpam;
 
-  public SolicitudEliminacion(Hecho hecho, String justificacion) {
-
-    Validacion.validarNoNulo(hecho, "hecho");
+  public SolicitudEliminacion(Hecho hecho, String justificacion, DetectorDeSpam detectorDeSpam) {
+    super(hecho);
+    this.tipoSolicitud = TipoSolicitud.ELIMINACION_HECHO;
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
-
-    this.hecho = hecho;
     this.justificacion = justificacion;
-    this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
-    this.fechaSolicitud = new Date();
+    SolicitudesRepositoryMemory.getInstancia().agregar(this);
+    this.detectorDeSpam = detectorDeSpam;
+    verificarSpam();
   }
 
+  public void verificarSpam() {
+    if (detectorDeSpam.esSpam(justificacion)) {
+      rechazar();
+    }
+  }
+
+  @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     hecho.marcarComoEliminado();
-    SolicitudEliminacionRepositoryMemory.getInstancia().eliminar(this);
   }
 
+  @Override
   public void rechazar() {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
-  }
-
-  public boolean estaPendiente() {
-    return estadoSolicitud == EstadoSolicitud.PENDIENTE;
-  }
-
-  public Hecho getHecho() {
-    return this.hecho;
   }
 
   public String getJustificacion() {
     return justificacion;
   }
 
-  public Date getFechaSolicitud() {
-    return (fechaSolicitud == null) ? null : new Date(fechaSolicitud.getTime());
+  public void setJustificacion(String justificacion) {
+    this.justificacion = justificacion;
   }
-
 }

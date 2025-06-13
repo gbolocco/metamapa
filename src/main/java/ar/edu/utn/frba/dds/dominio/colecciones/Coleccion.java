@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,12 +15,14 @@ import org.slf4j.Logger;
 
 
 public class Coleccion {
+
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
   private List<Hecho> hechos;
-  private TipoCombinacion tipoCombinacion;
+  String handle;
+
 
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
 
@@ -28,23 +31,19 @@ public class Coleccion {
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      Fuente fuente,
-      TipoCombinacion tipoCombinacion
-
-  ) {
+      Fuente fuente
+  ) throws IOException {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?
     Validacion.validarListaNoNula(
         criteriosDePertenencia,
         "criteriosDePertenencia"
     );
-
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
-    this.tipoCombinacion = tipoCombinacion;
     this.cargarHechos();
     this.cargarColeccion();
   }
@@ -68,19 +67,17 @@ public class Coleccion {
 
   //metodos relacionados a los hechos
 
-  public void cargarHechos() {
-    List<Hecho> hechosLeidos = fuente.cargarHechos();
-    hechosLeidos.stream()
-        .filter(this::cumpleCriterio)
-        .forEach(hechos::add);
+  public void cargarHechos() throws IOException {
+    hechos = fuente.obtenerHechos(criteriosDePertenencia);
+
   }
 
-  private boolean cumpleCriterio(Hecho hecho) {
-    if (this.tipoCombinacion == TipoCombinacion.AND) {
-      return criteriosDePertenencia.stream().allMatch(f -> f.cumpleFiltro(hecho));
-    } else {
-      return criteriosDePertenencia.stream().anyMatch(f -> f.cumpleFiltro(hecho));
-    }
+  public List<Filtro> getCriteriosDePertenencia() {
+    return new ArrayList<>(criteriosDePertenencia);
+  }
+
+  public List<Hecho> getHechos() {
+    return new ArrayList<>(hechos);
   }
 
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
@@ -90,13 +87,12 @@ public class Coleccion {
     this.criteriosDePertenencia.forEach(filtro -> {
       logger.info(filtro.toString());
     });
-    logger.info("Tipo de combinación: {}", this.tipoCombinacion);
+
     logger.info("Hechos: ");
     imprimirHechosDeColeccion(filtros, tipoCombinacion);
   }
 
   public void imprimirHechosDeColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
-
     if (filtros != null) {
       List<Hecho> hechosFiltrados = this.filtrarHechos(filtros, tipoCombinacion);
       logger.info("Cantidad de hechos filtrados: {}", hechosFiltrados.size());
@@ -109,12 +105,17 @@ public class Coleccion {
   }
 
   public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
-    if (this.tipoCombinacion == TipoCombinacion.AND) {
+    if (tipoCombinacion == TipoCombinacion.AND) {
       return filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho));
     } else {
       return filtros.stream().anyMatch(filtro -> filtro.cumpleFiltro(hecho));
     }
   }
+
+  public boolean contieneHecho(Hecho hecho) {
+    return this.hechos.contains(hecho);
+  }
+
 
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()
