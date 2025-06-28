@@ -38,7 +38,7 @@ public class FuenteDemo implements Fuente {
     Double longitud = (Double) datosHecho.get("longitud");
     LocalDate fechaAcontecimiento = (LocalDate) datosHecho.get("fechaAcontecimiento");
     LocalDateTime fechaDeCarga = (LocalDateTime) datosHecho
-        .getOrDefault("fechaDeCarga", LocalDate.now());
+        .getOrDefault("fechaDeCarga", LocalDateTime.now());
 
 
     Ubicacion ubicacion = new Ubicacion(latitud, longitud);

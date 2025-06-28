@@ -2,11 +2,15 @@ package ar.edu.utn.frba.dds.dominio.filtros;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FiltroFechaDeCargaDesde implements Filtro {
   private LocalDateTime fechaCargaDesde;
   private CampoDeHecho campoDeHechoAplicado;
-
+  private static final DateTimeFormatter DATE_FORMATTER =
+      DateTimeFormatter.ofPattern("dd/MM/yyyy");
   public FiltroFechaDeCargaDesde(
       LocalDateTime fechaCargaDesde,
       CampoDeHecho campoDeHechoAplicado
@@ -25,5 +29,13 @@ public class FiltroFechaDeCargaDesde implements Filtro {
 
   public boolean cumpleFiltro(Hecho hecho) {
     return this.fechaCargaDesde.isBefore(this.campoDeHechoAplicado.obtenerValor(hecho));
+  }
+
+
+  @Override
+  public Map<String, String> convertirfiltroAMap() {
+    Map<String, String> map = new HashMap<>();
+    map.put("fecha_de_carga_desde", this.fechaCargaDesde().format(DATE_FORMATTER));
+    return map;
   }
 }
