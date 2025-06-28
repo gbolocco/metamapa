@@ -7,5 +7,5 @@ import java.util.List;
 
 
 public interface Fuente {
-  public List<Hecho> obtenerHechos(List<Filtro> criterios) throws IOException;
+  public List<Hecho> obtenerHechos(List<Filtro> criterios) ;
 }

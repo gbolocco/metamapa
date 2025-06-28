@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,7 +41,7 @@ import static org.mockito.Mockito.when;
 
 public class FuenteProxyTest {
 
-  public Coleccion crearColeccionConFuenteProxy(Fuente fuente) throws IOException {
+  public Coleccion crearColeccionConFuenteProxy(Fuente fuente) {
     FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja",
         CampoDeHecho.TITULO);
     FiltroFechaDeCargaDesde filtroFechaDeCargaDesde = new FiltroFechaDeCargaDesde(
@@ -55,7 +56,7 @@ public class FuenteProxyTest {
     );
   }
 
-  public FuenteMetaMapa fuenteMetaMapa(List<Hecho> hechos) throws IOException {
+  public FuenteMetaMapa fuenteMetaMapa(List<Hecho> hechos) {
     FuenteMetaMapaAdapter adapter;
     adapter = mock(FuenteMetaMapaAdapter.class);
     when(adapter.obtenerHechos(anyMap())).thenReturn(hechos);
@@ -84,7 +85,7 @@ public class FuenteProxyTest {
 
 
   @Test
-  void seCargarCorrectamenteLosHechosDeUnaFuenteMetaMapaEnLaColeccion() throws IOException {
+  void seCargarCorrectamenteLosHechosDeUnaFuenteMetaMapaEnLaColeccion() {
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
     Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
@@ -93,7 +94,7 @@ public class FuenteProxyTest {
   }
 
   @Test
-  void seEnvianCorrectamenteLosFiltrosComoUnMapParaLaQuary() throws IOException {
+  void seEnvianCorrectamenteLosFiltrosComoUnMapParaLaQuary() {
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
     Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
@@ -103,8 +104,7 @@ public class FuenteProxyTest {
   }
 
   @Test
-  void seCarganHechosAlaColeccionDeUnaFuenteDemoYSeFiltranPorFechaDeCargaMenorAUnaHora()
-      throws IOException {
+  void seCarganHechosAlaColeccionDeUnaFuenteDemoYSeFiltranPorFechaDeCargaMenorAUnaHora() {
 
     Conexion conexion = mock(Conexion.class);
 
@@ -115,7 +115,7 @@ public class FuenteProxyTest {
     datosHecho1.put("latitud", 54.25);
     datosHecho1.put("longitud", -54.25);
     datosHecho1.put("fechaAcontecimiento", LocalDate.of(2025, 11, 15));
-    datosHecho1.put("fechaDeCarga",  LocalDateTime.of(2024, 5, 1,10,30,00));
+    datosHecho1.put("fechaDeCarga",  LocalDateTime.of(2024, 5, 1,10,30,0));
 
     Map<String, Object> datosHecho2 = new HashMap<>();
     datosHecho2.put("titulo", "incendio en la rioja");
@@ -124,7 +124,7 @@ public class FuenteProxyTest {
     datosHecho2.put("latitud", 4.25);
     datosHecho2.put("longitud", -44.25);
     datosHecho2.put("fechaAcontecimiento", LocalDate.of(2023, 11, 15));
-    datosHecho2.put("fechaDeCarga",  LocalDateTime.of(2024, 5, 1,10,30,00));
+    datosHecho2.put("fechaDeCarga",  LocalDateTime.of(2024, 5, 1,10,30,0));
 
     Map<String, Object> datosHecho3 = new HashMap<>();
     datosHecho3.put("titulo", "incendio en la rioja");
@@ -133,25 +133,14 @@ public class FuenteProxyTest {
     datosHecho3.put("latitud", 4.25);
     datosHecho3.put("longitud", -44.25);
     datosHecho3.put("fechaAcontecimiento", LocalDate.of(2025, 11, 15));
-    datosHecho3.put("fechaDeCarga", LocalDateTime.of(2024, 5, 1,9,30,00));
+    datosHecho3.put("fechaDeCarga", LocalDateTime.of(2024, 5, 1,9,30,0));
 
     FuenteDemo fuente = new FuenteDemo(conexion);
 
     when(conexion.siguienteHecho(anyString(), any(LocalDateTime.class)))
         .thenReturn(datosHecho1).thenReturn(datosHecho2).thenReturn(datosHecho3).thenReturn(null);
-    TimerTask tarea = new TimerTask() {
-      @Override
-      public void run() {
-        try {
-          fuente.incorporarNuevosHechosSiLosHay(LocalDateTime.now());
-        } catch (Exception e) {
-          System.err.println("Error durante tarea ficticia: " + e.getMessage());
-          e.printStackTrace();
-        }
-      }
-    };
-    tarea.run();
 
+    fuente.incorporarNuevosHechosSiLosHay(LocalDateTime.now());
     Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
     coleccion.getHechos();
     Assertions.assertEquals(2, coleccion.getHechos().size());
