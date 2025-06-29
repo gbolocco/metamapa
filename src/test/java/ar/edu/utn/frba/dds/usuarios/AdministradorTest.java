@@ -8,24 +8,26 @@ import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
+
 import org.slf4j.Logger;
 
 
@@ -36,16 +38,16 @@ public class AdministradorTest {
   private Coleccion coleccion;
   private Hecho hecho;
   private SolicitudEliminacion solicitud;
-  private DetectorDeSpam detectorDeSpam ;
+  private DetectorDeSpam detectorDeSpam;
 
   private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho, DetectorDeSpam detectorDeSpam) {
     String justificacionLarga = "a".repeat(501);
-    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
+    SolicitudEliminacion s = new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
     SolicitudesRepositoryMemory.getInstancia().agregar(s);
     return s;
   }
 
-  private Coleccion crearUnaColeccionParaTest() throws IOException {
+  private Coleccion crearUnaColeccionParaTest() {
     FuenteEstatica fuente = new FuenteEstatica("ruta.csv", mock(LectorCsv.class));
     return new Coleccion(
         "Incendios 2025",
@@ -71,8 +73,9 @@ public class AdministradorTest {
     solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho, detectorDeSpam);
 
   }
+
   @Test
-  void puedeCrearUnaColeccionyAgregarlaALaListaDeColecciones() throws IOException {
+  void puedeCrearUnaColeccionyAgregarlaALaListaDeColecciones() {
 
     coleccion = crearUnaColeccionParaTest();
 
@@ -81,8 +84,9 @@ public class AdministradorTest {
     coleccion.cargarColeccion();
     assertTrue(ColeccionRepositoryMemory.getInstancia().mostrarColecciones().contains(coleccion));
   }
+
   @Test
-  void puedeCargarHechosDesdeFuente() throws IOException {
+  void puedeCargarHechosDesdeFuente() {
 
     coleccion = crearUnaColeccionParaTest();
     coleccion.cargarHechos();

@@ -17,6 +17,10 @@ public class FiltroUtils {
   public static Map<String, String> convertirfiltrosaMap(List<Filtro> filtros) {
     Map<String, String> mapFiltros = new HashMap<>();
 
+    filtros.forEach(filtro->
+        mapFiltros.putAll(filtro.convertirfiltroAMap()));
+    return mapFiltros;
+    /*
     for (Filtro filtro : filtros) {
       if (filtro instanceof FiltroFechaDesde) {
         FiltroFechaDesde f = (FiltroFechaDesde) filtro;
@@ -36,8 +40,8 @@ public class FiltroUtils {
             .name().toLowerCase(), f.getTextoClave().toLowerCase());
 
       }
-    }
+    }*/
 
-    return mapFiltros;
+
   }
 }

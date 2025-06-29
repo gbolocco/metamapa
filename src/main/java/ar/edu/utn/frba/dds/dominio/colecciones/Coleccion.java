@@ -7,7 +7,6 @@ import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +31,7 @@ public class Coleccion {
       String descripcion,
       List<Filtro> criteriosDePertenencia,
       Fuente fuente
-  ) throws IOException {
+  ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?
     Validacion.validarListaNoNula(
@@ -67,7 +66,7 @@ public class Coleccion {
 
   //metodos relacionados a los hechos
 
-  public void cargarHechos() throws IOException {
+  public void cargarHechos() {
     hechos = fuente.obtenerHechos(criteriosDePertenencia);
 
   }

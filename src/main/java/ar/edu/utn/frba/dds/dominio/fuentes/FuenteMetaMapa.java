@@ -14,19 +14,19 @@ public class FuenteMetaMapa implements Fuente {
     this.adapter = adapter;
   }
 
-  public List<Hecho> obtenerHechos(List<Filtro> filtros) throws IOException {
+  public List<Hecho> obtenerHechos(List<Filtro> filtros) {
 
     return adapter.obtenerHechos(FiltroUtils.convertirfiltrosaMap(filtros));
   }
 
 
   public List<Hecho> obtenerHechosDeUnaColeccion(String id,
-                                                 List<Filtro> filtros) throws IOException {
+                                                 List<Filtro> filtros) {
 
     return adapter.obtenerHechosDeUnaColeccion(id, FiltroUtils.convertirfiltrosaMap(filtros));
   }
 
-  public void crearSolicitudEliminacion(SolicitudEliminacion solicitud) throws IOException {
+  public void crearSolicitudEliminacion(SolicitudEliminacion solicitud) {
     adapter.crearSolicitudEliminacion(solicitud);
   }
 

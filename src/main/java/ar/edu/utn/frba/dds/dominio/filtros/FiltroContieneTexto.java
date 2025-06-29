@@ -2,6 +2,9 @@ package ar.edu.utn.frba.dds.dominio.filtros;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FiltroContieneTexto implements Filtro {
   private String textoClave;
   private CampoDeHecho campoDeHechoAplicado;
@@ -27,6 +30,14 @@ public class FiltroContieneTexto implements Filtro {
         .toString()
         .toUpperCase()
         .contains(this.textoClave);
+  }
+
+  @Override
+  public Map<String, String> convertirfiltroAMap() {
+    Map<String, String> map = new HashMap<>();
+   map.put(this.getCampoDeHechoAplicado()
+        .name().toLowerCase(), this.getTextoClave().toLowerCase());
+   return map;
   }
 
 }
