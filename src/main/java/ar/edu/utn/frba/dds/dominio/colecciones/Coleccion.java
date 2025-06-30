@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio.colecciones;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
@@ -20,6 +21,8 @@ public class Coleccion {
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
   private List<Hecho> hechos;
+  private List<Hecho> hechosConsensuados;
+  private AlgoritmoConsenso algoritmoConsenso;
   String handle;
 
 
@@ -120,6 +123,13 @@ public class Coleccion {
     return this.mostrarHechos()
         .stream()
         .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))
+        .collect(Collectors.toList());
+  }
+
+  public void curarHechos() {
+
+    this.hechosConsensuados = this.hechos.stream()
+        .filter(h-> algoritmoConsenso.estaConsensuado(h))
         .collect(Collectors.toList());
   }
 }
