@@ -14,10 +14,15 @@ public class ServicioDeAgregacion {
     this.fuentes.add(fuente);
   }
 
-  public ResultadoConsenso ConsensuarHechoSegunAlgoritmo(Hecho hecho,List<Filtro> criteriosDePertenencia){
+  public List<Fuente> getFuentes() {
+    return fuentes;
+  }
+
+  public ResultadoConsenso ConsensuarHechoSegunAlgoritmo(Hecho hecho, List<Filtro> criteriosDePertenencia){
     int total = fuentes.size();
     int coincidencias = 0;
-    List<TipoFuente> fuentesCoincidentes = new ArrayList<>();
+    List<Fuente> fuentesCoincidentes = new ArrayList<>();
+    List<TipoFuente> tipoFuentesCoincidentes = new ArrayList<>();
 
     for (Fuente fuente : fuentes) {
       List<Hecho> hechos = fuente.obtenerHechos(criteriosDePertenencia);/*Le paso los criterios de pertenencia
@@ -25,13 +30,15 @@ public class ServicioDeAgregacion {
       for (Hecho otro : hechos) {
         if (sonEquivalentes(hecho, otro)) {
           coincidencias++;
-          fuentesCoincidentes.add(fuente.getTipoFuente());
+
+          fuentesCoincidentes.add(fuente);
+          tipoFuentesCoincidentes.add(fuente.getTipoFuente());
           break;
         }
       }
     }
 
-    return new ResultadoConsenso(total, coincidencias, fuentesCoincidentes);
+    return new ResultadoConsenso(total, coincidencias, fuentesCoincidentes, tipoFuentesCoincidentes);
   }
 
   private boolean sonEquivalentes(Hecho h1, Hecho h2) {
@@ -39,7 +46,10 @@ public class ServicioDeAgregacion {
         && h1.getAtributosClave().equals(h2.getAtributosClave());
   }
 
-  public List<Hecho> combinarHechosDesdeTodasLasFuentes() {
-
+  public List<Hecho> combinarHechosDesdeTodasLasFuentes(List<Filtro> criteriosDePertenencia) {
+    return this.fuentes
+            .stream()
+            .flatMap(fuente -> fuente.obtenerHechos(criteriosDePertenencia).stream())
+            .toList();
   }
 }

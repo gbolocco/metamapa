@@ -11,7 +11,8 @@ public class MayoriaSimple implements AlgoritmoConsenso{
   private static final ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
 
   public Boolean estaConsensuado(Hecho hecho, List<Filtro>criterioDePertenencia){
-    ResultadoConsenso resultado =this.servicioDeAgregacion.ConsensuarHechoSegunAlgoritmo(hecho,criterioDePertenencia);
+    ResultadoConsenso resultado = this.servicioDeAgregacion
+            .ConsensuarHechoSegunAlgoritmo(hecho,criterioDePertenencia);
     return resultado.getCantidadCoincidencias() >= resultado.getCantidadTotalFuentes()/2;
   }
 }
