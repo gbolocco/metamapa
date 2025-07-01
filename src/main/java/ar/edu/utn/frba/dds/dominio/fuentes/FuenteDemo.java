@@ -67,6 +67,11 @@ public class FuenteDemo implements Fuente {
         .filter(hecho -> cumpleCriterio(hecho, criterios))
         .collect(Collectors.toList());
   }
+
+  @Override
+  public TipoFuente getTipoFuente() {
+    return TipoFuente.FUENTE_PROXY;
+  }
 }
 
 

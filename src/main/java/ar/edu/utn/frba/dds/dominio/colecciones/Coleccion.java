@@ -129,7 +129,7 @@ public class Coleccion {
   public void curarHechos() {
 
     this.hechosConsensuados = this.hechos.stream()
-        .filter(h-> algoritmoConsenso.estaConsensuado(h))
+        .filter(h-> algoritmoConsenso.estaConsensuado(h,criteriosDePertenencia))
         .collect(Collectors.toList());
   }
 }

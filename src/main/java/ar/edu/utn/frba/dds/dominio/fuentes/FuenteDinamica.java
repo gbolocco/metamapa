@@ -13,4 +13,9 @@ public class FuenteDinamica implements Fuente {
         .getInstancia()
         .filtrarHechos(criterios, OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
   }
+
+  @Override
+  public TipoFuente getTipoFuente() {
+    return TipoFuente.FUENTE_DINAMICA;
+  }
 }

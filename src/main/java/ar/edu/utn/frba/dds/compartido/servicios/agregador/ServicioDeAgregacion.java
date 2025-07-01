@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.compartido.servicios.agregador;
 
+import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
+import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +14,18 @@ public class ServicioDeAgregacion {
     this.fuentes.add(fuente);
   }
 
-  public ResultadoConsenso ConsensuarHechoSegunAlgoritmo(Hecho hecho){
+  public ResultadoConsenso ConsensuarHechoSegunAlgoritmo(Hecho hecho,List<Filtro> criteriosDePertenencia){
     int total = fuentes.size();
     int coincidencias = 0;
-    List<String> fuentesCoincidentes = new ArrayList<>();
+    List<TipoFuente> fuentesCoincidentes = new ArrayList<>();
 
     for (Fuente fuente : fuentes) {
-      List<Hecho> hechos = fuente.obtenerHechos();
+      List<Hecho> hechos = fuente.obtenerHechos(criteriosDePertenencia);/*Le paso los criterios de pertenencia
+      de la fuente para q solo me traiga los hechos que pueden llegar a coinicidir con mi hecho*/
       for (Hecho otro : hechos) {
         if (sonEquivalentes(hecho, otro)) {
           coincidencias++;
-          fuentesCoincidentes.add(fuente.getNombre());
+          fuentesCoincidentes.add(fuente.getTipoFuente());
           break;
         }
       }

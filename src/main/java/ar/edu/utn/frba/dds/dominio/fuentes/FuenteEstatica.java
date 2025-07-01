@@ -27,6 +27,11 @@ public class FuenteEstatica implements Fuente {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public TipoFuente getTipoFuente() {
+    return TipoFuente.FUENTE_ESTATICA;
+  }
+
   private boolean cumpleCriterio(Hecho hecho, List<Filtro> criterios) {
     return criterios.stream().allMatch(f -> f.cumpleFiltro(hecho));
   }
