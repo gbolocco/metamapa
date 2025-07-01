@@ -6,12 +6,17 @@ import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServicioDeAgregacion {
-  private List<Fuente> fuentes;
+  private List<Fuente> fuentes;//menos la fuente agregadora
 
   public void agregarFuente(Fuente fuente){
-    this.fuentes.add(fuente);
+
+    if(fuente.getTipoFuente()!=TipoFuente.FUENTE_AGREGADORA ){
+      this.fuentes.add(fuente);
+    }
+
   }
 
   public ResultadoConsenso ConsensuarHechoSegunAlgoritmo(Hecho hecho,List<Filtro> criteriosDePertenencia){
@@ -39,7 +44,9 @@ public class ServicioDeAgregacion {
         && h1.getAtributosClave().equals(h2.getAtributosClave());
   }
 
-  public List<Hecho> combinarHechosDesdeTodasLasFuentes() {
-
+  public List<Hecho> combinarHechosDesdeTodasLasFuentes(List<Filtro> criteriosDePertenencia) {
+    return fuentes.stream()
+        .flatMap(fuente -> fuente.obtenerHechos(criteriosDePertenencia).stream())
+        .collect(Collectors.toList());
   }
 }

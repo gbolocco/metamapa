@@ -14,7 +14,7 @@ public class FuenteAgregadora implements Fuente {
     this.servicioDeAgregacion = servicioDeAgregacion;
   }
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
-    return servicioDeAgregacion.combinarHechosDesdeTodasLasFuentes(List<Filtro> criterios);
+    return servicioDeAgregacion.combinarHechosDesdeTodasLasFuentes( criterios);
   }
 
   @Override
