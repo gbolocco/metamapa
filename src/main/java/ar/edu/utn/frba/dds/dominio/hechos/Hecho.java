@@ -102,7 +102,6 @@ public class Hecho {
     return resumen;
   }
 
-
   public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
