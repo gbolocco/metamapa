@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 
+import javax.xml.validation.ValidatorHandler;
+
 
 public class Coleccion {
 
@@ -23,7 +25,7 @@ public class Coleccion {
   private List<Hecho> hechos;
   private List<Hecho> hechosConsensuados;
   private AlgoritmoConsenso algoritmoConsenso;
-  String handle;
+  private String handle;
 
 
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
@@ -33,7 +35,8 @@ public class Coleccion {
       String titulo,
       String descripcion,
       List<Filtro> criteriosDePertenencia,
-      Fuente fuente
+      Fuente fuente,
+      String handle
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?
@@ -41,11 +44,14 @@ public class Coleccion {
         criteriosDePertenencia,
         "criteriosDePertenencia"
     );
+    Validacion.validarStringAlfanumericoSinEspacios(handle);
+    Validacion.validarHandleValorUnico(handle);
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
+    this.handle = handle;
     this.cargarHechos();
     this.cargarColeccion();
   }
@@ -61,6 +67,14 @@ public class Coleccion {
 
   public List<Hecho> mostrarHechos() {
     return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
+  }
+
+  public String getHandle() {
+    return handle;
+  }
+
+  public void setHandle(String handle) {
+    this.handle = handle;
   }
 
   public void cargarColeccion() {

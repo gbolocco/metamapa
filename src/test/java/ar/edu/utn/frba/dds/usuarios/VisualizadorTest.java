@@ -37,7 +37,8 @@ public class VisualizadorTest {
         "Incendios 2025",
         "Hechos de incendios",
         List.of(),  // Lista vacía
-        fuente
+        fuente,
+            "A1302"
     );
 
     coleccion.cargarHechos();
@@ -52,13 +53,14 @@ public class VisualizadorTest {
 
   @Test
   void visualizadorPuedeVerTodosLosHechosDeLaColeccion() {
+
     coleccion.imprimirColeccion( List.of(), TipoCombinacion.OR);
     assertFalse(coleccion.mostrarHechos().isEmpty());
   }
 
   @Test
   void visualizadorPuedeAplicarUnaListaDeFiltros() {
-
+    coleccion.setHandle("A1303");
     List<Filtro> filtros = List.of(filtroTexto1, filtroTexto2, filtroFechaHasta);
 
     List<Hecho> coleccionSinFiltrar = coleccion.mostrarHechos();
