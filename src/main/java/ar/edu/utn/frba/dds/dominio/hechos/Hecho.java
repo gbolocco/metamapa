@@ -93,14 +93,15 @@ public class Hecho {
 
   public Map<String, Object> getAtributosClave() {
     Map<String, Object> resumen = new HashMap<>();
-    resumen.put("titulo", this.titulo);
     resumen.put("descripcion", this.descripcion);
     resumen.put("categoria", this.categoria);
     resumen.put("ubicacion", this.ubicacion);
     resumen.put("fechaAcontecimiento", this.fechaAcontecimiento);
     resumen.put("fechaDeCarga", this.fechaDeCarga);
+    resumen.put("origenHecho", this.origenHecho);
     return resumen;
   }
+
 
   public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);
