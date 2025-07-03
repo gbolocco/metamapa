@@ -12,7 +12,11 @@
   import java.util.stream.Collectors;
 
   public class MultiplesMenciones implements AlgoritmoConsenso{
-    private static final ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
+    private ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
+
+    public void setServicioDeAgregacion(ServicioDeAgregacion servicioDeAgregacion) {
+      this.servicioDeAgregacion = servicioDeAgregacion;
+    }
 
     public List<Fuente> getFuentesNoCoincidentes(List<Fuente> lista1, List<Fuente> lista2){
       List<Fuente> resultado = new ArrayList<>();
@@ -42,7 +46,7 @@
               .noneMatch(hechoActual -> hechosDeMismoTituloYDistintosAtributos(hechoActual, hecho));
     }
 
-  private boolean hechosDeMismoTituloYDistintosAtributos(Hecho h1, Hecho h2) {
+  public boolean hechosDeMismoTituloYDistintosAtributos(Hecho h1, Hecho h2) {
     return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
             && !h1.getAtributosClave().equals(h2.getAtributosClave());
   }

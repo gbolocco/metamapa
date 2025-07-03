@@ -8,7 +8,11 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.List;
 
 public class MayoriaSimple implements AlgoritmoConsenso{
-  private static final ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
+  private ServicioDeAgregacion servicioDeAgregacion;
+
+  public void setServicioDeAgregacion(ServicioDeAgregacion servicioDeAgregacion) {
+    this.servicioDeAgregacion = servicioDeAgregacion;
+  }
 
   public Boolean estaConsensuado(Hecho hecho, List<Filtro>criterioDePertenencia){
     ResultadoConsenso resultado = this.servicioDeAgregacion

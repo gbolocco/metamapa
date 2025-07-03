@@ -7,11 +7,16 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
 import java.util.List;
 
-public class Absoluta implements AlgoritmoConsenso{
-  private static final ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
+public class Absoluta implements AlgoritmoConsenso {
+  private ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
 
-  public Boolean estaConsensuado(Hecho hecho, List<Filtro>criterioDePertenencia ){
-    ResultadoConsenso resultado =this.servicioDeAgregacion.ConsensuarHechoSegunAlgoritmo(hecho,criterioDePertenencia);
+  public void setServicioDeAgregacion(ServicioDeAgregacion servicioDeAgregacion) {
+    this.servicioDeAgregacion = servicioDeAgregacion;
+  }
+
+  public Boolean estaConsensuado(Hecho hecho, List<Filtro> criterioDePertenencia) {
+    ResultadoConsenso resultado = this.servicioDeAgregacion.ConsensuarHechoSegunAlgoritmo(hecho,criterioDePertenencia);
     return resultado.getCantidadCoincidencias() == resultado.getCantidadTotalFuentes();
   }
+
 }
