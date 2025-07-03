@@ -43,4 +43,12 @@ public class ServicioDeAgregacion {
     public Integer getCantFuentes(){
         return this.fuentes.size();
     }
+
+    // para llenar la fuente agregadora
+    public List<Hecho> combinarHechosDesdeTodasLasFuentes(List<Filtro> criteriosDePertenencia) {
+        return this.fuentes
+            .stream()
+            .flatMap(fuente -> fuente.obtenerHechos(criteriosDePertenencia).stream())
+            .toList();
+    }
 }
