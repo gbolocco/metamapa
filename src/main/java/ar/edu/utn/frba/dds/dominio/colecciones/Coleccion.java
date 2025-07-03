@@ -146,10 +146,7 @@ public class Coleccion {
                 .collect(Collectors.toList());
     }
 
-    public void curarHechos() {
-
-        this.hechosConsensuados = this.hechos.stream()
-                .filter(h -> algoritmoConsenso.estaConsensuado(h, criteriosDePertenencia))
-                .toList();
+    public List<Hecho> curarHechos() {
+        return this.algoritmoConsenso.hechosConsensuados(this.hechos,this.criteriosDePertenencia);
     }
 }

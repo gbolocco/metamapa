@@ -8,10 +8,19 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.ArrayList;
 import java.util.List;
 
+//el crontab llama a la funcion cargarHechos desde fuente cada cierto tiempo para poder ir
+//actualizando esa cache, se parte de la base que el hecho no va a estar en la mimsa fuente 2 veces
+//con esa logica modifico los algortimos
+
 public class ServicioDeAgregacion {
     private List<Fuente> fuentes = new ArrayList<>();
 
+    private List<Hecho> hechosCache = new ArrayList<>();
+
     public void agregarFuente(Fuente fuente) {
+        if(fuente.getTipoFuente()!=TipoFuente.FUENTE_AGREGADORA){
+            return;
+        }
         this.fuentes.add(fuente);
     }
 
@@ -19,38 +28,19 @@ public class ServicioDeAgregacion {
         return fuentes;
     }
 
-    public ResultadoConsenso ConsensuarHechoSegunAlgoritmo(Hecho hecho, List<Filtro> criteriosDePertenencia) {
-        int total = fuentes.size();
-        int coincidencias = 0;
-        List<Fuente> fuentesCoincidentes = new ArrayList<>();
-        List<TipoFuente> tipoFuentesCoincidentes = new ArrayList<>();
-
-        for (Fuente fuente : fuentes) {
-            List<Hecho> hechos = fuente.obtenerHechos(criteriosDePertenencia);/*Le paso los criterios de pertenencia
-      de la fuente para q solo me traiga los hechos que pueden llegar a coinicidir con mi hecho*/
-            for (Hecho otro : hechos) {
-                if (sonEquivalentes(hecho, otro)) {
-                    coincidencias++;
-
-                    fuentesCoincidentes.add(fuente);
-                    tipoFuentesCoincidentes.add(fuente.getTipoFuente());
-                    break;
-                }
-            }
-        }
-
-        return new ResultadoConsenso(total, coincidencias, fuentesCoincidentes, tipoFuentesCoincidentes);
+    public  List<Hecho> getHechos(List<Filtro> filtros) {
+        return this.hechosCache.stream().filter(hecho -> filtros.stream().allMatch(f -> f.cumpleFiltro(hecho)) ).toList();
     }
 
-    private boolean sonEquivalentes(Hecho h1, Hecho h2) {
-        return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
-                && h1.getAtributosClave().equals(h2.getAtributosClave());
-    }
-
-    public List<Hecho> combinarHechosDesdeTodasLasFuentes(List<Filtro> criteriosDePertenencia) {
-        return this.fuentes
+    // me traigo a la cache todos los hechos de todas las fuentes
+    public void cargarHechosDesdeFuentes() {
+        this.hechosCache = this.fuentes
                 .stream()
-                .flatMap(fuente -> fuente.obtenerHechos(criteriosDePertenencia).stream())
+                .flatMap(fuente -> fuente.obtenerHechos(new ArrayList<>()).stream())
                 .toList();
+    }
+
+    public Integer getCantFuentes(){
+        return this.fuentes.size();
     }
 }

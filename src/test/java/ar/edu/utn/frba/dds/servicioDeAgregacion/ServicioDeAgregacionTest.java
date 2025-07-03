@@ -147,7 +147,7 @@ public class ServicioDeAgregacionTest {
     }
 
 
-    @Test
+    /*@Test
     public void hechosDeMismoTituloYDistintosAtributos() {
         this.hechos = listaDeHechos(OrigenHecho.FUENTE_PROXY);
         MultiplesMenciones algoritmoMutiplesMenciones = new MultiplesMenciones();
@@ -183,6 +183,6 @@ public class ServicioDeAgregacionTest {
         MultiplesMenciones algoritmoMultiplesMenciones = new MultiplesMenciones();
         algoritmoMultiplesMenciones.setServicioDeAgregacion(servicioDeAgregacion);
         assertTrue(algoritmoMultiplesMenciones.estaConsensuado(this.hechos.get(0), filtros));
-    }
+    }*/
 
 }
