@@ -45,4 +45,11 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
   public void vaciar() {
     this.colecciones.clear();
   }
+
+  public List<String> getHandleList() {
+    return colecciones
+            .stream()
+            .map(Coleccion::getHandle)
+            .toList();
+  }
 }

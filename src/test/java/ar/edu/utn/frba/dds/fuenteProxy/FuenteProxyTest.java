@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
 
 public class FuenteProxyTest {
 
-  public Coleccion crearColeccionConFuenteProxy(Fuente fuente) {
+  public Coleccion crearColeccionConFuenteProxy(Fuente fuente, String handle) {
     FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja",
         CampoDeHecho.TITULO);
     FiltroFechaDeCargaDesde filtroFechaDeCargaDesde = new FiltroFechaDeCargaDesde(
@@ -51,8 +51,9 @@ public class FuenteProxyTest {
     return new Coleccion(
         "Incendios 2025",
         "Hechos de incendios",
-        List.of( filtroTexto1,filtroFechaDeCargaDesde),
-        fuente
+        List.of(filtroTexto1,filtroFechaDeCargaDesde),
+        fuente,
+        handle
     );
   }
 
@@ -88,7 +89,7 @@ public class FuenteProxyTest {
   void seCargarCorrectamenteLosHechosDeUnaFuenteMetaMapaEnLaColeccion() {
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
-    Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
+    Coleccion coleccion = crearColeccionConFuenteProxy(fuente, "A103");
     coleccion.cargarHechos();
     Assertions.assertEquals(3, coleccion.getHechos().size());
   }
@@ -97,7 +98,7 @@ public class FuenteProxyTest {
   void seEnvianCorrectamenteLosFiltrosComoUnMapParaLaQuary() {
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
-    Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
+    Coleccion coleccion = crearColeccionConFuenteProxy(fuente, "B102");
     Map<String, String> filtrosQuary = FiltroUtils
         .convertirfiltrosaMap(coleccion.getCriteriosDePertenencia());
     Assertions.assertEquals(2, filtrosQuary.size());
@@ -153,7 +154,7 @@ public class FuenteProxyTest {
         .thenReturn(datosHecho1).thenReturn(datosHecho2).thenReturn(datosHecho3).thenReturn(datosHecho4).thenReturn(null);
 
     fuente.incorporarNuevosHechosSiLosHay(LocalDateTime.now());
-    Coleccion coleccion = crearColeccionConFuenteProxy(fuente);
+    Coleccion coleccion = crearColeccionConFuenteProxy(fuente, "C102");
 
     Assertions.assertEquals(2, coleccion.getHechos().size());
 

@@ -11,6 +11,7 @@ public class FiltroFechaDeCargaDesde implements Filtro {
   private CampoDeHecho campoDeHechoAplicado;
   private static final DateTimeFormatter DATE_FORMATTER =
       DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
   public FiltroFechaDeCargaDesde(
       LocalDateTime fechaCargaDesde,
       CampoDeHecho campoDeHechoAplicado
@@ -33,7 +34,7 @@ public class FiltroFechaDeCargaDesde implements Filtro {
 
 
   @Override
-  public Map<String, String> convertirfiltroAMap() {
+  public Map<String, String> convertirfiltroAmap() {
     Map<String, String> map = new HashMap<>();
     map.put("fecha_de_carga_desde", this.fechaCargaDesde().format(DATE_FORMATTER));
     return map;

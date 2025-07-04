@@ -32,7 +32,7 @@ public class ContribuyenteTest {
 
   private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho, DetectorDeSpam detectorDeSpam) {
     String justificacionLarga = "a".repeat(501);
-    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
+    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga);
     SolicitudesRepositoryMemory.getInstancia().agregar(s);
     return s;
   }
@@ -58,7 +58,7 @@ public class ContribuyenteTest {
     //solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho, detectorDeSpam);
 
     String justificacionLarga = "a".repeat(501);
-    solicitud = new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
+    solicitud = new SolicitudEliminacion(hecho, justificacionLarga);
     logger.info("Solicitud creada");
     solicitudRep.agregar(solicitud);
     logger.info("Solicitud agregada al repositorio de solicitudes");

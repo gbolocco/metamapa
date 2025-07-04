@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.filtros;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,11 +32,10 @@ public class FiltroContieneTexto implements Filtro {
   }
 
   @Override
-  public Map<String, String> convertirfiltroAMap() {
+  public Map<String, String> convertirfiltroAmap() {
     Map<String, String> map = new HashMap<>();
-   map.put(this.getCampoDeHechoAplicado()
+    map.put(this.getCampoDeHechoAplicado()
         .name().toLowerCase(), this.getTextoClave().toLowerCase());
-   return map;
+    return map;
   }
-
 }

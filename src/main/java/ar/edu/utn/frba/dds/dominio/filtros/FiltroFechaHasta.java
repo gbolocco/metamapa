@@ -11,6 +11,7 @@ public class FiltroFechaHasta implements Filtro {
   private CampoDeHecho campoDeHechoAplicado;
   private static final DateTimeFormatter DATE_FORMATTER =
       DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
   public FiltroFechaHasta(
       LocalDate fechaHasta,
       CampoDeHecho campoDeHechoAplicado
@@ -33,7 +34,7 @@ public class FiltroFechaHasta implements Filtro {
   }
 
   @Override
-  public Map<String, String> convertirfiltroAMap() {
+  public Map<String, String> convertirfiltroAmap() {
     Map<String, String> map = new HashMap<>();
     map.put("fecha_hasta", this.fechaHasta.format(DATE_FORMATTER));
     return map;

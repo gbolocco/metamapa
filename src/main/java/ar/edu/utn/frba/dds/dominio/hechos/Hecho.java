@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 
@@ -85,6 +87,18 @@ public class Hecho {
   public OrigenHecho getOrigenHecho() {
     return OrigenHecho.valueOf(this.origenHecho.name());
   }
+
+  public Map<String, Object> getAtributosClave() {
+    Map<String, Object> resumen = new HashMap<>();
+    resumen.put("descripcion", this.descripcion);
+    resumen.put("categoria", this.categoria);
+    resumen.put("ubicacion", this.ubicacion);
+    resumen.put("fechaAcontecimiento", this.fechaAcontecimiento);
+    resumen.put("fechaDeCarga", this.fechaDeCarga);
+    resumen.put("origenHecho", this.origenHecho);
+    return resumen;
+  }
+
 
   public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);

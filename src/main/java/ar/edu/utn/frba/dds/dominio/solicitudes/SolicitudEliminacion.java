@@ -11,15 +11,17 @@ public class SolicitudEliminacion  extends Solicitud {
   Integer min = 500;
   DetectorDeSpam detectorDeSpam;
 
-  public SolicitudEliminacion(Hecho hecho, String justificacion, DetectorDeSpam detectorDeSpam) {
+  public SolicitudEliminacion(Hecho hecho, String justificacion) {
     super(hecho);
     this.tipoSolicitud = TipoSolicitud.ELIMINACION_HECHO;
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
+  }
+
+  public void setDetectorDeSpam(DetectorDeSpam detectorDeSpam) {
     this.detectorDeSpam = detectorDeSpam;
-    verificarSpam();
   }
 
   public void verificarSpam() {
