@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.servicioDeAgregacion;
 
 import ar.edu.utn.frba.dds.compartido.servicios.agregador.ServicioDeAgregacion;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.Absoluta;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.MayoriaSimple;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.MultiplesMenciones;
 import ar.edu.utn.frba.dds.dominio.filtros.*;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
@@ -158,20 +159,20 @@ public class ServicioDeAgregacionTest {
         assertTrue(algoritmoAbsoluta.estaConsensuado(this.hechos.get(0), listHechosCache));
     }
 
-//    @Test
-//    public void testAlgoritmoMayoriaSimpleConsensua() {
-//        configParaTestAlgMayoriaSimple();
-//        MayoriaSimple algoritmoMayoriaSimple = new MayoriaSimple();
-//        List<Hecho> listHechosConsensuados = algoritmoMayoriaSimple.hechosConsensuados(hechos,new ArrayList<>());
-//        assertTrue(listHechosConsensuados.contains(this.hechos.get(0)));
-//    }
-//
-//    @Test
-//    public void testAlgoritmoMultiplesMencionesConsensua() {
-//        configParaTestAlgMultMenciones();
-//        MultiplesMenciones algoritmoMultiplesMenciones = new MultiplesMenciones();
-//        List<Hecho> listaHechosConsensuados = algoritmoMultiplesMenciones.hechosConsensuados(hechos,new ArrayList<>());
-//        assertTrue(listaHechosConsensuados.contains(this.hechos.get(0)));
-//    }
+    @Test
+    public void testAlgoritmoMayoriaSimpleConsensua() {
+        configParaTestAlgMayoriaSimple();
+        MayoriaSimple algoritmoMayoriaSimple = new MayoriaSimple();
+        List<Hecho> listHechosConsensuados = algoritmoMayoriaSimple.hechosConsensuados(hechos,new ArrayList<>());
+        assertTrue(listHechosConsensuados.contains(this.hechos.get(0)));
+    }
+
+    @Test
+    public void testAlgoritmoMultiplesMencionesConsensua() {
+        configParaTestAlgMultMenciones();
+        MultiplesMenciones algoritmoMultiplesMenciones = new MultiplesMenciones();
+        List<Hecho> listaHechosConsensuados = algoritmoMultiplesMenciones.hechosConsensuados(hechos,new ArrayList<>());
+        assertTrue(listaHechosConsensuados.contains(this.hechos.get(0)));
+    }
 
 }
