@@ -8,13 +8,9 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.List;
 
 public class FuenteAgregadora implements Fuente {
-  private ServicioDeAgregacion servicioDeAgregacion;
 
-  public FuenteAgregadora(ServicioDeAgregacion servicioDeAgregacion) {
-    this.servicioDeAgregacion = servicioDeAgregacion;
-  }
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
-    return servicioDeAgregacion.combinarHechosDesdeTodasLasFuentes(criterios);
+    return ServicioDeAgregacion.getInstancia().getHechos(criterios);
   }
 
   @Override
