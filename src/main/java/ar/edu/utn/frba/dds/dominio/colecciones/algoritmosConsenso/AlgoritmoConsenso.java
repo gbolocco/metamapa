@@ -8,16 +8,11 @@ import java.util.List;
 
 public abstract class AlgoritmoConsenso {
 
-  protected ServicioDeAgregacion servicioDeAgregacion = ServicioDeAgregacion.getInstancia();
-
-  public void setServicioDeAgregacion(ServicioDeAgregacion servicioDeAgregacion) {
-    this.servicioDeAgregacion = servicioDeAgregacion;
-  }
 
   public abstract Boolean estaConsensuado(Hecho hecho, List<Hecho> hechosCache);
 
   public List<Hecho> hechosConsensuados(List<Hecho> hechosColeccion,List<Filtro> criterioDePertenencia) {
-    List<Hecho> hechosCache = this.servicioDeAgregacion.getHechos(criterioDePertenencia);
+    List<Hecho> hechosCache = ServicioDeAgregacion.getInstancia().getHechos(criterioDePertenencia);
     return hechosColeccion.stream().filter(hecho -> estaConsensuado(hecho, hechosCache)).toList();
   }
 

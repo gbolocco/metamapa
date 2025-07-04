@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
-import javax.xml.validation.ValidatorHandler;
-
 
 public class Coleccion {
 
@@ -25,7 +23,6 @@ public class Coleccion {
     private List<Filtro> criteriosDePertenencia;
     private Fuente fuente;
     private List<Hecho> hechos;
-    private List<Hecho> hechosConsensuados;
     private AlgoritmoConsenso algoritmoConsenso;
     private String handle;
 
@@ -102,6 +99,33 @@ public class Coleccion {
         return new ArrayList<>(hechos);
     }
 
+
+    public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
+        if (tipoCombinacion == TipoCombinacion.AND) {
+            return filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho));
+        } else {
+            return filtros.stream().anyMatch(filtro -> filtro.cumpleFiltro(hecho));
+        }
+    }
+
+    public boolean contieneHecho(Hecho hecho) {
+        return this.hechos.contains(hecho);
+    }
+
+
+    public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
+        return this.mostrarHechos()
+                .stream()
+                .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))
+                .collect(Collectors.toList());
+    }
+
+    public List<Hecho> hechosConsensuados() {
+        return this.algoritmoConsenso.hechosConsensuados(this.hechos,this.criteriosDePertenencia);
+    }
+
+    //===
+
     public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
         logger.info("Coleccion: {}", this.titulo);
         logger.info("Descripcion: {}", this.descripcion);
@@ -124,29 +148,5 @@ public class Coleccion {
             logger.info("Cantidad de hechos: {}", this.mostrarHechos().size());
             this.mostrarHechos().forEach(Hecho::imprimirHecho);
         }
-    }
-
-    public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
-        if (tipoCombinacion == TipoCombinacion.AND) {
-            return filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho));
-        } else {
-            return filtros.stream().anyMatch(filtro -> filtro.cumpleFiltro(hecho));
-        }
-    }
-
-    public boolean contieneHecho(Hecho hecho) {
-        return this.hechos.contains(hecho);
-    }
-
-
-    public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
-        return this.mostrarHechos()
-                .stream()
-                .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))
-                .collect(Collectors.toList());
-    }
-
-    public List<Hecho> curarHechos() {
-        return this.algoritmoConsenso.hechosConsensuados(this.hechos,this.criteriosDePertenencia);
     }
 }

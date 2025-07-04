@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +32,15 @@ public class ServicioDeAgregacion {
         return fuentes;
     }
 
-    public  List<Hecho> getHechos(List<Filtro> filtros) {
-        return this.hechosCache.stream().filter(hecho -> filtros.stream().allMatch(f -> f.cumpleFiltro(hecho)) ).toList();
+    public  List<Hecho> getHechos(List<Filtro> criteriosDePertenencia) {
+        if (hechosCache.isEmpty()) {
+            this.cargarHechosDesdeFuentesCache();
+        }
+        return this.hechosCache.stream().filter(hecho -> criteriosDePertenencia.stream().allMatch(f -> f.cumpleFiltro(hecho)) ).toList();
     }
 
     // me traigo a la cache todos los hechos de todas las fuentes
-    public void cargarHechosDesdeFuentes() {
+    public void cargarHechosDesdeFuentesCache() {
         this.hechosCache = this.fuentes
                 .stream()
                 .flatMap(fuente -> fuente.obtenerHechos(new ArrayList<>()).stream())
@@ -47,13 +49,5 @@ public class ServicioDeAgregacion {
 
     public Integer getCantFuentes(){
         return this.fuentes.size();
-    }
-
-    // para llenar la fuente agregadora
-    public List<Hecho> combinarHechosDesdeTodasLasFuentes(List<Filtro> criteriosDePertenencia) {
-        return this.fuentes
-            .stream()
-            .flatMap(fuente -> fuente.obtenerHechos(criteriosDePertenencia).stream())
-            .toList();
     }
 }

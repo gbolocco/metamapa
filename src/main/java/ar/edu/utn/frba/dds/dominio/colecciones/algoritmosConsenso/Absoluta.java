@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 public class Absoluta extends AlgoritmoConsenso {
 
   public Boolean estaConsensuado(Hecho hecho, List<Hecho> hechosCacheFiltrados) {
-    return Objects.equals(this.cuantasVecesAparece(hecho, hechosCacheFiltrados ), this.servicioDeAgregacion.getCantFuentes());
-  }
+    Integer apariciones = this.cuantasVecesAparece(hecho, hechosCacheFiltrados);
+    Integer totalFuentes = ServicioDeAgregacion.getInstancia().getCantFuentes();
+    return Objects.equals(apariciones, totalFuentes);  }
 
 }

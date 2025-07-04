@@ -26,9 +26,10 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
 
 
+    // Lo que ejecuta el cron, todos los dias en un horario de baja carga
+    ServicioDeAgregacion.getInstancia().cargarHechosDesdeFuentesCache();
 
     System.out.println("EJECUTANDO CRON");
 
