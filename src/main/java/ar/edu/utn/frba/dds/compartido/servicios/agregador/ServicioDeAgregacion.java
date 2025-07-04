@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +14,13 @@ import java.util.List;
 //con esa logica modifico los algortimos
 
 public class ServicioDeAgregacion {
+    public static final ServicioDeAgregacion instance = new ServicioDeAgregacion();
     private List<Fuente> fuentes = new ArrayList<>();
-
+    public static ServicioDeAgregacion getInstancia() {
+        return instance;
+    }
     private List<Hecho> hechosCache = new ArrayList<>();
+
 
     public void agregarFuente(Fuente fuente) {
         if(fuente.getTipoFuente()!=TipoFuente.FUENTE_AGREGADORA){

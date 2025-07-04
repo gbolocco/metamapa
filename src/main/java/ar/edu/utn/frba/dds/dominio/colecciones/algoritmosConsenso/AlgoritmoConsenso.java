@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class AlgoritmoConsenso {
 
-  protected ServicioDeAgregacion servicioDeAgregacion = new ServicioDeAgregacion();
+  protected ServicioDeAgregacion servicioDeAgregacion = ServicioDeAgregacion.getInstancia();
 
   public void setServicioDeAgregacion(ServicioDeAgregacion servicioDeAgregacion) {
     this.servicioDeAgregacion = servicioDeAgregacion;
