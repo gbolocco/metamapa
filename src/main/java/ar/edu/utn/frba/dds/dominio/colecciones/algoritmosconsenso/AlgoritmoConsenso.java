@@ -1,23 +1,26 @@
-package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso;
+package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso;
 
 import ar.edu.utn.frba.dds.compartido.servicios.agregador.ServicioDeAgregacion;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-
 import java.util.List;
 
 public abstract class AlgoritmoConsenso {
-
-
   public abstract Boolean estaConsensuado(Hecho hecho, List<Hecho> hechosCache);
 
-  public List<Hecho> hechosConsensuados(List<Hecho> hechosColeccion,List<Filtro> criterioDePertenencia) {
+  public List<Hecho> hechosConsensuados(
+      List<Hecho> hechosColeccion,
+      List<Filtro> criterioDePertenencia) {
     List<Hecho> hechosCache = ServicioDeAgregacion.getInstancia().getHechos(criterioDePertenencia);
     return hechosColeccion.stream().filter(hecho -> estaConsensuado(hecho, hechosCache)).toList();
   }
 
-  public Integer cuantasVecesAparece(Hecho hecho, List<Hecho> hechosCacheFiltrados) {
-    return hechosCacheFiltrados.stream().filter(hechoCache -> this.sonEquivalentes(hecho,hechoCache)).toList().size();
+  public Integer cuantasVecesAparece(
+      Hecho hecho,
+      List<Hecho> hechosCacheFiltrados) {
+    return hechosCacheFiltrados.stream()
+        .filter(hechoCache -> this.sonEquivalentes(hecho, hechoCache))
+        .toList().size();
   }
 
   public boolean sonEquivalentes(Hecho h1, Hecho h2) {

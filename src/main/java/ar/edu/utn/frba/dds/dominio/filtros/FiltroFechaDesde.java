@@ -33,12 +33,11 @@ public class FiltroFechaDesde implements Filtro {
   }
 
   @Override
-  public Map<String, String> convertirfiltroAMap() {
-
-      Map<String, String> map = new HashMap<>();
-      map.put("fecha_desde", this.fechaDesde.format(DATE_FORMATTER));
-      return map;
-    }
+  public Map<String, String> convertirfiltroAmap() {
+    Map<String, String> map = new HashMap<>();
+    map.put("fecha_desde", this.fechaDesde.format(DATE_FORMATTER));
+    return map;
   }
+}
 
 
