@@ -44,10 +44,10 @@ public class AplicacionTest {
     String justificacionCorta = "no se";
 
     assertThrows(IllegalArgumentException.class, () -> {
-      new SolicitudEliminacion(hecho, justificacionCorta, null); // justificacion larga
+      new SolicitudEliminacion(hecho, justificacionCorta); // justificacion larga
     });
     assertThrows(IllegalArgumentException.class, () -> {
-      new SolicitudEliminacion(hecho, null, null); // sin justificacion
+      new SolicitudEliminacion(hecho, null); // sin justificacion
     });
   }
 }

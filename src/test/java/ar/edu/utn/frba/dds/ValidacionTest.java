@@ -1,10 +1,14 @@
 package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
+import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
+import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.excepciones.CoordenadaInvalidaException;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
+import static org.mockito.Mockito.mock;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,5 +102,15 @@ public class ValidacionTest {
     assertThrows(IllegalArgumentException.class, () -> Validacion.validarStringAlfanumericoSinEspacios("colección"));
   }
 
-
+  @Test
+  void testHandleYaExiste() {
+    Coleccion coleccion2 = new Coleccion(
+            "Incendios 2025",
+            "Hechos de incendios",
+            List.of(mock(Filtro.class)),  // Lista con un mock de Filtro
+            mock(Fuente.class),
+            "A1302"
+    );
+    assertThrows(IllegalArgumentException.class, () -> Validacion.validarHandleValorUnico(coleccion2.getHandle()));;
+  }
 }

@@ -19,6 +19,11 @@ public class FuenteMetaMapa implements Fuente {
     return adapter.obtenerHechos(FiltroUtils.convertirfiltrosaMap(filtros));
   }
 
+  @Override
+  public TipoFuente getTipoFuente() {
+    return TipoFuente.FUENTE_PROXY;
+  }
+
 
   public List<Hecho> obtenerHechosDeUnaColeccion(String id,
                                                  List<Filtro> filtros) {

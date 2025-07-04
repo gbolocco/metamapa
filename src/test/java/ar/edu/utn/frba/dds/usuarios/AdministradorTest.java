@@ -40,10 +40,11 @@ public class AdministradorTest {
   private SolicitudEliminacion solicitud;
   private DetectorDeSpam detectorDeSpam;
 
-  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho, DetectorDeSpam detectorDeSpam) {
+  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho) {
     String justificacionLarga = "a".repeat(501);
-    SolicitudEliminacion s = new SolicitudEliminacion(hecho, justificacionLarga, detectorDeSpam);
+    SolicitudEliminacion s = new SolicitudEliminacion(hecho, justificacionLarga);
     SolicitudesRepositoryMemory.getInstancia().agregar(s);
+    s.setDetectorDeSpam(detectorDeSpam);
     return s;
   }
 
@@ -53,7 +54,8 @@ public class AdministradorTest {
         "Incendios 2025",
         "Hechos de incendios",
         List.of(mock(Filtro.class)),  // Lista con un mock de Filtro
-        fuente
+        fuente,
+        "A1302"
     );
   }
 
@@ -70,7 +72,7 @@ public class AdministradorTest {
     // Crear mock de Hecho
     hecho = mock(Hecho.class);
     detectorDeSpam = mock(DetectorDeSpam.class);
-    solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho, detectorDeSpam);
+    solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho);
 
   }
 
