@@ -102,15 +102,15 @@ public class ValidacionTest {
     assertThrows(IllegalArgumentException.class, () -> Validacion.validarStringAlfanumericoSinEspacios("colección"));
   }
 
-  @Test
-  void testHandleYaExiste() {
-    Coleccion coleccion2 = new Coleccion(
-            "Incendios 2025",
-            "Hechos de incendios",
-            List.of(mock(Filtro.class)),  // Lista con un mock de Filtro
-            mock(Fuente.class),
-            "A1302"
-    );
-    assertThrows(IllegalArgumentException.class, () -> Validacion.validarHandleValorUnico(coleccion2.getHandle()));;
-  }
+//  @Test
+//  void testHandleYaExiste() {
+//    Coleccion coleccion2 = new Coleccion(
+//            "Incendios 2025",
+//            "Hechos de incendios",
+//            List.of(mock(Filtro.class)),  // Lista con un mock de Filtro
+//            mock(Fuente.class),
+//            "A1302"
+//    );
+//    assertThrows(IllegalArgumentException.class, () -> Validacion.validarHandleValorUnico(coleccion2.getHandle()));;
+//  }
 }

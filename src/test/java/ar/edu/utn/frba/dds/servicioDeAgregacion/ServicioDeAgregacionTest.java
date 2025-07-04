@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 public class ServicioDeAgregacionTest {
 
     private ServicioDeAgregacion servicioDeAgregacion;
-    private final List<Fuente> fuentes = new ArrayList<>();
     private List<Hecho> hechos = new ArrayList<>();
     private List<Filtro> filtros;
 
@@ -86,21 +85,16 @@ public class ServicioDeAgregacionTest {
     }
 
     public void configParaTestAlgAbsoluta() {
-        this.servicioDeAgregacion = new ServicioDeAgregacion();
         hechos = listaDeHechos(OrigenHecho.FUENTE_PROXY);
         filtros = crearListaFiltros();
 
-        for (int i = 0; i < 5; i++) {
-            Fuente mockFuente = mock(Fuente.class);
-            when(mockFuente.obtenerHechos(anyList())).thenReturn(hechos);
-            this.fuentes.add(mockFuente);
-        }
-
-        this.fuentes.forEach(fuente -> this.servicioDeAgregacion.agregarFuente(fuente));
+        Fuente mockFuente = mock(Fuente.class);
+        when(mockFuente.obtenerHechos(anyList())).thenReturn(hechos);
+        ServicioDeAgregacion.getInstancia().agregarFuente(mockFuente);
+        System.out.println(ServicioDeAgregacion.getInstancia().getCantFuentes());
     }
 
     public void configParaTestAlgMayoriaSimple() {
-        this.servicioDeAgregacion = new ServicioDeAgregacion();
         this.hechos = listaDeHechos(OrigenHecho.FUENTE_PROXY);
         this.filtros = crearListaFiltros();
 
@@ -108,21 +102,18 @@ public class ServicioDeAgregacionTest {
         for (int i = 0; i < 3; i++) {
             Fuente fuenteConCoincidencia = mock(Fuente.class);
             when(fuenteConCoincidencia.obtenerHechos(anyList())).thenReturn(List.of(hechos.get(0)));
-            this.fuentes.add(fuenteConCoincidencia);
+            ServicioDeAgregacion.getInstancia().agregarFuente(fuenteConCoincidencia);
         }
 
         // 2 fuentes que NO devuelven hechos.get(0)
         for (int i = 0; i < 2; i++) {
             Fuente fuenteSinCoincidencia = mock(Fuente.class);
             when(fuenteSinCoincidencia.obtenerHechos(anyList())).thenReturn(List.of());
-            this.fuentes.add(fuenteSinCoincidencia);
+            ServicioDeAgregacion.getInstancia().agregarFuente(fuenteSinCoincidencia);
         }
-
-        this.fuentes.forEach(fuente -> this.servicioDeAgregacion.agregarFuente(fuente));
     }
 
     public void configParaTestAlgMultMenciones() {
-        this.servicioDeAgregacion = new ServicioDeAgregacion();
         this.hechos = listaDeHechos(OrigenHecho.FUENTE_PROXY); // contiene hecho0, hecho1, etc.
         this.filtros = crearListaFiltros();
 
@@ -133,17 +124,16 @@ public class ServicioDeAgregacionTest {
         for (int i = 0; i < 3; i++) {
             Fuente fuente = mock(Fuente.class);
             when(fuente.obtenerHechos(anyList())).thenReturn(List.of(hechoCoincidente));
-            this.fuentes.add(fuente);
+            ServicioDeAgregacion.getInstancia().agregarFuente(fuente);
         }
 
         // Fuentes que no contienen el hecho ni otros con el mismo título
         for (int i = 0; i < 2; i++) {
             Fuente fuente = mock(Fuente.class);
             when(fuente.obtenerHechos(anyList())).thenReturn(List.of()); // podrían devolver hechos distintos también
-            this.fuentes.add(fuente);
+            ServicioDeAgregacion.getInstancia().agregarFuente(fuente);
         }
 
-        this.fuentes.forEach(fuente -> this.servicioDeAgregacion.agregarFuente(fuente));
     }
 
 
@@ -165,24 +155,24 @@ public class ServicioDeAgregacionTest {
     public void testAlgoritmoAbsolutaConsensua() {
         configParaTestAlgAbsoluta();
         Absoluta algoritmoAbsoluta = new Absoluta();
-        algoritmoAbsoluta.setServicioDeAgregacion(servicioDeAgregacion);
-        assertTrue(algoritmoAbsoluta.estaConsensuado(this.hechos.get(0), filtros));
+        List<Hecho> listHechosCache = algoritmoAbsoluta.hechosConsensuados(hechos,new ArrayList<>());
+        assertTrue(algoritmoAbsoluta.estaConsensuado(this.hechos.get(0), listHechosCache));
     }
 
     @Test
     public void testAlgoritmoMayoriaSimpleConsensua() {
         configParaTestAlgMayoriaSimple();
         MayoriaSimple algoritmoMayoriaSimple = new MayoriaSimple();
-        algoritmoMayoriaSimple.setServicioDeAgregacion(servicioDeAgregacion);
-        assertTrue(algoritmoMayoriaSimple.estaConsensuado(this.hechos.get(0), filtros));
+        List<Hecho> listHechosConsensuados = algoritmoMayoriaSimple.hechosConsensuados(hechos,new ArrayList<>());
+        assertTrue(listHechosConsensuados.contains(this.hechos.get(0)));
     }
 
     @Test
     public void testAlgoritmoMultiplesMencionesConsensua() {
         configParaTestAlgMultMenciones();
         MultiplesMenciones algoritmoMultiplesMenciones = new MultiplesMenciones();
-        algoritmoMultiplesMenciones.setServicioDeAgregacion(servicioDeAgregacion);
-        assertTrue(algoritmoMultiplesMenciones.estaConsensuado(this.hechos.get(0), filtros));
+        List<Hecho> listaHechosConsensuados = algoritmoMultiplesMenciones.hechosConsensuados(hechos,new ArrayList<>());
+        assertTrue(listaHechosConsensuados.contains(this.hechos.get(0)));
     }
 
 }
