@@ -35,7 +35,7 @@ public class FiltroContieneTexto implements Filtro {
   public Map<String, String> convertirfiltroAmap() {
     Map<String, String> map = new HashMap<>();
     map.put(this.getCampoDeHechoAplicado()
-     .name().toLowerCase(), this.getTextoClave().toLowerCase());
+        .name().toLowerCase(), this.getTextoClave().toLowerCase());
     return map;
   }
 }

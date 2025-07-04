@@ -18,17 +18,17 @@ public class ServicioDeAgregacion {
 
   public static ServicioDeAgregacion getInstancia() {
     return instance;
-}
+  }
 
   public void agregarFuente(Fuente fuente) {
-    if (fuente.getTipoFuente()==TipoFuente.FUENTE_AGREGADORA) {
-        return;
+    if (fuente.getTipoFuente() == TipoFuente.FUENTE_AGREGADORA) {
+      return;
     }
     this.fuentes.add(fuente);
   }
 
   public List<Fuente> getFuentes() {
-    return fuentes;
+    return new ArrayList<>(fuentes);
   }
 
   public  List<Hecho> getHechos(List<Filtro> criteriosDePertenencia) {
@@ -37,19 +37,19 @@ public class ServicioDeAgregacion {
     }
     return this.hechosCache.stream()
         .filter(hecho -> criteriosDePertenencia.stream()
-            .allMatch(f -> f.cumpleFiltro(hecho)) )
+            .allMatch(f -> f.cumpleFiltro(hecho)))
         .toList();
   }
 
-    // me traigo a la cache todos los hechos de todas las fuentes
+  // me traigo a la cache todos los hechos de todas las fuentes
   public void cargarHechosDesdeFuentesCache() {
     this.hechosCache = this.fuentes
-            .stream()
-            .flatMap(fuente -> fuente.obtenerHechos(new ArrayList<>()).stream())
-            .toList();
+        .stream()
+        .flatMap(fuente -> fuente.obtenerHechos(new ArrayList<>()).stream())
+        .toList();
   }
 
-  public Integer getCantFuentes(){
+  public Integer getCantFuentes() {
     return this.fuentes.size();
   }
 }

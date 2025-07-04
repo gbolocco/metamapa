@@ -51,5 +51,5 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
             .stream()
             .map(Coleccion::getHandle)
             .toList();
-  };
+  }
 }

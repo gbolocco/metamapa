@@ -4,12 +4,9 @@ import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import org.slf4j.Logger;
 
 public class Hecho {
