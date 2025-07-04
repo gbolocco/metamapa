@@ -68,9 +68,6 @@ public class Coleccion {
         return this.descripcion;
     }
 
-    public List<Hecho> mostrarHechos() {
-        return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
-    }
 
     public String getHandle() {
         return handle;
@@ -84,6 +81,23 @@ public class Coleccion {
         ColeccionRepositoryMemory.getInstancia().agregarColeccion(this);
     }
 
+    // MODOS DE VISUALIZACION
+
+    public List<Hecho> navegarHechos(ModoNavegacion modoNavegacion) {
+        if(modoNavegacion == ModoNavegacion.RESTRICTO){
+            return this.mostrarHechosConsensuados();
+        }
+        return this.mostrarHechos();
+    }
+
+    public List<Hecho> mostrarHechos() {
+        return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
+    }
+
+    public List<Hecho> mostrarHechosConsensuados() {
+        return this.algoritmoConsenso.hechosConsensuados(this.hechos,this.criteriosDePertenencia).stream().filter(hecho -> !hecho.estaEliminado()).toList();
+    }
+    
     //metodos relacionados a los hechos
 
     public void cargarHechos() {
@@ -118,10 +132,6 @@ public class Coleccion {
                 .stream()
                 .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))
                 .collect(Collectors.toList());
-    }
-
-    public List<Hecho> hechosConsensuados() {
-        return this.algoritmoConsenso.hechosConsensuados(this.hechos,this.criteriosDePertenencia);
     }
 
     //===

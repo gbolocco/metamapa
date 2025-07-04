@@ -15,14 +15,14 @@ import java.util.List;
 public class ServicioDeAgregacion {
     public static final ServicioDeAgregacion instance = new ServicioDeAgregacion();
     private List<Fuente> fuentes = new ArrayList<>();
+    private List<Hecho> hechosCache = new ArrayList<>();
+
     public static ServicioDeAgregacion getInstancia() {
         return instance;
     }
-    private List<Hecho> hechosCache = new ArrayList<>();
-
 
     public void agregarFuente(Fuente fuente) {
-        if(fuente.getTipoFuente()!=TipoFuente.FUENTE_AGREGADORA){
+        if(fuente.getTipoFuente()==TipoFuente.FUENTE_AGREGADORA){
             return;
         }
         this.fuentes.add(fuente);
