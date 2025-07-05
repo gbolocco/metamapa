@@ -32,9 +32,6 @@ public class ServicioDeAgregacion {
   }
 
   public  List<Hecho> getHechos(List<Filtro> criteriosDePertenencia) {
-    if (hechosCache.isEmpty()) {
-      this.cargarHechosDesdeFuentesCache();
-    }
     return this.hechosCache.stream()
         .filter(hecho -> criteriosDePertenencia.stream()
             .allMatch(f -> f.cumpleFiltro(hecho)))
@@ -43,13 +40,21 @@ public class ServicioDeAgregacion {
 
   // me traigo a la cache todos los hechos de todas las fuentes
   public void cargarHechosDesdeFuentesCache() {
-    this.hechosCache = this.fuentes
-        .stream()
-        .flatMap(fuente -> fuente.obtenerHechos(new ArrayList<>()).stream())
-        .toList();
+    this.hechosCache = new ArrayList<>(
+        this.fuentes
+            .stream()
+            .flatMap(fuente -> fuente.obtenerHechos(new ArrayList<>()).stream())
+            .toList()
+    );
   }
 
   public Integer getCantFuentes() {
     return this.fuentes.size();
   }
+
+  public void limpiarCache() {
+    this.fuentes.clear();
+    this.hechosCache.clear();
+  }
+
 }

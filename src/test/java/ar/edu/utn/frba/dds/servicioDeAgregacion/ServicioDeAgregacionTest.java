@@ -159,20 +159,20 @@ public class ServicioDeAgregacionTest {
         assertTrue(algoritmoAbsoluta.estaConsensuado(this.hechos.get(0), listHechosCache));
     }
 
-//    @Test
-//    public void testAlgoritmoMayoriaSimpleConsensua() {
-//        configParaTestAlgMayoriaSimple();
-//        MayoriaSimple algoritmoMayoriaSimple = new MayoriaSimple();
-//        List<Hecho> listHechosConsensuados = algoritmoMayoriaSimple.hechosConsensuados(hechos,new ArrayList<>());
-//        assertTrue(listHechosConsensuados.contains(this.hechos.get(0)));
-//    }
-//
-//    @Test
-//    public void testAlgoritmoMultiplesMencionesConsensua() {
-//        configParaTestAlgMultMenciones();
-//        MultiplesMenciones algoritmoMultiplesMenciones = new MultiplesMenciones();
-//        List<Hecho> listaHechosConsensuados = algoritmoMultiplesMenciones.hechosConsensuados(hechos,new ArrayList<>());
-//        assertTrue(listaHechosConsensuados.contains(this.hechos.get(0)));
-//    }
+    @Test
+    public void testAlgoritmoMayoriaSimpleConsensua() {
+        configParaTestAlgMayoriaSimple();
+        MayoriaSimple algoritmoMayoriaSimple = new MayoriaSimple();
+        List<Hecho> listHechosConsensuados = algoritmoMayoriaSimple.hechosConsensuados(hechos,new ArrayList<>());
+        assertTrue(listHechosConsensuados.contains(this.hechos.get(0)));
+    }
+
+    @Test
+    public void testAlgoritmoMultiplesMencionesConsensua() {
+        configParaTestAlgMultMenciones();
+        MultiplesMenciones algoritmoMultiplesMenciones = new MultiplesMenciones();
+        List<Hecho> listaHechosConsensuados = algoritmoMultiplesMenciones.hechosConsensuados(hechos,new ArrayList<>());
+        assertTrue(listaHechosConsensuados.contains(this.hechos.get(0)));
+    }
 
 }
