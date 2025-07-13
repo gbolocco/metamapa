@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.dominio.colecciones;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;

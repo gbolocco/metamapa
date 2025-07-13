@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
-import ar.edu.utn.frba.dds.compartido.servicios.agregador.ServicioDeAgregacion;
 import ar.edu.utn.frba.dds.dominio.preprocesadores.PreProcesadorCsv;
 import com.opencsv.exceptions.CsvException;
 import java.io.File;
@@ -27,7 +26,7 @@ public class Main {
     //    }
     // Lo que ejecuta el cron, todos los dias en un horario de baja carga
 
-    ServicioDeAgregacion.getInstancia().cargarHechosDesdeFuentesCache();
+    //TODO
     System.out.println("EJECUTANDO CRON");
 
   }
