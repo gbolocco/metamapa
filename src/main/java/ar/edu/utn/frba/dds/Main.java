@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.preprocesadores.PreProcesadorCsv;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import com.opencsv.exceptions.CsvException;
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +25,10 @@ public class Main {
     //      logger.error("Error al procesar el CSV:");
     //      e.printStackTrace();
     //    }
-    // Lo que ejecuta el cron, todos los dias en un horario de baja carga
 
-    //TODO
+
+    // Lo que ejecuta el cron, todos los dias en un horario de baja carga
+    ColeccionRepositoryMemory.getInstancia().consensuarHechosDeColecciones();
     System.out.println("EJECUTANDO CRON");
 
   }

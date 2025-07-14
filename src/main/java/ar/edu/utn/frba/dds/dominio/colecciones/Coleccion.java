@@ -18,7 +18,10 @@ public class Coleccion {
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
   private Fuente fuente;
+
   private List<Hecho> hechos;
+  private List<Hecho> hechosConsensuados;
+
   private AlgoritmoConsenso algoritmoConsenso;
   private String handle;
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
@@ -79,7 +82,7 @@ public class Coleccion {
 
   public List<Hecho> navegarHechos(ModoNavegacion modoNavegacion) {
     if (modoNavegacion == ModoNavegacion.RESTRICTO) {
-      return this.mostrarHechosConsensuados();
+      return this.hechosConsensuados;
     }
     return this.mostrarHechos();
   }
@@ -88,8 +91,8 @@ public class Coleccion {
     return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
   }
 
-  public List<Hecho> mostrarHechosConsensuados() {
-    return this.algoritmoConsenso.hechosConsensuados(
+  public void consensuarHechos() {
+    this.hechosConsensuados = this.algoritmoConsenso.hechosConsensuados(
         this.hechos, this.criteriosDePertenencia).stream()
         .filter(hecho -> !hecho.estaEliminado())
         .toList();
