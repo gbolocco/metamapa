@@ -54,7 +54,7 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
   }
 
   public void consensuarHechosDeColecciones() {
-    this.colecciones.forEach(coleccion -> {coleccion.});
+    this.colecciones.forEach(Coleccion::consensuarHechos);
   }
 
 }
