@@ -1,8 +1,8 @@
-package ar.edu.utn.frba.dds.servicioDeAgregacion;
+package ar.edu.utn.frba.dds.algoritmos;
 
 import static org.mockito.Mockito.mock;
 
-public class ServicioDeAgregacionTest {
+public class AlgoritmosTest {
 //
 //    private ServicioDeAgregacion servicioDeAgregacion;
 //    private List<Hecho> hechos = new ArrayList<>();

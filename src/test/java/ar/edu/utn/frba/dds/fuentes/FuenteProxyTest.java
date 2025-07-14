@@ -1,11 +1,9 @@
-package ar.edu.utn.frba.dds.fuenteProxy;
+package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDeCargaDesde;
-import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde;
-import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaHasta;
 import ar.edu.utn.frba.dds.dominio.fuentes.Conexion;
 import ar.edu.utn.frba.dds.dominio.fuentes.FiltroUtils;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
@@ -15,11 +13,9 @@ import ar.edu.utn.frba.dds.dominio.fuentes.FuenteMetaMapaAdapter;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,11 +23,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
