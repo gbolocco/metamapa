@@ -52,4 +52,11 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
             .map(Coleccion::getHandle)
             .toList();
   }
+
+  public void consensuarHechosDeColecciones() {
+    this.colecciones.forEach(Coleccion::consensuarHechos);
+  }
+
 }
+
+

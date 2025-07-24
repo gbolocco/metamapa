@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.fuenteDinamica;
+package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
-public class fuenteDinamicaTest {
+public class FuenteDinamicaTest {
   List<Filtro> filtros;
   Hecho hecho;
   SolicitudDeCargaHecho solicitud;
