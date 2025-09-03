@@ -4,10 +4,12 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.contratos.HechosRepository;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class HechosRepositoryMemory implements HechosRepository {
+public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
   private HechosRepositoryMemory() {
   }
@@ -21,11 +23,14 @@ public class HechosRepositoryMemory implements HechosRepository {
   }
 
   public void cargarHecho(Hecho hecho) {
-    this.hechos.add(hecho);
+    entityManager().persist(hecho);
   }
 
+
   public List<Hecho> mostrarHechos() {
-    return new ArrayList<>(hechos);
+    return entityManager()
+        .createQuery("FROM Hecho h", Hecho.class)
+        .getResultList();
   }
 
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {

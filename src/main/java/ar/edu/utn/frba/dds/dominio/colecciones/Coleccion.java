@@ -12,13 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import org.slf4j.Logger;
 
-@Entity
+
 public class Coleccion {
-  @Id
+
   private Long id;
+
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
@@ -57,6 +59,8 @@ public class Coleccion {
     this.cargarColeccion();
   }
 
+  public Coleccion() {
+  }
   public void setAlgoritmoConsenso(AlgoritmoConsenso algoritmoConsenso) {
     this.algoritmoConsenso = algoritmoConsenso;
   }

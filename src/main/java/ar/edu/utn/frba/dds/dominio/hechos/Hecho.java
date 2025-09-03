@@ -9,17 +9,36 @@ import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+
+@Entity
 public class Hecho {
+
+  @Id
+  @GeneratedValue
+  private Long id;
+
   private String titulo;
   private String descripcion;
   private String categoria;
+
+  @ManyToOne
   private Ubicacion ubicacion;
+
   private LocalDate fechaAcontecimiento;
   private LocalDateTime fechaDeCarga;
-  private final OrigenHecho origenHecho;
+  private OrigenHecho origenHecho;
   private Boolean eliminado = false;
   private Boolean editado = false;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
+
+
 
   public Hecho(
       String titulo,
@@ -30,18 +49,23 @@ public class Hecho {
       LocalDateTime fechaDeCarga,
       OrigenHecho origenHecho
   ) {
+    /*
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(ubicacion, "ubicacion");
     Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
     Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    Validacion.validarNoNulo(origenHecho, "origenHecho");
+    Validacion.validarNoNulo(origenHecho, "origenHecho");*/
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
-    this.ubicacion = ubicacion;
+    //this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
-    this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
+    //this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
+  }
+
+  public Hecho() {
+
   }
 
   public void marcarComoEditado() {

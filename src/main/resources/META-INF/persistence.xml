@@ -8,14 +8,17 @@
     <persistence-unit name="simple-persistence-unit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+        <class>ar.edu.utn.frba.dds.dominio.hechos.Hecho</class>
+        <class>ar.edu.utn.frba.dds.dominio.hechos.Ubicacion</class>
 
         <properties>
             <property name="hibernate.archive.autodetection" value="class"/>
 
          <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/metaMapa" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/metaMapa?serverTimezone=UTC" />
             <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="12345678" />
+            <property name="hibernate.connection.password" value="Porche92" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <!--
                      <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
                      <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:app-db"/>

@@ -1,10 +1,18 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
+
+
 
 public abstract class Solicitud {
 
+
+  private Long id;
   protected EstadoSolicitud estadoSolicitud;
   protected Hecho hecho;
   protected Date fechaSolicitud;
