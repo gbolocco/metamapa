@@ -107,7 +107,7 @@ public class LectorCsv implements Lector {
               categoria,
               new Ubicacion(latitudDouble, longitudDouble),
               fechaHecho,
-              fechaCarga,
+              LocalDate.now(),
               origen
           );
           hechos.add(hecho);

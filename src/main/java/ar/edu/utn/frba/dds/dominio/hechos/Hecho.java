@@ -7,6 +7,10 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
 import org.slf4j.Logger;
 
 import javax.persistence.Entity;
@@ -21,23 +25,31 @@ import javax.persistence.OneToOne;
 public class Hecho {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(unique = true, nullable = false, name = "id_hecho")
   private Long id;
 
   private String titulo;
   private String descripcion;
   private String categoria;
 
-  @ManyToOne
+  @Embedded
   private Ubicacion ubicacion;
 
+
+  @Column(columnDefinition = "DATE")
   private LocalDate fechaAcontecimiento;
-  private LocalDateTime fechaDeCarga;
+
+  @Column(columnDefinition = "DATE")
+  private LocalDate fechaDeCarga;
   private OrigenHecho origenHecho;
   private Boolean eliminado = false;
   private Boolean editado = false;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
+  public Hecho() {
+
+  }
 
 
   public Hecho(
@@ -46,7 +58,7 @@ public class Hecho {
       String categoria,
       Ubicacion ubicacion,
       LocalDate fechaAcontecimiento,
-      LocalDateTime fechaDeCarga,
+      LocalDate fechaDeCarga,
       OrigenHecho origenHecho
   ) {
     /*
@@ -58,15 +70,12 @@ public class Hecho {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
-    //this.ubicacion = ubicacion;
+    this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
     //this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
   }
 
-  public Hecho() {
-
-  }
 
   public void marcarComoEditado() {
     editado = true;
@@ -104,7 +113,7 @@ public class Hecho {
     return fechaAcontecimiento;
   }
 
-  public LocalDateTime getFechaDeCarga() {
+  public LocalDate getFechaDeCarga() {
     return fechaDeCarga;
   }
 

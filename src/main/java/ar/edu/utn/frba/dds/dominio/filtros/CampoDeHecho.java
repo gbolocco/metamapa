@@ -13,7 +13,7 @@ public enum CampoDeHecho {
   CATEGORIA(Hecho::getCategoria, String.class),
   FECHA_ACONTECIMIENTO(Hecho::getFechaAcontecimiento, LocalDate.class),
   UBICACION(Hecho::getUbicacion, Ubicacion.class),
-  FECHA_DE_CARGA(Hecho::getFechaDeCarga, LocalDateTime.class);
+  FECHA_DE_CARGA(Hecho::getFechaDeCarga, LocalDate.class);
   private final Function<Hecho, ?> extractor;
   private final Class<?> tipoRetorno;
 

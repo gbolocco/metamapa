@@ -26,16 +26,16 @@ public class SolicitudModificacion extends Solicitud {
 
   public boolean sePuedeModificar() {
     return (hecho.getOrigenHecho().getContribuyenteHecho() == this.contribuyente
-        && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now()));
+        && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDate.now()));
 
   }
 
-  public boolean cumpleCondicionDias(LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
+  public boolean cumpleCondicionDias(LocalDate fechaInicial, LocalDate fechaFinal) {
     long dias = ChronoUnit.DAYS.between(fechaInicial, fechaFinal);
     return dias >= 0 && dias <= 7;
   }
 
-  public LocalDateTime getFechaDeCarga() {
+  public LocalDate getFechaDeCarga() {
     return hecho.getFechaDeCarga();
   }
 

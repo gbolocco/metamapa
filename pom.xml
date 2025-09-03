@@ -42,6 +42,11 @@
       <version>2.0.9</version>
     </dependency>
     <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>5.6.14.Final</version> </dependency>
+
+    <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-client</artifactId>
       <version>3.1.0</version>
@@ -61,7 +66,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.13 </version>
+      <version>8.0.33 </version>
     </dependency>
 
     <dependency>

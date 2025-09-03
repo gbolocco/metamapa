@@ -39,7 +39,7 @@ public class AplicacionTest {
         "Prueba",
         new Ubicacion(1.1,1.1),
         LocalDate.now(),
-        LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
+        LocalDate.now(), OrigenHecho.FUENTE_ESTATICA);
 
     String justificacionCorta = "no se";
 

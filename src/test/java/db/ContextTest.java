@@ -1,6 +1,7 @@
 package db;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
@@ -28,12 +29,12 @@ public class ContextTest implements SimplePersistenceTest {
 
   @Test
   void insertarYTraerSolicitudes() {
-    Hecho hecho = new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2,10.2), LocalDate.now(), null, null);
+    Hecho hecho = new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2,10.2), LocalDate.now(), LocalDate.now(), OrigenHecho.FUENTE_PROXY);
     HechosRepositoryMemory repo=  HechosRepositoryMemory.getInstancia();
     repo.cargarHecho(hecho);
     entityManager().flush();
     entityManager().getTransaction().commit();
-    assertEquals(3, repo.mostrarHechos().size() );
+    assertEquals(3, repo.mostrarHechos().size());
   }
 
 }

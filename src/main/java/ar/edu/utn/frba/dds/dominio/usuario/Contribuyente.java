@@ -25,7 +25,7 @@ public class Contribuyente {
       String categoria,
       Ubicacion ubicacion,
       LocalDate fechaAcontecimiento,
-      LocalDateTime fechaDeCarga) {
+      LocalDate fechaDeCarga) {
 
     OrigenHecho origenContribuyente = OrigenHecho.PROVISTO_POR_CONTRIBUYENTE;
     origenContribuyente.setContribuyenteHecho(this);

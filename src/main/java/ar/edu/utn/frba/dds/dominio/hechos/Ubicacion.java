@@ -4,26 +4,26 @@ import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
-@Entity
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Ubicacion {
 
-  @Id
-  @GeneratedValue
   private Double latitud;
-
   private Double longitud;
 
   public Ubicacion(Double latitud, Double longitud) {
-    Validacion.validarCoordenadas(latitud, longitud);
     this.latitud = latitud;
     this.longitud = longitud;
   }
 
   public Ubicacion() {
   }
+
   public Double getLatitud() {
     return latitud;
   }

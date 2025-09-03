@@ -17,8 +17,8 @@
          <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/metaMapa?serverTimezone=UTC" />
             <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="Porche92" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.connection.password" value="12345678" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
             <!--
                      <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
                      <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:app-db"/>
@@ -29,7 +29,7 @@
                      <property name="hibernate.show_sql" value="true"/>
                      <property name="hibernate.format_sql" value="true"/>
                      <property name="use_sql_comments" value="true"/>
-                     <property name="hibernate.hbm2ddl.auto" value="update"/>
+                    <property name="hibernate.hbm2ddl.auto" value="create-drop" />
                  </properties>
 
              </persistence-unit>

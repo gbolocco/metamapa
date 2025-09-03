@@ -59,17 +59,17 @@ public class FuenteProxyTest {
     Hecho hecho1 = new Hecho("incendio en la rioja",
         "incendio forestal en la rioja", "incendios forestales",
         mock(Ubicacion.class), mock(LocalDate.class),
-        LocalDateTime.of(2024, 5, 1,9,59,00),
+        LocalDate.of(2024, 5, 1),
         origen);
     Hecho hecho2 = new Hecho("incendio en la rioja",
         "incendio forestal en la pampa", "incendios forestales",
         mock(Ubicacion.class), mock(LocalDate.class),
-        LocalDateTime.of(2024, 5, 1,9,59,00),
+        LocalDate.of(2024, 5, 1),
         origen);
     Hecho hecho3 = new Hecho("incendio en la cordoba",
         "incendio forestal en la cordoba", "incendios forestales",
         mock(Ubicacion.class), mock(LocalDate.class),
-        LocalDateTime.of(2024, 5, 1,13,00,00),
+        LocalDate.of(2024, 5, 1),
         origen);
     List<Hecho> hechos = new ArrayList<>(Arrays.asList(hecho1, hecho2, hecho3));
     return hechos;
