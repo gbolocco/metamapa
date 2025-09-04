@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import org.slf4j.Logger;
@@ -42,6 +44,7 @@ public class Hecho {
 
   @Column(columnDefinition = "DATE")
   private LocalDate fechaDeCarga;
+  @Enumerated(EnumType.STRING)
   private OrigenHecho origenHecho;
   private Boolean eliminado = false;
   private Boolean editado = false;
@@ -73,7 +76,7 @@ public class Hecho {
     this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
-    //this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
+    this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
   }
 
 

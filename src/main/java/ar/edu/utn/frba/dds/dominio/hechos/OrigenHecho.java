@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
+import javax.persistence.Entity;
+
 
 public enum OrigenHecho {
   FUENTE_ESTATICA,

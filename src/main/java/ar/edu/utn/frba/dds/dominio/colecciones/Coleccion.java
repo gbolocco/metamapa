@@ -11,19 +11,25 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemor
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import org.slf4j.Logger;
 
 
 public class Coleccion {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(unique = true, nullable = false, name = "id_coleccion")
   private Long id;
 
   private String titulo;
   private String descripcion;
   private List<Filtro> criteriosDePertenencia;
+
   private Fuente fuente;
 
   private List<Hecho> hechos;
@@ -163,5 +169,13 @@ public class Coleccion {
       logger.info("Cantidad de hechos: {}", this.mostrarHechos().size());
       this.mostrarHechos().forEach(Hecho::imprimirHecho);
     }
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getId() {
+    return id;
   }
 }
