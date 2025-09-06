@@ -5,9 +5,14 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.List;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 
-public class FuenteDinamica implements Fuente {
+@Entity
+@DiscriminatorValue("fuenteDinamica")
+public class FuenteDinamica extends Fuente {
+  @Override
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
     return HechosRepositoryMemory
         .getInstancia()

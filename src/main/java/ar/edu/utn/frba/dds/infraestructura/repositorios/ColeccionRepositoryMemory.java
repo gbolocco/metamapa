@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
-public class ColeccionRepositoryMemory implements ColeccionRepository {
+public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit{
 
   private static final ColeccionRepositoryMemory instance = new ColeccionRepositoryMemory();
 
@@ -22,13 +23,12 @@ public class ColeccionRepositoryMemory implements ColeccionRepository {
   }
 
   public void agregarColeccion(Coleccion coleccion) {
-    this.colecciones.add(coleccion);
+    entityManager().persist(coleccion.getFuente());
+    entityManager().persist(coleccion);
   }
 
-  public Optional<Coleccion> buscarColeccionPor(String titulo) {
-    return this.mostrarColecciones().stream()
-        .filter(c -> Objects.equals(titulo, c.getTitulo()))
-        .findFirst();
+  public Coleccion buscarColeccionPorId(Long id) {
+    return(entityManager().find(Coleccion.class,id));
   }
 
   public Optional<Hecho> buscarHechoPor(String tituloHecho) {

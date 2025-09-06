@@ -4,8 +4,27 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "algoritmoConsenso")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "algoritmo", discriminatorType = DiscriminatorType.STRING)
 public abstract class AlgoritmoConsenso {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "algoritmo_Id")
+  private Long id;
 
   public abstract Boolean estaConsensuado(Hecho hecho, List<List<Hecho>> hechosCacheFiltrados);
 
@@ -27,5 +46,13 @@ public abstract class AlgoritmoConsenso {
   public boolean sonEquivalentes(Hecho h1, Hecho h2) {
     return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
         && h1.getAtributosClave().equals(h2.getAtributosClave());
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getId() {
+    return id;
   }
 }

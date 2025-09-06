@@ -12,13 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import org.slf4j.Logger;
 
-
+@Entity
 public class Coleccion {
 
   @Id
@@ -28,13 +35,36 @@ public class Coleccion {
 
   private String titulo;
   private String descripcion;
+
+  @ManyToMany
+  @JoinTable(
+      name = "coleccion_filtro",
+      joinColumns = @JoinColumn(name = "id_coleccion"),
+      inverseJoinColumns = @JoinColumn(name = "filtro_Id")
+  )
   private List<Filtro> criteriosDePertenencia;
 
+  @ManyToOne(targetEntity = Fuente.class, fetch = FetchType.EAGER)
+  @JoinColumn(name = "fuente_id")
   private Fuente fuente;
 
+  @ManyToMany
+  @JoinTable(
+      name = "coleccion_hecho",
+      joinColumns = @JoinColumn(name = "id_coleccion"),
+      inverseJoinColumns = @JoinColumn(name = "hecho_id")
+  )
   private List<Hecho> hechos;
+  @ManyToMany
+  @JoinTable(
+      name = "coleccion_hecho",
+      joinColumns = @JoinColumn(name = "id_coleccion"),
+      inverseJoinColumns = @JoinColumn(name = "hecho_id")
+  )
   private List<Hecho> hechosConsensuados;
 
+  @ManyToOne
+  @JoinColumn(name = "algoritmo_Id" )
   private AlgoritmoConsenso algoritmoConsenso;
   private String handle;
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
@@ -61,8 +91,6 @@ public class Coleccion {
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
     this.handle = handle;
-    this.cargarHechos();
-    this.cargarColeccion();
   }
 
   public Coleccion() {
@@ -169,6 +197,14 @@ public class Coleccion {
       logger.info("Cantidad de hechos: {}", this.mostrarHechos().size());
       this.mostrarHechos().forEach(Hecho::imprimirHecho);
     }
+  }
+
+  public Fuente getFuente() {
+    return fuente;
+  }
+
+  public AlgoritmoConsenso getAlgoritmoConsenso() {
+    return algoritmoConsenso;
   }
 
   public void setId(Long id) {

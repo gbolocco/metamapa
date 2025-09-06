@@ -6,7 +6,7 @@ import ar.edu.utn.frba.dds.dominio.lectores.Lector;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FuenteEstatica implements Fuente {
+public class FuenteEstatica extends Fuente {
   private final Lector lector;
   private String rutaArchivo;
 

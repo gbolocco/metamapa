@@ -7,13 +7,14 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class FuenteMetaMapa implements Fuente {
+public class FuenteMetaMapa extends Fuente {
   private final FuenteMetaMapaAdapter adapter;
 
   public FuenteMetaMapa(FuenteMetaMapaAdapter adapter) {
     this.adapter = adapter;
   }
 
+  @Override
   public List<Hecho> obtenerHechos(List<Filtro> filtros) {
 
     return adapter.obtenerHechos(FiltroUtils.convertirfiltrosaMap(filtros));
