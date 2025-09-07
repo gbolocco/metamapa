@@ -33,13 +33,14 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
         .getResultList();
   }
 
+//HACER QUERY
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {
     return hechos.stream().filter(
         hecho -> filtros
             .stream()
             .allMatch(
                 filtro -> filtro.cumpleFiltro(hecho)
-                    && hecho.getOrigenHecho().equals(origenHecho)))
+                   && hecho.getOrigenHecho().equals(origenHecho)))
         .toList();
   }
 

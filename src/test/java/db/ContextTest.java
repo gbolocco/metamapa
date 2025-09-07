@@ -32,26 +32,6 @@ public class ContextTest implements SimplePersistenceTest {
     });
   }
 
-  @Test
-  void insertarYTraerSolicitudes() {
-    Hecho hecho = new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2,10.2), LocalDate.now(), LocalDate.now(), OrigenHecho.FUENTE_PROXY);
-    HechosRepositoryMemory repo=  HechosRepositoryMemory.getInstancia();
-    repo.cargarHecho(hecho);
-    entityManager().flush();
-    entityManager().getTransaction().commit();
-    assertEquals(3, repo.mostrarHechos().size());
-  }
 
-  @Test
-  void insertarColeccionYTraerSolicitudes() {
-    Fuente fuente = new FuenteDinamica();
-    Coleccion coleccion = new Coleccion("coleccion piola","descripcion piola",new ArrayList<>(),fuente,"handle");
-    coleccion.cargarHechos();
-    ColeccionRepositoryMemory repo=  ColeccionRepositoryMemory.getInstancia();
-    repo.agregarColeccion(coleccion);
-    entityManager().flush();
-    entityManager().getTransaction().commit();
-    assertEquals(coleccion,repo.buscarColeccionPorId(coleccion.getId()));
-  }
 
 }

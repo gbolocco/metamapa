@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemor
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -30,13 +31,13 @@ public class Coleccion {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(unique = true, nullable = false, name = "id_coleccion")
+  //@Column(unique = true, nullable = false, name = "id_coleccion")
   private Long id;
 
   private String titulo;
   private String descripcion;
 
-  @ManyToMany
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
       name = "coleccion_filtro",
       joinColumns = @JoinColumn(name = "id_coleccion"),
@@ -116,6 +117,7 @@ public class Coleccion {
   public void setHandle(String handle) {
     this.handle = handle;
   }
+
 
   public void cargarColeccion() {
     ColeccionRepositoryMemory.getInstancia().agregarColeccion(this);
