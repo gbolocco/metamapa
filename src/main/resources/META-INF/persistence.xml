@@ -26,7 +26,9 @@
         <class>ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde</class>
 
         <properties>
-            <!--property name="hibernate.search.default.indexBase" value="/."/-->
+            <!--property name="hibernate.search.default.indexBase" value="./indexes"/-->
+            <property name="hibernate.search.backend.directory.root"
+                      value="./indexes"/>
             <property name="hibernate.archive.autodetection" value="class"/>
 
 
