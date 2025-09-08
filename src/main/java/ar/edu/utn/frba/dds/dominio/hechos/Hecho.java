@@ -28,7 +28,7 @@ public class Hecho {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(unique = true, nullable = false, name = "id_hecho")
+  @Column(unique = true, nullable = false, name = "hecho_id")
   private Long id;
 
   private String titulo;
@@ -146,6 +146,10 @@ public class Hecho {
     logger.info("Origen: {}", this.origenHecho);
     logger.info("-------------------------------------------");
 
+  }
+
+  public Long getId() {
+    return id;
   }
 
 }

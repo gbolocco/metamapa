@@ -8,12 +8,12 @@ import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,15 +23,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+
 import javax.persistence.Transient;
+import org.hibernate.annotations.DynamicUpdate;
 import org.slf4j.Logger;
 
 @Entity
-public class Coleccion {
+@DynamicUpdate
+public class Coleccion  {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  //@Column(unique = true, nullable = false, name = "id_coleccion")
+  @Column(unique = true, nullable = false, name = "id_coleccion")
   private Long id;
 
   private String titulo;
@@ -49,19 +53,14 @@ public class Coleccion {
   @JoinColumn(name = "fuente_id")
   private Fuente fuente;
 
-  @ManyToMany
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
       name = "coleccion_hecho",
       joinColumns = @JoinColumn(name = "id_coleccion"),
       inverseJoinColumns = @JoinColumn(name = "hecho_id")
   )
   private List<Hecho> hechos;
-  @ManyToMany
-  @JoinTable(
-      name = "coleccion_hecho",
-      joinColumns = @JoinColumn(name = "id_coleccion"),
-      inverseJoinColumns = @JoinColumn(name = "hecho_id")
-  )
+  @Transient
   private List<Hecho> hechosConsensuados;
 
   @ManyToOne
@@ -146,7 +145,10 @@ public class Coleccion {
   //metodos relacionados a los hechos
 
   public void cargarHechos() {
-    hechos = fuente.obtenerHechos(criteriosDePertenencia);
+    HechosRepositoryMemory repo = HechosRepositoryMemory.getInstancia();
+    System.out.println("aca");
+    List<Hecho> hechosAPersistir = this.fuente.obtenerHechos(this.criteriosDePertenencia);
+    hechosAPersistir.forEach(hecho -> repo.agregarHechoAColeccion(this.id, hecho));
   }
 
   public List<Filtro> getCriteriosDePertenencia() {
@@ -216,4 +218,9 @@ public class Coleccion {
   public Long getId() {
     return id;
   }
+
+  public void anadirHecho(Hecho hecho) {
+    hechos.add(hecho);
+  }
+
 }

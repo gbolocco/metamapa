@@ -61,18 +61,21 @@ public class PersistenciaTest implements SimplePersistenceTest {
     FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja", CampoDeHecho.TITULO);
 
     Coleccion coleccion = new Coleccion("coleccion","descripcion", List.of(filtroTexto1),fuente,"handle");
+    ColeccionRepositoryMemory repo=  ColeccionRepositoryMemory.getInstancia();
+    repo.agregarColeccion(coleccion);
 
     repoHechos.cargarHecho(hecho);
+    coleccion.cargarHechos();
     entityManager().flush();
     entityManager().getTransaction().commit();
 
     assertEquals(hecho.getTitulo(),repoHechos.mostrarHechos().get(0).getTitulo());
 
-    //Hay q modificar la funcion filtrarHechos en el repo de hechos para q haga la query
-    assertEquals(hecho.getTitulo(),repoHechos.filtrarHechos(List.of(filtroTexto1),
-        OrigenHecho.PROVISTO_POR_CONTRIBUYENTE)
-        );
 
+
+    assertEquals(hecho.getTitulo(),repoHechos.filtrarHechos(List.of(filtroTexto1),
+        OrigenHecho.PROVISTO_POR_CONTRIBUYENTE).get(0).getTitulo()
+        );
 
   }
 
