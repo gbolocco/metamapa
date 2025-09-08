@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.contratos.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +30,22 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
 public List<Hecho> buscarHechos(String texto) {
 
-    return entityManager().createQuery("FROM Hecho WHERE descripcion LIKE :texto", Hecho.class)
+    return entityManager().createQuery("FROM Hecho WHERE MATCH(descripcion,titulo) AGAINST (:texto)", Hecho.class)
         .setParameter("texto", "%" + texto + "%")
         .getResultList();
 
 }
+
+  public List<Hecho> buscarPorTexto(String texto) {
+    SearchSession searchSession = Search.session(entityManager());
+
+    return searchSession.search(Hecho.class)
+        .where(f -> f.match()
+            .fields("titulo", "descripcion")
+            .matching(texto)
+            .analyzer("standard"))
+        .fetchAllHits();
+  }
 
   public List<Hecho> mostrarHechos() {
     return entityManager()

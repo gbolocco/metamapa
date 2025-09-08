@@ -7,30 +7,29 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import org.slf4j.Logger;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+//import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.slf4j.Logger;
 
 
 @Entity
+@Indexed
 public class Hecho {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "id_hecho")
   private Long id;
+
+  @FullTextField(analyzer = "standard")
+  @Column(name = "titulo")
   private String titulo;
+
+  @FullTextField(analyzer = "standard")
+  @Column(name = "descripcion")
   private String descripcion;
 
   private String categoria;
