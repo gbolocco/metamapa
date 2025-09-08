@@ -26,6 +26,13 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
     entityManager().persist(hecho);
   }
 
+public List<Hecho> buscarHechos(String texto) {
+
+    return entityManager().createQuery("FROM Hecho WHERE descripcion LIKE :texto", Hecho.class)
+        .setParameter("texto", "%" + texto + "%")
+        .getResultList();
+
+}
 
   public List<Hecho> mostrarHechos() {
     return entityManager()

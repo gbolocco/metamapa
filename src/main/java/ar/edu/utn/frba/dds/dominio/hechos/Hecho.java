@@ -30,9 +30,9 @@ public class Hecho {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "id_hecho")
   private Long id;
-
   private String titulo;
   private String descripcion;
+
   private String categoria;
 
   @Embedded
