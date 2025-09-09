@@ -55,6 +55,7 @@ public class FuenteDinamicaTest {
   void contribuyentePuedeGenerarUnaSolicitudCreacion(){
 
     SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hecho);
+
     Assertions.assertTrue(
         SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitudContribuyente));
   }

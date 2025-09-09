@@ -4,7 +4,11 @@ import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
+@Entity
+@DiscriminatorValue("cargaHecho")
 public class SolicitudDeCargaHecho extends Solicitud {
 
 
@@ -13,6 +17,10 @@ public class SolicitudDeCargaHecho extends Solicitud {
     this.tipoSolicitud = TipoSolicitud.CARGA_HECHO;
     Validacion.validarNoNulo(hecho, "hecho");
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
+  }
+
+  public SolicitudDeCargaHecho() {
+
   }
 
   @Override

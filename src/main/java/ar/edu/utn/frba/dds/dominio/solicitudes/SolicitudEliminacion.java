@@ -4,11 +4,17 @@ import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 
+@Entity
+@DiscriminatorValue("eliminacion")
 public class SolicitudEliminacion  extends Solicitud {
   String justificacion;
   Integer min = 500;
+  @Transient
   DetectorDeSpam detectorDeSpam;
 
   public SolicitudEliminacion(Hecho hecho, String justificacion) {
@@ -17,7 +23,15 @@ public class SolicitudEliminacion  extends Solicitud {
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
+    this.agregarSolicitud();
+  }
+
+  public void agregarSolicitud(){
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
+  }
+
+  public SolicitudEliminacion() {
+
   }
 
   public void setDetectorDeSpam(DetectorDeSpam detectorDeSpam) {

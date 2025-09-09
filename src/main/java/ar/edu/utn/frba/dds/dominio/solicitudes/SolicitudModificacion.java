@@ -7,10 +7,20 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMem
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
+
+@Entity
+@DiscriminatorValue("modificacion")
 public class SolicitudModificacion extends Solicitud {
 
+  @OneToOne(cascade = CascadeType.ALL)
   protected Hecho hechoModificado;
+  @ManyToOne(cascade = CascadeType.ALL)
   protected Contribuyente contribuyente;
 
   public SolicitudModificacion(Hecho hecho, Hecho hechoModificado, Contribuyente contribuyente) {
@@ -22,6 +32,10 @@ public class SolicitudModificacion extends Solicitud {
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
     this.hechoModificado = hechoModificado;
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
+  }
+
+  public SolicitudModificacion() {
+
   }
 
   public boolean sePuedeModificar() {

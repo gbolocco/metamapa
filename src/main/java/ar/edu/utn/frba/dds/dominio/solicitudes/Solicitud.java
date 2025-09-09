@@ -2,18 +2,33 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 
-
+@Entity
+@Table(name = "solicitud") // Mapped to a single table named 'fuentes'
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_solicitud", discriminatorType = DiscriminatorType.STRING)
 public abstract class Solicitud {
 
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(unique = true, nullable = false, name = "solicitud_id")
   private Long id;
   protected EstadoSolicitud estadoSolicitud;
+  @ManyToOne
   protected Hecho hecho;
   protected Date fechaSolicitud;
   protected TipoSolicitud tipoSolicitud;
@@ -22,6 +37,10 @@ public abstract class Solicitud {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
     this.hecho = hecho;
     this.fechaSolicitud = new Date();
+  }
+
+  public Solicitud() {
+
   }
 
   public EstadoSolicitud getEstadoSolicitud() {
@@ -48,4 +67,11 @@ public abstract class Solicitud {
 
   public abstract void rechazar();
 
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getId() {
+    return id;
+  }
 }
