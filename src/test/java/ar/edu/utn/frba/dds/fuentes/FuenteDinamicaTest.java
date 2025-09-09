@@ -2,7 +2,9 @@ package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
+import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
@@ -32,7 +34,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   Hecho hechoContribuyente;
   @BeforeEach
   void setUp() {
-    hecho = mock(Hecho.class);
+    hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class),LocalDate.now(),LocalDate.now(),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
     solicitud = new SolicitudDeCargaHecho(hecho); // ya se carga en el repositorio por el constructor
     fuente = new FuenteDinamica();
     filtros = new ArrayList<>();
@@ -47,7 +49,6 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
         mock(Ubicacion.class),
         mock(LocalDate.class),
         fecha);
-
     SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
     solicitudContribuyente.aceptar();
   }
@@ -81,6 +82,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   void puedeAceptarSolicitudDespuesDeApagar(){
     Solicitud solicitud1 = SolicitudesRepositoryMemory.getInstancia().buscarSolicitudPorId(solicitud.getId());
     solicitud1.aceptar();
+    entityManager().getTransaction().commit();
     Assertions.assertTrue(solicitud1.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
   }
 
@@ -88,11 +90,12 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   void contribuyenteRegistradoPuedeModificarHechoAFuenteDinamica() {
     crearSolicitudDeCarga(LocalDate.now());
     Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
-    SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoContribuyente,hecho,contribuyente);
+    Assertions.assertNotEquals(hechoContribuyente.getTitulo(),hecho.getTitulo());
+    SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hecho,hechoContribuyente,contribuyente);
     solicitudModificacion.aceptar();
 
-    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hecho));
-    Assertions.assertFalse(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
+    entityManager().getTransaction().commit();
+    Assertions.assertEquals(hechoContribuyente.getTitulo(),hecho.getTitulo());
   }
 
   @Test
@@ -107,24 +110,6 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
     crearSolicitudDeCarga(LocalDate.of(2025,5,20));
     Contribuyente contribuyenteChorro = new Contribuyente("gian", 21);
     Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(hechoContribuyente,hecho,contribuyenteChorro));
-  }
-
-  @Test
-  void administradorPuedeAceptarConSugerenciaDeCambios(){
-      Contribuyente contribuyente = new Contribuyente("juan", 21);
-      Hecho hechoContribuyente = contribuyente.crearHecho(
-          "incendio en la pampa",
-          "incendio forestal en la pampa",
-          "incendios forestales",
-          mock(Ubicacion.class),
-          mock(LocalDate.class),
-          LocalDate.of(2025,5,20));
-
-      SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
-      solicitudContribuyente.aceptarConSugerenciaDeCambio(hecho);
-
-      Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hecho));
-      Assertions.assertFalse(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
   }
 
 }

@@ -6,15 +6,29 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Entity
+@Getter
+@Setter
 public class FuenteMetaMapaAdapter {
-  private final String url;
+
+  private  String url;
+  @Transient
   private Retrofit retrofit;
+  @Transient
   private FuenteMetaMapaApiService fuenteMetaMapaApiService;
+  @Id
+  private Long id;
 
   public FuenteMetaMapaAdapter(String url) {
     this.url = url;
@@ -23,6 +37,10 @@ public class FuenteMetaMapaAdapter {
         .addConverterFactory(GsonConverterFactory.create())
         .build();
     this.fuenteMetaMapaApiService = retrofit.create(FuenteMetaMapaApiService.class);
+  }
+
+  public FuenteMetaMapaAdapter() {
+
   }
 
   public List<Hecho> obtenerHechos(Map<String, String> filtros) {

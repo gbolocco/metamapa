@@ -7,8 +7,10 @@ import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.contratos.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityTransaction;
 
 public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
@@ -47,12 +49,12 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
   }
 
   public void modificarHecho(Hecho hechoaModificar, Hecho hechoModificado) {
-    List<Hecho> hechos = this.mostrarHechos();
-    if (!hechos.contains(hechoaModificar)) {
-      throw new IllegalArgumentException("El hecho no existe en la fuenta dinamica");
-    }
-
-
+    hechoaModificar.setTitulo(hechoModificado.getTitulo());
+    hechoaModificar.setDescripcion(hechoModificado.getDescripcion());
+    hechoaModificar.setCategoria(hechoModificado.getCategoria());
+    hechoaModificar.setUbicacion(hechoModificado.getUbicacion());
+    hechoaModificar.setFechaDeCarga(LocalDate.now());
+    hechoaModificar.setFechaAcontecimiento(hechoModificado.getFechaAcontecimiento());
   }
 
 

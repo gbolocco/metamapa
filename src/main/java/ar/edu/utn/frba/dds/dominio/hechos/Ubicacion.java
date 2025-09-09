@@ -9,7 +9,9 @@ import javax.persistence.Id;
 
 
 import javax.persistence.Embeddable;
+import lombok.Getter;
 
+@Getter
 @Embeddable
 public class Ubicacion {
 
@@ -23,12 +25,12 @@ public class Ubicacion {
 
   public Ubicacion() {
   }
-
+/*
   public Double getLatitud() {
     return latitud;
   }
 
   public Double getLongitud() {
     return longitud;
-  }
+  }*/
 }

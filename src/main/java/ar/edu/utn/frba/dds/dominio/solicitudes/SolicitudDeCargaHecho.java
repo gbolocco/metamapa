@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
@@ -16,6 +17,7 @@ public class SolicitudDeCargaHecho extends Solicitud {
     super(hecho);
     this.tipoSolicitud = TipoSolicitud.CARGA_HECHO;
     Validacion.validarNoNulo(hecho, "hecho");
+    hecho.setEstadoHecho(EstadoHecho.PENDIENTE_DE_APROBACION);
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
@@ -26,7 +28,7 @@ public class SolicitudDeCargaHecho extends Solicitud {
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    HechosRepositoryMemory.getInstancia().cargarHecho(this.hecho);
+    this.hecho.setEstadoHecho(EstadoHecho.VISUALIZABLE);
   }
 
   @Override
@@ -35,8 +37,8 @@ public class SolicitudDeCargaHecho extends Solicitud {
   }
 
   public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
-    hechoSugerido.marcarComoEditado();
     this.hecho = hechoSugerido;
     this.aceptar();
   }
+
 }

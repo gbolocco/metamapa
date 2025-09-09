@@ -1,7 +1,10 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
+import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -17,8 +20,11 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Setter
+@Getter
 @Entity
 @Table(name = "solicitud") // Mapped to a single table named 'fuentes'
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -33,7 +39,6 @@ public abstract class Solicitud {
   @Enumerated(EnumType.STRING)
   protected EstadoSolicitud estadoSolicitud;
   @ManyToOne
-  @Transient
   protected Hecho hecho;
   protected Date fechaSolicitud;
   @Enumerated(EnumType.STRING)
@@ -43,36 +48,22 @@ public abstract class Solicitud {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
     this.hecho = hecho;
     this.fechaSolicitud = new Date();
+    HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
   }
 
   public Solicitud() {
 
   }
 
-  public EstadoSolicitud getEstadoSolicitud() {
-    return estadoSolicitud;
-  }
-
-  public Hecho getHecho() {
-    return hecho;
-  }
-
-  public Date getFechaSolicitud() {
-    return (fechaSolicitud == null) ? null : new Date(fechaSolicitud.getTime());
-  }
-
   public boolean estaPendiente() {
     return estadoSolicitud == EstadoSolicitud.PENDIENTE;
-  }
-
-  public TipoSolicitud getTipoSolicitud() {
-    return tipoSolicitud;
   }
 
   public abstract void aceptar();
 
   public abstract void rechazar();
 
+  /*
   public void setId(Long id) {
     this.id = id;
   }
@@ -80,4 +71,16 @@ public abstract class Solicitud {
   public Long getId() {
     return id;
   }
+
+  public Hecho getHecho() {
+    return hecho;
+  }
+  public EstadoSolicitud getEstadoSolicitud() {
+    return estadoSolicitud;
+  }
+    public Date getFechaSolicitud() {
+    return (fechaSolicitud == null) ? null : new Date(fechaSolicitud.getTime());
+  }
+
+    */
 }

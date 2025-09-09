@@ -13,6 +13,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 
 import javax.persistence.Entity;
@@ -22,7 +24,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-
+@Getter
+@Setter
 @Entity
 public class Hecho {
 
@@ -39,7 +42,6 @@ public class Hecho {
   private Ubicacion ubicacion;
 
 
-
   @Column(columnDefinition = "DATE")
   private LocalDate fechaAcontecimiento;
 
@@ -49,9 +51,9 @@ public class Hecho {
   private OrigenHecho origenHecho;
 
 
-
-
-  private boolean estadoDeVisualizacion;
+  @Setter
+  @Enumerated(EnumType.STRING)
+  private EstadoHecho estadoHecho;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   public Hecho() {
@@ -81,17 +83,11 @@ public class Hecho {
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
     this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
+    this.estadoHecho = EstadoHecho.VISUALIZABLE;
   }
 
 
-  public void marcarComoVisualizable() {
-    this.estadoDeVisualizacion = true;
-  }
-  public void marcarComoNoVisualizable() {
-    this.estadoDeVisualizacion = false;
-  }
-
-
+  /*
   public String getTitulo() {
     return titulo;
   }
@@ -115,7 +111,7 @@ public class Hecho {
   public LocalDate getFechaDeCarga() {
     return fechaDeCarga;
   }
-
+  */
   public OrigenHecho getOrigenHecho() {
     return OrigenHecho.valueOf(this.origenHecho.name());
   }
@@ -143,11 +139,11 @@ public class Hecho {
     logger.info("-------------------------------------------");
 
   }
-
+/*
   public Long getId() {
     return id;
   }
-
+*/
 }
 
 

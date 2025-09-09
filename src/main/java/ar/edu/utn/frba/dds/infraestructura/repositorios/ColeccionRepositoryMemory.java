@@ -39,7 +39,7 @@ public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit{
   }
 
   public List<Coleccion> mostrarColecciones() {
-    return new ArrayList<>(this.colecciones);
+    return entityManager().createQuery("select c from Coleccion c", Coleccion.class).getResultList();
   }
 
   public void vaciar() {

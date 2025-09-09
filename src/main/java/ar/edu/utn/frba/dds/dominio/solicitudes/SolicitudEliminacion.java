@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -12,6 +14,7 @@ import javax.persistence.Transient;
 @Entity
 @DiscriminatorValue("eliminacion")
 public class SolicitudEliminacion  extends Solicitud {
+  @Column(length = 1000)
   String justificacion;
   Integer min = 500;
   @Transient
@@ -47,7 +50,7 @@ public class SolicitudEliminacion  extends Solicitud {
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    hecho.marcarComoEliminado();
+    hecho.setEstadoHecho(EstadoHecho.ELIMINADO);
   }
 
   @Override

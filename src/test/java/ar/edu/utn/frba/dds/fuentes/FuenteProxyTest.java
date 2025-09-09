@@ -13,6 +13,7 @@ import ar.edu.utn.frba.dds.dominio.fuentes.FuenteMetaMapaAdapter;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class FuenteProxyTest {
+public class FuenteProxyTest implements SimplePersistenceTest {
 
   public Coleccion crearColeccionConFuenteProxy(Fuente fuente, String handle) {
     FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja",
@@ -46,6 +47,7 @@ public class FuenteProxyTest {
         fuente,
         handle
     );
+
   }
 
   public FuenteMetaMapa fuenteMetaMapa(List<Hecho> hechos) {
@@ -75,6 +77,9 @@ public class FuenteProxyTest {
     return hechos;
   }
 
+  public void persistirHechos (List<Hecho> hechos) {
+    hechos.forEach(hecho -> entityManager().persist(hecho));
+  }
 
   @Test
   void seCargarCorrectamenteLosHechosDeUnaFuenteMetaMapaEnLaColeccion() {

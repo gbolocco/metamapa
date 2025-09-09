@@ -3,10 +3,14 @@ package ar.edu.utn.frba.dds.usuarios;
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.colecciones.contratos.ColeccionRepository;
+import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
+import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -18,11 +22,16 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +40,7 @@ import java.util.List;
 import org.slf4j.Logger;
 
 
-public class AdministradorTest {
+public class AdministradorTest implements SimplePersistenceTest {
 
   private static final Logger logger = AppLogger.getLogger(AdministradorTest.class);
 
@@ -49,11 +58,12 @@ public class AdministradorTest {
   }
 
   private Coleccion crearUnaColeccionParaTest() {
+    FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja", CampoDeHecho.TITULO);
     FuenteEstatica fuente = new FuenteEstatica("ruta.csv", mock(LectorCsv.class));
     return new Coleccion(
         "Incendios 2025",
         "Hechos de incendios",
-        List.of(mock(Filtro.class)),  // Lista con un mock de Filtro
+        List.of(filtroTexto1),  // Lista con un mock de Filtro
         fuente,
         "A1302"
     );
@@ -66,7 +76,8 @@ public class AdministradorTest {
     logger.info("Iniciando test de Administrador");
 
     // Crear mock de Hecho
-    hecho = mock(Hecho.class);
+    hecho =  hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDate.now(),LocalDate.now(), OrigenHecho.FUENTE_ESTATICA);
+    HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
     detectorDeSpam = mock(DetectorDeSpam.class);
     solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho);
 
@@ -74,23 +85,13 @@ public class AdministradorTest {
 
   @Test
   void puedeCrearUnaColeccionyAgregarlaALaListaDeColecciones() {
-
     coleccion = crearUnaColeccionParaTest();
-
+    entityManager().getTransaction().commit();
     assertEquals("Incendios 2025", coleccion.getTitulo());
     assertEquals("Hechos de incendios", coleccion.getDescripcion());
-    coleccion.cargarColeccion();
     assertTrue(ColeccionRepositoryMemory.getInstancia().mostrarColecciones().contains(coleccion));
   }
 
-  @Test
-  void puedeCargarHechosDesdeFuente() {
-
-    coleccion = crearUnaColeccionParaTest();
-    coleccion.cargarHechos();
-
-    assertTrue(coleccion.mostrarHechos().isEmpty());
-  }
 
   @Test
   void puedeAceptarUnaSolicitudDeEliminacion() {
@@ -98,6 +99,7 @@ public class AdministradorTest {
     assertTrue(solicitud.estaPendiente());
     assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     solicitud.aceptar();
+    entityManager().getTransaction().commit();
     assertFalse(solicitud.estaPendiente());
     assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
 

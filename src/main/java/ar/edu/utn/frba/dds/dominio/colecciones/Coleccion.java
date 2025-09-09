@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConse
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
+import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
@@ -26,9 +27,13 @@ import javax.persistence.ManyToOne;
 
 
 import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.slf4j.Logger;
 
+@Getter
+@Setter
 @Entity
 @DynamicUpdate
 public class Coleccion  {
@@ -38,7 +43,9 @@ public class Coleccion  {
   @Column(unique = true, nullable = false, name = "id_coleccion")
   private Long id;
 
+
   private String titulo;
+
   private String descripcion;
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -49,7 +56,7 @@ public class Coleccion  {
   )
   private List<Filtro> criteriosDePertenencia;
 
-  @ManyToOne(targetEntity = Fuente.class, fetch = FetchType.EAGER)
+  @ManyToOne(targetEntity = Fuente.class)
   @JoinColumn(name = "fuente_id")
   private Fuente fuente;
 
@@ -63,9 +70,11 @@ public class Coleccion  {
   @Transient
   private List<Hecho> hechosConsensuados;
 
+
   @ManyToOne
   @JoinColumn(name = "algoritmo_Id" )
   private AlgoritmoConsenso algoritmoConsenso;
+
   private String handle;
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
 
@@ -91,30 +100,10 @@ public class Coleccion  {
     this.fuente = fuente;
     this.hechos = new ArrayList<>();
     this.handle = handle;
+    this.cargarColeccion();
   }
 
   public Coleccion() {
-  }
-  public void setAlgoritmoConsenso(AlgoritmoConsenso algoritmoConsenso) {
-    this.algoritmoConsenso = algoritmoConsenso;
-  }
-
-  //getters
-  public String getTitulo() {
-    return this.titulo;
-  }
-
-  public String getDescripcion() {
-    return this.descripcion;
-  }
-
-
-  public String getHandle() {
-    return handle;
-  }
-
-  public void setHandle(String handle) {
-    this.handle = handle;
   }
 
 
@@ -132,13 +121,13 @@ public class Coleccion  {
   }
 
   public List<Hecho> mostrarHechos() {
-    return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
+    return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.getEstadoHecho().equals(EstadoHecho.VISUALIZABLE)).toList());
   }
 
   public void consensuarHechos() {
     this.hechosConsensuados = this.algoritmoConsenso.hechosConsensuados(
         this.hechos, this.criteriosDePertenencia).stream()
-        .filter(hecho -> !hecho.estaEliminado())
+        .filter(hecho -> hecho.getEstadoHecho().equals(EstadoHecho.VISUALIZABLE))
         .toList();
   }
     
@@ -146,18 +135,10 @@ public class Coleccion  {
 
   public void cargarHechos() {
     HechosRepositoryMemory repo = HechosRepositoryMemory.getInstancia();
-    System.out.println("aca");
     List<Hecho> hechosAPersistir = this.fuente.obtenerHechos(this.criteriosDePertenencia);
     hechosAPersistir.forEach(hecho -> repo.agregarHechoAColeccion(this.id, hecho));
   }
 
-  public List<Filtro> getCriteriosDePertenencia() {
-    return new ArrayList<>(criteriosDePertenencia);
-  }
-
-  public List<Hecho> getHechos() {
-    return new ArrayList<>(hechos);
-  }
 
 
   public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
@@ -179,6 +160,10 @@ public class Coleccion  {
         .collect(Collectors.toList());
   }
 
+  public void anadirHecho(Hecho hecho) {
+    hechos.add(hecho);
+  }
+  /*
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     logger.info("Coleccion: {}", this.titulo);
     logger.info("Descripcion: {}", this.descripcion);
@@ -191,6 +176,7 @@ public class Coleccion  {
     imprimirHechosDeColeccion(filtros, tipoCombinacion);
   }
 
+
   public void imprimirHechosDeColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     if (filtros != null) {
       List<Hecho> hechosFiltrados = this.filtrarHechos(filtros, tipoCombinacion);
@@ -202,6 +188,9 @@ public class Coleccion  {
       this.mostrarHechos().forEach(Hecho::imprimirHecho);
     }
   }
+
+
+
 
   public Fuente getFuente() {
     return fuente;
@@ -219,8 +208,7 @@ public class Coleccion  {
     return id;
   }
 
-  public void anadirHecho(Hecho hecho) {
-    hechos.add(hecho);
-  }
+*/
+
 
 }

@@ -56,7 +56,7 @@ public class SolicitudModificacion extends Solicitud {
   @Override
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    this.hechoModificado.marcarComoEditado();
+    //this.hechoModificado.marcarComoEditado();
     HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
   }
 
@@ -66,7 +66,7 @@ public class SolicitudModificacion extends Solicitud {
   }
 
   public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
-    hechoSugerido.marcarComoEditado();
+    //hechoSugerido.marcarComoEditado();
     this.hecho = hechoSugerido;
     this.aceptar();
   }
