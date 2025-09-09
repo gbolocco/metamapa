@@ -16,6 +16,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 @Entity
@@ -32,6 +33,7 @@ public abstract class Solicitud {
   @Enumerated(EnumType.STRING)
   protected EstadoSolicitud estadoSolicitud;
   @ManyToOne
+  @Transient
   protected Hecho hecho;
   protected Date fechaSolicitud;
   @Enumerated(EnumType.STRING)

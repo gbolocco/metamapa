@@ -37,6 +37,9 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository, WithS
         .getResultList();
   }
 
+  public Solicitud buscarSolicitudPorId(Long id) {
+    return entityManager().find(Solicitud.class, id);
+  }
 
 }
 

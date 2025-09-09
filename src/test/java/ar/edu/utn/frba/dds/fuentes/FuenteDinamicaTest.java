@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
@@ -34,7 +35,6 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
     hecho = mock(Hecho.class);
     solicitud = new SolicitudDeCargaHecho(hecho); // ya se carga en el repositorio por el constructor
     fuente = new FuenteDinamica();
-    HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
     filtros = new ArrayList<>();
   }
 
@@ -67,20 +67,21 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
 
   }
 
-/*
-  @Test
-  void fuenteDinamicaPuedeCargarHechosDesdeFuente(){
-    List<Hecho> lista = fuente.obtenerHechos();
-    Assertions.assertFalse(lista.isEmpty());
-  }*/
 
   @Test
   void contribuyenteRegistradoPuedeCargarHechoAFuenteDinamica(){
-
     crearSolicitudDeCarga(LocalDate.now());
+    entityManager().getTransaction().commit();
     Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente)); // se acepto correctamente y se agrego
     Assertions.assertTrue(contribuyente == hechoContribuyente.getOrigenHecho().getContribuyenteHecho());
 
+  }
+
+  @Test
+  void puedeAceptarSolicitudDespuesDeApagar(){
+    Solicitud solicitud1 = SolicitudesRepositoryMemory.getInstancia().buscarSolicitudPorId(solicitud.getId());
+    solicitud1.aceptar();
+    Assertions.assertTrue(solicitud1.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
   }
 
   @Test

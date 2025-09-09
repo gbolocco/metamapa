@@ -39,6 +39,7 @@ public class Hecho {
   private Ubicacion ubicacion;
 
 
+
   @Column(columnDefinition = "DATE")
   private LocalDate fechaAcontecimiento;
 
@@ -46,8 +47,11 @@ public class Hecho {
   private LocalDate fechaDeCarga;
   @Enumerated(EnumType.STRING)
   private OrigenHecho origenHecho;
-  private Boolean eliminado = false;
-  private Boolean editado = false;
+
+
+
+
+  private boolean estadoDeVisualizacion;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   public Hecho() {
@@ -80,21 +84,13 @@ public class Hecho {
   }
 
 
-  public void marcarComoEditado() {
-    editado = true;
+  public void marcarComoVisualizable() {
+    this.estadoDeVisualizacion = true;
+  }
+  public void marcarComoNoVisualizable() {
+    this.estadoDeVisualizacion = false;
   }
 
-  public boolean getEditado() {
-    return editado;
-  }
-
-  public void marcarComoEliminado() {
-    this.eliminado = true;
-  }
-
-  public boolean estaEliminado() {
-    return this.eliminado;
-  }
 
   public String getTitulo() {
     return titulo;

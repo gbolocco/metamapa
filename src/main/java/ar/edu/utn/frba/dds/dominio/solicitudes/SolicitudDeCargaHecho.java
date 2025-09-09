@@ -26,6 +26,7 @@ public class SolicitudDeCargaHecho extends Solicitud {
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
+    HechosRepositoryMemory.getInstancia().cargarHecho(this.hecho);
   }
 
   @Override
