@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,10 +43,11 @@ public class Hecho {
 
 
   @Column(columnDefinition = "DATE")
-  private LocalDate fechaAcontecimiento;
+  private LocalDateTime fechaAcontecimiento;
 
   @Column(columnDefinition = "DATE")
-  private LocalDate fechaDeCarga;
+  private LocalDateTime fechaDeCarga;
+
   @Enumerated(EnumType.STRING)
   private OrigenHecho origenHecho;
 
@@ -66,8 +67,8 @@ public class Hecho {
       String descripcion,
       String categoria,
       Ubicacion ubicacion,
-      LocalDate fechaAcontecimiento,
-      LocalDate fechaDeCarga,
+      LocalDateTime fechaAcontecimiento,
+      LocalDateTime fechaDeCarga,
       OrigenHecho origenHecho
   ) {
     /*
@@ -104,11 +105,11 @@ public class Hecho {
     return ubicacion;
   }
 
-  public LocalDate getFechaAcontecimiento() {
+  public LocalDateTime getFechaAcontecimiento() {
     return fechaAcontecimiento;
   }
 
-  public LocalDate getFechaDeCarga() {
+  public LocalDateTime getFechaDeCarga() {
     return fechaDeCarga;
   }
   */

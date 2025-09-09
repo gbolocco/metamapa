@@ -5,18 +5,28 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 
+@Entity
+@DiscriminatorValue("fuenteDemo")
 public class FuenteDemo extends Fuente {
+  @Transient
   private Conexion conexion;
   private String url = "URL";
 
   public FuenteDemo(Conexion conexion) {
     this.conexion = conexion;
+  }
+
+  public FuenteDemo() {
+
   }
 
   public void incorporarNuevosHechosSiLosHay(LocalDateTime fecha) {
@@ -36,9 +46,9 @@ public class FuenteDemo extends Fuente {
     String categoria = (String) datosHecho.getOrDefault("categoria", "");
     Double latitud = (Double) datosHecho.get("latitud");
     Double longitud = (Double) datosHecho.get("longitud");
-    LocalDate fechaAcontecimiento = (LocalDate) datosHecho.get("fechaAcontecimiento");
-    LocalDate fechaDeCarga = (LocalDate) datosHecho
-        .getOrDefault("fechaDeCarga", LocalDate.now());
+    LocalDateTime fechaAcontecimiento = (LocalDateTime) datosHecho.get("fechaAcontecimiento");
+    LocalDateTime fechaDeCarga = (LocalDateTime) datosHecho.get("fechaDeCarga");
+
 
 
     Ubicacion ubicacion = new Ubicacion(latitud, longitud);

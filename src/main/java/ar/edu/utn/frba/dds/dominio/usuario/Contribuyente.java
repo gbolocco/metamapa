@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.dominio.usuario;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,8 +39,8 @@ public class Contribuyente {
       String descripcion,
       String categoria,
       Ubicacion ubicacion,
-      LocalDate fechaAcontecimiento,
-      LocalDate fechaDeCarga) {
+      LocalDateTime fechaAcontecimiento,
+      LocalDateTime fechaDeCarga) {
 
     OrigenHecho origenContribuyente = OrigenHecho.PROVISTO_POR_CONTRIBUYENTE;
     origenContribuyente.setContribuyenteHecho(this);

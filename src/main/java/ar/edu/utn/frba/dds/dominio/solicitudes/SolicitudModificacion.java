@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.CascadeType;
@@ -40,16 +40,16 @@ public class SolicitudModificacion extends Solicitud {
 
   public boolean sePuedeModificar() {
     return (hecho.getOrigenHecho().getContribuyenteHecho() == this.contribuyente
-        && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDate.now()));
+        && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now()));
 
   }
 
-  public boolean cumpleCondicionDias(LocalDate fechaInicial, LocalDate fechaFinal) {
+  public boolean cumpleCondicionDias(LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
     long dias = ChronoUnit.DAYS.between(fechaInicial, fechaFinal);
     return dias >= 0 && dias <= 7;
   }
 
-  public LocalDate getFechaDeCarga() {
+  public LocalDateTime getFechaDeCarga() {
     return hecho.getFechaDeCarga();
   }
 

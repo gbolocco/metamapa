@@ -27,7 +27,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMem
 
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.persistence.Entity;
@@ -76,7 +76,7 @@ public class AdministradorTest implements SimplePersistenceTest {
     logger.info("Iniciando test de Administrador");
 
     // Crear mock de Hecho
-    hecho =  hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDate.now(),LocalDate.now(), OrigenHecho.FUENTE_ESTATICA);
+    hecho =  hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDateTime.now(),LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
     HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
     detectorDeSpam = mock(DetectorDeSpam.class);
     solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho);

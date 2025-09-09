@@ -11,7 +11,7 @@ import ar.edu.utn.frba.dds.compartido.AppLogger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 
 public class AplicacionTest {
@@ -38,8 +38,8 @@ public class AplicacionTest {
         "Prueba",
         "Prueba",
         new Ubicacion(1.1,1.1),
-        LocalDate.now(),
-        LocalDate.now(), OrigenHecho.FUENTE_ESTATICA);
+        LocalDateTime.now(),
+        LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
 
     String justificacionCorta = "no se";
 

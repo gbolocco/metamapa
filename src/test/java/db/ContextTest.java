@@ -13,7 +13,7 @@ import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

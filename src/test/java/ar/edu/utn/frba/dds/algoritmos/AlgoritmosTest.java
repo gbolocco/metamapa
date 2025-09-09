@@ -11,25 +11,25 @@ public class AlgoritmosTest {
 //    public List<Hecho> listaDeHechos(OrigenHecho origen) {
 //        Hecho hecho1 = new Hecho("incendio en la rioja",
 //                "incendio forestal en la rioja", "incendios forestales",
-//                new Ubicacion(-34.6591644, -58.4694862), LocalDate.of(2020, 4, 1),
+//                new Ubicacion(-34.6591644, -58.4694862), LocalDateTime.of(2020, 4, 1),
 //                LocalDateTime.of(2024, 5, 1, 9, 59, 00),
 //                origen);
 //        Hecho hecho2 = new Hecho("incendio en la rioja",
 //                "incendio forestal en la pampa", "incendios forestales",
-//                new Ubicacion(-34.5984145, -58.4222096), LocalDate.of(2020, 4, 2),
+//                new Ubicacion(-34.5984145, -58.4222096), LocalDateTime.of(2020, 4, 2),
 //                LocalDateTime.of(2024, 5, 1, 9, 59, 00),
 //                origen);
 //
 //        Hecho hecho3 = new Hecho("incendio en la cordoba",
 //                "incendio forestal en la cordoba", "incendios forestales",
-//                new Ubicacion(-34.6591644, -58.4694862), LocalDate.of(2020, 4, 3),
+//                new Ubicacion(-34.6591644, -58.4694862), LocalDateTime.of(2020, 4, 3),
 //                LocalDateTime.of(2024, 5, 1, 13, 00, 00),
 //                origen);
 //        Hecho hecho4 = new Hecho("inundación en Rosario",
 //                "el desborde del río provocó inundaciones en varios barrios",
 //                "desastres naturales",
 //                new Ubicacion(-32.9442, -60.6505),
-//                LocalDate.of(2023, 11, 12),
+//                LocalDateTime.of(2023, 11, 12),
 //                LocalDateTime.of(2023, 11, 12, 14, 30, 0),
 //                origen);
 //
@@ -37,7 +37,7 @@ public class AlgoritmosTest {
 //                "docentes marcharon por mejoras salariales en el centro de Mendoza",
 //                "manifestaciones sociales",
 //                new Ubicacion(-32.8908, -68.8272),
-//                LocalDate.of(2024, 3, 7),
+//                LocalDateTime.of(2024, 3, 7),
 //                LocalDateTime.of(2024, 3, 7, 10, 0, 0),
 //                origen);
 //
@@ -45,7 +45,7 @@ public class AlgoritmosTest {
 //                "una formación del tren Mitre colisionó con un auto en un paso a nivel",
 //                "accidentes de transporte",
 //                new Ubicacion(-34.6037, -58.3816),
-//                LocalDate.of(2024, 6, 20),
+//                LocalDateTime.of(2024, 6, 20),
 //                LocalDateTime.of(2024, 6, 20, 8, 15, 0),
 //                origen);
 //        List<Hecho> hechos = List.of(hecho1, hecho2, hecho3, hecho4, hecho5, hecho6);
@@ -58,7 +58,7 @@ public class AlgoritmosTest {
 //        FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("Geophysical", CampoDeHecho.CATEGORIA);
 //        FiltroContieneTexto filtroTexto2 = new FiltroContieneTexto("Earthquake", CampoDeHecho.CATEGORIA);
 //        FiltroFechaHasta filtroFechaHasta = new FiltroFechaHasta(
-//                LocalDate.of(2024, 5, 1),
+//                LocalDateTime.of(2024, 5, 1),
 //                CampoDeHecho.FECHA_ACONTECIMIENTO
 //        );
 //

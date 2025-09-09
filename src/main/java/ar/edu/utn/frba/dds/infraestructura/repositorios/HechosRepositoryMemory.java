@@ -7,7 +7,8 @@ import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.contratos.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityTransaction;
@@ -29,14 +30,14 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
     entityManager().persist(hecho);
   }
 
-
+//NO HAY QUE USAR
   public List<Hecho> mostrarHechos() {
     return entityManager()
         .createQuery("FROM Hecho h", Hecho.class)
         .getResultList();
   }
 
-//HACER QUERY
+
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {
     List<Hecho> hechos = this.mostrarHechos();
     return hechos.stream().filter(
@@ -53,7 +54,7 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
     hechoaModificar.setDescripcion(hechoModificado.getDescripcion());
     hechoaModificar.setCategoria(hechoModificado.getCategoria());
     hechoaModificar.setUbicacion(hechoModificado.getUbicacion());
-    hechoaModificar.setFechaDeCarga(LocalDate.now());
+    hechoaModificar.setFechaDeCarga(LocalDateTime.now());
     hechoaModificar.setFechaAcontecimiento(hechoModificado.getFechaAcontecimiento());
   }
 
@@ -74,5 +75,9 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
     coleccion.anadirHecho(hecho);
 
 
+  }
+
+  public Hecho buscar(Long id) {
+    return entityManager().find(Hecho.class, id);
   }
 }

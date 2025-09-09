@@ -8,6 +8,7 @@ import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.ArrayList;
@@ -162,6 +163,10 @@ public class Coleccion  {
 
   public void anadirHecho(Hecho hecho) {
     hechos.add(hecho);
+  }
+
+  public List<Hecho> getHechos() {
+    return this.hechos;
   }
   /*
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
