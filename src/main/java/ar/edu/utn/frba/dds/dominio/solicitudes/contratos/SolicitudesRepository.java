@@ -13,7 +13,6 @@ public interface SolicitudesRepository {
 
   void eliminarSolicitud(Solicitud solicitud);
 
-  public void vaciar();
 
   List<Solicitud> mostrarSolicitudes(TipoSolicitud tipoSolicitud);
 }

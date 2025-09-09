@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
-public class FuenteDinamicaTest {
+public class FuenteDinamicaTest implements SimplePersistenceTest {
   List<Filtro> filtros;
   Hecho hecho;
   SolicitudDeCargaHecho solicitud;
@@ -53,18 +54,19 @@ public class FuenteDinamicaTest {
 
   @Test
   void contribuyentePuedeGenerarUnaSolicitudCreacion(){
-
-    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hecho);
-
+    entityManager().getTransaction().commit();
     Assertions.assertTrue(
-        SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitudContribuyente));
+        SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitud));
   }
 
   @Test
   void administradorPuedeAceptarUnaSolicitudCreacion(){
     solicitud.aceptar();
+    entityManager().getTransaction().commit();
     Assertions.assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
+
   }
+
 /*
   @Test
   void fuenteDinamicaPuedeCargarHechosDesdeFuente(){

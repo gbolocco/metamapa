@@ -63,10 +63,6 @@ public class AdministradorTest {
   @BeforeEach
   void setUp() {
 
-    // Limpieza de estado antes de cada test
-    ColeccionRepositoryMemory.getInstancia().vaciar();
-    SolicitudesRepositoryMemory.getInstancia().vaciar();
-
     logger.info("Iniciando test de Administrador");
 
     // Crear mock de Hecho
