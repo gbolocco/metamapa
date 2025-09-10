@@ -28,14 +28,6 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
     entityManager().persist(hecho);
   }
 
-public List<Hecho> buscarHechos(String texto) {
-
-    return entityManager().createQuery("FROM Hecho WHERE MATCH(descripcion,titulo) AGAINST (:texto)", Hecho.class)
-        .setParameter("texto", "%" + texto + "%")
-        .getResultList();
-
-}
-
   public List<Hecho> buscarPorTexto(String texto) {
     SearchSession searchSession = Search.session(entityManager());
 
