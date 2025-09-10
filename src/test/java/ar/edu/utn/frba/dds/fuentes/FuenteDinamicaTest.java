@@ -55,7 +55,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
 
   @Test
   void contribuyentePuedeGenerarUnaSolicitudCreacion(){
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     Assertions.assertTrue(
         SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitud));
   }
@@ -63,7 +63,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   @Test
   void administradorPuedeAceptarUnaSolicitudCreacion(){
     solicitud.aceptar();
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     Assertions.assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
 
   }
@@ -72,7 +72,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   @Test
   void contribuyenteRegistradoPuedeCargarHechoAFuenteDinamica(){
     crearSolicitudDeCarga(LocalDateTime.now());
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente)); // se acepto correctamente y se agrego
     Assertions.assertTrue(contribuyente == hechoContribuyente.getOrigenHecho().getContribuyenteHecho());
 
@@ -82,7 +82,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   void puedeAceptarSolicitudDespuesDeApagar(){
     Solicitud solicitud1 = SolicitudesRepositoryMemory.getInstancia().buscarSolicitudPorId(solicitud.getId());
     solicitud1.aceptar();
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     Assertions.assertTrue(solicitud1.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
   }
 
@@ -94,7 +94,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
     SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hecho,hechoContribuyente,contribuyente);
     solicitudModificacion.aceptar();
 
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     Assertions.assertEquals(hechoContribuyente.getTitulo(),hecho.getTitulo());
   }
 

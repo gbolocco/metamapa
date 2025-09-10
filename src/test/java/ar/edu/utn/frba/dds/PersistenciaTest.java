@@ -1,4 +1,4 @@
-package db;
+package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -11,12 +11,9 @@ import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,8 +30,8 @@ public class PersistenciaTest implements SimplePersistenceTest {
     repo.cargarHecho(hecho);
     repo.cargarHecho(hecho2);
 
-    entityManager().flush();
-    entityManager().getTransaction().commit();
+    //entityManager().flush();
+    //entityManager().getTransaction().commit();
     assertEquals(2, repo.mostrarHechos().size());
   }
 
@@ -47,8 +44,8 @@ public class PersistenciaTest implements SimplePersistenceTest {
     ColeccionRepositoryMemory repo=  ColeccionRepositoryMemory.getInstancia();
     repo.agregarColeccion(coleccion);
 
-    entityManager().flush();
-    entityManager().getTransaction().commit();
+   // entityManager().flush();
+   // entityManager().getTransaction().commit();
 
     assertEquals(coleccion,repo.buscarColeccionPorId(coleccion.getId()));
 
@@ -71,7 +68,7 @@ public class PersistenciaTest implements SimplePersistenceTest {
 
     coleccion.cargarHechos();
 
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
 
     assertEquals(hecho.getTitulo(),repoHechos.buscar(hecho.getId()).getTitulo());
 

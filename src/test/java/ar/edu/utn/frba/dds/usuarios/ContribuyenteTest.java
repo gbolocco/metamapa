@@ -61,7 +61,7 @@ public class ContribuyenteTest implements SimplePersistenceTest  {
 
     String justificacionLarga = "a".repeat(501);
     solicitud = new SolicitudEliminacion(hecho, justificacionLarga);
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     assertTrue(solicitudRep.mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     assertTrue(solicitud.estaPendiente());
   }

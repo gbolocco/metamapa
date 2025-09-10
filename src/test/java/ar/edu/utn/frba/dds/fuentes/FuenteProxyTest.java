@@ -150,7 +150,7 @@ public class FuenteProxyTest implements SimplePersistenceTest {
     fuente.incorporarNuevosHechosSiLosHay(LocalDateTime.now());
     Coleccion coleccion = crearColeccionConFuenteProxy(fuente, "C102");
     coleccion.cargarHechos();
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     Assertions.assertEquals(2, coleccion.getHechos().size());
 
     Assertions.assertEquals(datosHecho1.get("titulo"), coleccion.getHechos().get(0).getTitulo());

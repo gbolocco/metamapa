@@ -86,7 +86,7 @@ public class AdministradorTest implements SimplePersistenceTest {
   @Test
   void puedeCrearUnaColeccionyAgregarlaALaListaDeColecciones() {
     coleccion = crearUnaColeccionParaTest();
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     assertEquals("Incendios 2025", coleccion.getTitulo());
     assertEquals("Hechos de incendios", coleccion.getDescripcion());
     assertTrue(ColeccionRepositoryMemory.getInstancia().mostrarColecciones().contains(coleccion));
@@ -99,7 +99,7 @@ public class AdministradorTest implements SimplePersistenceTest {
     assertTrue(solicitud.estaPendiente());
     assertTrue(SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     solicitud.aceptar();
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     assertFalse(solicitud.estaPendiente());
     assertTrue(solicitud.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);
 
