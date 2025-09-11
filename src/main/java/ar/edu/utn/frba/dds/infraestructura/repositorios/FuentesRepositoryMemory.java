@@ -3,39 +3,42 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 // todas las fuentes del nodo
-public class FuentesRepositoryMemory {
+public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
 
   private static final FuentesRepositoryMemory instance = new FuentesRepositoryMemory();
 
-  private List<Fuente> fuentes = new ArrayList<>();
+
 
   private FuentesRepositoryMemory() {}
 
   public static FuentesRepositoryMemory getInstancia() { return instance; }
 
   public List<Fuente> getFuentes() {
-    return fuentes;
+    return entityManager().createQuery("from Fuente", Fuente.class).getResultList();
   }
 
   public void agregarFuente(Fuente fuente) {
-    this.fuentes.add(fuente);
+    entityManager().persist(fuente);
   }
 
   // metodos para algoritmos de consenso
 
-  // Notar que este metodo retorna una lista de listas (lista con una lista de hechos por fuente)
-  public List<List<Hecho>> obtenerHechosPorFuente(List<Filtro> criterios) {
-    return this.fuentes.stream()
+
+  public List<List<Hecho>> obtenerHechosDeFuentes(List<Filtro> criterios) {
+    /*return this.fuentes.stream()
         .map(fuente -> fuente.obtenerHechos(criterios))
-        .toList();
+        .toList();*/
+    return new ArrayList<>();
   }
 
   public int getCantidadFuentes() {
-    return  this.fuentes.size();
+    return  getFuentes().size();
   }
+
 
 }

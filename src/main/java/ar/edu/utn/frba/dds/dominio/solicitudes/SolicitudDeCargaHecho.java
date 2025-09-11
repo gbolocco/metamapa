@@ -34,6 +34,7 @@ public class SolicitudDeCargaHecho extends Solicitud {
   @Override
   public void rechazar() {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
+    hecho.setEstadoHecho(EstadoHecho.ELIMINADO);
   }
 
   public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {

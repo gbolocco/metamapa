@@ -65,7 +65,9 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
 
     if (hecho.getId() == null) {
+
       entityManager().persist(hecho);
+
     } else {
 
       hecho = entityManager().merge(hecho);
@@ -77,7 +79,9 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
   }
 
+
   public Hecho buscar(Long id) {
     return entityManager().find(Hecho.class, id);
   }
+
 }

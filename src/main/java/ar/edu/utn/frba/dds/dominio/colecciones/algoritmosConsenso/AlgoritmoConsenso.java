@@ -31,7 +31,7 @@ public abstract class AlgoritmoConsenso {
   public List<Hecho> hechosConsensuados(
       List<Hecho> hechosColeccion,
       List<Filtro> criterioDePertenencia) {
-    List<List<Hecho>> hechosCache = FuentesRepositoryMemory.getInstancia().obtenerHechosPorFuente(criterioDePertenencia);
+    List<List<Hecho>> hechosCache = FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(criterioDePertenencia);
     return hechosColeccion.stream().filter(hecho -> estaConsensuado(hecho, hechosCache)).toList();
   }
 

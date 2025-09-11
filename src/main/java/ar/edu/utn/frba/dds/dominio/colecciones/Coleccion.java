@@ -135,9 +135,8 @@ public class Coleccion  {
   //metodos relacionados a los hechos
 
   public void cargarHechos() {
-    HechosRepositoryMemory repo = HechosRepositoryMemory.getInstancia();
     List<Hecho> hechosAPersistir = this.fuente.obtenerHechos(this.criteriosDePertenencia);
-    hechosAPersistir.forEach(hecho -> repo.agregarHechoAColeccion(this.id, hecho));
+    hechosAPersistir.forEach(this::anadirHecho);
   }
 
 

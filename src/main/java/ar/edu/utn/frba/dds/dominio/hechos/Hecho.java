@@ -87,32 +87,6 @@ public class Hecho {
     this.estadoHecho = EstadoHecho.VISUALIZABLE;
   }
 
-
-  /*
-  public String getTitulo() {
-    return titulo;
-  }
-
-  public String getDescripcion() {
-    return descripcion;
-  }
-
-  public String getCategoria() {
-    return categoria;
-  }
-
-  public Ubicacion getUbicacion() {
-    return ubicacion;
-  }
-
-  public LocalDateTime getFechaAcontecimiento() {
-    return fechaAcontecimiento;
-  }
-
-  public LocalDateTime getFechaDeCarga() {
-    return fechaDeCarga;
-  }
-  */
   public OrigenHecho getOrigenHecho() {
     return OrigenHecho.valueOf(this.origenHecho.name());
   }
