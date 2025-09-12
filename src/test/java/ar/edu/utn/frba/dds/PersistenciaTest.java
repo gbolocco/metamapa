@@ -5,9 +5,12 @@ import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
+import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.lectores.Lector;
+import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
@@ -55,6 +58,7 @@ public class PersistenciaTest implements SimplePersistenceTest {
   void seCarganLosHechosPersistidosDeUnaFuenteEnLaColeccion() {
     Fuente fuente = new FuenteDinamica();
     Hecho hecho = new Hecho("incendio en la rioja", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
+    Hecho hecho1 = new Hecho("incendio en la rioja", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
     HechosRepositoryMemory repoHechos=  HechosRepositoryMemory.getInstancia();
 
     FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja", CampoDeHecho.TITULO);
@@ -67,13 +71,20 @@ public class PersistenciaTest implements SimplePersistenceTest {
     repoHechos.cargarHecho(hecho);
 
     coleccion.cargarHechos();
+    coleccion.cargarHechos();
 
-    //entityManager().getTransaction().commit();
+    repoHechos.cargarHecho(hecho1);
+    coleccion.cargarHechos();
+
+    entityManager().getTransaction().commit();
 
     assertEquals(hecho.getTitulo(),repoHechos.buscar(hecho.getId()).getTitulo());
 
     assertTrue(repoHechos.filtrarHechos(List.of(filtroTexto1), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE).contains(hecho));
 
+    assertEquals(2,coleccion.getHechos().size());
+
   }
+  
 
 }

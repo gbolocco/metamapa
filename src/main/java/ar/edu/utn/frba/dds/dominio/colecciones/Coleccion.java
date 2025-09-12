@@ -136,10 +136,13 @@ public class Coleccion  {
 
   public void cargarHechos() {
     List<Hecho> hechosAPersistir = this.fuente.obtenerHechos(this.criteriosDePertenencia);
+    hechosAPersistir = hechosAPersistir.stream().filter(this::noEstaRepetido).toList();
     hechosAPersistir.forEach(this::anadirHecho);
   }
 
-
+  public Boolean noEstaRepetido(Hecho hecho) {
+   return this.getHechos().stream().noneMatch(hecho1 -> sonEquivalentes(hecho1,hecho));
+  }
 
   public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     if (tipoCombinacion == TipoCombinacion.AND) {
@@ -167,6 +170,12 @@ public class Coleccion  {
   public List<Hecho> getHechos() {
     return this.hechos;
   }
+
+  public boolean sonEquivalentes(Hecho h1, Hecho h2) {
+    return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
+        && h1.getAtributosClave().equals(h2.getAtributosClave());
+  }
+
   /*
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     logger.info("Coleccion: {}", this.titulo);

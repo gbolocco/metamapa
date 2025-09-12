@@ -55,7 +55,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
 
   @Test
   void contribuyentePuedeGenerarUnaSolicitudCreacion(){
-    //entityManager().getTransaction().commit();
+    entityManager().getTransaction().commit();
     Assertions.assertTrue(
         SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitud));
   }
