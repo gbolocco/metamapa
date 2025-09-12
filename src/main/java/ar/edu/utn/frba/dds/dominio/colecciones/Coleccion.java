@@ -141,7 +141,7 @@ public class Coleccion  {
   }
 
   public Boolean noEstaRepetido(Hecho hecho) {
-   return this.getHechos().stream().noneMatch(hecho1 -> sonEquivalentes(hecho1,hecho));
+   return this.getHechos().stream().noneMatch(hecho1 -> HechosRepositoryMemory.sonEquivalentes(hecho1,hecho));
   }
 
   public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
@@ -171,10 +171,6 @@ public class Coleccion  {
     return this.hechos;
   }
 
-  public boolean sonEquivalentes(Hecho h1, Hecho h2) {
-    return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
-        && h1.getAtributosClave().equals(h2.getAtributosClave());
-  }
 
   /*
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {

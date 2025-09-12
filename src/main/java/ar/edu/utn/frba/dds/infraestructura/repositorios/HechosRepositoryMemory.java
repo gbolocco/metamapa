@@ -78,10 +78,27 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
 
   }
-
+  public static boolean sonEquivalentes(Hecho h1, Hecho h2) {
+    return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
+        && h1.getDescripcion().equals(h2.getDescripcion())
+        && h1.getCategoria().equals(h2.getCategoria())
+        && h1.getUbicacion().getLatitud().equals(h2.getUbicacion().getLatitud())
+        && h1.getUbicacion().getLongitud().equals(h2.getUbicacion().getLongitud())
+        && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento())
+        && h1.getOrigenHecho().equals(h2.getOrigenHecho());
+  }
 
   public Hecho buscar(Long id) {
     return entityManager().find(Hecho.class, id);
   }
 
+
+  public List<Hecho> cargarHechosNoRepetidosSegunOrigen(List<Hecho> hechosLeidos,OrigenHecho origenHecho) {
+   List<Hecho> hechosDB = entityManager()
+       .createQuery("FROM Hecho h where h.origenHecho =: origin", Hecho.class)
+       .setParameter("origin",origenHecho)
+       .getResultList();
+  return hechosDB;
+
+  }
 }

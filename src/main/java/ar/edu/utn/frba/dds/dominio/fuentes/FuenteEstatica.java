@@ -2,7 +2,9 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.DiscriminatorValue;
@@ -29,6 +31,9 @@ public class FuenteEstatica extends Fuente {
 
   public List<Hecho> obtenerHechos(List<Filtro> criteriosDePertenencia) {
     List<Hecho> hechosLeidos = lector.leer(rutaArchivo);
+    //comprar hechosLeidos con los que te trajiste de la base de datos
+    List <Hecho> hechosDelaDB= HechosRepositoryMemory.getInstancia()
+        .cargarHechosNoRepetidosSegunOrigen(hechosLeidos, OrigenHecho.FUENTE_ESTATICA);
 
     return hechosLeidos.stream()
         .filter(hecho -> cumpleCriterio(hecho, criteriosDePertenencia))

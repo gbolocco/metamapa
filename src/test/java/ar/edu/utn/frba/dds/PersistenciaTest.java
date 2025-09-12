@@ -14,6 +14,7 @@ import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PersistenciaTest implements SimplePersistenceTest {
+
+
 
   @Test
   void persistir2Hechos() {
@@ -37,6 +40,7 @@ public class PersistenciaTest implements SimplePersistenceTest {
     //entityManager().getTransaction().commit();
     assertEquals(2, repo.mostrarHechos().size());
   }
+
 
   @Test
   void persistirColeccion() {
@@ -78,13 +82,14 @@ public class PersistenciaTest implements SimplePersistenceTest {
 
     entityManager().getTransaction().commit();
 
+
     assertEquals(hecho.getTitulo(),repoHechos.buscar(hecho.getId()).getTitulo());
 
     assertTrue(repoHechos.filtrarHechos(List.of(filtroTexto1), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE).contains(hecho));
 
-    assertEquals(2,coleccion.getHechos().size());
+    assertEquals(1,coleccion.getHechos().size());
 
   }
-  
+
 
 }
