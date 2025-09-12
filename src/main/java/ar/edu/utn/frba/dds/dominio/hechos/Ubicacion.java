@@ -25,12 +25,12 @@ public class Ubicacion {
 
   public Ubicacion() {
   }
-/*
+
   public Double getLatitud() {
     return latitud;
   }
 
   public Double getLongitud() {
     return longitud;
-  }*/
+  }
 }

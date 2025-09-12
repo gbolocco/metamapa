@@ -14,8 +14,7 @@ import javax.persistence.Transient;
 @Entity
 @DiscriminatorValue("eliminacion")
 public class SolicitudEliminacion  extends Solicitud {
-  @Column(length = 1000)
-  String justificacion;
+
   Integer min = 500;
   @Transient
   DetectorDeSpam detectorDeSpam;
@@ -58,11 +57,4 @@ public class SolicitudEliminacion  extends Solicitud {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
   }
 
-  public String getJustificacion() {
-    return justificacion;
-  }
-
-  public void setJustificacion(String justificacion) {
-    this.justificacion = justificacion;
-  }
 }

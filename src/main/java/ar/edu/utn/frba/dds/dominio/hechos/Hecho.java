@@ -102,7 +102,6 @@ public class Hecho {
     return resumen;
   }
 
-
   public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
@@ -114,7 +113,8 @@ public class Hecho {
     logger.info("-------------------------------------------");
 
   }
-/*
+
+  /*
   public Long getId() {
     return id;
   }
