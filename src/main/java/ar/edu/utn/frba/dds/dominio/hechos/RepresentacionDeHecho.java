@@ -31,7 +31,7 @@ public class RepresentacionDeHecho {
     this.categoria= categoria;
     this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
-    //this.estadoRepresentacionHecho= EstadoRepresentacionHecho.PENDIENTE;
+    this.estadoRepresentacionHecho= EstadoRepresentacionHecho.PENDIENTE;
   }
 
   @Id
@@ -42,7 +42,8 @@ public class RepresentacionDeHecho {
   @Embedded
   public Ubicacion ubicacion;
   public LocalDateTime fechaAcontecimiento;
-  //public EstadoRepresentacionHecho estadoRepresentacionHecho;
+  public EstadoRepresentacionHecho estadoRepresentacionHecho;
+
 
 
 }
