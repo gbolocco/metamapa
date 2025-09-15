@@ -14,27 +14,29 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "fuente") // Mapped to a single table named 'fuentes'
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_fuente", discriminatorType = DiscriminatorType.STRING)
+@Setter
+@Getter
 public abstract class  Fuente {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "id_Fuente")
   private Long id;
 
+
+  @Transient
+  public List<Hecho> hechos;
+
   public abstract List<Hecho> obtenerHechos(List<Filtro> criterios);
 
 
   public abstract TipoFuente getTipoFuente();
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Long getId() {
-    return id;
-  }
 }

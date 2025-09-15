@@ -20,6 +20,8 @@ public class FuenteEstatica extends Fuente {
   private Lector lector;
   private String rutaArchivo;
 
+
+
   public FuenteEstatica() {
 
   }
@@ -27,17 +29,18 @@ public class FuenteEstatica extends Fuente {
   public FuenteEstatica(String rutaArchivo, Lector lector) {
     this.rutaArchivo = rutaArchivo;
     this.lector = lector;
+    this.cargarFuente();
   }
 
   public List<Hecho> obtenerHechos(List<Filtro> criteriosDePertenencia) {
-    List<Hecho> hechosLeidos = lector.leer(rutaArchivo);
-    //comprar hechosLeidos con los que te trajiste de la base de datos
-    List <Hecho> hechosDelaDB= HechosRepositoryMemory.getInstancia()
-        .cargarHechosNoRepetidosSegunOrigen(hechosLeidos, OrigenHecho.FUENTE_ESTATICA);
-
-    return hechosLeidos.stream()
+    return this.hechos.stream()
         .filter(hecho -> cumpleCriterio(hecho, criteriosDePertenencia))
         .collect(Collectors.toList());
+  }
+
+  public void  cargarFuente(){
+    this.hechos = lector.leer(rutaArchivo);
+    this.hechos = HechosRepositoryMemory.getInstancia().purgarHechos();
   }
 
   @Override

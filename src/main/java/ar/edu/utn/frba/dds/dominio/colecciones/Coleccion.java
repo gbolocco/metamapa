@@ -61,13 +61,7 @@ public class Coleccion  {
   @JoinColumn(name = "fuente_id")
   private Fuente fuente;
 
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(
-      name = "coleccion_hecho",
-      joinColumns = @JoinColumn(name = "id_coleccion"),
-      inverseJoinColumns = @JoinColumn(name = "hecho_id")
-  )
-  private List<Hecho> hechos;
+
   @Transient
   private List<Hecho> hechosConsensuados;
 
@@ -99,7 +93,6 @@ public class Coleccion  {
     this.descripcion = descripcion;
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
-    this.hechos = new ArrayList<>();
     this.handle = handle;
     this.cargarColeccion();
   }
@@ -122,27 +115,17 @@ public class Coleccion  {
   }
 
   public List<Hecho> mostrarHechos() {
-    return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.getEstadoHecho().equals(EstadoHecho.VISUALIZABLE)).toList());
+   return new ArrayList<>(fuente.obtenerHechos(criteriosDePertenencia));
   }
 
-  public void consensuarHechos() {
+  /*public void consensuarHechos() {
     this.hechosConsensuados = this.algoritmoConsenso.hechosConsensuados(
         this.hechos, this.criteriosDePertenencia).stream()
         .filter(hecho -> hecho.getEstadoHecho().equals(EstadoHecho.VISUALIZABLE))
         .toList();
-  }
+  }*/
     
   //metodos relacionados a los hechos
-
-  public void cargarHechos() {
-    List<Hecho> hechosAPersistir = this.fuente.obtenerHechos(this.criteriosDePertenencia);
-    hechosAPersistir = hechosAPersistir.stream().filter(this::noEstaRepetido).toList();
-    hechosAPersistir.forEach(this::anadirHecho);
-  }
-
-  public Boolean noEstaRepetido(Hecho hecho) {
-   return this.getHechos().stream().noneMatch(hecho1 -> HechosRepositoryMemory.sonEquivalentes(hecho1,hecho));
-  }
 
   public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     if (tipoCombinacion == TipoCombinacion.AND) {
@@ -151,24 +134,11 @@ public class Coleccion  {
       return filtros.stream().anyMatch(filtro -> filtro.cumpleFiltro(hecho));
     }
   }
-
-  public boolean contieneHecho(Hecho hecho) {
-    return this.hechos.contains(hecho);
-  }
-
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()
         .stream()
         .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))
         .collect(Collectors.toList());
-  }
-
-  public void anadirHecho(Hecho hecho) {
-    hechos.add(hecho);
-  }
-
-  public List<Hecho> getHechos() {
-    return this.hechos;
   }
 
 

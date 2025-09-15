@@ -59,25 +59,6 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
   }
 
 
-  public void agregarHechoAColeccion(Long coleccionId, Hecho hecho) {
-
-    Coleccion coleccion = entityManager().find(Coleccion.class, coleccionId);
-
-
-    if (hecho.getId() == null) {
-
-      entityManager().persist(hecho);
-
-    } else {
-
-      hecho = entityManager().merge(hecho);
-    }
-
-
-    coleccion.anadirHecho(hecho);
-
-
-  }
   public static boolean sonEquivalentes(Hecho h1, Hecho h2) {
     return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
         && h1.getDescripcion().equals(h2.getDescripcion())
@@ -88,17 +69,9 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
         && h1.getOrigenHecho().equals(h2.getOrigenHecho());
   }
 
+
   public Hecho buscar(Long id) {
     return entityManager().find(Hecho.class, id);
   }
 
-
-  public List<Hecho> cargarHechosNoRepetidosSegunOrigen(List<Hecho> hechosLeidos,OrigenHecho origenHecho) {
-   List<Hecho> hechosDB = entityManager()
-       .createQuery("FROM Hecho h where h.origenHecho =: origin", Hecho.class)
-       .setParameter("origin",origenHecho)
-       .getResultList();
-  return hechosDB;
-
-  }
 }
