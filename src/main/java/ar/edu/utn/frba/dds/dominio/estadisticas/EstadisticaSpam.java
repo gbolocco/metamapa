@@ -13,7 +13,8 @@ public class EstadisticaSpam extends Estadistica {
 
   private DetectorDeSpam detectorDeSpam;
 
-  public EstadisticaSpam(DetectorDeSpam detectorDeSpam) {
+  public EstadisticaSpam(DetectorDeSpam detectorDeSpam, boolean publica) {
+    super(publica);
     this.detectorDeSpam = detectorDeSpam;
   }
 

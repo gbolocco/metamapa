@@ -6,6 +6,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EstadisticaCategoria extends Estadistica {
+
+  public EstadisticaCategoria(boolean publica) {
+    super(publica);
+  }
+
   public String calcular(List<Hecho> hechos) {
 
     Map<String, Long> conteo = hechos.stream()

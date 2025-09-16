@@ -1,4 +1,4 @@
-package csv;
+package componenteEstadistica;
 
 import static ar.edu.utn.frba.dds.dominio.exportador.ExportadorCsv.exportToCsv;
 

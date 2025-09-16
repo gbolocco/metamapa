@@ -11,7 +11,8 @@ public class EstadisticaProvincia extends Estadistica {
 
   private CalculadorProvincia calculadorProvincia;
 
-  public EstadisticaProvincia(CalculadorProvincia calculadorProvincia) {
+  public EstadisticaProvincia(CalculadorProvincia calculadorProvincia,  boolean publica) {
+    super(publica);
     this.calculadorProvincia = calculadorProvincia;
   }
 

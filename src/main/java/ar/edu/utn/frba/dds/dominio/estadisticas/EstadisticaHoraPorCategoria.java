@@ -9,9 +9,12 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
 
   private final String categoriaBuscada;
 
-  public EstadisticaHoraPorCategoria(String categoriaBuscada) {
+  public EstadisticaHoraPorCategoria(String categoriaBuscada, boolean publica) {
+    super(publica);
     this.categoriaBuscada = categoriaBuscada;
   }
+
+
 
   @Override
   public String calcular(List<Hecho> hechos) {

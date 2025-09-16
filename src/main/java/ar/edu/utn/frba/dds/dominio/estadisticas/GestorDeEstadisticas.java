@@ -17,13 +17,15 @@ public class GestorDeEstadisticas {
     this.resultados = new ArrayList<>();
   }
 
-  public void calcular(List<Hecho> hechos) {
-    resultados.clear(); // Limpiamos resultados previos
-    resultados.addAll(
-        estadisticas.stream()
-            .map(e -> e.calcular(hechos))
-            .toList()
-    );
+  public List<String> calcular(List<Hecho> hechos) {
+    resultados.clear();
+
+    List<String> res = estadisticas.stream()
+        .flatMap(e -> e.calcular(hechos).lines()) // aplana los streams de líneas
+        .toList();
+
+    resultados.addAll(res);
+    return res;
   }
 
   public void generarArchivoCSV(String path, String fileName) {

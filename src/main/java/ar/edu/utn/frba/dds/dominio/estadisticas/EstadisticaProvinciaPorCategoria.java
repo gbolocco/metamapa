@@ -12,7 +12,8 @@ public class EstadisticaProvinciaPorCategoria extends Estadistica {
   private final CalculadorProvincia calculadorProvincia;
   private final String categoriaBuscada;
 
-  public EstadisticaProvinciaPorCategoria(CalculadorProvincia calculadorProvincia, String categoriaBuscada) {
+  public EstadisticaProvinciaPorCategoria(CalculadorProvincia calculadorProvincia, String categoriaBuscada, boolean publica) {
+    super(publica);
     this.calculadorProvincia = calculadorProvincia;
     this.categoriaBuscada = categoriaBuscada;
   }
