@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.contratos.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
@@ -49,29 +50,29 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
         .toList();
   }
 
-  public void modificarHecho(Hecho hechoaModificar, Hecho hechoModificado) {
-    hechoaModificar.setTitulo(hechoModificado.getTitulo());
-    hechoaModificar.setDescripcion(hechoModificado.getDescripcion());
-    hechoaModificar.setCategoria(hechoModificado.getCategoria());
-    hechoaModificar.setUbicacion(hechoModificado.getUbicacion());
+  public void modificarHecho(Hecho hechoaModificar, RepresentacionDeHecho representacionDeHecho) {
+    hechoaModificar.setTitulo(representacionDeHecho.getTitulo());
+    hechoaModificar.setDescripcion(representacionDeHecho.getDescripcion());
+    hechoaModificar.setCategoria(representacionDeHecho.getCategoria());
+    hechoaModificar.setUbicacion(representacionDeHecho.getUbicacion());
     hechoaModificar.setFechaDeCarga(LocalDateTime.now());
-    hechoaModificar.setFechaAcontecimiento(hechoModificado.getFechaAcontecimiento());
+    hechoaModificar.setFechaAcontecimiento(representacionDeHecho.getFechaAcontecimiento());
   }
 
 
-  public static boolean sonEquivalentes(Hecho h1, Hecho h2) {
+  public static boolean sonEquivalentes(Hecho h1, RepresentacionDeHecho h2) {
     return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
         && h1.getDescripcion().equals(h2.getDescripcion())
         && h1.getCategoria().equals(h2.getCategoria())
         && h1.getUbicacion().getLatitud().equals(h2.getUbicacion().getLatitud())
         && h1.getUbicacion().getLongitud().equals(h2.getUbicacion().getLongitud())
-        && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento())
-        && h1.getOrigenHecho().equals(h2.getOrigenHecho());
+        && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento());
   }
 
 
   public Hecho buscar(Long id) {
     return entityManager().find(Hecho.class, id);
   }
+
 
 }

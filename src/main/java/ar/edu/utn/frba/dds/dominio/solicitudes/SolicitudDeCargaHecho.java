@@ -42,7 +42,8 @@ public class SolicitudDeCargaHecho extends Solicitud {
         LocalDateTime.now(),
         OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
         );
-
+    hecho.setContribuyente(this.representacionDeHecho.getContribuyente());
+    this.representacionDeHecho.setHecho(hecho);
     HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
 
   }

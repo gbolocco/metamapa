@@ -20,24 +20,25 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("eliminacion")
 public class SolicitudEliminacion  extends Solicitud {
   @Column(length = 1000)
-  String justificacion;
-  Integer min = 500;
+  private String justificacion;
+  private Integer min = 500;
   @Transient
   DetectorDeSpam detectorDeSpam;
 
-  public SolicitudEliminacion(RepresentacionDeHecho representacionDeHecho, String justificacion) {
+  public SolicitudEliminacion(RepresentacionDeHecho representacionDeHecho, Long idHecho,String justificacion) {
     super(representacionDeHecho);
     this.tipoSolicitud = TipoSolicitud.ELIMINACION_HECHO;
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
+    this.representacionDeHecho.setHecho(HechosRepositoryMemory.getInstancia().buscar(idHecho));
     this.agregarSolicitud();
-    SolicitudesRepositoryMemory.getInstancia().agregar(this);
+
   }
 
-  /*public void agregarSolicitud(){
+  public void agregarSolicitud(){
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
-  }*/
+  }
 
   public SolicitudEliminacion() {
 
@@ -77,11 +78,7 @@ public class SolicitudEliminacion  extends Solicitud {
     representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.RECHAZADO);
   }
 
-  public String getJustificacion() {
-    return justificacion;
-  }
 
-  public void setJustificacion(String justificacion) {
-    this.justificacion = justificacion;
-  }
+
+
 }

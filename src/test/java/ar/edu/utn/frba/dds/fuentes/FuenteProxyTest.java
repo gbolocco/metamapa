@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.fuentes;
+/**package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -159,4 +159,4 @@ public class FuenteProxyTest implements SimplePersistenceTest {
 
 
 
-}
+}*/

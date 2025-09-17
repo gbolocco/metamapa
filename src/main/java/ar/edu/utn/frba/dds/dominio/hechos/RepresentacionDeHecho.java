@@ -1,11 +1,16 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
+import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import java.time.LocalDateTime;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,25 +30,31 @@ public class RepresentacionDeHecho {
                                Ubicacion ubicacion,
                                LocalDateTime fechaAcontecimiento,
                                LocalDateTime fechaDeCarga,
-                               OrigenHecho origenHecho) {
+                               OrigenHecho origenHecho,
+                               Contribuyente contribuyente) {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria= categoria;
     this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.estadoRepresentacionHecho= EstadoRepresentacionHecho.PENDIENTE;
+    this.contribuyente= contribuyente;
+    this.hecho= null;
   }
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  public String titulo;
-  public String categoria;
-  public String descripcion;
+  private String titulo;
+  private String categoria;
+  private String descripcion;
   @Embedded
-  public Ubicacion ubicacion;
-  public LocalDateTime fechaAcontecimiento;
-  public EstadoRepresentacionHecho estadoRepresentacionHecho;
-
-
-
+  private Ubicacion ubicacion;
+  private LocalDateTime fechaAcontecimiento;
+  @Enumerated(EnumType.STRING)
+  private EstadoRepresentacionHecho estadoRepresentacionHecho;
+  @ManyToOne
+  private Contribuyente contribuyente;
+  @OneToOne
+  private Hecho hecho;
 }

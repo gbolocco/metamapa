@@ -11,6 +11,7 @@ import java.time.temporal.ChronoUnit;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -19,24 +20,17 @@ import javax.persistence.OneToOne;
 @DiscriminatorValue("modificacion")
 public class SolicitudModificacion extends Solicitud {
 
-  @OneToOne(cascade = CascadeType.ALL)
-  private Hecho hechoModificado;
-  @ManyToOne(cascade = CascadeType.ALL)
-  private Contribuyente contribuyente;
-
-  @OneToOne(cascade = CascadeType.ALL)
-  private RepresentacionDeHecho representacionDeHecho;
-
   private Long IdHecho;
 
-  public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long IdHecho, Contribuyente contribuyente) {
-    this.contribuyente = contribuyente;
-    if (!this.sePuedeModificar() || contribuyente == null) {
-      throw new UnsupportedOperationException("No se puede modificar el hecho");
+  public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long IdHecho) {
+
+    if (HechosRepositoryMemory.getInstancia().buscar(IdHecho).getContribuyente() == null || !sePuedeModificar()) {
+      throw new UnsupportedOperationException("No se puede modificar un hecho sin contribuyente o no cumple condicion dias");
     }
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
     this.representacionDeHecho = representacionDeHecho;
     this.IdHecho = IdHecho;
+    this.representacionDeHecho.setHecho(HechosRepositoryMemory.getInstancia().buscar(IdHecho));
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
@@ -46,9 +40,7 @@ public class SolicitudModificacion extends Solicitud {
 
   public boolean sePuedeModificar() {
     Hecho hecho= HechosRepositoryMemory.getInstancia().buscar(this.IdHecho);
-    return (hecho.getOrigenHecho().getContribuyenteHecho() == this.contribuyente
-        && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now()));
-
+    return this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now());
   }
 
   public boolean cumpleCondicionDias(LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
@@ -64,7 +56,8 @@ public class SolicitudModificacion extends Solicitud {
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
     //this.hechoModificado.marcarComoEditado();
-
+    HechosRepositoryMemory.getInstancia().modificarHecho(HechosRepositoryMemory.getInstancia().buscar(IdHecho), representacionDeHecho);
+/*
     String hql = "UPDATE Hecho SET titulo = :titulo, descripcion = :descripcion " +
         "categoria =: categoria latidud:=latitud longitud:=longitud fechaAcontecimiento:= fechaAcontecimiento " +
         "WHERE id = :userId";
@@ -78,9 +71,10 @@ public class SolicitudModificacion extends Solicitud {
     query.setParameter("latitud", this.representacionDeHecho.getFechaAcontecimiento());
     HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
 
+
     entityManager().createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
         .setParameter("tipoSolicitud", tipoSolicitud)
-        .getResultList();
+        .getResultList();*/
   }
 
   @Override

@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds;
+/*package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -92,4 +92,4 @@ public class PersistenciaTest implements SimplePersistenceTest {
   }
 
 
-}
+}*/

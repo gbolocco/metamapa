@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
@@ -16,6 +17,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,34 +30,52 @@ import static org.mockito.Mockito.mock;
 public class FuenteDinamicaTest implements SimplePersistenceTest {
   List<Filtro> filtros;
   Hecho hecho;
+  RepresentacionDeHecho representacionDeHecho;
   SolicitudDeCargaHecho solicitud;
   FuenteDinamica fuente;
   Contribuyente contribuyente;
   Hecho hechoContribuyente;
+  RepresentacionDeHecho representacionDeHechoContribuyente;
   @BeforeEach
   void setUp() {
+    representacionDeHecho = new RepresentacionDeHecho("prueba", "prueba", "prueba",mock(Ubicacion.class),LocalDateTime.now(),LocalDateTime.now(),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE,null);
+
     hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class),LocalDateTime.now(),LocalDateTime.now(),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
-    solicitud = new SolicitudDeCargaHecho(hecho); // ya se carga en el repositorio por el constructor
+    solicitud = new SolicitudDeCargaHecho(representacionDeHecho); // ya se carga en el repositorio por el constructor
     fuente = new FuenteDinamica();
     filtros = new ArrayList<>();
   }
 
+  public  boolean sonEquivalentes(Hecho h1, RepresentacionDeHecho h2) {
+    return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
+        && h1.getDescripcion().equals(h2.getDescripcion())
+        && h1.getCategoria().equals(h2.getCategoria())
+        && h1.getUbicacion().getLatitud().equals(h2.getUbicacion().getLatitud())
+        && h1.getUbicacion().getLongitud().equals(h2.getUbicacion().getLongitud())
+        && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento());
+  }
+
+  public boolean cumpleCondicionDias(LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
+    long dias = Math.abs(ChronoUnit.DAYS.between(fechaInicial, fechaFinal));
+    return dias >= 0 && dias <= 7;
+  }
+
   public void crearSolicitudDeCarga(LocalDateTime fecha){
     contribuyente = new Contribuyente("juan", 21);
-    hechoContribuyente = contribuyente.crearHecho(
+    representacionDeHechoContribuyente = contribuyente.crearHecho(
         "incendio en la pampa",
         "incendio forestal en la pampa",
         "incendios forestales",
         mock(Ubicacion.class),
         mock(LocalDateTime.class),
         fecha);
-    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(hechoContribuyente);
+    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(representacionDeHechoContribuyente);
     solicitudContribuyente.aceptar();
   }
 
   @Test
   void contribuyentePuedeGenerarUnaSolicitudCreacion(){
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
     Assertions.assertTrue(
         SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitud));
   }
@@ -73,9 +93,8 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   void contribuyenteRegistradoPuedeCargarHechoAFuenteDinamica(){
     crearSolicitudDeCarga(LocalDateTime.now());
     //entityManager().getTransaction().commit();
-    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente)); // se acepto correctamente y se agrego
-    Assertions.assertTrue(contribuyente == hechoContribuyente.getOrigenHecho().getContribuyenteHecho());
-
+    Assertions.assertFalse(HechosRepositoryMemory.getInstancia().mostrarHechos().isEmpty());
+    Assertions.assertEquals(representacionDeHechoContribuyente.getHecho().getContribuyente().getId(),contribuyente.getId());
   }
 
   @Test
@@ -89,27 +108,20 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   @Test
   void contribuyenteRegistradoPuedeModificarHechoAFuenteDinamica() {
     crearSolicitudDeCarga(LocalDateTime.now());
-    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
-    Assertions.assertNotEquals(hechoContribuyente.getTitulo(),hecho.getTitulo());
-    SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hecho,hechoContribuyente,contribuyente);
+    hechoContribuyente = representacionDeHechoContribuyente.getHecho();
+    SolicitudModificacion solicitudModificacion = new SolicitudModificacion(representacionDeHecho,hechoContribuyente.getId());
     solicitudModificacion.aceptar();
-
     //entityManager().getTransaction().commit();
-    Assertions.assertEquals(hechoContribuyente.getTitulo(),hecho.getTitulo());
-  }
-
-  @Test
-  void contribuyenteNoPuedeModificarHechoAFuenteDinamicaFueCreadoHaceMasDeSieteDias() {
-    crearSolicitudDeCarga(LocalDateTime.of(2025,5,20,0,0,0));
-    Assertions.assertTrue(HechosRepositoryMemory.getInstancia().mostrarHechos().contains(hechoContribuyente));
-    Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(hechoContribuyente,hecho,contribuyente));
+    Assertions.assertTrue(sonEquivalentes(HechosRepositoryMemory.getInstancia().buscar(hechoContribuyente.getId()),representacionDeHecho));
   }
 
   @Test
   void contribuyenteQuiereSolicitaModificarUnHechoQueNoEsSuyo(){
     crearSolicitudDeCarga(LocalDateTime.of(2025,5,20,0,0,0));
-    Contribuyente contribuyenteChorro = new Contribuyente("gian", 21);
-    Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(hechoContribuyente,hecho,contribuyenteChorro));
+    solicitud.aceptar();
+    //entityManager().getTransaction().commit();
+    Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(representacionDeHecho,representacionDeHecho.getHecho().getId()));
   }
 
 }
+

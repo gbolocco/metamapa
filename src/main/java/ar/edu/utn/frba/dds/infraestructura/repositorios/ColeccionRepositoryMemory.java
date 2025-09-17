@@ -53,9 +53,10 @@ public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit{
             .toList();
   }
 
-  public void consensuarHechosDeColecciones() {
+  //TODO
+  /**public void consensuarHechosDeColecciones() {
     this.colecciones.forEach(Coleccion::consensuarHechos);
-  }
+  }*/
 
 }
 

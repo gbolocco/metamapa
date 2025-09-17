@@ -19,9 +19,7 @@ public class FuenteEstatica extends Fuente {
   @Transient
   private Lector lector;
   private String rutaArchivo;
-
-
-
+  
   public FuenteEstatica() {
 
   }
@@ -40,7 +38,7 @@ public class FuenteEstatica extends Fuente {
 
   public void  cargarFuente(){
     this.hechos = lector.leer(rutaArchivo);
-    this.hechos = HechosRepositoryMemory.getInstancia().purgarHechos();
+    //this.hechos = HechosRepositoryMemory.getInstancia().purgarHechos();
   }
 
   @Override
