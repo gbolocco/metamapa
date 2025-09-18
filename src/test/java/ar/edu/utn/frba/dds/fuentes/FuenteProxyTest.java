@@ -1,4 +1,4 @@
-/**package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -84,12 +84,11 @@ public class FuenteProxyTest implements SimplePersistenceTest {
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
     Coleccion coleccion = crearColeccionConFuenteProxy(fuente, "A103");
-    coleccion.cargarHechos();
-    Assertions.assertEquals(3, coleccion.getHechos().size());
+    Assertions.assertEquals(3, coleccion.mostrarHechos().size());
   }
 
   @Test
-  void seEnvianCorrectamenteLosFiltrosComoUnMapParaLaQuary() {
+  void seEnvianCorrectamenteLosFiltrosComoUnMapParaLaQuery() {
     List<Hecho> listaDeHechos= listaDeHechos(OrigenHecho.FUENTE_PROXY);
     Fuente fuente= fuenteMetaMapa(listaDeHechos);
     Coleccion coleccion = crearColeccionConFuenteProxy(fuente, "B102");
@@ -149,14 +148,14 @@ public class FuenteProxyTest implements SimplePersistenceTest {
 
     fuente.incorporarNuevosHechosSiLosHay(LocalDateTime.now());
     Coleccion coleccion = crearColeccionConFuenteProxy(fuente, "C102");
-    coleccion.cargarHechos();
+    //coleccion.cargarHechos();
     //entityManager().getTransaction().commit();
-    Assertions.assertEquals(2, coleccion.getHechos().size());
+    Assertions.assertEquals(2, coleccion.mostrarHechos().size());
 
-    Assertions.assertEquals(datosHecho1.get("titulo"), coleccion.getHechos().get(0).getTitulo());
-    Assertions.assertEquals(datosHecho2.get("titulo"), coleccion.getHechos().get(1).getTitulo());
+    Assertions.assertEquals(datosHecho1.get("titulo"), coleccion.mostrarHechos().get(0).getTitulo());
+    Assertions.assertEquals(datosHecho2.get("titulo"), coleccion.mostrarHechos().get(1).getTitulo());
   }
 
 
 
-}*/
+}

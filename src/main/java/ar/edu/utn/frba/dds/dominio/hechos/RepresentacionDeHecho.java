@@ -34,12 +34,12 @@ public class RepresentacionDeHecho {
                                Contribuyente contribuyente) {
     this.titulo = titulo;
     this.descripcion = descripcion;
-    this.categoria= categoria;
+    this.categoria = categoria;
     this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
-    this.estadoRepresentacionHecho= EstadoRepresentacionHecho.PENDIENTE;
-    this.contribuyente= contribuyente;
-    this.hecho= null;
+    this.estadoRepresentacionHecho = EstadoRepresentacionHecho.PENDIENTE;
+    this.contribuyente = contribuyente;
+    this.hecho = null;
   }
 
   @Id

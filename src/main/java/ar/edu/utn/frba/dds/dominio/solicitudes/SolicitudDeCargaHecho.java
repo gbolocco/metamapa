@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -19,9 +20,11 @@ public class SolicitudDeCargaHecho extends Solicitud {
 
   public SolicitudDeCargaHecho(RepresentacionDeHecho representacionDeHecho) {
     super(representacionDeHecho);
+
     this.tipoSolicitud = TipoSolicitud.CARGA_HECHO;
     //Validacion.validarNoNulo(hecho, "hecho");
     //hecho.setEstadoHecho(EstadoHecho.PENDIENTE_DE_APROBACION);
+
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 

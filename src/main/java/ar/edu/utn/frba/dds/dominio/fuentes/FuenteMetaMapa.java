@@ -2,9 +2,13 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepositoryMemory;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
@@ -16,11 +20,13 @@ import javax.persistence.Transient;
 @DiscriminatorValue("metamapa")
 public class FuenteMetaMapa extends Fuente {
 
-  @OneToOne()
+  @Transient
   private FuenteMetaMapaAdapter adapter;
 
   public FuenteMetaMapa(FuenteMetaMapaAdapter adapter) {
     this.adapter = adapter;
+    this.hechos = new ArrayList<>();
+    FuentesRepositoryMemory.getInstancia().agregarFuente(this);
   }
 
   public FuenteMetaMapa() {
@@ -30,8 +36,11 @@ public class FuenteMetaMapa extends Fuente {
   @Override
   public List<Hecho> obtenerHechos(List<Filtro> filtros) {
     List<Hecho> hechos = adapter.obtenerHechos(FiltroUtils.convertirfiltrosaMap(filtros));
-    hechos.forEach(hecho -> HechosRepositoryMemory.getInstancia().cargarHecho(hecho));
-    return hechos;
+    List <RepresentacionDeHecho>  representaciones = RepresentacionHechosRepositoryMemory.getInstancia().getRepHechosEliminados();
+
+    return hechos.stream()
+        .filter(h -> representaciones.stream().noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
+        .toList();
   }
 
   @Override

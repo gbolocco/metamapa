@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import javax.persistence.Column;
@@ -14,10 +15,14 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @DiscriminatorValue("eliminacion")
+@Getter
+@Setter
 public class SolicitudEliminacion  extends Solicitud {
   @Column(length = 1000)
   private String justificacion;
@@ -25,16 +30,17 @@ public class SolicitudEliminacion  extends Solicitud {
   @Transient
   DetectorDeSpam detectorDeSpam;
 
-  public SolicitudEliminacion(RepresentacionDeHecho representacionDeHecho, Long idHecho,String justificacion) {
+
+
+  public SolicitudEliminacion(RepresentacionDeHecho representacionDeHecho,String justificacion) {
     super(representacionDeHecho);
     this.tipoSolicitud = TipoSolicitud.ELIMINACION_HECHO;
     Validacion.validarNoNulo(justificacion, "justificacion");
     Validacion.validarLongitudMinima(justificacion, min, "justificacion");
     this.justificacion = justificacion;
-    this.representacionDeHecho.setHecho(HechosRepositoryMemory.getInstancia().buscar(idHecho));
     this.agregarSolicitud();
-
   }
+
 
   public void agregarSolicitud(){
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
@@ -42,10 +48,6 @@ public class SolicitudEliminacion  extends Solicitud {
 
   public SolicitudEliminacion() {
 
-  }
-
-  public void setDetectorDeSpam(DetectorDeSpam detectorDeSpam) {
-    this.detectorDeSpam = detectorDeSpam;
   }
 
   public void verificarSpam() {
@@ -57,25 +59,17 @@ public class SolicitudEliminacion  extends Solicitud {
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    this.representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.ACEPTADO);
+    this.representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.ELIMINADO);
+    FuentesRepositoryMemory.getInstancia().actualizarListasFuentes();
+    //HechosRepositoryMemory.getInstancia().buscar(this.idHechoAEliminar).setEstadoHecho(EstadoHecho.ELIMINADO);
 
-    Hecho hecho = new Hecho(this.representacionDeHecho.getTitulo(),
-        this.representacionDeHecho.getDescripcion(),
-        this.representacionDeHecho.getCategoria(),
-        this.representacionDeHecho.getUbicacion(),
-        this.representacionDeHecho.getFechaAcontecimiento(),
-        LocalDateTime.now(),
-        OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
-    );
-
-    //HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
-    //hecho.setEstadoHecho(EstadoHecho.ELIMINADO);
   }
 
   @Override
   public void rechazar() {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
     representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.RECHAZADO);
+
   }
 
 

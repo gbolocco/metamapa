@@ -33,7 +33,6 @@ import lombok.Setter;
 @DiscriminatorColumn(name = "tipo_solicitud", discriminatorType = DiscriminatorType.STRING)
 public abstract class Solicitud {
 
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "solicitud_id")
