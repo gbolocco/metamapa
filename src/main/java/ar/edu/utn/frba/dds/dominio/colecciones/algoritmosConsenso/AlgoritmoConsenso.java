@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import java.util.List;
 import javax.persistence.Column;
@@ -43,9 +44,13 @@ public abstract class AlgoritmoConsenso {
             listaPorFuente.stream().anyMatch(h -> this.sonEquivalentes(hecho, h))).count();
   }
 
-  public boolean sonEquivalentes(Hecho h1, Hecho h2) {
+  public  boolean sonEquivalentes(Hecho h1, Hecho h2) {
     return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
-        && h1.getAtributosClave().equals(h2.getAtributosClave());
+        && h1.getDescripcion().equals(h2.getDescripcion())
+        && h1.getCategoria().equals(h2.getCategoria())
+        && h1.getUbicacion().getLatitud().equals(h2.getUbicacion().getLatitud())
+        && h1.getUbicacion().getLongitud().equals(h2.getUbicacion().getLongitud())
+        && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento());
   }
 
   public void setId(Long id) {

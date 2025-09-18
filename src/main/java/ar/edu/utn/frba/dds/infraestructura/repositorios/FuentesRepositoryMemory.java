@@ -14,7 +14,6 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
   private static final FuentesRepositoryMemory instance = new FuentesRepositoryMemory();
 
 
-
   private FuentesRepositoryMemory() {}
 
   public static FuentesRepositoryMemory getInstancia() { return instance; }
@@ -31,10 +30,9 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
 
 //TODO
   public List<List<Hecho>> obtenerHechosDeFuentes(List<Filtro> criterios) {
-    /*return this.fuentes.stream()
+    return getFuentes().stream()
         .map(fuente -> fuente.obtenerHechos(criterios))
-        .toList();*/
-    return new ArrayList<>();
+        .toList();
   }
 
   public int getCantidadFuentes() {

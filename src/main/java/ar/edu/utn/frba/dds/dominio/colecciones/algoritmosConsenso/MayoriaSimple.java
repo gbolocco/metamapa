@@ -12,8 +12,8 @@ import javax.persistence.Entity;
 public class MayoriaSimple extends AlgoritmoConsenso {
 
   public Boolean estaConsensuado(Hecho hecho, List<List<Hecho>> hechosCacheFiltrados) {
-    int apariciones = this.cuantasVecesAparece(hecho, hechosCacheFiltrados);
+    int apariciones =  this.cuantasVecesAparece(hecho, hechosCacheFiltrados);
     int cantFuentes = FuentesRepositoryMemory.getInstancia().getCantidadFuentes();
-    return apariciones > (cantFuentes / 2);
+    return apariciones >= Math.ceil((double) cantFuentes / 2);
   }
 }

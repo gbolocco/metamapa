@@ -15,169 +15,174 @@ import ar.edu.utn.frba.dds.dominio.fuentes.FuenteMetaMapaAdapter;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.lectores.Lector;
+import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AlgoritmosTest {
+public class AlgoritmosTest implements SimplePersistenceTest {
 
-    public Fuente fuente1 = mock(Fuente.class);
-    public Fuente fuente2 = mock(Fuente.class);
-    public Fuente fuente3 = mock(Fuente.class);
-    public Fuente fuente4 = mock(Fuente.class);
-
-
-  Hecho hecho1 = new Hecho("incendio en la rioja",
-          "incendio forestal en la rioja", "incendios forestales",
-          new Ubicacion(-34.6591644, -58.4694862), LocalDateTime.of(2020, 4, 1,0,0,0),
-          LocalDateTime.of(2024, 5, 1, 9, 59, 0),
-          mock(OrigenHecho.class));
-  Hecho hecho2 = new Hecho("incendio en la rioja",
-          "incendio forestal en la pampa", "incendios forestales",
-          new Ubicacion(-34.5984145, -58.4222096), LocalDateTime.of(2020, 4, 2,0,0,0),
-          LocalDateTime.of(2024, 5, 1, 9, 59, 0),
-      mock(OrigenHecho.class));
-
-  Hecho hecho3 = new Hecho("incendio en la cordoba",
-          "incendio forestal en la cordoba", "incendios forestales",
-          new Ubicacion(-34.6591644, -58.4694862), LocalDateTime.of(2020, 4, 3,0,0,0),
-          LocalDateTime.of(2024, 5, 1, 13, 0, 0),
-      mock(OrigenHecho.class));
-  Hecho hecho4 = new Hecho("inundación en Rosario",
-          "el desborde del río provocó inundaciones en varios barrios",
-          "desastres naturales",
-          new Ubicacion(-32.9442, -60.6505),
-          LocalDateTime.of(2023, 11, 12,0,0,0),
-          LocalDateTime.of(2023, 11, 12, 14, 30, 0),
-          mock(OrigenHecho.class));
-
-  Hecho hecho5 = new Hecho("protesta docente en Mendoza",
-          "docentes marcharon por mejoras salariales en el centro de Mendoza",
-          "manifestaciones sociales",
-          new Ubicacion(-32.8908, -68.8272),
-          LocalDateTime.of(2024, 3, 7,0,0,0),
-          LocalDateTime.of(2024, 3, 7, 10, 0, 0),
-      mock(OrigenHecho.class));
-
-  Hecho hecho6 = new Hecho("accidente ferroviario en Buenos Aires",
-          "una formación del tren Mitre colisionó con un auto en un paso a nivel",
-          "accidentes de transporte",
-          new Ubicacion(-34.6037, -58.3816),
-          LocalDateTime.of(2024, 6, 20,0,0),
-          LocalDateTime.of(2024, 6, 20, 8, 15, 0),
-          mock(OrigenHecho.class));
-
-  private List<Hecho> hechos = List.of(hecho1, hecho2, hecho3, hecho4, hecho5, hecho6);
-
-
-
-    FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("Geophysical", CampoDeHecho.CATEGORIA);
-    FiltroContieneTexto filtroTexto2 = new FiltroContieneTexto("Earthquake", CampoDeHecho.CATEGORIA);
-    FiltroFechaHasta filtroFechaHasta = new FiltroFechaHasta(
-            LocalDateTime.of(2024, 5, 1,0,0),
-            CampoDeHecho.FECHA_ACONTECIMIENTO
-    );
-
-    List <Filtro> filtros = List.of(filtroTexto1, filtroTexto2, filtroFechaHasta);
-
-
-
-//    public void configParaTestAlgAbsoluta() {
-//        hechos = listaDeHechos(OrigenHecho.FUENTE_PROXY);
-//
-//        Fuente mockFuente = mock(Fuente.class);
-//        when(mockFuente.obtenerHechos(anyList())).thenReturn(hechos);
-//
-////        ServicioDeAgregacion.getInstancia().agregarFuente(mockFuente);
-////        System.out.println(ServicioDeAgregacion.getInstancia().getCantFuentes());
-//    }
-//
-//    public void configParaTestAlgMayoriaSimple() {
-//        this.hechos = listaDeHechos(OrigenHecho.FUENTE_PROXY);
-//
-//         //3 fuentes que SÍ devuelven hechos.get(0)
-////        for (int i = 0; i < 3; i++) {
-////            Fuente fuenteConCoincidencia = mock(Fuente.class);
-////            when(fuenteConCoincidencia.obtenerHechos(anyList())).thenReturn(List.of(hechos.get(0)));
-////            ServicioDeAgregacion.getInstancia().agregarFuente(fuenteConCoincidencia);
-////        }
-////
-////         //2 fuentes que NO devuelven hechos.get(0)
-////        for (int i = 0; i < 2; i++) {
-////            Fuente fuenteSinCoincidencia = mock(Fuente.class);
-////            when(fuenteSinCoincidencia.obtenerHechos(anyList())).thenReturn(List.of());
-////            ServicioDeAgregacion.getInstancia().agregarFuente(fuenteSinCoincidencia);
-////        }
-//    }
-//
-//    public void configParaTestAlgMultMenciones() {
-//        this.hechos = listaDeHechos(OrigenHecho.FUENTE_PROXY);  //contiene hecho0, hecho1, etc.
-//
-//         //Hecho base con título compartido
-//        Hecho hechoCoincidente = hechos.get(0);
-//
-////         //Fuentes que coinciden exactamente con hechoCoincidente
-////        for (int i = 0; i < 3; i++) {
-////            Fuente fuente = mock(Fuente.class);
-////            when(fuente.obtenerHechos(anyList())).thenReturn(List.of(hechoCoincidente));
-////            ServicioDeAgregacion.getInstancia().agregarFuente(fuente);
-////        }
-////
-////        ///Fuentes que no contienen el hecho ni otros con el mismo título
-////        for (int i = 0; i < 2; i++) {
-////            Fuente fuente = mock(Fuente.class);
-////            when(fuente.obtenerHechos(anyList())).thenReturn(List.of());  //podrían devolver hechos distintos también
-////            ServicioDeAgregacion.getInstancia().agregarFuente(fuente);
-////        }
-//
-//    }
-
-  @BeforeEach
-  public void setUp() {
+  public FuenteEstatica fuenteEstatica(List<Hecho> hechos) {
+    LectorCsv lectorCsv;
+    lectorCsv = mock(LectorCsv.class);
+    when(lectorCsv.leer(anyString())).thenReturn(hechos);
+    return new FuenteEstatica("ruta.csv", lectorCsv);
   }
 
-//  @Test
-//  public void hechosDeMismoTituloYDistintosAtributos() {
-//      MultiplesMenciones algoritmoMutiplesMenciones = new MultiplesMenciones();
-//      assertTrue(algoritmoMutiplesMenciones.hechosDeMismoTituloYdistintosAtributos(this.hechos.get(0), this.hechos.get(1)));
-//  }
-//
-//  @Test
-//  public void hechosDeMismoTituloYMismosAtributos() {
-//      MultiplesMenciones algoritmoMutiplesMenciones = new MultiplesMenciones();
-//      assertFalse(algoritmoMutiplesMenciones.hechosDeMismoTituloYdistintosAtributos(this.hechos.get(0), this.hechos.get(0)));
-//  }
-//
-//  @Test
-//  public void testAlgoritmoAbsolutaConsensua() {
-//      //configParaTestAlgAbsoluta();
-//      Absoluta algoritmoAbsoluta = new Absoluta();
-//      List<Hecho> listHechosCache = algoritmoAbsoluta.hechosConsensuados(hechos,new ArrayList<>());
-//      assertTrue(algoritmoAbsoluta.estaConsensuado(this.hechos.get(0), listHechosCache));
-//  }
-//
-//  @Test
-//  public void testAlgoritmoMayoriaSimpleConsensua() {
-//      //configParaTestAlgMayoriaSimple();
-//      MayoriaSimple algoritmoMayoriaSimple = new MayoriaSimple();
-//      List<Hecho> listHechosConsensuados = algoritmoMayoriaSimple.hechosConsensuados(hechos,new ArrayList<>());
-//      assertTrue(listHechosConsensuados.contains(this.hechos.get(0)));
-//  }
-//
-//  @Test
-//  public void testAlgoritmoMultiplesMencionesConsensua() {
-//      //configParaTestAlgMultMenciones();
-//      MultiplesMenciones algoritmoMultiplesMenciones = new MultiplesMenciones();
-//      List<Hecho> listaHechosConsensuados = algoritmoMultiplesMenciones.hechosConsensuados(hechos,new ArrayList<>());
-//      assertTrue(listaHechosConsensuados.contains(this.hechos.get(0)));
-//  }
+  public FuenteMetaMapa fuenteMetaMapa(List<Hecho> hechos) {
+    FuenteMetaMapaAdapter adapter;
+    adapter = mock(FuenteMetaMapaAdapter.class);
+    when(adapter.obtenerHechos(anyMap())).thenReturn(hechos);
+    return new FuenteMetaMapa(adapter);
+  }
+
+
+
+    Hecho hecho1 = new Hecho("incendio en la rioja",
+        "incendio forestal en la rioja", "incendios forestales",
+        new Ubicacion(-34.6591644, -58.4694862), LocalDateTime.of(2020, 4, 1,0,0,0),
+        LocalDateTime.of(2024, 5, 1, 9, 59, 0),
+        mock(OrigenHecho.class));
+    Hecho hecho2 = new Hecho("incendio en la rioja",
+        "incendio forestal en la pampa", "incendios forestales",
+        new Ubicacion(-34.5984145, -58.4222096), LocalDateTime.of(2020, 4, 2,0,0,0),
+        LocalDateTime.of(2024, 5, 1, 9, 59, 0),
+        mock(OrigenHecho.class));
+
+    Hecho hecho3 = new Hecho("incendio en la cordoba",
+        "incendio forestal en la cordoba", "incendios forestales",
+        new Ubicacion(-34.6591644, -58.4694862), LocalDateTime.of(2020, 4, 3,0,0,0),
+        LocalDateTime.of(2024, 5, 1, 13, 0, 0),
+        mock(OrigenHecho.class));
+    Hecho hecho4 = new Hecho("inundación en Rosario",
+        "el desborde del río provocó inundaciones en varios barrios",
+        "desastres naturales",
+        new Ubicacion(-32.9442, -60.6505),
+        LocalDateTime.of(2023, 11, 12,0,0,0),
+        LocalDateTime.of(2023, 11, 12, 14, 30, 0),
+        mock(OrigenHecho.class));
+
+    Hecho hecho5 = new Hecho("protesta docente en Mendoza",
+        "docentes marcharon por mejoras salariales en el centro de Mendoza",
+        "manifestaciones sociales",
+        new Ubicacion(-32.8908, -68.8272),
+        LocalDateTime.of(2024, 3, 7,0,0,0),
+        LocalDateTime.of(2024, 3, 7, 10, 0, 0),
+        mock(OrigenHecho.class));
+
+    Hecho hecho6 = new Hecho("accidente ferroviario en Buenos Aires",
+        "una formación del tren Mitre colisionó con un auto en un paso a nivel",
+        "accidentes de transporte",
+        new Ubicacion(-34.6037, -58.3816),
+        LocalDateTime.of(2024, 6, 20,0,0),
+        LocalDateTime.of(2024, 6, 20, 8, 15, 0),
+        mock(OrigenHecho.class));
+
+    List<Hecho> hechosColeccion = List.of(hecho1, hecho2, hecho3, hecho4, hecho5, hecho6);
+
+
+
+
+    FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendios forestales", CampoDeHecho.CATEGORIA);
+    List <Filtro> filtrosCategoria = List.of(filtroTexto1);
+    FiltroContieneTexto filtroTexto2 = new FiltroContieneTexto("incendio en la cordoba", CampoDeHecho.TITULO);
+    List <Filtro> filtroTitulo = List.of(filtroTexto2);
+
+
+  @Test
+  public void algoritmoAbsoluta(){
+    FuenteEstatica fuenteEstatica = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho1,hecho2,hecho3)));
+    FuenteMetaMapa fuenteMetaMapa = fuenteMetaMapa(List.of(hecho1,hecho2));
+
+    Absoluta algoritmo = new Absoluta();
+    List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,filtrosCategoria);
+
+    Assertions.assertEquals(2,FuentesRepositoryMemory.getInstancia().getFuentes().size());
+
+    assertEquals(2, hechosConsensuados.size());
+
+    assertTrue(hechosConsensuados.contains(hecho1));
+    assertTrue(hechosConsensuados.contains(hecho2));
+
+    Assertions.assertEquals(3,fuenteEstatica.obtenerHechos(filtrosCategoria).size());
+    Assertions.assertEquals(2,fuenteMetaMapa.obtenerHechos(filtrosCategoria).size());
+
+  }
+
+  @Test
+  public void noConsensuaAbsolutamente(){
+    FuenteEstatica fuenteEstatica1 = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho1,hecho2,hecho3)));
+    FuenteEstatica fuenteEstatica2 = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho4,hecho5,hecho6)));
+    FuenteMetaMapa fuenteMetaMapa = fuenteMetaMapa(List.of(hecho1,hecho2));
+
+    Absoluta algoritmo = new Absoluta();
+
+    List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,filtrosCategoria);
+
+    Assertions.assertEquals(3,FuentesRepositoryMemory.getInstancia().getFuentes().size());
+
+    assertEquals(0, hechosConsensuados.size());
+  }
+
+  @Test
+  public void consensuaMayoritariamente(){
+    FuenteEstatica fuenteEstatica1 = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho1,hecho2,hecho3)));
+    FuenteEstatica fuenteEstatica2 = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho1,hecho5,hecho6)));
+    FuenteMetaMapa fuenteMetaMapa = fuenteMetaMapa(List.of(hecho6,hecho4));
+
+    MayoriaSimple algoritmo = new MayoriaSimple();
+
+    List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,List.of());
+
+
+    Assertions.assertEquals(3,FuentesRepositoryMemory.getInstancia().getFuentes().size());
+    Assertions.assertEquals(2,algoritmo.cuantasVecesAparece(hecho1,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
+
+    assertTrue(algoritmo.cuantasVecesAparece(hecho1,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())) >= (FuentesRepositoryMemory.getInstancia().getFuentes().size() / 2));
+    assertTrue(algoritmo.cuantasVecesAparece(hecho6,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())) >= (FuentesRepositoryMemory.getInstancia().getFuentes().size() / 2));
+
+    assertTrue(algoritmo.estaConsensuado(hecho1,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
+    assertTrue(algoritmo.estaConsensuado(hecho6,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
+
+    assertEquals(2, hechosConsensuados.size());
+
+    assertTrue(hechosConsensuados.contains(hecho1));
+    assertTrue(hechosConsensuados.contains(hecho6));
+  }
+
+
+  @Test
+  public void NoConsensuaMayoritariamente(){
+    FuenteEstatica fuenteEstatica1 = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho1,hecho2,hecho3)));
+    FuenteEstatica fuenteEstatica2 = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho1,hecho5,hecho6)));
+    FuenteEstatica fuenteEstatica3 = fuenteEstatica(List.of());
+    FuenteEstatica fuenteEstatica4 = fuenteEstatica(List.of());
+    FuenteMetaMapa fuenteMetaMapa = fuenteMetaMapa(List.of(hecho6,hecho4));
+
+    MayoriaSimple algoritmo = new MayoriaSimple();
+
+    List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,List.of());
+
+
+    Assertions.assertEquals(5,FuentesRepositoryMemory.getInstancia().getFuentes().size());
+    assertEquals(0, hechosConsensuados.size());
+  }
+
 
 }

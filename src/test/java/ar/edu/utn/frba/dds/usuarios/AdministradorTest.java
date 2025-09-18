@@ -168,6 +168,8 @@ public class AdministradorTest implements SimplePersistenceTest {
     assertNotEquals(EstadoSolicitud.RECHAZADA, solicitud.getEstadoSolicitud());
   }
 
+
+  //Test que corre solo pero en conjunto no REVISAR o comentar para generar el tag
   @Test
   void solicitudDeEliminacionBorraEnTodasLasFuentes(){
     FuenteMetaMapa fuente  = fuenteMetaMapa(listaDeHechos(OrigenHecho.FUENTE_PROXY));
