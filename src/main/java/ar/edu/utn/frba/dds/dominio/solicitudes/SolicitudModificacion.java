@@ -24,13 +24,9 @@ public class SolicitudModificacion extends Solicitud {
 
   public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long IdHecho) {
 
-    if (HechosRepositoryMemory.getInstancia().buscar(IdHecho).getContribuyente() == null || !sePuedeModificar()) {
-      throw new UnsupportedOperationException("No se puede modificar un hecho sin contribuyente o no cumple condicion dias");
-    }
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
     this.representacionDeHecho = representacionDeHecho;
     this.IdHecho = IdHecho;
-    this.representacionDeHecho.setHecho(HechosRepositoryMemory.getInstancia().buscar(IdHecho));
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 

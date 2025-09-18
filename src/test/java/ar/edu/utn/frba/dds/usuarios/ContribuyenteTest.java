@@ -1,6 +1,7 @@
-/*package ar.edu.utn.frba.dds.usuarios;
+package ar.edu.utn.frba.dds.usuarios;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
@@ -31,10 +32,11 @@ public class ContribuyenteTest implements SimplePersistenceTest  {
   private SolicitudesRepositoryMemory solicitudRep;
   private DetectorDeSpam detectorDeSpam;
   private SolicitudEliminacion solicitud;
+  private RepresentacionDeHecho representacionDeHecho;
 
-  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho, DetectorDeSpam detectorDeSpam) {
+  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(RepresentacionDeHecho representacionDeHecho) {
     String justificacionLarga = "a".repeat(501);
-    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga);
+    SolicitudEliminacion s =  new SolicitudEliminacion( representacionDeHecho, justificacionLarga);
     SolicitudesRepositoryMemory.getInstancia().agregar(s);
     return s;
   }
@@ -49,7 +51,7 @@ public class ContribuyenteTest implements SimplePersistenceTest  {
 
     // Crear mock de Hecho
     hecho = mock(Hecho.class);
-
+    representacionDeHecho = mock(RepresentacionDeHecho.class);
     // Mockeo el detector
     detectorDeSpam = mock(DetectorDeSpam.class);
   }
@@ -57,13 +59,11 @@ public class ContribuyenteTest implements SimplePersistenceTest  {
   @Test
   void puedeCrearUnaSolicitudDeEliminacion() {
 
-    //solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho, detectorDeSpam);
+    solicitud = crearUnaSolicitudDeEliminacionParaTest(representacionDeHecho);
 
     String justificacionLarga = "a".repeat(501);
-    solicitud = new SolicitudEliminacion(hecho, justificacionLarga);
     //entityManager().getTransaction().commit();
     assertTrue(solicitudRep.mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     assertTrue(solicitud.estaPendiente());
   }
 }
-*/

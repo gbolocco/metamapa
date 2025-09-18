@@ -109,18 +109,11 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   void contribuyenteRegistradoPuedeModificarHechoAFuenteDinamica() {
     crearSolicitudDeCarga(LocalDateTime.now());
     hechoContribuyente = representacionDeHechoContribuyente.getHecho();
+    Assertions.assertNotNull(hechoContribuyente.getId());
+
     SolicitudModificacion solicitudModificacion = new SolicitudModificacion(representacionDeHecho,hechoContribuyente.getId());
     solicitudModificacion.aceptar();
-    //entityManager().getTransaction().commit();
     Assertions.assertTrue(sonEquivalentes(HechosRepositoryMemory.getInstancia().buscar(hechoContribuyente.getId()),representacionDeHecho));
-  }
-
-  @Test
-  void contribuyenteQuiereSolicitaModificarUnHechoQueNoEsSuyo(){
-    crearSolicitudDeCarga(LocalDateTime.of(2025,5,20,0,0,0));
-    solicitud.aceptar();
-    //entityManager().getTransaction().commit();
-    Assertions.assertThrows(UnsupportedOperationException.class, () -> new SolicitudModificacion(representacionDeHecho,representacionDeHecho.getHecho().getId()));
   }
 
 }

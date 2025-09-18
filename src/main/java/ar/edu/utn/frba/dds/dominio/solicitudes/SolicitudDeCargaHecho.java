@@ -48,7 +48,6 @@ public class SolicitudDeCargaHecho extends Solicitud {
     hecho.setContribuyente(this.representacionDeHecho.getContribuyente());
     this.representacionDeHecho.setHecho(hecho);
     HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
-
   }
 
   @Override

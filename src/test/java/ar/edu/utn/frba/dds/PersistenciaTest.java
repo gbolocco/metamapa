@@ -1,4 +1,4 @@
-/*package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -58,38 +58,5 @@ public class PersistenciaTest implements SimplePersistenceTest {
 
   }
 
-  @Test
-  void seCarganLosHechosPersistidosDeUnaFuenteEnLaColeccion() {
-    Fuente fuente = new FuenteDinamica();
-    Hecho hecho = new Hecho("incendio en la rioja", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
-    Hecho hecho1 = new Hecho("incendio en la rioja", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
-    HechosRepositoryMemory repoHechos=  HechosRepositoryMemory.getInstancia();
 
-    FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja", CampoDeHecho.TITULO);
-
-    Coleccion coleccion = new Coleccion("coleccion","descripcion", List.of(filtroTexto1),fuente,"handle");
-    ColeccionRepositoryMemory repo=  ColeccionRepositoryMemory.getInstancia();
-
-    repo.agregarColeccion(coleccion);
-
-    repoHechos.cargarHecho(hecho);
-
-    coleccion.cargarHechos();
-    coleccion.cargarHechos();
-
-    repoHechos.cargarHecho(hecho1);
-    coleccion.cargarHechos();
-
-    entityManager().getTransaction().commit();
-
-
-    assertEquals(hecho.getTitulo(),repoHechos.buscar(hecho.getId()).getTitulo());
-
-    assertTrue(repoHechos.filtrarHechos(List.of(filtroTexto1), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE).contains(hecho));
-
-    assertEquals(1,coleccion.getHechos().size());
-
-  }
-
-
-}*/
+}

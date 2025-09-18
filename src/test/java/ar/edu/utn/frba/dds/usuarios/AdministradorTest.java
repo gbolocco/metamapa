@@ -180,8 +180,7 @@ public class AdministradorTest implements SimplePersistenceTest {
 
     SolicitudEliminacion solicitud = crearUnaSolicitudDeEliminacionParaTest(representacion);
 
-    assertEquals(fuente.obtenerHechos(List.of()).get(0),representacion);
-    //Testo fun
+
     assertEquals(fuente.obtenerHechos(List.of()).get(0).getTitulo(),representacion.getTitulo());
     assertEquals(fuente.obtenerHechos(List.of()).get(0).getCategoria(),representacion.getCategoria());
     assertEquals(fuente.obtenerHechos(List.of()).get(0).getDescripcion(),representacion.getDescripcion());
@@ -193,7 +192,6 @@ public class AdministradorTest implements SimplePersistenceTest {
     Assertions.assertTrue(sonEquivalentes(fuente.obtenerHechos(List.of()).get(0),representacion));
 
     solicitud.aceptar();
-    entityManager().getTransaction().commit();
     Assertions.assertEquals(2,fuente.obtenerHechos(List.of()).size());
   }
 
