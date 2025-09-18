@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -57,6 +58,9 @@ public class Hecho {
   private EstadoHecho estadoHecho;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
+  @ManyToOne
+  private Contribuyente contribuyente;
+
   public Hecho() {
 
   }
@@ -85,6 +89,7 @@ public class Hecho {
     this.fechaDeCarga = fechaDeCarga;
     this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
     this.estadoHecho = EstadoHecho.VISUALIZABLE;
+    this.contribuyente = null;
   }
 
   public OrigenHecho getOrigenHecho() {

@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -14,11 +16,16 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "fuente") // Mapped to a single table named 'fuentes'
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_fuente", discriminatorType = DiscriminatorType.STRING)
+@Setter
+@Getter
 public abstract class  Fuente {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,17 +33,20 @@ public abstract class  Fuente {
   private Long id;
 
 
+  @Transient
+  public List<Hecho> hechos;
 
   public abstract List<Hecho> obtenerHechos(List<Filtro> criterios);
 
 
   public abstract TipoFuente getTipoFuente();
 
-  public void setId(Long id) {
-    this.id = id;
+
+  public void actualizarLista(List<RepresentacionDeHecho> representaciones) {
+    this.hechos = this.hechos.stream()
+        .filter(h -> representaciones.stream().noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
+        .toList();
   }
 
-  public Long getId() {
-    return id;
-  }
+
 }

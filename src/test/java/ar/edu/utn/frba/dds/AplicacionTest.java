@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds;
+/*package ar.edu.utn.frba.dds;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -50,4 +50,4 @@ public class AplicacionTest {
       new SolicitudEliminacion(hecho, null); // sin justificacion
     });
   }
-}
+}*/

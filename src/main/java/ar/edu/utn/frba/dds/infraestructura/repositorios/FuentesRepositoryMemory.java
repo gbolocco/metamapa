@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +41,11 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
     return  getFuentes().size();
   }
 
+  public void actualizarListasFuentes(){
+    List<Fuente> fuentes = getFuentes();
+    List<RepresentacionDeHecho> representacionDeHechos = RepresentacionHechosRepositoryMemory
+                                                            .getInstancia().getRepHechosEliminados();
 
+    fuentes.forEach(fuente -> fuente.actualizarLista(representacionDeHechos));
+  }
 }

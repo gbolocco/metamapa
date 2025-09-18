@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
@@ -10,6 +11,7 @@ import java.time.temporal.ChronoUnit;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -18,19 +20,13 @@ import javax.persistence.OneToOne;
 @DiscriminatorValue("modificacion")
 public class SolicitudModificacion extends Solicitud {
 
-  @OneToOne(cascade = CascadeType.ALL)
-  protected Hecho hechoModificado;
-  @ManyToOne(cascade = CascadeType.ALL)
-  protected Contribuyente contribuyente;
+  private Long IdHecho;
 
-  public SolicitudModificacion(Hecho hecho, Hecho hechoModificado, Contribuyente contribuyente) {
-    super(hecho);
-    this.contribuyente = contribuyente;
-    if (!this.sePuedeModificar() || contribuyente == null) {
-      throw new UnsupportedOperationException("No se puede modificar el hecho");
-    }
+  public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long IdHecho) {
+
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
-    this.hechoModificado = hechoModificado;
+    this.representacionDeHecho = representacionDeHecho;
+    this.IdHecho = IdHecho;
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
@@ -39,9 +35,8 @@ public class SolicitudModificacion extends Solicitud {
   }
 
   public boolean sePuedeModificar() {
-    return (hecho.getOrigenHecho().getContribuyenteHecho() == this.contribuyente
-        && this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now()));
-
+    Hecho hecho= HechosRepositoryMemory.getInstancia().buscar(this.IdHecho);
+    return this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now());
   }
 
   public boolean cumpleCondicionDias(LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
@@ -49,15 +44,33 @@ public class SolicitudModificacion extends Solicitud {
     return dias >= 0 && dias <= 7;
   }
 
-  public LocalDateTime getFechaDeCarga() {
+  /*public LocalDateTime getFechaDeCarga() {
     return hecho.getFechaDeCarga();
-  }
+  }*/
 
   @Override
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
     //this.hechoModificado.marcarComoEditado();
+    HechosRepositoryMemory.getInstancia().modificarHecho(HechosRepositoryMemory.getInstancia().buscar(IdHecho), representacionDeHecho);
+/*
+    String hql = "UPDATE Hecho SET titulo = :titulo, descripcion = :descripcion " +
+        "categoria =: categoria latidud:=latitud longitud:=longitud fechaAcontecimiento:= fechaAcontecimiento " +
+        "WHERE id = :userId";
+
+    Query query = entityManager().createQuery(hql);
+    query.setParameter("titulo", this.representacionDeHecho.getTitulo());
+    query.setParameter("descripcion", this.representacionDeHecho.getDescripcion());
+    query.setParameter("categoria", this.representacionDeHecho.getCategoria());
+    query.setParameter("latitud", this.representacionDeHecho.getUbicacion().getLatitud());
+    query.setParameter("latitud", this.representacionDeHecho.getUbicacion().getLongitud());
+    query.setParameter("latitud", this.representacionDeHecho.getFechaAcontecimiento());
     HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
+
+
+    entityManager().createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
+        .setParameter("tipoSolicitud", tipoSolicitud)
+        .getResultList();*/
   }
 
   @Override
@@ -67,7 +80,7 @@ public class SolicitudModificacion extends Solicitud {
 
   public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
     //hechoSugerido.marcarComoEditado();
-    this.hecho = hechoSugerido;
+    this.IdHecho = IdHecho;
     this.aceptar();
   }
 }

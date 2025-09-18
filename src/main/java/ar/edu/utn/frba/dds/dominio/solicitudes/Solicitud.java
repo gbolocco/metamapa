@@ -2,8 +2,10 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepositoryMemory;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -31,7 +33,6 @@ import lombok.Setter;
 @DiscriminatorColumn(name = "tipo_solicitud", discriminatorType = DiscriminatorType.STRING)
 public abstract class Solicitud {
 
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "solicitud_id")
@@ -39,18 +40,19 @@ public abstract class Solicitud {
   @Enumerated(EnumType.STRING)
   protected EstadoSolicitud estadoSolicitud;
   @ManyToOne
-  protected Hecho hecho;
+
+  protected RepresentacionDeHecho representacionDeHecho;
   protected Date fechaSolicitud;
   @Enumerated(EnumType.STRING)
   protected TipoSolicitud tipoSolicitud;
   @Column(length = 1000)
   String justificacion;
 
-  public Solicitud(Hecho hecho) {
+  public Solicitud(RepresentacionDeHecho representacionDeHecho) {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
-    this.hecho = hecho;
+    this.representacionDeHecho = representacionDeHecho;
     this.fechaSolicitud = new Date();
-    HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
+    RepresentacionHechosRepositoryMemory.getInstancia().cargarRepresentacionDeHecho(representacionDeHecho);
   }
 
   public Solicitud() {
