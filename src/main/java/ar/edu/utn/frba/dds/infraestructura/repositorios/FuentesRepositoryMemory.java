@@ -29,7 +29,7 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
 
   // metodos para algoritmos de consenso
 
-
+//TODO
   public List<List<Hecho>> obtenerHechosDeFuentes(List<Filtro> criterios) {
     /*return this.fuentes.stream()
         .map(fuente -> fuente.obtenerHechos(criterios))

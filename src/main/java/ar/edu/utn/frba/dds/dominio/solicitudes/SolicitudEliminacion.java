@@ -24,9 +24,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SolicitudEliminacion  extends Solicitud {
+
   @Column(length = 1000)
   private String justificacion;
   private Integer min = 500;
+  
   @Transient
   DetectorDeSpam detectorDeSpam;
 
@@ -71,8 +73,5 @@ public class SolicitudEliminacion  extends Solicitud {
     representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.RECHAZADO);
 
   }
-
-
-
-
+  
 }

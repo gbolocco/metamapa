@@ -45,6 +45,8 @@ public abstract class Solicitud {
   protected Date fechaSolicitud;
   @Enumerated(EnumType.STRING)
   protected TipoSolicitud tipoSolicitud;
+  @Column(length = 1000)
+  String justificacion;
 
   public Solicitud(RepresentacionDeHecho representacionDeHecho) {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
@@ -64,6 +66,7 @@ public abstract class Solicitud {
   public abstract void aceptar();
 
   public abstract void rechazar();
+
 
   /*
   public void setId(Long id) {
