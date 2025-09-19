@@ -1,20 +1,15 @@
 package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.dominio.hechos.contratos.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-import org.hibernate.search.mapper.orm.Search;
-import org.hibernate.search.mapper.orm.session.SearchSession;
-
-import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityTransaction;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 
 public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
@@ -44,14 +39,14 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
         .fetchAllHits();
   }
 
-//NO HAY QUE USAR
+  //NO HAY QUE USAR
   public List<Hecho> mostrarHechos() {
     return entityManager()
         .createQuery("FROM Hecho h", Hecho.class)
         .getResultList();
   }
 
-//HACER QUERY
+  //HACER QUERY
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {
     return hechos.stream().filter(
         hecho -> filtros

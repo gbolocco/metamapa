@@ -22,7 +22,8 @@ public class UsuarioRepositoryMemory implements WithSimplePersistenceUnit {
   }
 
   public List<Contribuyente> buscarTodos() {
-    return entityManager().createQuery("from Contribuyente",Contribuyente.class).getResultList();
+    return entityManager()
+        .createQuery("from Contribuyente", Contribuyente.class).getResultList();
   }
 
 }

@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso;
+package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.List;

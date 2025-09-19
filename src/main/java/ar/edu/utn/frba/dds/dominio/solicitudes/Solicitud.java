@@ -1,12 +1,8 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
-import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
-import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepositoryMemory;
-import javax.persistence.CascadeType;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -16,12 +12,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,8 +25,8 @@ import lombok.Setter;
 @Table(name = "solicitud") // Mapped to a single table named 'fuentes'
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_solicitud", discriminatorType = DiscriminatorType.STRING)
-public abstract class Solicitud {
 
+public abstract class Solicitud {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "solicitud_id")
@@ -52,7 +46,8 @@ public abstract class Solicitud {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
     this.representacionDeHecho = representacionDeHecho;
     this.fechaSolicitud = new Date();
-    RepresentacionHechosRepositoryMemory.getInstancia().cargarRepresentacionDeHecho(representacionDeHecho);
+    RepresentacionHechosRepositoryMemory
+        .getInstancia().cargarRepresentacionDeHecho(representacionDeHecho);
   }
 
   public Solicitud() {

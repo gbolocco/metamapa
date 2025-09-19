@@ -8,7 +8,8 @@ import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SolicitudesRepositoryMemory implements SolicitudesRepository, WithSimplePersistenceUnit {
+public class SolicitudesRepositoryMemory implements
+    SolicitudesRepository, WithSimplePersistenceUnit {
 
   private static final SolicitudesRepositoryMemory instance =
       new SolicitudesRepositoryMemory();
@@ -22,7 +23,8 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository, WithS
   }
 
   public List<Solicitud> pendientes() {
-    return entityManager().createQuery("from Solicitud s where s.estadoSolicitud =:estadoSolicitud", Solicitud.class)
+    return entityManager()
+        .createQuery("from Solicitud s where s.estadoSolicitud =:estadoSolicitud", Solicitud.class)
         .setParameter("estadoSolicitud", EstadoSolicitud.PENDIENTE)
         .getResultList();
   }
@@ -32,7 +34,8 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository, WithS
   }
 
   public List<Solicitud> mostrarSolicitudes(TipoSolicitud tipoSolicitud) {
-    return entityManager().createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
+    return entityManager()
+        .createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
         .setParameter("tipoSolicitud", tipoSolicitud)
         .getResultList();
   }

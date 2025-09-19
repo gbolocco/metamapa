@@ -1,15 +1,14 @@
 package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
-import ar.edu.utn.frba.dds.dominio.colecciones.contratos.ColeccionRepository;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
-public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit{
+public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit {
 
   private static final ColeccionRepositoryMemory instance = new ColeccionRepositoryMemory();
 
@@ -28,7 +27,7 @@ public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit{
   }
 
   public Coleccion buscarColeccionPorId(Long id) {
-    return(entityManager().find(Coleccion.class,id));
+    return (entityManager().find(Coleccion.class, id));
   }
 
   public Optional<Hecho> buscarHechoPor(String tituloHecho) {
@@ -39,7 +38,8 @@ public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit{
   }
 
   public List<Coleccion> mostrarColecciones() {
-    return entityManager().createQuery("select c from Coleccion c", Coleccion.class).getResultList();
+    return entityManager()
+        .createQuery("select c from Coleccion c", Coleccion.class).getResultList();
   }
 
   public void vaciar() {
@@ -52,11 +52,6 @@ public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit{
             .map(Coleccion::getHandle)
             .toList();
   }
-
-  //TODO
-  /**public void consensuarHechosDeColecciones() {
-    this.colecciones.forEach(Coleccion::consensuarHechos);
-  }*/
 
 }
 

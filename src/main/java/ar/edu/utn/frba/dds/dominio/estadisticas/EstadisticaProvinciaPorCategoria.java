@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.estadisticas;
 
-import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
-import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia.CalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +12,8 @@ public class EstadisticaProvinciaPorCategoria extends Estadistica {
   private final CalculadorProvincia calculadorProvincia;
   private final String categoriaBuscada;
 
-  public EstadisticaProvinciaPorCategoria(CalculadorProvincia calculadorProvincia, String categoriaBuscada, boolean publica) {
+  public EstadisticaProvinciaPorCategoria(CalculadorProvincia calculadorProvincia,
+                                          String categoriaBuscada, boolean publica) {
     super(publica);
     this.calculadorProvincia = calculadorProvincia;
     this.categoriaBuscada = categoriaBuscada;

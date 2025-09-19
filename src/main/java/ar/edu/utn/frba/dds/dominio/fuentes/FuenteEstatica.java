@@ -38,7 +38,7 @@ public class FuenteEstatica extends Fuente {
         .collect(Collectors.toList());
   }
 
-  public void  cargarFuente(){
+  public void  cargarFuente() {
     this.hechos = lector.leer(rutaArchivo);
   }
 

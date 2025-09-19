@@ -10,18 +10,21 @@ import java.util.List;
 
 public class RepresentacionHechosRepositoryMemory implements WithSimplePersistenceUnit {
 
-  private static final RepresentacionHechosRepositoryMemory instance = new RepresentacionHechosRepositoryMemory();
+  private static final RepresentacionHechosRepositoryMemory instance =
+      new RepresentacionHechosRepositoryMemory();
 
   public static RepresentacionHechosRepositoryMemory getInstancia() {
     return instance;
   }
 
-  public List<RepresentacionDeHecho> getRepHechos (){
-    return entityManager().createQuery("FROM RepresentacionDeHecho r",RepresentacionDeHecho.class).getResultList();
+  public List<RepresentacionDeHecho> getRepHechos() {
+    return entityManager()
+        .createQuery("FROM RepresentacionDeHecho r", RepresentacionDeHecho.class).getResultList();
   }
 
-  public List<RepresentacionDeHecho> getRepHechosEliminados (){
-    return entityManager().createQuery("FROM RepresentacionDeHecho r where r.estadoRepresentacionHecho=: eliminado",
+  public List<RepresentacionDeHecho> getRepHechosEliminados() {
+    return entityManager()
+        .createQuery("FROM RepresentacionDeHecho r where r.estadoRepresentacionHecho=: eliminado",
         RepresentacionDeHecho.class)
         .setParameter("eliminado", EstadoRepresentacionHecho.ELIMINADO)
         .getResultList();

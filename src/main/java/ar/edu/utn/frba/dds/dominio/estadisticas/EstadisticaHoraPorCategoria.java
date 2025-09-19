@@ -14,8 +14,6 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
     this.categoriaBuscada = categoriaBuscada;
   }
 
-
-
   @Override
   public String calcular(List<Hecho> hechos) {
 
@@ -38,7 +36,7 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
 
     assert maxHora != null;
 
-    return "Hora con más hechos de categoría " + categoriaBuscada + ": " +
-        maxHora.getKey() + " hs (" + maxHora.getValue() + " hechos)";
+    return "Hora con más hechos de categoría " + categoriaBuscada + ": "
+        + maxHora.getKey() + " hs (" + maxHora.getValue() + " hechos)";
   }
 }

@@ -11,7 +11,6 @@ public abstract class Estadistica {
   public Estadistica(boolean publica) {
     this.publica = publica;
   }
-  
 
   public abstract String calcular(List<Hecho> hechos);
 

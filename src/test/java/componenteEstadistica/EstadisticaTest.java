@@ -9,9 +9,8 @@ import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaHoraPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvinciaPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.GestorDeEstadisticas;
-import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
-import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvincia;
-import ar.edu.utn.frba.dds.dominio.exportador.ExportadorCsv;
+import ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia.CalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia.ServicioCalculadorProvincia;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
@@ -94,7 +93,7 @@ public class EstadisticaTest {
     Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("Córdoba") || s.contains("CORDOBA")));
     Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("incendio") || s.contains("robo")));
 
-    gestor.generarArchivoCSV("./estadisticas/","test.csv");
+    gestor.generarArchivoCsv("./estadisticas/","test.csv");
   }
 
   @Test

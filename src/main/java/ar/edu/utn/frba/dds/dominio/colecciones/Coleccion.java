@@ -2,22 +2,18 @@ package ar.edu.utn.frba.dds.dominio.colecciones;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
-import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,8 +21,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
-
 import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,7 +61,7 @@ public class Coleccion  {
 
 
   @ManyToOne
-  @JoinColumn(name = "algoritmo_Id" )
+  @JoinColumn(name = "algoritmo_Id")
   private AlgoritmoConsenso algoritmoConsenso;
 
   private String handle;
@@ -115,7 +109,7 @@ public class Coleccion  {
   }
 
   public List<Hecho> mostrarHechos() {
-   return new ArrayList<>(fuente.obtenerHechos(criteriosDePertenencia));
+    return new ArrayList<>(fuente.obtenerHechos(criteriosDePertenencia));
   }
 
   /*public void consensuarHechos() {
@@ -134,6 +128,7 @@ public class Coleccion  {
       return filtros.stream().anyMatch(filtro -> filtro.cumpleFiltro(hecho));
     }
   }
+
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()
         .stream()

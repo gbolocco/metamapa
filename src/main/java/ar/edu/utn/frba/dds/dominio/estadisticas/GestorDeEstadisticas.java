@@ -28,7 +28,7 @@ public class GestorDeEstadisticas {
     return res;
   }
 
-  public void generarArchivoCSV(String path, String fileName) {
+  public void generarArchivoCsv(String path, String fileName) {
 
     List<String[]> data = IntStream.range(0, estadisticas.size())
         .mapToObj(i -> new String[] {

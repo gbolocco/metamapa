@@ -19,7 +19,13 @@ public class EstadisticaSpam extends Estadistica {
   }
 
   public String calcular(List<Hecho> hechos) {
-    List<Solicitud> solicitudesDeEliminacionSpan = SolicitudesRepositoryMemory.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).stream().filter(s -> detectorDeSpam.esSpam(s.getJustificacion())).toList();
+    List<Solicitud> solicitudesDeEliminacionSpan =
+        SolicitudesRepositoryMemory
+            .getInstancia()
+            .mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO)
+            .stream()
+            .filter(s -> detectorDeSpam.esSpam(s.getJustificacion()))
+            .toList();
     int cantidadSolicitudesSpan = solicitudesDeEliminacionSpan.size();
 
     return cantidadSolicitudesSpan + " solicitudes de eliminacion son Spam";

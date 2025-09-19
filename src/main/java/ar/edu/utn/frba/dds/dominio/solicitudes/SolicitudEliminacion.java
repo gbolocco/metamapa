@@ -1,20 +1,15 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
-import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.EstadoRepresentacionHecho;
-import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,9 +27,7 @@ public class SolicitudEliminacion  extends Solicitud {
   @Transient
   DetectorDeSpam detectorDeSpam;
 
-
-
-  public SolicitudEliminacion(RepresentacionDeHecho representacionDeHecho,String justificacion) {
+  public SolicitudEliminacion(RepresentacionDeHecho representacionDeHecho, String justificacion) {
     super(representacionDeHecho);
     this.tipoSolicitud = TipoSolicitud.ELIMINACION_HECHO;
     Validacion.validarNoNulo(justificacion, "justificacion");
@@ -44,7 +37,7 @@ public class SolicitudEliminacion  extends Solicitud {
   }
 
 
-  public void agregarSolicitud(){
+  public void agregarSolicitud() {
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
@@ -63,7 +56,8 @@ public class SolicitudEliminacion  extends Solicitud {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     this.representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.ELIMINADO);
     FuentesRepositoryMemory.getInstancia().actualizarListasFuentes();
-    //HechosRepositoryMemory.getInstancia().buscar(this.idHechoAEliminar).setEstadoHecho(EstadoHecho.ELIMINADO);
+    //HechosRepositoryMemory
+    // .getInstancia().buscar(this.idHechoAEliminar).setEstadoHecho(EstadoHecho.ELIMINADO);
 
   }
 

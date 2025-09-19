@@ -1,13 +1,5 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
-import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-
 import javax.persistence.Embeddable;
 import lombok.Getter;
 

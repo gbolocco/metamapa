@@ -44,7 +44,9 @@ public abstract class  Fuente {
 
   public void actualizarLista(List<RepresentacionDeHecho> representaciones) {
     this.hechos = this.hechos.stream()
-        .filter(h -> representaciones.stream().noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
+        .filter(h -> representaciones
+            .stream()
+            .noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
         .toList();
   }
 

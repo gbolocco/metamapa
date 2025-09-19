@@ -16,10 +16,13 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
 
   private FuentesRepositoryMemory() {}
 
-  public static FuentesRepositoryMemory getInstancia() { return instance; }
+  public static FuentesRepositoryMemory getInstancia() {
+    return instance;
+  }
 
   public List<Fuente> getFuentes() {
-    return entityManager().createQuery("from Fuente", Fuente.class).getResultList();
+    return entityManager()
+        .createQuery("from Fuente", Fuente.class).getResultList();
   }
 
   public void agregarFuente(Fuente fuente) {
@@ -28,7 +31,7 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
 
   // metodos para algoritmos de consenso
 
-//TODO
+  //TODO
   public List<List<Hecho>> obtenerHechosDeFuentes(List<Filtro> criterios) {
     return getFuentes().stream()
         .map(fuente -> fuente.obtenerHechos(criterios))
@@ -39,10 +42,11 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
     return  getFuentes().size();
   }
 
-  public void actualizarListasFuentes(){
+  public void actualizarListasFuentes() {
     List<Fuente> fuentes = getFuentes();
-    List<RepresentacionDeHecho> representacionDeHechos = RepresentacionHechosRepositoryMemory
-                                                            .getInstancia().getRepHechosEliminados();
+    List<RepresentacionDeHecho> representacionDeHechos =
+        RepresentacionHechosRepositoryMemory
+            .getInstancia().getRepHechosEliminados();
 
     fuentes.forEach(fuente -> fuente.actualizarLista(representacionDeHechos));
   }

@@ -27,10 +27,12 @@ public class FuenteDinamica extends Fuente {
   }
 
   @Override
-  public void actualizarLista(List<RepresentacionDeHecho> representaciones){
+  public void actualizarLista(List<RepresentacionDeHecho> representaciones) {
     List<Hecho> hechosDb = HechosRepositoryMemory.getInstancia().mostrarHechos();
     hechosDb = hechosDb.stream()
-        .filter(h -> representaciones.stream().anyMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
+        .filter(h -> representaciones
+            .stream()
+            .anyMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
         .toList();
     hechosDb.forEach(hecho -> hecho.setEstadoHecho(EstadoHecho.ELIMINADO));
   }

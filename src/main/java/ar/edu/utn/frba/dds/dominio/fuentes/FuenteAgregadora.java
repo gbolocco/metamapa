@@ -19,7 +19,9 @@ public class FuenteAgregadora extends Fuente {
   private List<Fuente> fuentes;
 
   public FuenteAgregadora(List<Fuente> fuentes) {
-    if (fuentes == null) throw new NullPointerException("fuente agreagadora no puede estar vacia");
+    if (fuentes == null) {
+      throw new NullPointerException("fuente agreagadora no puede estar vacia");
+    }
     this.fuentes = fuentes;
   }
 

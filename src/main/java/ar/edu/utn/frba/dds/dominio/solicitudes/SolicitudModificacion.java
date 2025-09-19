@@ -20,13 +20,13 @@ import javax.persistence.OneToOne;
 @DiscriminatorValue("modificacion")
 public class SolicitudModificacion extends Solicitud {
 
-  private Long IdHecho;
+  private Long idHecho;
 
-  public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long IdHecho) {
+  public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long idHecho) {
 
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
     this.representacionDeHecho = representacionDeHecho;
-    this.IdHecho = IdHecho;
+    this.idHecho = idHecho;
     SolicitudesRepositoryMemory.getInstancia().agregar(this);
   }
 
@@ -35,7 +35,7 @@ public class SolicitudModificacion extends Solicitud {
   }
 
   public boolean sePuedeModificar() {
-    Hecho hecho= HechosRepositoryMemory.getInstancia().buscar(this.IdHecho);
+    Hecho hecho = HechosRepositoryMemory.getInstancia().buscar(this.idHecho);
     return this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now());
   }
 
@@ -52,10 +52,15 @@ public class SolicitudModificacion extends Solicitud {
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
     //this.hechoModificado.marcarComoEditado();
-    HechosRepositoryMemory.getInstancia().modificarHecho(HechosRepositoryMemory.getInstancia().buscar(IdHecho), representacionDeHecho);
-/*
+    HechosRepositoryMemory
+        .getInstancia()
+        .modificarHecho(HechosRepositoryMemory
+            .getInstancia()
+            .buscar(idHecho), representacionDeHecho);
+    /*
     String hql = "UPDATE Hecho SET titulo = :titulo, descripcion = :descripcion " +
-        "categoria =: categoria latidud:=latitud longitud:=longitud fechaAcontecimiento:= fechaAcontecimiento " +
+        "categoria =: categoria latidud:=
+        latitud longitud:=longitud fechaAcontecimiento:= fechaAcontecimiento " +
         "WHERE id = :userId";
 
     Query query = entityManager().createQuery(hql);
@@ -65,10 +70,12 @@ public class SolicitudModificacion extends Solicitud {
     query.setParameter("latitud", this.representacionDeHecho.getUbicacion().getLatitud());
     query.setParameter("latitud", this.representacionDeHecho.getUbicacion().getLongitud());
     query.setParameter("latitud", this.representacionDeHecho.getFechaAcontecimiento());
-    HechosRepositoryMemory.getInstancia().modificarHecho(this.hecho, this.hechoModificado);
+    HechosRepositoryMemory
+    .getInstancia().modificarHecho(this.hecho, this.hechoModificado);
 
 
-    entityManager().createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
+    entityManager()
+    .createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
         .setParameter("tipoSolicitud", tipoSolicitud)
         .getResultList();*/
   }
@@ -80,7 +87,7 @@ public class SolicitudModificacion extends Solicitud {
 
   public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
     //hechoSugerido.marcarComoEditado();
-    this.IdHecho = IdHecho;
+    this.idHecho = idHecho;
     this.aceptar();
   }
 }

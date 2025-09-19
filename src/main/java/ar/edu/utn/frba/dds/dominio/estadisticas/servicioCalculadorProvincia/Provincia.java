@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia;
+package ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia;
 
 public enum Provincia {
   BUENOS_AIRES("Buenos Aires"),

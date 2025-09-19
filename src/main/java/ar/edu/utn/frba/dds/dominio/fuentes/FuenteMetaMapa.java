@@ -36,10 +36,13 @@ public class FuenteMetaMapa extends Fuente {
   @Override
   public List<Hecho> obtenerHechos(List<Filtro> filtros) {
     List<Hecho> hechos = adapter.obtenerHechos(FiltroUtils.convertirfiltrosaMap(filtros));
-    List <RepresentacionDeHecho>  representaciones = RepresentacionHechosRepositoryMemory.getInstancia().getRepHechosEliminados();
+    List<RepresentacionDeHecho> representaciones = RepresentacionHechosRepositoryMemory
+        .getInstancia().getRepHechosEliminados();
 
     return hechos.stream()
-        .filter(h -> representaciones.stream().noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
+        .filter(h -> representaciones
+            .stream()
+            .noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
         .toList();
   }
 
