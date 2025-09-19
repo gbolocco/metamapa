@@ -94,7 +94,7 @@ public class EstadisticaTest {
     Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("Córdoba") || s.contains("CORDOBA")));
     Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("incendio") || s.contains("robo")));
 
-    gestor.generarArchivoCSV("./estadisticas/","test");
+    gestor.generarArchivoCSV("./estadisticas/","test.csv");
   }
 
   @Test
