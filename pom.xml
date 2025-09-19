@@ -19,6 +19,18 @@
   </properties>
 
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.hibernate.search/hibernate-search-mapper-orm -->
+    <dependency>
+      <groupId>org.hibernate.search</groupId>
+      <artifactId>hibernate-search-mapper-orm</artifactId>
+      <version>6.2.1.Final</version>
+    </dependency>
+    <!-- Backend Lucene (recomendado para empezar) -->
+    <dependency>
+      <groupId>org.hibernate.search</groupId>
+      <artifactId>hibernate-search-backend-lucene</artifactId>
+      <version>6.2.1.Final</version>
+    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -91,11 +103,6 @@
       <groupId>com.squareup.retrofit2</groupId>
       <artifactId>converter-gson</artifactId>
       <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-core</artifactId>
-      <version>8.11.2</version>
     </dependency>
   </dependencies>
 

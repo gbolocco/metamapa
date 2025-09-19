@@ -2,8 +2,7 @@ package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
-import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
+import javax.persistence.*;
+
+//import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.slf4j.Logger;
 
 import javax.persistence.Entity;
@@ -27,7 +31,9 @@ import javax.persistence.OneToOne;
 
 @Getter
 @Setter
+
 @Entity
+@Indexed
 public class Hecho {
 
   @Id
@@ -35,8 +41,14 @@ public class Hecho {
   @Column(unique = true, nullable = false, name = "hecho_id")
   private Long id;
 
+  @FullTextField(analyzer = "standard")
+  @Column(name = "titulo")
   private String titulo;
+
+  @FullTextField(analyzer = "standard")
+  @Column(name = "descripcion")
   private String descripcion;
+
   private String categoria;
 
   @Embedded
@@ -71,8 +83,8 @@ public class Hecho {
       String descripcion,
       String categoria,
       Ubicacion ubicacion,
-      LocalDateTime fechaAcontecimiento,
-      LocalDateTime fechaDeCarga,
+      LocalDate fechaAcontecimiento,
+      LocalDate fechaDeCarga,
       OrigenHecho origenHecho
   ) {
     /*
@@ -107,6 +119,7 @@ public class Hecho {
     return resumen;
   }
 
+
   public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
@@ -119,11 +132,6 @@ public class Hecho {
 
   }
 
-  /*
-  public Long getId() {
-    return id;
-  }
-*/
 }
 
 

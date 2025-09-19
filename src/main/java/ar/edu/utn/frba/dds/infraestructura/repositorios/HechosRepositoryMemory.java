@@ -7,6 +7,8 @@ import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.contratos.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
@@ -31,6 +33,17 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
     entityManager().persist(hecho);
   }
 
+  public List<Hecho> buscarPorTexto(String texto) {
+    SearchSession searchSession = Search.session(entityManager());
+
+    return searchSession.search(Hecho.class)
+        .where(f -> f.match()
+            .fields("titulo", "descripcion")
+            .matching(texto)
+            .analyzer("standard"))
+        .fetchAllHits();
+  }
+
 //NO HAY QUE USAR
   public List<Hecho> mostrarHechos() {
     return entityManager()
@@ -38,9 +51,8 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
         .getResultList();
   }
 
-
+//HACER QUERY
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {
-    List<Hecho> hechos = this.mostrarHechos();
     return hechos.stream().filter(
         hecho -> filtros
             .stream()
