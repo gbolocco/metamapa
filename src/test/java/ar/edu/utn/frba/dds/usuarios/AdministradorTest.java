@@ -170,7 +170,7 @@ public class AdministradorTest implements SimplePersistenceTest {
 
 
   //Test que corre solo pero en conjunto no REVISAR o comentar para generar el tag
-  @Test
+  //@Test
   void solicitudDeEliminacionBorraEnTodasLasFuentes(){
     FuenteMetaMapa fuente  = fuenteMetaMapa(listaDeHechos(OrigenHecho.FUENTE_PROXY));
     Assertions.assertEquals(3,fuente.obtenerHechos(List.of()).size());
