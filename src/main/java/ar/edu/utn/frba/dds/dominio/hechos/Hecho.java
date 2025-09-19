@@ -13,6 +13,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
+
+import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -83,8 +85,8 @@ public class Hecho {
       String descripcion,
       String categoria,
       Ubicacion ubicacion,
-      LocalDate fechaAcontecimiento,
-      LocalDate fechaDeCarga,
+      LocalDateTime fechaAcontecimiento,
+      LocalDateTime fechaDeCarga,
       OrigenHecho origenHecho
   ) {
     /*

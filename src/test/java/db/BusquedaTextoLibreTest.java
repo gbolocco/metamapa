@@ -12,12 +12,13 @@ import org.junit.jupiter.api.Test;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BusquedaTextoLibreTest implements SimplePersistenceTest {
-  Hecho hecho = new Hecho("Prueba1", "Prueba1", "Prueba1", new Ubicacion(30.2, 30.2), LocalDate.now(), LocalDate.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
-  Hecho hecho2 = new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2, 10.2), LocalDate.now(), LocalDate.now(), OrigenHecho.FUENTE_PROXY);
+  Hecho hecho = new Hecho("Prueba1", "Prueba1", "Prueba1", new Ubicacion(30.2, 30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
+  Hecho hecho2 = new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2, 10.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.FUENTE_PROXY);
   FileUtils fileUtils = new FileUtils();
 
   @BeforeEach

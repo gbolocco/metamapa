@@ -23,7 +23,7 @@ public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
 
   private static final HechosRepositoryMemory instance = new HechosRepositoryMemory();
 
-  //private final List<Hecho> hechos = new ArrayList<>();
+  private final List<Hecho> hechos = new ArrayList<>();
 
   public static HechosRepositoryMemory getInstancia() {
     return instance;
