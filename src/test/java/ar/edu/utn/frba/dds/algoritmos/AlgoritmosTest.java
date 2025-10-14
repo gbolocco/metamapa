@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.algoritmos;
 
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.Absoluta;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.MayoriaSimple;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;

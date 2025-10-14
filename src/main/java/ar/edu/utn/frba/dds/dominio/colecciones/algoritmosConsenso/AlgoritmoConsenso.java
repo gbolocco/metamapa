@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso;
+package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;

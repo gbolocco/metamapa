@@ -10,10 +10,10 @@
 
         <class>ar.edu.utn.frba.dds.dominio.hechos.Hecho</class>
         <class>ar.edu.utn.frba.dds.dominio.colecciones.Coleccion</class>
-        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.AlgoritmoConsenso</class>
-        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.MayoriaSimple</class>
-        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.MultiplesMenciones</class>
-        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosconsenso.Absoluta</class>
+        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso</class>
+        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple</class>
+        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones</class>
+        <class>ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta</class>
         <class>ar.edu.utn.frba.dds.dominio.fuentes.Fuente</class>
         <class>ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica</class>
         <class>ar.edu.utn.frba.dds.dominio.fuentes.FuenteAgregadora</class>
@@ -33,10 +33,13 @@
             <property name="hibernate.archive.autodetection" value="class"/>
 
 
+            <!--
+            setup de juan no borrar
+            /-->
          <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/metamapa" />
             <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="" />
+            <property name="hibernate.connection.password" value="12345678" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
             <!--
                      <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
