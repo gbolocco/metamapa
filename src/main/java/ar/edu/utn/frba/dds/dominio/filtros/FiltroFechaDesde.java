@@ -1,26 +1,34 @@
 package ar.edu.utn.frba.dds.dominio.filtros;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-public class FiltroFechaDesde implements Filtro {
-  private LocalDate fechaDesde;
+@Entity
+@DiscriminatorValue("filtroFechaDesde")
+public class FiltroFechaDesde extends Filtro {
+  private LocalDateTime fechaDesde;
   private CampoDeHecho campoDeHechoAplicado;
   private static final DateTimeFormatter DATE_FORMATTER =
       DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
   public FiltroFechaDesde(
-      LocalDate fechaDesde,
+      LocalDateTime fechaDesde,
       CampoDeHecho campoDeHechoAplicado
   ) {
     this.fechaDesde = fechaDesde;
     this.campoDeHechoAplicado = campoDeHechoAplicado;
   }
 
-  public LocalDate getFechaDesde() {
+  public FiltroFechaDesde() {
+
+  }
+
+  public LocalDateTime getFechaDesde() {
     return fechaDesde;
   }
 

@@ -1,26 +1,34 @@
 package ar.edu.utn.frba.dds.dominio.filtros;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-public class FiltroFechaHasta implements Filtro {
-  private LocalDate fechaHasta;
+@Entity
+@DiscriminatorValue("filtroFechaHasta")
+public class FiltroFechaHasta extends Filtro {
+  private LocalDateTime fechaHasta;
   private CampoDeHecho campoDeHechoAplicado;
   private static final DateTimeFormatter DATE_FORMATTER =
       DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
   public FiltroFechaHasta(
-      LocalDate fechaHasta,
+      LocalDateTime fechaHasta,
       CampoDeHecho campoDeHechoAplicado
   ) {
     this.fechaHasta = fechaHasta;
     this.campoDeHechoAplicado = campoDeHechoAplicado;
   }
 
-  public LocalDate getFechaHasta() {
+  public FiltroFechaHasta() {
+
+  }
+
+  public LocalDateTime getFechaHasta() {
     return fechaHasta;
   }
 

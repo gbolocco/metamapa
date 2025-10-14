@@ -1,7 +1,10 @@
 package ar.edu.utn.frba.dds.usuarios;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.slf4j.Logger;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ContribuyenteTest {
+public class ContribuyenteTest implements SimplePersistenceTest  {
 
   private static final Logger logger = AppLogger.getLogger(ContribuyenteTest.class);
 
@@ -29,10 +32,11 @@ public class ContribuyenteTest {
   private SolicitudesRepositoryMemory solicitudRep;
   private DetectorDeSpam detectorDeSpam;
   private SolicitudEliminacion solicitud;
+  private RepresentacionDeHecho representacionDeHecho;
 
-  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(Hecho hecho, DetectorDeSpam detectorDeSpam) {
+  private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(RepresentacionDeHecho representacionDeHecho) {
     String justificacionLarga = "a".repeat(501);
-    SolicitudEliminacion s =  new SolicitudEliminacion(hecho, justificacionLarga);
+    SolicitudEliminacion s =  new SolicitudEliminacion( representacionDeHecho, justificacionLarga);
     SolicitudesRepositoryMemory.getInstancia().agregar(s);
     return s;
   }
@@ -40,14 +44,14 @@ public class ContribuyenteTest {
   @BeforeEach
   void setUp() {
 
-    logger.info("Iniciando test de Contribuyente");
+
 
     // Repositorios en memoria
     solicitudRep = SolicitudesRepositoryMemory.getInstancia();
 
     // Crear mock de Hecho
     hecho = mock(Hecho.class);
-	
+    representacionDeHecho = mock(RepresentacionDeHecho.class);
     // Mockeo el detector
     detectorDeSpam = mock(DetectorDeSpam.class);
   }
@@ -55,14 +59,10 @@ public class ContribuyenteTest {
   @Test
   void puedeCrearUnaSolicitudDeEliminacion() {
 
-    //solicitud = crearUnaSolicitudDeEliminacionParaTest(hecho, detectorDeSpam);
+    solicitud = crearUnaSolicitudDeEliminacionParaTest(representacionDeHecho);
 
     String justificacionLarga = "a".repeat(501);
-    solicitud = new SolicitudEliminacion(hecho, justificacionLarga);
-    logger.info("Solicitud creada");
-    solicitudRep.agregar(solicitud);
-    logger.info("Solicitud agregada al repositorio de solicitudes");
-
+    //entityManager().getTransaction().commit();
     assertTrue(solicitudRep.mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     assertTrue(solicitud.estaPendiente());
   }

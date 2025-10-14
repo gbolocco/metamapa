@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -99,7 +99,7 @@ public class LectorCsv implements Lector {
           String longitudLimpia = longitud.trim().replace(",", ".");
           Double longitudDouble = Double.parseDouble(longitudLimpia);
 
-          LocalDate fechaHecho = LocalDate.parse(fecha, formatter);
+          LocalDateTime fechaHecho = LocalDateTime.parse(fecha, formatter);
 
           Hecho hecho = new Hecho(
               titulo,
@@ -107,7 +107,7 @@ public class LectorCsv implements Lector {
               categoria,
               new Ubicacion(latitudDouble, longitudDouble),
               fechaHecho,
-              fechaCarga,
+              LocalDateTime.now(),
               origen
           );
           hechos.add(hecho);

@@ -1,40 +1,88 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
-import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
-import java.time.LocalDate;
+import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.slf4j.Logger;
 
+@Getter
+@Setter
+@Entity
+@Indexed
 public class Hecho {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(unique = true, nullable = false, name = "hecho_id")
+  private Long id;
+
+  @FullTextField(analyzer = "standard")
+  @Column(name = "titulo")
   private String titulo;
+
+  @FullTextField(analyzer = "standard")
+  @Column(name = "descripcion")
   private String descripcion;
+
   private String categoria;
+
+  @Embedded
   private Ubicacion ubicacion;
-  private LocalDate fechaAcontecimiento;
+
+
+  @Column(columnDefinition = "DATE")
+  private LocalDateTime fechaAcontecimiento;
+
+  @Column(columnDefinition = "DATE")
   private LocalDateTime fechaDeCarga;
-  private final OrigenHecho origenHecho;
-  private Boolean eliminado = false;
-  private Boolean editado = false;
+
+  @Enumerated(EnumType.STRING)
+  private OrigenHecho origenHecho;
+
+
+  @Setter
+  @Enumerated(EnumType.STRING)
+  private EstadoHecho estadoHecho;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
+
+  @ManyToOne
+  private Contribuyente contribuyente;
+
+  public Hecho() {
+
+  }
+
 
   public Hecho(
       String titulo,
       String descripcion,
       String categoria,
       Ubicacion ubicacion,
-      LocalDate fechaAcontecimiento,
+      LocalDateTime fechaAcontecimiento,
       LocalDateTime fechaDeCarga,
       OrigenHecho origenHecho
   ) {
+    /*
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(ubicacion, "ubicacion");
     Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
     Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    Validacion.validarNoNulo(origenHecho, "origenHecho");
+    Validacion.validarNoNulo(origenHecho, "origenHecho");*/
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
@@ -42,46 +90,8 @@ public class Hecho {
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.fechaDeCarga = fechaDeCarga;
     this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
-  }
-
-  public void marcarComoEditado() {
-    editado = true;
-  }
-
-  public boolean getEditado() {
-    return editado;
-  }
-
-  public void marcarComoEliminado() {
-    this.eliminado = true;
-  }
-
-  public boolean estaEliminado() {
-    return this.eliminado;
-  }
-
-  public String getTitulo() {
-    return titulo;
-  }
-
-  public String getDescripcion() {
-    return descripcion;
-  }
-
-  public String getCategoria() {
-    return categoria;
-  }
-
-  public Ubicacion getUbicacion() {
-    return ubicacion;
-  }
-
-  public LocalDate getFechaAcontecimiento() {
-    return fechaAcontecimiento;
-  }
-
-  public LocalDateTime getFechaDeCarga() {
-    return fechaDeCarga;
+    this.estadoHecho = EstadoHecho.VISUALIZABLE;
+    this.contribuyente = null;
   }
 
   public OrigenHecho getOrigenHecho() {

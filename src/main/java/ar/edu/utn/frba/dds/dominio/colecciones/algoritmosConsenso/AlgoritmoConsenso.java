@@ -4,15 +4,35 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "algoritmoConsenso")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "algoritmo", discriminatorType = DiscriminatorType.STRING)
 public abstract class AlgoritmoConsenso {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "algoritmo_Id")
+  private Long id;
 
   public abstract Boolean estaConsensuado(Hecho hecho, List<List<Hecho>> hechosCacheFiltrados);
 
   public List<Hecho> hechosConsensuados(
       List<Hecho> hechosColeccion,
       List<Filtro> criterioDePertenencia) {
-    List<List<Hecho>> hechosCache = FuentesRepositoryMemory.getInstancia().obtenerHechosPorFuente(criterioDePertenencia);
+    List<List<Hecho>> hechosCache = FuentesRepositoryMemory
+        .getInstancia().obtenerHechosDeFuentes(criterioDePertenencia);
     return hechosColeccion.stream().filter(hecho -> estaConsensuado(hecho, hechosCache)).toList();
   }
 
@@ -24,8 +44,20 @@ public abstract class AlgoritmoConsenso {
             listaPorFuente.stream().anyMatch(h -> this.sonEquivalentes(hecho, h))).count();
   }
 
-  public boolean sonEquivalentes(Hecho h1, Hecho h2) {
+  public  boolean sonEquivalentes(Hecho h1, Hecho h2) {
     return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
-        && h1.getAtributosClave().equals(h2.getAtributosClave());
+        && h1.getDescripcion().equals(h2.getDescripcion())
+        && h1.getCategoria().equals(h2.getCategoria())
+        && h1.getUbicacion().getLatitud().equals(h2.getUbicacion().getLatitud())
+        && h1.getUbicacion().getLongitud().equals(h2.getUbicacion().getLongitud())
+        && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento());
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getId() {
+    return id;
   }
 }

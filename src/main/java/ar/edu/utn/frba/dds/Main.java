@@ -28,7 +28,7 @@ public class Main {
 
 
     // Lo que ejecuta el cron, todos los dias en un horario de baja carga
-    ColeccionRepositoryMemory.getInstancia().consensuarHechosDeColecciones();
+    //ColeccionRepositoryMemory.getInstancia().consensuarHechosDeColecciones();
     System.out.println("EJECUTANDO CRON");
 
   }

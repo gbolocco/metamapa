@@ -1,14 +1,15 @@
 package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
+import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.contratos.SolicitudesRepository;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SolicitudesRepositoryMemory implements SolicitudesRepository {
-
-  private final List<Solicitud> solicitudes = new ArrayList<>();
+public class SolicitudesRepositoryMemory implements
+    SolicitudesRepository, WithSimplePersistenceUnit {
 
   private static final SolicitudesRepositoryMemory instance =
       new SolicitudesRepositoryMemory();
@@ -18,28 +19,29 @@ public class SolicitudesRepositoryMemory implements SolicitudesRepository {
   }
 
   public void agregar(Solicitud solicitud) {
-    solicitudes.add(solicitud);
+    entityManager().persist(solicitud);
   }
 
   public List<Solicitud> pendientes() {
-    return solicitudes.stream()
-        .filter(Solicitud::estaPendiente)
-        .toList();
+    return entityManager()
+        .createQuery("from Solicitud s where s.estadoSolicitud =:estadoSolicitud", Solicitud.class)
+        .setParameter("estadoSolicitud", EstadoSolicitud.PENDIENTE)
+        .getResultList();
   }
 
   public void eliminarSolicitud(Solicitud solicitud) {
-    solicitudes.remove(solicitud);
+    entityManager().remove(solicitud);
   }
 
   public List<Solicitud> mostrarSolicitudes(TipoSolicitud tipoSolicitud) {
-    return this.solicitudes
-        .stream()
-        .filter(s -> s.getTipoSolicitud() == tipoSolicitud && s.estaPendiente())
-        .toList();
+    return entityManager()
+        .createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
+        .setParameter("tipoSolicitud", tipoSolicitud)
+        .getResultList();
   }
 
-  public void vaciar() {
-    this.solicitudes.clear();
+  public Solicitud buscarSolicitudPorId(Long id) {
+    return entityManager().find(Solicitud.class, id);
   }
 
 }

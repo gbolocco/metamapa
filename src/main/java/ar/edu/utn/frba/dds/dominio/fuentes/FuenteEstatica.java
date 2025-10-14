@@ -2,29 +2,44 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+import lombok.Getter;
 
-public class FuenteEstatica implements Fuente {
-  private final Lector lector;
+@Entity
+@DiscriminatorValue("estatica")
+@Getter
+public class FuenteEstatica extends Fuente {
+  @Transient
+  private Lector lector;
   private String rutaArchivo;
+  
+  public FuenteEstatica() {
 
-  public String getRutaArchivo() {
-    return rutaArchivo;
   }
 
   public FuenteEstatica(String rutaArchivo, Lector lector) {
     this.rutaArchivo = rutaArchivo;
     this.lector = lector;
+    this.cargarFuente();
+    FuentesRepositoryMemory.getInstancia().agregarFuente(this);
   }
 
   public List<Hecho> obtenerHechos(List<Filtro> criteriosDePertenencia) {
-    List<Hecho> hechosLeidos = lector.leer(rutaArchivo);
-
-    return hechosLeidos.stream()
+    return this.hechos.stream()
         .filter(hecho -> cumpleCriterio(hecho, criteriosDePertenencia))
         .collect(Collectors.toList());
+  }
+
+  public void  cargarFuente() {
+    this.hechos = lector.leer(rutaArchivo);
   }
 
   @Override

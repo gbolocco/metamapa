@@ -3,14 +3,22 @@ package ar.edu.utn.frba.dds.dominio.filtros;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-public class FiltroContieneTexto implements Filtro {
+@Entity
+@DiscriminatorValue("filtroTexto")
+public class FiltroContieneTexto extends Filtro {
   private String textoClave;
   private CampoDeHecho campoDeHechoAplicado;
 
   public FiltroContieneTexto(String textoClave, CampoDeHecho campoDeHechoAplicado) {
     this.textoClave = textoClave.toUpperCase();
     this.campoDeHechoAplicado = campoDeHechoAplicado;
+  }
+
+  public FiltroContieneTexto() {
+
   }
 
   public CampoDeHecho getCampoDeHechoAplicado() {

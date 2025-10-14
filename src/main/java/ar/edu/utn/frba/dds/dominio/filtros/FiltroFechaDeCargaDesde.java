@@ -5,8 +5,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-public class FiltroFechaDeCargaDesde implements Filtro {
+@Entity
+@DiscriminatorValue("filtroFechaCargaDesde")
+public class FiltroFechaDeCargaDesde extends Filtro {
   private LocalDateTime fechaCargaDesde;
   private CampoDeHecho campoDeHechoAplicado;
   private static final DateTimeFormatter DATE_FORMATTER =
@@ -18,6 +22,10 @@ public class FiltroFechaDeCargaDesde implements Filtro {
   ) {
     this.fechaCargaDesde = fechaCargaDesde;
     this.campoDeHechoAplicado = campoDeHechoAplicado;
+  }
+
+  public FiltroFechaDeCargaDesde() {
+
   }
 
   public LocalDateTime fechaCargaDesde() {

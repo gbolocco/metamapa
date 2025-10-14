@@ -11,18 +11,59 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemor
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.slf4j.Logger;
 
-public class Coleccion {
+@Getter
+@Setter
+@Entity
+@DynamicUpdate
+public class Coleccion  {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(unique = true, nullable = false, name = "id_coleccion")
+  private Long id;
+
+
   private String titulo;
+
   private String descripcion;
+
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+      name = "coleccion_filtro",
+      joinColumns = @JoinColumn(name = "id_coleccion"),
+      inverseJoinColumns = @JoinColumn(name = "filtro_Id")
+  )
   private List<Filtro> criteriosDePertenencia;
+
+  @ManyToOne(targetEntity = Fuente.class)
+  @JoinColumn(name = "fuente_id")
   private Fuente fuente;
 
-  private List<Hecho> hechos;
+
+  @Transient
   private List<Hecho> hechosConsensuados;
 
+
+  @ManyToOne
+  @JoinColumn(name = "algoritmo_Id")
   private AlgoritmoConsenso algoritmoConsenso;
+
   private String handle;
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
 
@@ -46,33 +87,13 @@ public class Coleccion {
     this.descripcion = descripcion;
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
-    this.hechos = new ArrayList<>();
     this.handle = handle;
-    this.cargarHechos();
     this.cargarColeccion();
   }
 
-  public void setAlgoritmoConsenso(AlgoritmoConsenso algoritmoConsenso) {
-    this.algoritmoConsenso = algoritmoConsenso;
+  public Coleccion() {
   }
 
-  //getters
-  public String getTitulo() {
-    return this.titulo;
-  }
-
-  public String getDescripcion() {
-    return this.descripcion;
-  }
-
-
-  public String getHandle() {
-    return handle;
-  }
-
-  public void setHandle(String handle) {
-    this.handle = handle;
-  }
 
   public void cargarColeccion() {
     ColeccionRepositoryMemory.getInstancia().agregarColeccion(this);
@@ -88,30 +109,17 @@ public class Coleccion {
   }
 
   public List<Hecho> mostrarHechos() {
-    return new ArrayList<>(this.hechos.stream().filter(hecho -> !hecho.estaEliminado()).toList());
+    return new ArrayList<>(fuente.obtenerHechos(criteriosDePertenencia));
   }
 
-  public void consensuarHechos() {
+  /*public void consensuarHechos() {
     this.hechosConsensuados = this.algoritmoConsenso.hechosConsensuados(
         this.hechos, this.criteriosDePertenencia).stream()
-        .filter(hecho -> !hecho.estaEliminado())
+        .filter(hecho -> hecho.getEstadoHecho().equals(EstadoHecho.VISUALIZABLE))
         .toList();
-  }
+  }*/
     
   //metodos relacionados a los hechos
-
-  public void cargarHechos() {
-    hechos = fuente.obtenerHechos(criteriosDePertenencia);
-  }
-
-  public List<Filtro> getCriteriosDePertenencia() {
-    return new ArrayList<>(criteriosDePertenencia);
-  }
-
-  public List<Hecho> getHechos() {
-    return new ArrayList<>(hechos);
-  }
-
 
   public boolean cumpleFiltros(Hecho hecho, List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     if (tipoCombinacion == TipoCombinacion.AND) {
@@ -121,10 +129,6 @@ public class Coleccion {
     }
   }
 
-  public boolean contieneHecho(Hecho hecho) {
-    return this.hechos.contains(hecho);
-  }
-
   public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     return this.mostrarHechos()
         .stream()
@@ -132,6 +136,8 @@ public class Coleccion {
         .collect(Collectors.toList());
   }
 
+
+  /*
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     logger.info("Coleccion: {}", this.titulo);
     logger.info("Descripcion: {}", this.descripcion);
@@ -144,6 +150,7 @@ public class Coleccion {
     imprimirHechosDeColeccion(filtros, tipoCombinacion);
   }
 
+
   public void imprimirHechosDeColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     if (filtros != null) {
       List<Hecho> hechosFiltrados = this.filtrarHechos(filtros, tipoCombinacion);
@@ -155,4 +162,27 @@ public class Coleccion {
       this.mostrarHechos().forEach(Hecho::imprimirHecho);
     }
   }
+
+
+
+
+  public Fuente getFuente() {
+    return fuente;
+  }
+
+  public AlgoritmoConsenso getAlgoritmoConsenso() {
+    return algoritmoConsenso;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+*/
+
+
 }
