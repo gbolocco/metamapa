@@ -31,4 +31,5 @@ target/**
 .idea/**
 .DS_Store
 
+#indexes
 indexes/
