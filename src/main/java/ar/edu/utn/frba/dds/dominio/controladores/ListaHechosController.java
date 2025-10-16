@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public class ListaHechoController implements Handler, SimplePersistenceTest{
+public class ListaHechosController implements Handler, SimplePersistenceTest{
 
     public void persistirHechos() {
         Hecho hecho = new Hecho("Prueba1", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
@@ -33,7 +33,7 @@ public class ListaHechoController implements Handler, SimplePersistenceTest{
 
     }
 
-    public ListaHechoController() {
+    public ListaHechosController() {
     }
 
     @Override

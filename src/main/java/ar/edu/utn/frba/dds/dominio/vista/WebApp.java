@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.vista;
 
-import ar.edu.utn.frba.dds.dominio.controladores.ListaHechoController;
+import ar.edu.utn.frba.dds.dominio.controladores.ListaHechosController;
+import ar.edu.utn.frba.dds.dominio.controladores.UIListaHechosController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -23,7 +24,8 @@ public class WebApp {
           .get("/", ctx -> ctx.result("Hello World"))
           .start(8080);
 
-      app.get("/hechos", new ListaHechoController());
+      app.get("/api/hechos", new ListaHechosController());
+      app.get("/hechos", new UIListaHechosController());
     }
 
   private static void initTemplateEngine() {
@@ -52,13 +54,12 @@ public class WebApp {
           mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // fechas ISO-8601
           config.jsonMapper(new JavalinJackson(mapper));
 
-          /*
           // --- Configuración de archivos estáticos ---
           config.staticFiles.add(staticFiles -> {
               staticFiles.hostedPath = "/";
               staticFiles.directory = "/public";
           });
-          */
+
       };
 
     }

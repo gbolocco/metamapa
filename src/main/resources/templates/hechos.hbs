@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Hechos</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Lista de Hechos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Ubicación</th>
+                <th>Fecha Acontecimiento</th>
+                <th>Fecha de Carga</th>
+                <th>Origen</th>
+                <th>Contribuyente</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each hechos}}
+            <tr>
+                <td>{{titulo}}</td>
+                <td>{{descripcion}}</td>
+                <td>({{ubicacion.latitud}}, {{ubicacion.longitud}})</td>
+                <td>{{fechaAcontecimiento}}</td>
+                <td>{{fechaDeCarga}}</td>
+                <td>{{origenHecho}}</td>
+                <td>{{contribuyente}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</body>
+</html>
