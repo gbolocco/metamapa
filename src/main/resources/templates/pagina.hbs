@@ -1,0 +1,34 @@
+<!-- Ejemplo de HBS, editar a nuestra conveniencia!!-->
+
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+
+
+<form method="POST" action="/productos">
+    Alta de producto <br /> Nombre: <input type="text" name="nombre">
+    <br /> Descripcion: <input type="text" name="descripcion"><br />
+    <input type="submit" />
+</form>
+
+<table>
+
+    <tr>
+        <th>Nombre</th>
+        </td>
+        <th>Descripción</th>
+        </td>
+    </tr>
+    {{#each productos}}
+        <tr>
+            <td>{{nombre}}</td>
+            <td>{{this.descripcion}}</td>
+            <td><a href="/productos/{{id}}"> detalle </a></td>
+        </tr>
+    {{/each}}
+
+
+</table>
+
+</html>
