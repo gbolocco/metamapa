@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Hecho</title>
+    <link rel="stylesheet" href="/css/style_form.css">
+</head>
+<body>
+<div class="form-container">
+    <h1>Registrar nuevo Hecho</h1>
+
+    <form method="post" action="/formulario">
+        <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="lat">Latitud:</label>
+            <input type="number" step="0.0001" id="lat" name="lat" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lon">Longitud:</label>
+            <input type="number" step="0.0001" id="lon" name="lon" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lon">Categoria:</label>
+            <input type="text" id="categoria" name="categoria" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lon">Fecha de ocurrencia:</label>
+            <input type="datetime-local"  name="fechaOcurrencia" required>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Guardar Hecho</button>
+            <a class="btn-secondary" href="/">Volver</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

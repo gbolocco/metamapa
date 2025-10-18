@@ -1,7 +1,7 @@
-package ar.edu.utn.frba.dds.dominio.vista;
+package ar.edu.utn.frba.dds.dominio.servidor;
 
-import ar.edu.utn.frba.dds.dominio.controladores.ListaHechosController;
-import ar.edu.utn.frba.dds.dominio.controladores.UIListaHechosController;
+import ar.edu.utn.frba.dds.dominio.controladores.*;
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -26,6 +26,15 @@ public class WebApp {
 
       app.get("/api/hechos", new ListaHechosController());
       app.get("/hechos", new UIListaHechosController());
+      app.get("/login", new LoginController());
+
+      app.get("/mapa", new MapaHechosController());
+
+      app.get("/formulario", new UIFormularioHechos());
+
+      app.post("/formulario", new CrearHechoController());
+
+
     }
 
   private static void initTemplateEngine() {
