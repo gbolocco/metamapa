@@ -2,18 +2,12 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
-import java.time.LocalDateTime;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 
 @Entity
@@ -27,7 +21,7 @@ public class SolicitudModificacion extends Solicitud {
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
     this.representacionDeHecho = representacionDeHecho;
     this.idHecho = idHecho;
-    SolicitudesRepositoryMemory.getInstancia().agregar(this);
+    SolicitudesRepository.getInstancia().agregar(this);
   }
 
   public SolicitudModificacion() {
@@ -35,7 +29,7 @@ public class SolicitudModificacion extends Solicitud {
   }
 
   public boolean sePuedeModificar() {
-    Hecho hecho = HechosRepositoryMemory.getInstancia().buscar(this.idHecho);
+    Hecho hecho = HechosRepository.getInstancia().buscar(this.idHecho);
     return this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now());
   }
 
@@ -52,9 +46,9 @@ public class SolicitudModificacion extends Solicitud {
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
     //this.hechoModificado.marcarComoEditado();
-    HechosRepositoryMemory
+    HechosRepository
         .getInstancia()
-        .modificarHecho(HechosRepositoryMemory
+        .modificarHecho(HechosRepository
             .getInstancia()
             .buscar(idHecho), representacionDeHecho);
     /*

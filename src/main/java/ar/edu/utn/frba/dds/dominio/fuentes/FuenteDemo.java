@@ -4,8 +4,7 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
-import java.time.LocalDateTime;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class FuenteDemo extends Fuente {
     Map<String, Object> datosHecho;
     while ((datosHecho = conexion.siguienteHecho(this.url, fecha)) != null) {
       Hecho hecho = this.crearHechoDesdeMap(datosHecho);
-      HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
+      HechosRepository.getInstancia().cargarHecho(hecho);
     }
     /*if (conexion.siguienteHecho(this.url, fecha) == null) {
       throw new RuntimeException("No hay nuevos hechos");
@@ -69,7 +68,7 @@ public class FuenteDemo extends Fuente {
 
   @Override
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
-    List<Hecho> hechos = HechosRepositoryMemory.getInstancia().mostrarHechos()
+    List<Hecho> hechos = HechosRepository.getInstancia().mostrarHechos()
         .stream()
         .filter(h -> h.getOrigenHecho() == OrigenHecho.FUENTE_PROXY).toList();
 

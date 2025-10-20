@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.usuarios;
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.slf4j.Logger;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -15,7 +14,7 @@ import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.colecciones.contratos.ColeccionRepository;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +28,7 @@ public class ContribuyenteTest implements SimplePersistenceTest  {
   private Hecho hecho;
   private Coleccion coleccion;
   private ColeccionRepository colectionRep;
-  private SolicitudesRepositoryMemory solicitudRep;
+  private SolicitudesRepository solicitudRep;
   private DetectorDeSpam detectorDeSpam;
   private SolicitudEliminacion solicitud;
   private RepresentacionDeHecho representacionDeHecho;
@@ -37,7 +36,7 @@ public class ContribuyenteTest implements SimplePersistenceTest  {
   private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(RepresentacionDeHecho representacionDeHecho) {
     String justificacionLarga = "a".repeat(501);
     SolicitudEliminacion s =  new SolicitudEliminacion( representacionDeHecho, justificacionLarga);
-    SolicitudesRepositoryMemory.getInstancia().agregar(s);
+    SolicitudesRepository.getInstancia().agregar(s);
     return s;
   }
 
@@ -47,7 +46,7 @@ public class ContribuyenteTest implements SimplePersistenceTest  {
 
 
     // Repositorios en memoria
-    solicitudRep = SolicitudesRepositoryMemory.getInstancia();
+    solicitudRep = SolicitudesRepository.getInstancia();
 
     // Crear mock de Hecho
     hecho = mock(Hecho.class);

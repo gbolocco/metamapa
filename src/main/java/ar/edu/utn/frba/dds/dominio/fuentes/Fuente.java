@@ -3,12 +3,11 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,7 +45,7 @@ public abstract class  Fuente {
     this.hechos = this.hechos.stream()
         .filter(h -> representaciones
             .stream()
-            .noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
+            .noneMatch(r -> HechosRepository.sonEquivalentes(h, r)))
         .toList();
   }
 

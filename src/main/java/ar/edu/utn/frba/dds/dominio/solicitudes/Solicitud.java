@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepository;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -46,7 +46,7 @@ public abstract class Solicitud {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
     this.representacionDeHecho = representacionDeHecho;
     this.fechaSolicitud = new Date();
-    RepresentacionHechosRepositoryMemory
+    RepresentacionHechosRepository
         .getInstancia().cargarRepresentacionDeHecho(representacionDeHecho);
   }
 

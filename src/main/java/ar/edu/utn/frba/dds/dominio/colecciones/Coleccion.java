@@ -7,7 +7,7 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +22,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -96,7 +98,7 @@ public class Coleccion  {
 
 
   public void cargarColeccion() {
-    ColeccionRepositoryMemory.getInstancia().agregarColeccion(this);
+    ColeccionRepository.getInstancia().agregarColeccion(this);
   }
 
   // MODOS DE VISUALIZACION

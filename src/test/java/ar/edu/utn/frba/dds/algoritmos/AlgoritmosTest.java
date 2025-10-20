@@ -12,14 +12,13 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -107,7 +106,7 @@ public class AlgoritmosTest implements SimplePersistenceTest {
     Absoluta algoritmo = new Absoluta();
     List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,filtrosCategoria);
 
-    Assertions.assertEquals(2,FuentesRepositoryMemory.getInstancia().getFuentes().size());
+    Assertions.assertEquals(2, FuentesRepository.getInstancia().getFuentes().size());
 
     assertEquals(2, hechosConsensuados.size());
 
@@ -129,7 +128,7 @@ public class AlgoritmosTest implements SimplePersistenceTest {
 
     List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,filtrosCategoria);
 
-    Assertions.assertEquals(3,FuentesRepositoryMemory.getInstancia().getFuentes().size());
+    Assertions.assertEquals(3, FuentesRepository.getInstancia().getFuentes().size());
 
     assertEquals(0, hechosConsensuados.size());
   }
@@ -145,14 +144,14 @@ public class AlgoritmosTest implements SimplePersistenceTest {
     List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,List.of());
 
 
-    Assertions.assertEquals(3,FuentesRepositoryMemory.getInstancia().getFuentes().size());
-    Assertions.assertEquals(2,algoritmo.cuantasVecesAparece(hecho1,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
+    Assertions.assertEquals(3, FuentesRepository.getInstancia().getFuentes().size());
+    Assertions.assertEquals(2,algoritmo.cuantasVecesAparece(hecho1, FuentesRepository.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
 
-    assertTrue(algoritmo.cuantasVecesAparece(hecho1,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())) >= (FuentesRepositoryMemory.getInstancia().getFuentes().size() / 2));
-    assertTrue(algoritmo.cuantasVecesAparece(hecho6,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())) >= (FuentesRepositoryMemory.getInstancia().getFuentes().size() / 2));
+    assertTrue(algoritmo.cuantasVecesAparece(hecho1, FuentesRepository.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())) >= (FuentesRepository.getInstancia().getFuentes().size() / 2));
+    assertTrue(algoritmo.cuantasVecesAparece(hecho6, FuentesRepository.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())) >= (FuentesRepository.getInstancia().getFuentes().size() / 2));
 
-    assertTrue(algoritmo.estaConsensuado(hecho1,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
-    assertTrue(algoritmo.estaConsensuado(hecho6,FuentesRepositoryMemory.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
+    assertTrue(algoritmo.estaConsensuado(hecho1, FuentesRepository.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
+    assertTrue(algoritmo.estaConsensuado(hecho6, FuentesRepository.getInstancia().obtenerHechosDeFuentes(new ArrayList<>())));
 
     assertEquals(2, hechosConsensuados.size());
 
@@ -174,7 +173,7 @@ public class AlgoritmosTest implements SimplePersistenceTest {
     List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,List.of());
 
 
-    Assertions.assertEquals(5,FuentesRepositoryMemory.getInstancia().getFuentes().size());
+    Assertions.assertEquals(5, FuentesRepository.getInstancia().getFuentes().size());
     assertEquals(0, hechosConsensuados.size());
   }
 

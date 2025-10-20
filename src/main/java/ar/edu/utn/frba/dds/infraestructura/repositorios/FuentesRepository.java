@@ -5,18 +5,18 @@ import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-import java.util.ArrayList;
+
 import java.util.List;
 
 // todas las fuentes del nodo
-public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
+public class FuentesRepository implements WithSimplePersistenceUnit {
 
-  private static final FuentesRepositoryMemory instance = new FuentesRepositoryMemory();
+  private static final FuentesRepository instance = new FuentesRepository();
 
 
-  private FuentesRepositoryMemory() {}
+  private FuentesRepository() {}
 
-  public static FuentesRepositoryMemory getInstancia() {
+  public static FuentesRepository getInstancia() {
     return instance;
   }
 
@@ -45,7 +45,7 @@ public class FuentesRepositoryMemory implements WithSimplePersistenceUnit {
   public void actualizarListasFuentes() {
     List<Fuente> fuentes = getFuentes();
     List<RepresentacionDeHecho> representacionDeHechos =
-        RepresentacionHechosRepositoryMemory
+        RepresentacionHechosRepository
             .getInstancia().getRepHechosEliminados();
 
     fuentes.forEach(fuente -> fuente.actualizarLista(representacionDeHechos));

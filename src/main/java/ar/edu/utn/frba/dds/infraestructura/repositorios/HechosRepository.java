@@ -11,16 +11,16 @@ import java.util.List;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 
-public class HechosRepositoryMemory implements WithSimplePersistenceUnit {
+public class HechosRepository implements WithSimplePersistenceUnit {
 
-  private HechosRepositoryMemory() {
+  private HechosRepository() {
   }
 
-  private static final HechosRepositoryMemory instance = new HechosRepositoryMemory();
+  private static final HechosRepository instance = new HechosRepository();
 
   private final List<Hecho> hechos = new ArrayList<>();
 
-  public static HechosRepositoryMemory getInstancia() {
+  public static HechosRepository getInstancia() {
     return instance;
   }
 

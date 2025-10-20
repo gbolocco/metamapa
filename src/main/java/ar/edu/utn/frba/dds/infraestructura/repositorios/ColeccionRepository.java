@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ColeccionRepositoryMemory implements WithSimplePersistenceUnit {
+public class ColeccionRepository implements WithSimplePersistenceUnit {
 
-  private static final ColeccionRepositoryMemory instance = new ColeccionRepositoryMemory();
+  private static final ColeccionRepository instance = new ColeccionRepository();
 
   private List<Coleccion> colecciones = new ArrayList<>();
 
-  private ColeccionRepositoryMemory() {
+  private ColeccionRepository() {
   }
 
-  public static ColeccionRepositoryMemory getInstancia() {
+  public static ColeccionRepository getInstancia() {
     return instance;
   }
 

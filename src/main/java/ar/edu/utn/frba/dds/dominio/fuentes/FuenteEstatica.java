@@ -2,10 +2,9 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.DiscriminatorValue;
@@ -29,7 +28,7 @@ public class FuenteEstatica extends Fuente {
     this.rutaArchivo = rutaArchivo;
     this.lector = lector;
     this.cargarFuente();
-    FuentesRepositoryMemory.getInstancia().agregarFuente(this);
+    FuentesRepository.getInstancia().agregarFuente(this);
   }
 
   public List<Hecho> obtenerHechos(List<Filtro> criteriosDePertenencia) {

@@ -3,18 +3,17 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
-import ar.edu.utn.frba.dds.dominio.solicitudes.contratos.SolicitudesRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-import java.util.ArrayList;
+
 import java.util.List;
 
-public class SolicitudesRepositoryMemory implements
-    SolicitudesRepository, WithSimplePersistenceUnit {
+public class SolicitudesRepository implements
+    ar.edu.utn.frba.dds.dominio.solicitudes.contratos.SolicitudesRepository, WithSimplePersistenceUnit {
 
-  private static final SolicitudesRepositoryMemory instance =
-      new SolicitudesRepositoryMemory();
+  private static final SolicitudesRepository instance =
+      new SolicitudesRepository();
 
-  public static SolicitudesRepositoryMemory getInstancia() {
+  public static SolicitudesRepository getInstancia() {
     return instance;
   }
 

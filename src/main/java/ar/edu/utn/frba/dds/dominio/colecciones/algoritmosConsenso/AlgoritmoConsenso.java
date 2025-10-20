@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso;
 
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -31,7 +31,7 @@ public abstract class AlgoritmoConsenso {
   public List<Hecho> hechosConsensuados(
       List<Hecho> hechosColeccion,
       List<Filtro> criterioDePertenencia) {
-    List<List<Hecho>> hechosCache = FuentesRepositoryMemory
+    List<List<Hecho>> hechosCache = FuentesRepository
         .getInstancia().obtenerHechosDeFuentes(criterioDePertenencia);
     return hechosColeccion.stream().filter(hecho -> estaConsensuado(hecho, hechosCache)).toList();
   }
