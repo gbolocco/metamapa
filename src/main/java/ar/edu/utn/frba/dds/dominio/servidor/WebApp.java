@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
 import ar.edu.utn.frba.dds.dominio.controladores.*;
-import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -21,12 +20,22 @@ public class WebApp {
     public static void main(String[] args) {
       initTemplateEngine();
       var app = Javalin.create(config())
-          .get("/", ctx -> ctx.result("Hello World"))
+          //.get("/", ctx -> ctx.result("Hello World"))
           .start(8080);
 
-      app.get("/api/hechos", new ListaHechosController());
       app.get("/hechos", new UIListaHechosController());
-      app.get("/login", new LoginController());
+      app.get("/login", new UILoginController());
+      app.post("/login", new LoginController());
+
+      //PROVISORIO
+      app.get("/", ctx -> {
+        Long userId = ctx.sessionAttribute("user_id");
+        if (userId == null) {
+          ctx.redirect("/login");
+        } else {
+          ctx.result("Bienvenido usuario ID " + userId);
+        }
+      });
 
       app.get("/mapa", new MapaHechosController());
 

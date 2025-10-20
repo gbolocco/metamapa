@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.controladores;
 
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UIListaHechosController implements Handler {
-    HechosRepositoryMemory repo = HechosRepositoryMemory.getInstancia();
+    HechosRepository repo = HechosRepository.getInstancia();
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {

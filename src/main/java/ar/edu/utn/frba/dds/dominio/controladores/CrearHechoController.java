@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.dominio.controladores;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -32,7 +32,7 @@ public class CrearHechoController implements Handler, WithSimplePersistenceUnit 
         OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
     );
 
-    HechosRepositoryMemory.getInstancia().cargarHecho(hecho);
+    HechosRepository.getInstancia().cargarHecho(hecho);
     //DISCUTIR SI DEJAR ACA O EN cargarHecho()
     entityManager().getTransaction().begin();
     entityManager().flush();

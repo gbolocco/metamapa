@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.script;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
@@ -28,7 +28,10 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           new Hecho("Prueba1", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
           new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2,10.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.FUENTE_PROXY)
       );
-      hechos.forEach((hecho) -> HechosRepositoryMemory.getInstancia().cargarHecho(hecho));
+      hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
+
     });
+
   }
+
 }

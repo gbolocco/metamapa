@@ -7,8 +7,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class RepositorioUsuarios implements SimplePersistenceTest {
   public static RepositorioUsuarios INSTANCE = new RepositorioUsuarios();
 
-  public void registrar(Usuario usuarie) {
-    entityManager().persist(usuarie);
+  public void registrar(Usuario usuario) {
+    entityManager().persist(usuario);
   }
 
   public long contar() {

@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.controladores;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -16,7 +16,7 @@ public class MapaHechosController implements Handler {
 
   @Override
   public void handle(@NotNull Context ctx) throws Exception {
-    Collection<Hecho> hechos = HechosRepositoryMemory.getInstancia().mostrarHechos();
+    Collection<Hecho> hechos = HechosRepository.getInstancia().mostrarHechos();
 
     Map<String, Object> model = new HashMap<>();
     ObjectMapper mapper = new ObjectMapper();
