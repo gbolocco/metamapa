@@ -15,17 +15,17 @@ import io.javalin.rendering.JavalinRenderer;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+import static io.javalin.apibuilder.ApiBuilder.*;
+
 public class WebApp {
 
     public static void main(String[] args) {
       initTemplateEngine();
       var app = Javalin.create(config())
-          //.get("/", ctx -> ctx.result("Hello World"))
           .start(8080);
 
-      app.get("/hechos", new UIListaHechosController());
-      app.get("/login", new UILoginController());
-      app.post("/login", new LoginController());
+      HechosController hechoController = new HechosController();
+      LoginController loginController = new LoginController();
 
       //PROVISORIO
       app.get("/", ctx -> {
@@ -37,14 +37,24 @@ public class WebApp {
         }
       });
 
-      app.get("/mapa", new MapaHechosController());
+      app.routes(() -> {
+        path("hechos", () -> {
+          get(hechoController::listar);
+          get("nuevo", hechoController::mostrarFormulario);
+          get("mapa", hechoController::mostrarMapa);
+          post(hechoController::crear);
+          get("{hechoId}", hechoController::mostrar);
+        });
 
-      app.get("/formulario", new UIFormularioHechos());
+        // Login y usuarios
+        path("login", () -> {
+          get(loginController::mostrarLogin);
+          post(loginController::login);
+        });
 
-      app.post("/formulario", new CrearHechoController());
+      });
 
-
-    }
+  }
 
   private static void initTemplateEngine() {
     JavalinRenderer.register(
@@ -56,7 +66,7 @@ public class WebApp {
             return template.apply(model);
           } catch (IOException e) {
             //
-            e.printStackTrace();
+            //e.printStackTrace();
             context.status(HttpStatus.NOT_FOUND);
             return "No se encuentra la página indicada...";
           }

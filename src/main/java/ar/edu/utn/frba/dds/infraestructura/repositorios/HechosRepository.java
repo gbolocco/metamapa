@@ -39,11 +39,21 @@ public class HechosRepository implements WithSimplePersistenceUnit {
         .fetchAllHits();
   }
 
+  public boolean existe(Long hechoId) {
+    return buscar(hechoId) != null;
+  }
+
   //NO HAY QUE USAR
   public List<Hecho> mostrarHechos() {
     return entityManager()
         .createQuery("FROM Hecho h", Hecho.class)
         .getResultList();
+  }
+
+  public void borrarHecho(Long hechoId) {
+    if (existe(hechoId)) {
+      entityManager().remove(entityManager().find(Hecho.class, hechoId));
+    }
   }
 
   //HACER QUERY
