@@ -1,0 +1,189 @@
+/* Header Styles */
+.site-header {
+  background-color: #75501d;
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.site-logo {
+  grid-column: 1;
+  height: 30px;
+  max-width: 200px;
+  width: auto;
+  justify-self: start;
+}
+
+.site-header {
+  background-color: #75501d;
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.header-search {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: 28px 1fr 34px;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,0,0,.15);
+  border-radius: 999px;
+  padding: 6px 10px;
+  border: 1px solid rgba(0,0,0,.25);
+}
+
+.search-input {
+  background: transparent;
+  border: 0;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: rgba(255,255,255,.85);
+}
+
+.icon, .icon-btn, .mic-btn, .profile-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease;
+}
+
+.icon svg, .icon-btn svg, .mic-btn svg, .profile-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  stroke: white;
+}
+
+.icon-btn:hover, .mic-btn:hover, .profile-btn:hover {
+  transform: translateY(-1px);
+  opacity: .9;
+}
+
+.filter-btn {
+  grid-column: 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.15);
+  border: 1px solid rgba(0,0,0,.25);
+}
+
+.main-nav {
+  grid-column: 2;
+  display: flex;
+  gap: 36px;
+  justify-content: center;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  white-space: nowrap;
+  transition: opacity .12s ease;
+}
+
+.main-nav a:hover {
+  opacity: .85;
+}
+
+.login-dropdown {
+  grid-column: 3;
+  justify-self: end;
+  position: relative;
+}
+
+.profile-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 150px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.login-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 16px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Footer Styles */
+.main-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: auto;
+  width: 100%;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.footer-content p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Layout adjustments */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+}

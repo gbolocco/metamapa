@@ -79,3 +79,8 @@ button:hover {
     background-color: #4CAF50;
     color: white;
 }
+
+main {
+  background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
+  border-radius: 8px;
+}
