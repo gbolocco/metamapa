@@ -30,3 +30,8 @@ th {
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
+main {
+  background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
+  border-radius: 8px;
+}

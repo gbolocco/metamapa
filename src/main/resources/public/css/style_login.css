@@ -1,10 +1,14 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f3f3f3;
+}
+
+main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: calc(100vh - 140px);
+     background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
 }
 
 .login-container {

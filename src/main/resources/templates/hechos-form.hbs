@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title>Nuevo Hecho</title>
     <link rel="stylesheet" href="/css/style_form.css">
+    <link rel="stylesheet" href="/css/header-footer.css">
 </head>
 <body>
-<div class="form-container">
+    {{> header}}
+    <main>
+        <div class="form-container">
     <h1>Registrar nuevo Hecho</h1>
 
     <form method="post" action="/hechos">
@@ -45,6 +48,8 @@
             <a class="btn-secondary" href="/">Volver</a>
         </div>
     </form>
-</div>
+        </div>
+    </main>
+    {{> footer}}
 </body>
 </html>

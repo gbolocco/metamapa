@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title>Hechos</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header-footer.css">
 </head>
 <body>
-    <h1>Lista de Hechos</h1>
+    {{> header}}
+    <main>
+        <h1>Lista de Hechos</h1>
     <table>
         <thead>
             <tr>
@@ -33,5 +36,7 @@
             {{/each}}
         </tbody>
     </table>
+    </main>
+    {{> footer}}
 </body>
 </html>

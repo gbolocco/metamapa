@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title>Iniciar sesión</title>
     <link rel="stylesheet" href="/css/style_login.css">
+    <link rel="stylesheet" href="/css/header-footer.css">
 </head>
 <body>
-<div class="login-container">
+    {{> header}}
+    <main>
+        <div class="login-container">
     <h2>Iniciar sesión</h2>
 
     {{#if error}}
@@ -26,6 +29,8 @@
 
         <button type="submit">Ingresar</button>
     </form>
-</div>
+        </div>
+    </main>
+    {{> footer}}
 </body>
 </html>

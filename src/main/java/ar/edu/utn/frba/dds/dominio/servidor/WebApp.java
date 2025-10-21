@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.CompositeTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.http.HttpStatus;
@@ -58,19 +61,22 @@ public class WebApp {
 
   private static void initTemplateEngine() {
     JavalinRenderer.register(
-        (path, model, context) -> { // Función que renderiza el template
-          Handlebars handlebars = new Handlebars();
-          Template template = null;
+        (path, model, context) -> {
           try {
-            template = handlebars.compile("templates/" + path.replace(".hbs", ""));
+            TemplateLoader mainLoader = new ClassPathTemplateLoader("/templates", ".hbs");
+            TemplateLoader partialsLoader = new ClassPathTemplateLoader("/templates/partials", ".hbs");
+            Handlebars handlebars = new Handlebars(new CompositeTemplateLoader(mainLoader, partialsLoader));
+
+            Template template = handlebars.compile(path.replace(".hbs", ""));
+
             return template.apply(model);
+
           } catch (IOException e) {
-            //
-            //e.printStackTrace();
             context.status(HttpStatus.NOT_FOUND);
             return "No se encuentra la página indicada...";
           }
-        }, ".hbs" // Extensión del archivo de template
+        },
+        ".hbs" // extensión de las vistas
     );
   }
 
