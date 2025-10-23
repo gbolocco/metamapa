@@ -1,7 +1,11 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
+<<<<<<< HEAD
 import static io.javalin.apibuilder.ApiBuilder.get;
 
+=======
+import ar.edu.utn.frba.dds.controladores.ColeccionController;
+>>>>>>> ee96926e5b327df28f8964df61e474ebe6c2bfce
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
@@ -35,11 +39,6 @@ import java.util.function.Consumer;
 public class WebApp {
 
   private static final Handlebars handlebars;
-
-  static {
-    TemplateLoader loader = new ClassPathTemplateLoader("/templates");
-    handlebars = new Handlebars(loader);
-  }
 
   public static void main(String[] args) {
     WebApp app = new WebApp();

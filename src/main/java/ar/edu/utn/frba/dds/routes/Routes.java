@@ -1,18 +1,16 @@
 package ar.edu.utn.frba.dds.routes;
 
+import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 
-import static io.javalin.apibuilder.ApiBuilder.before;
-import static io.javalin.apibuilder.ApiBuilder.get;
-import static io.javalin.apibuilder.ApiBuilder.path;
-import static io.javalin.apibuilder.ApiBuilder.post;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
-  public static final Routes instance = new Routes();
 
+  private final Javalin app;
 
   public void configure(JavalinConfig config, HechosController hechos, LoginController login) {
 
@@ -44,6 +42,10 @@ public class Routes {
 
       config.router.apiBuilder(() -> {
         post("/logout", login::logout);
+      });
+
+      path("colecciones", () -> {
+        get(coleccionController::mostrarColecciones);
       });
     });
   }
