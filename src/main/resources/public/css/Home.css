@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(#c9ac86, #8d6b43);
+}
+
+.main-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.colecciones-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-items: center;
+    margin-top: 20px;
+}
+
+.coleccion-card {
+    background-color: #7a4a00;
+    color: white;
+    padding: 15px;
+    width: 200px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.flecha {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.paginas a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
+import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
 import ar.edu.utn.frba.dds.routes.Routes;
@@ -31,10 +32,12 @@ public class WebApp {
 
       HechosController hechoController = new HechosController();
       LoginController loginController = new LoginController();
+      ColeccionController coleccionController = new ColeccionController();
 
-      Routes.instance.setApp(app);
-      Routes.instance.configureRoutes(hechoController, loginController);
-      Routes.instance.initialRouting();
+      Routes router = new Routes(app);
+
+      router.configureRoutes(hechoController, loginController,coleccionController);
+      router.initialRouting();
   }
 
   private static void initTemplateEngine() {

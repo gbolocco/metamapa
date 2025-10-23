@@ -1,24 +1,28 @@
 package ar.edu.utn.frba.dds.routes;
 
+import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
 import io.javalin.Javalin;
 
-import static io.javalin.apibuilder.ApiBuilder.get;
-import static io.javalin.apibuilder.ApiBuilder.path;
-import static io.javalin.apibuilder.ApiBuilder.post;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
-  private Javalin app;
-  public static final Routes instance = new Routes();
 
+  private final Javalin app;
 
-  public void Routes(Javalin app) {
+  // ✅ Constructor real (sin void)
+  public Routes(Javalin app) {
     this.app = app;
   }
 
-  public void configureRoutes(HechosController hechoController, LoginController loginController){
+  // ✅ Método para configurar todas las rutas
+  public void configureRoutes(HechosController hechoController,
+                              LoginController loginController,
+                              ColeccionController coleccionController) {
+
     app.routes(() -> {
+
       path("hechos", () -> {
         get(hechoController::listar);
         get("nuevo", hechoController::mostrarFormulario);
@@ -27,15 +31,18 @@ public class Routes {
         get("{hechoId}", hechoController::mostrar);
       });
 
-      // Login y usuarios
       path("login", () -> {
         get(loginController::mostrarLogin);
         post(loginController::login);
       });
+
+      path("colecciones", () -> {
+        get(coleccionController::mostrarColecciones);
+      });
     });
   }
 
-  public void initialRouting(){
+  public void initialRouting() {
     app.get("/", ctx -> {
       Long userId = ctx.sessionAttribute("user_id");
       if (userId == null) {
@@ -44,13 +51,5 @@ public class Routes {
         ctx.result("Bienvenido usuario ID " + userId);
       }
     });
-  }
-
-  public Routes getInstance() {
-    return instance;
-  }
-
-  public void setApp(Javalin app) {
-    this.app = app;
   }
 }
