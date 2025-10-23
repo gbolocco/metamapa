@@ -20,7 +20,16 @@
         </svg>
       </button>
       <div class="dropdown-menu">
-        <a href="/login" class="dropdown-item">Iniciar Sesión</a>
+            {{#if loggedIn}}
+                  <span><a href="/admin">Panel admin</a></span>
+                  <span><a href="/solicitudes">Solicitudes</a></span>
+
+                <form id="logoutForm" method="post" action="/logout">
+                  <button type="submit">Salir</button>
+                </form>
+            {{else}}
+        <a href="/login" class="btn">Iniciar Sesión</a>
+         {{/if}}
       </div>
     </div>
 

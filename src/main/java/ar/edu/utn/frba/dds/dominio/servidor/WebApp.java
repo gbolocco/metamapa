@@ -1,82 +1,141 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
+import static io.javalin.apibuilder.ApiBuilder.get;
+
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
+import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
+import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
+import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.CompositeTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
+import io.javalin.http.Context;
+import io.javalin.rendering.FileRenderer;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import io.javalin.http.HttpStatus;
+import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JavalinJackson;
-import io.javalin.rendering.JavalinRenderer;
-
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
-
-import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class WebApp {
 
-    public static void main(String[] args) {
-      initTemplateEngine();
-      var app = Javalin.create(config())
-          .start(8080);
 
-      HechosController hechoController = new HechosController();
-      LoginController loginController = new LoginController();
-      ColeccionController coleccionController = new ColeccionController();
-
-      Routes router = new Routes(app);
-
-      router.configureRoutes(hechoController, loginController,coleccionController);
-      router.initialRouting();
+  public static void main(String[] args) {
+    WebApp app = new WebApp();
+    app.start();
   }
 
-  private static void initTemplateEngine() {
-    JavalinRenderer.register(
-        (path, model, context) -> {
-          try {
-            TemplateLoader mainLoader = new ClassPathTemplateLoader("/templates", ".hbs");
-            TemplateLoader partialsLoader = new ClassPathTemplateLoader("/templates/partials", ".hbs");
-            Handlebars handlebars = new Handlebars(new CompositeTemplateLoader(mainLoader, partialsLoader));
+  public void start() {
+    var app = Javalin.create(this::configureJavalin).start(8080);
 
-            Template template = handlebars.compile(path.replace(".hbs", ""));
-
-            return template.apply(model);
-
-          } catch (IOException e) {
-            context.status(HttpStatus.NOT_FOUND);
-            return "No se encuentra la página indicada...";
-          }
-        },
-        ".hbs" // extensión de las vistas
-    );
   }
 
-  private static Consumer<JavalinConfig> config() {
-      return config -> {
-          // --- Configuración de JSON ---
-          ObjectMapper mapper = new ObjectMapper();
-          mapper.registerModule(new JavaTimeModule());
-          mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // fechas ISO-8601
-          config.jsonMapper(new JavalinJackson(mapper));
+  private void configureJavalin(JavalinConfig config) {
+    configureStaticFiles(config);
+    configureTemplating(config);
+    configureRoutes(config);
+  }
 
-          // --- Configuración de archivos estáticos ---
-          config.staticFiles.add(staticFiles -> {
-              staticFiles.hostedPath = "/";
-              staticFiles.directory = "/public";
-          });
+  private static void configureStaticFiles(JavalinConfig config) {
+    config.staticFiles.add(staticFilesConfig -> {
+      staticFilesConfig.directory = "/public";
+      staticFilesConfig.location = Location.CLASSPATH;
+    });
+  }
 
-      };
+  private void configureRoutes(JavalinConfig config){
+    var repoUsuarios = RepositorioUsuarios.INSTANCE;
+    var repoColecciones = ColeccionRepository.getInstancia();
+    var servicioUsuarios = new ServicioUsuarios(repoUsuarios);
+    var servicioColecciones = new ServicioColecciones(repoColecciones);
 
-    }
+    HechosController hechos = new HechosController();
+    LoginController login = new LoginController(servicioUsuarios);
+    ColeccionController coleccion = new ColeccionController(servicioColecciones);
+
+
+
+    new Routes().configure(config, hechos, login, coleccion);
+  }
+
+  private void configureTemplating(JavalinConfig config) {
+    TemplateLoader mainLoader = new ClassPathTemplateLoader("/templates", ".hbs");
+    TemplateLoader partialsLoader = new ClassPathTemplateLoader("/templates/partials", ".hbs");
+    Handlebars handlebars = new Handlebars(new CompositeTemplateLoader(mainLoader, partialsLoader));
+
+    handlebars.registerHelper("ifRole", (context, options) -> {
+      Map<String, Object> model = (Map<String, Object>) options.context;
+      String userRole = (String) model.get("rol");
+      String requiredRole = options.param(0, null);
+      if (userRole != null && userRole.equals(requiredRole)) {
+        return options.fn(context);
+      }
+      return options.inverse(context);
+    });
+
+    FileRenderer handlebarsRenderer = (filePath, model, context) -> {
+      try {
+        String templateName = filePath.replace(".hbs", "");
+        Template template = handlebars.compile(templateName);
+
+        return template.apply((Map<String, Object>) model);
+      } catch (IOException e) {
+        throw new RuntimeException("Error al renderizar la plantilla Handlebars: " + filePath, e);
+      }
+    };
+    config.fileRenderer(handlebarsRenderer);
+  }
 }
 
+//  private static Consumer<JavalinConfig> config() {
+//    return config -> {
+//      ObjectMapper mapper = new ObjectMapper();
+//      mapper.registerModule(new JavaTimeModule());
+//      mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // fechas ISO-8601
+//      config.jsonMapper(new JavalinJackson(mapper));
+//
+//      config.staticFiles.add(staticFiles -> {
+//        staticFiles.hostedPath = "/";
+//        staticFiles.directory = "/public";
+//      });
+//      TemplateLoader mainLoader = new ClassPathTemplateLoader("/templates", ".hbs");
+//      TemplateLoader partialsLoader = new ClassPathTemplateLoader("/templates/partials", ".hbs");
+//      Handlebars handlebars = new Handlebars(new CompositeTemplateLoader(mainLoader, partialsLoader));
+//
+//      config.fileRenderer((path, model, ctx) -> {
+//        try {
+//          Template template = handlebars.compile(path.replace(".hbs", ""));
+//          Map<String, Object> m = new HashMap<>();
+//
+//          // Add session/context attributes
+//          model.put("isLogged", ctx.attribute("isLogged"));
+//          model.put("role", ctx.attribute("role"));
+//          model.put("isAdmin", ctx.attribute("isAdmin"));
+//
+//          return template.apply(m);
+//        } catch (IOException e) {
+//          ctx.status(HttpStatus.NOT_FOUND);
+//          return "No se encuentra la página indicada...";
+//        }
+//      }, ".hbs");
+//    };
+//  }
+//}

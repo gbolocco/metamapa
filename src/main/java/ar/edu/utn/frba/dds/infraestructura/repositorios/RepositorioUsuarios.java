@@ -2,7 +2,8 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
-import org.apache.commons.codec.digest.DigestUtils;
+import javax.persistence.NoResultException;
+import java.util.Optional;
 
 public class RepositorioUsuarios implements SimplePersistenceTest {
   public static RepositorioUsuarios INSTANCE = new RepositorioUsuarios();
@@ -14,13 +15,16 @@ public class RepositorioUsuarios implements SimplePersistenceTest {
   public long contar() {
     return entityManager().createQuery("from Usuario").getResultStream().count();
   }
-  public Usuario buscar(String nombre, String contrasenia) {
-    return entityManager()
-        .createQuery("from Usuario where nombre = :nombre and hashPassorwd = :hashPassorwd"
-            , Usuario.class)
-        .setParameter("nombre", nombre)
-        .setParameter("hashPassorwd", DigestUtils.sha256Hex(contrasenia))
-        .getResultList()
-        .get(0);
+
+  public Optional<Usuario> buscarPorNombre(String nombre) {
+    try {
+      Usuario usuario = entityManager()
+          .createQuery("FROM Usuario WHERE LOWER(nombre) = :nombre", Usuario.class)
+          .setParameter("nombre", nombre.toLowerCase())
+          .getSingleResult();
+      return Optional.of(usuario);
+    } catch (NoResultException e) {
+      return Optional.empty();
+    }
   }
 }
