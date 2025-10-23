@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
@@ -19,9 +20,9 @@ public class Bootstrap implements WithSimplePersistenceUnit {
   public void init() {
     withTransaction(() -> {
       var usuarios = Arrays.asList(
-          new Usuario("feli", "feli"),
-          new Usuario("dani", "dani"),
-          new Usuario("umi", "umi")
+          new Usuario("feli", "feli", Rol.USER),
+          new Usuario("dani", "dani", Rol.USER),
+          new Usuario("umi", "umi", Rol.ADMIN)
       );
       usuarios.forEach((usuario) -> RepositorioUsuarios.INSTANCE.registrar(usuario));
       var hechos = Arrays.asList(

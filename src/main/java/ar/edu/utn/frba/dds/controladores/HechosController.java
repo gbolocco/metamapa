@@ -22,7 +22,12 @@ public class HechosController implements WithSimplePersistenceUnit {
   private HechosRepository repo = HechosRepository.getInstancia();
 
   public void listar(Context ctx) {
-    var model = new HashMap<String, Object>();
+    Map<String, Object> model = new HashMap<>();
+    model.put("title", "Solicitudes");
+    model.put("content", "View requests here...");
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
     model.put("hechos", repo.mostrarHechos());
     ctx.render("hechos.hbs", model);
   }
