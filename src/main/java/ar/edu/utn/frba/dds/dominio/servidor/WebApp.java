@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
-import ar.edu.utn.frba.dds.dominio.controladores.*;
+import ar.edu.utn.frba.dds.controladores.HechosController;
+import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.routes.Routes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -30,33 +32,9 @@ public class WebApp {
       HechosController hechoController = new HechosController();
       LoginController loginController = new LoginController();
 
-      //PROVISORIO
-      app.get("/", ctx -> {
-        Long userId = ctx.sessionAttribute("user_id");
-        if (userId == null) {
-          ctx.redirect("/login");
-        } else {
-          ctx.result("Bienvenido usuario ID " + userId);
-        }
-      });
-
-      app.routes(() -> {
-        path("hechos", () -> {
-          get(hechoController::listar);
-          get("nuevo", hechoController::mostrarFormulario);
-          get("mapa", hechoController::mostrarMapa);
-          post(hechoController::crear);
-          get("{hechoId}", hechoController::mostrar);
-        });
-
-        // Login y usuarios
-        path("login", () -> {
-          get(loginController::mostrarLogin);
-          post(loginController::login);
-        });
-
-      });
-
+      Routes.instance.setApp(app);
+      Routes.instance.configureRoutes(hechoController, loginController);
+      Routes.instance.initialRouting();
   }
 
   private static void initTemplateEngine() {

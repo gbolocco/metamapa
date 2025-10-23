@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.dominio.controladores;
+package ar.edu.utn.frba.dds.controladores;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
