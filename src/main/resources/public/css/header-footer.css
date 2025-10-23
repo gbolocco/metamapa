@@ -12,11 +12,21 @@
   margin: 0 auto;
   padding: 0 2rem;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 80px 1fr;
   align-items: center;
   gap: 14px;
-}
+  height: 80px;
 
+}
+.logo {
+  background-image: url('../images/metamapa-logo.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain; /* mantiene proporciones del logo */
+  height: 80px; /* tamaño visible del logo */
+  width: 180px; /* ancho del contenedor */
+  flex-shrink: 0; /* evita que se achique */
+}
 .site-logo {
   grid-column: 1;
   height: 30px;
