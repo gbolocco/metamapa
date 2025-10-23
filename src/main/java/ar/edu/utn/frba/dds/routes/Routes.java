@@ -10,9 +10,9 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
 
-  private final Javalin app;
 
-  public void configure(JavalinConfig config, HechosController hechos, LoginController login) {
+
+  public void configure(JavalinConfig config, HechosController hechos, LoginController login, ColeccionController coleccionController) {
 
     config.router.apiBuilder(() -> {
       before(ctx -> {
@@ -40,12 +40,12 @@ public class Routes {
         post(login::login);
       });
 
-      config.router.apiBuilder(() -> {
-        post("/logout", login::logout);
+      path("/colecciones", () -> {
+        get(coleccionController::mostrarColecciones);
       });
 
-      path("colecciones", () -> {
-        get(coleccionController::mostrarColecciones);
+      config.router.apiBuilder(() -> {
+        post("/logout", login::logout);
       });
     });
   }
@@ -60,10 +60,6 @@ public class Routes {
 //      }
 //    });
 //  }
-
-  public Routes getInstance() {
-    return instance;
-  }
 
 //  public void setApp(Javalin app) {
 //    this.app = app;
