@@ -1,17 +1,15 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
-<<<<<<< Updated upstream
 import static io.javalin.apibuilder.ApiBuilder.get;
-
-=======
 import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
->>>>>>> Stashed changes
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
+import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.CompositeTemplateLoader;
@@ -28,12 +26,6 @@ import java.util.Map;
 
 public class WebApp {
 
-  private static final Handlebars handlebars;
-
-  static {
-    TemplateLoader loader = new ClassPathTemplateLoader("/templates");
-    handlebars = new Handlebars(loader);
-  }
 
   public static void main(String[] args) {
     WebApp app = new WebApp();
@@ -60,20 +52,17 @@ public class WebApp {
   }
 
   private void configureRoutes(JavalinConfig config){
-    var repoUsuarios = new RepositorioUsuarios();
+    var repoUsuarios = RepositorioUsuarios.INSTANCE;
+    var repoColecciones = ColeccionRepository.getInstancia();
     var servicioUsuarios = new ServicioUsuarios(repoUsuarios);
+    var servicioColecciones = new ServicioColecciones(repoColecciones);
+
     HechosController hechos = new HechosController();
     LoginController login = new LoginController(servicioUsuarios);
-<<<<<<< Updated upstream
-    new Routes().configure(config, hechos, login);
-=======
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
     AdminController admin = new AdminController();
 
-
-
     new Routes().configure(config, hechos, login, coleccion, admin);
->>>>>>> Stashed changes
   }
 
   private void configureTemplating(JavalinConfig config) {

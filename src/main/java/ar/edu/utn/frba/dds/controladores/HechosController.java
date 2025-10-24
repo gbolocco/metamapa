@@ -20,12 +20,8 @@ import java.util.Map;
 
 public class HechosController implements WithSimplePersistenceUnit {
   private HechosRepository repo = HechosRepository.getInstancia();
-
-<<<<<<< Updated upstream
-=======
   private Map<String, Object> model;
 
->>>>>>> Stashed changes
   public void listar(Context ctx) {
     Map<String, Object> model = new HashMap<>();
     model.put("title", "Solicitudes");
@@ -72,10 +68,7 @@ public class HechosController implements WithSimplePersistenceUnit {
           OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
       );
 
-<<<<<<< Updated upstream
-=======
       //todo: deberia pegarle a un service, ese service al repositorio y despues a la base de datos
->>>>>>> Stashed changes
       repo.cargarHecho(hecho);
       //DISCUTIR SI DEJAR ACA O EN cargarHecho()
       entityManager().getTransaction().begin();
@@ -99,6 +92,4 @@ public class HechosController implements WithSimplePersistenceUnit {
       ctx.result("Producto no encontrado");
     }
   }
-
-
 }
