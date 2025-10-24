@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Metamapa - Colecciones</title>
+    <link rel="stylesheet" href="/css/Home.css" />
+    <link rel="stylesheet" href="/css/style_form.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+{{> header}}
+
+<main class="main-content">
+    <h1>Colecciones :</h1>
+    <div class="colecciones-grid">
+        {{#each colecciones}}
+            <div class="coleccion-card">
+                <h2>{{titulo}}</h2>
+                <p>{{descripcion}}</p>
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="paginacion">
+        <button class="flecha" id="prev">⬅</button>
+        <div class="paginas">
+            {{#each paginas}}
+                <a href="/colecciones?page={{this}}">{{this}}</a>
+            {{/each}}
+        </div>
+        <button class="flecha" id="next">➡</button>
+    </div>
+</main>
+{{> footer}}
+</body>
+</html>

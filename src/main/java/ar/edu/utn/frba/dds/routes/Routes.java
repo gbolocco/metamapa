@@ -1,8 +1,13 @@
 package ar.edu.utn.frba.dds.routes;
 
+<<<<<<< Updated upstream
+=======
+import ar.edu.utn.frba.dds.controladores.AdminController;
+import ar.edu.utn.frba.dds.controladores.ColeccionController;
+>>>>>>> Stashed changes
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
-import io.javalin.Javalin;
+import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
 
 import static io.javalin.apibuilder.ApiBuilder.before;
@@ -13,8 +18,17 @@ import static io.javalin.apibuilder.ApiBuilder.post;
 public class Routes {
   public static final Routes instance = new Routes();
 
+<<<<<<< Updated upstream
 
   public void configure(JavalinConfig config, HechosController hechos, LoginController login) {
+=======
+  public void configure(
+    JavalinConfig config,
+    HechosController hechos,
+    LoginController login,
+    ColeccionController coleccionController,
+    AdminController admin) {
+>>>>>>> Stashed changes
 
     config.router.apiBuilder(() -> {
       before(ctx -> {
@@ -29,6 +43,24 @@ public class Routes {
             ", loggedIn: " + ctx.attribute("loggedIn") +
             ", rol: " + ctx.attribute("rol"));
       });
+<<<<<<< Updated upstream
+=======
+
+      before("/admin/*", ctx -> {
+        Rol rol = ctx.sessionAttribute("rol");  // enum en sesión
+        if (rol == null || rol != Rol.ADMIN) {
+          ctx.redirect("/login");
+          ctx.status(302);
+          ctx.result("");
+          return;
+        }
+      });
+
+      path("/admin", () -> {
+        get("/dashboard",admin::mostrarDashboard);
+        });
+
+>>>>>>> Stashed changes
       path("/hechos", () -> {
         get(hechos::listar);
         get("/nuevo", hechos::mostrarFormulario);
@@ -42,11 +74,19 @@ public class Routes {
         post(login::login);
       });
 
+<<<<<<< Updated upstream
+=======
+      path("/colecciones", () -> {
+        get(coleccionController::mostrarColecciones);
+      });
+
+>>>>>>> Stashed changes
       config.router.apiBuilder(() -> {
         post("/logout", login::logout);
       });
     });
   }
+<<<<<<< Updated upstream
 
 //  public void initialRouting(){
 //    app.get("/", ctx -> {
@@ -66,4 +106,6 @@ public class Routes {
 //  public void setApp(Javalin app) {
 //    this.app = app;
 //  }
+=======
+>>>>>>> Stashed changes
 }
