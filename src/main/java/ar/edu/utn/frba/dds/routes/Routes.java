@@ -43,7 +43,7 @@ public class Routes {
         get("/nuevo", hechos::mostrarFormulario);
         get("/mapa", hechos::mostrarMapa);
         post(hechos::crear);
-        get("/{hechoId}", hechos::mostrar);
+
       });
 
       path("/login", () -> {
@@ -54,6 +54,7 @@ public class Routes {
       path("/colecciones", () -> {
         get(coleccionController::mostrarColecciones);
         get("/{id}",coleccionController::mostrarColeccion);
+        get("/{id}/hechos/{hechoId}", hechos::mostrar);
       });
 
       post("/logout", login::logout);

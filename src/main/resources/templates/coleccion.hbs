@@ -128,9 +128,19 @@
                     <b>${h.titulo}</b><br>
                     ${h.descripcion}<br>
                     (${h.ubicacion.latitud}, ${h.ubicacion.longitud})
+                    <button class="hecho" data-id="${h.id}">Expandir</button>
                 `);
         }
     });
+</script>
+<script>
+    document.addEventListener('click', async (e) => {
+        const coleccionId = {{coleccion.id}}
+        if (e.target.classList.contains('hecho')) {
+            const id = e.target.dataset.id;
+            window.location.href = `/colecciones/${coleccionId}/hechos/${id}`;
+        }
+    })
 </script>
 
 </body>
