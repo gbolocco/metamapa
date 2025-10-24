@@ -60,6 +60,10 @@
     font-size: 0.95rem;
 }
 
+.coleccion-card a{
+    color: white;
+}
+
 /* --- Paginación --- */
 .paginacion {
     display: flex;

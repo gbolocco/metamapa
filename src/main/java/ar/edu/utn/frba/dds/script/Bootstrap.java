@@ -24,6 +24,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
 
   public void init() {
     withTransaction(() -> {
+
       var usuarios = Arrays.asList(
           new Usuario("feli", "feli", Rol.USER),
           new Usuario("dani", "dani", Rol.USER),
@@ -35,25 +36,26 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2,10.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.FUENTE_PROXY)
       );
       hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
-
+      var fuente = new FuenteDinamica();
       var colecciones = Arrays.asList(
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(),new FuenteDinamica(),"prueba"),
-          new Coleccion("prueba2","prueba2",new ArrayList<>(),new FuenteDinamica(),"prueba2"),
-          new Coleccion("prueba2","prueba2",new ArrayList<>(),new FuenteDinamica(),"prueba2"),
-          new Coleccion("prueba2","prueba2",new ArrayList<>(),new FuenteDinamica(),"prueba2")
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2"),
+          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2"),
+          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2")
       );
       colecciones.forEach(c -> ColeccionRepository.getInstancia().agregarColeccion(c));
+
     });
 
   }

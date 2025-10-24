@@ -46,6 +46,9 @@ public class HechosController implements WithSimplePersistenceUnit {
     String hechosJson = mapper.writeValueAsString(hechos);
 
     model.put("hechosJson", hechosJson);
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
     ctx.render("mapa.hbs", model);
   }
 
@@ -75,6 +78,10 @@ public class HechosController implements WithSimplePersistenceUnit {
       entityManager().flush();
       entityManager().getTransaction().commit();
 
+      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+      model.put("rol", ctx.sessionAttribute("rol"));
+      model.put("user_id", ctx.sessionAttribute("user_id"));
+      ctx.render("hechos.hbs", model);
       ctx.redirect("/hechos");
     } catch (Exception e) {
       e.printStackTrace();
@@ -87,6 +94,10 @@ public class HechosController implements WithSimplePersistenceUnit {
 
     if (repo.existe(hechoId)) {
       ctx.json(repo.buscar(hechoId));
+      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+      model.put("rol", ctx.sessionAttribute("rol"));
+      model.put("user_id", ctx.sessionAttribute("user_id"));
+      ctx.render("hechos.hbs", model);
     } else {
       ctx.status(HttpStatus.NOT_FOUND);
       ctx.result("Producto no encontrado");

@@ -5,13 +5,17 @@
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/Home.css">
 </head>
+
 <h1>Colecciones :</h1>
 <div class="colecciones-grid">
     {{#each colecciones}}
         <div class="coleccion-card">
-            <h2>{{titulo}}</h2>
-            <p>{{descripcion}}</p>
+            <a href="colecciones/{{id}}" id="coleccion-card">
+                <h2>{{titulo}}</h2>
+                <p>{{descripcion}}</p>
+            </a>
         </div>
+
     {{/each}}
 </div>
 
@@ -22,6 +26,42 @@
             <a href="/colecciones?page={{this}}">{{this}}</a>
         {{/each}}
     </div>
-    <button class="flecha" id="next">➡</button>
+    <button class="flecha" id="next" >➡</button>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const prevBtn = document.getElementById("prev");
+        const nextBtn = document.getElementById("next");
+
+        // Convertimos a número los valores de Handlebars
+        const paginaActual = {{paginaActual}} || 1;
+        const totalPaginas = {{totalPaginas}} || 1;
+
+        prevBtn.addEventListener("click", () => {
+            if (paginaActual > 1) {
+                window.location.href = `/colecciones?page=${paginaActual - 1}`;
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            if (paginaActual < totalPaginas) {
+                window.location.href = `/colecciones?page=${paginaActual + 1}`;
+            }
+        });
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const coleccion = document.getElementById("coleccion-card");
+
+        coleccion.addEventListener("click", ()=> {
+                window.location.href = `/colecciones/${{id}}`;
+            }
+
+        )
+
+    });
+</script>

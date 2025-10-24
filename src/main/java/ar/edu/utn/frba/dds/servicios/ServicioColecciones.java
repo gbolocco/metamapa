@@ -15,4 +15,8 @@ public class ServicioColecciones {
     return coleccionRepository.mostrarColecciones();
   }
 
+  public Coleccion findById(Long id){
+    return coleccionRepository.buscarColeccionPorId(id);
+  }
+
 }

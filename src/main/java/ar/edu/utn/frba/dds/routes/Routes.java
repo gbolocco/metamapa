@@ -18,6 +18,7 @@ public class Routes {
     AdminController admin) {
 
     config.router.apiBuilder(() -> {
+
       before(ctx -> {
         ctx.attribute("user_id", ctx.sessionAttribute("user_id"));
         ctx.attribute("loggedIn", ctx.sessionAttribute("loggedIn"));
@@ -52,6 +53,7 @@ public class Routes {
 
       path("/colecciones", () -> {
         get(coleccionController::mostrarColecciones);
+        get("/{id}",coleccionController::mostrarColeccion);
       });
 
       post("/logout", login::logout);
