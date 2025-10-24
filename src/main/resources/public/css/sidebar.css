@@ -1,0 +1,208 @@
+.sidebar-wrapper {
+  display: flex;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  min-height: calc(100vh - 60px); /* 60px = altura del header */
+}
+
+/* Sidebar lateral */
+.sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+/* Encabezado */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.logo-admin {
+  background-color: #0f172a;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Navegación */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #334155;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.nav-item:hover {
+  background-color: #f1f5f9;
+}
+
+.nav-item.active {
+  background-color: #0f172a;
+  color: #fff;
+}
+
+/* Botón de logout */
+.logout-form {
+  margin-top: auto;
+  padding: 0 16px;
+}
+
+.logout-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #475569;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #f1f5f9;
+}
+
+/* Área principal a la derecha del sidebar */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f8fafc;
+}
+
+/*                  SIDEBAR               */
+.sidebar-wrapper {
+  display: flex;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  min-height: calc(100vh - 60px); /* 60px = altura del header */
+}
+
+/* Sidebar lateral */
+.sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+/* Encabezado */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.logo-admin {
+  background-color: #0f172a;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Navegación */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #334155;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.nav-item:hover {
+  background-color: #f1f5f9;
+}
+
+.nav-item.active {
+  background-color: #0f172a;
+  color: #fff;
+}
+
+/* Botón de logout */
+.logout-form {
+  margin-top: auto;
+  padding: 0 16px;
+}
+
+.logout-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #475569;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #f1f5f9;
+}
+
+/* Área principal a la derecha del sidebar */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f8fafc;
+}
+
+

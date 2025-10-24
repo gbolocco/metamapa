@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.controladores;
 
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
+import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import io.javalin.http.Context;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
@@ -37,10 +38,10 @@ public class LoginController {
     ctx.sessionAttribute("user_id", usuario.getId());
     ctx.sessionAttribute("loggedIn", true);
     ctx.sessionAttribute("rol", usuario.getRol());
-    System.out.println("Session after validate - user_id: " + ctx.sessionAttribute("user_id") +
-        ", loggedIn: " + ctx.sessionAttribute("loggedIn") +
-        ", rol: " + ctx.sessionAttribute("rol"));
-    ctx.redirect("/hechos");
+    if (usuario.getRol() == Rol.ADMIN) {
+        ctx.redirect("/admin/dashboard");
+    }
+    //ctx.redirect("/hechos");
   }
 
   public void logout(Context ctx) {

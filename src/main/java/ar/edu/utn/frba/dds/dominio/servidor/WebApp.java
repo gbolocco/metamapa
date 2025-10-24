@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
 import static io.javalin.apibuilder.ApiBuilder.get;
-
+import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
@@ -11,29 +11,18 @@ import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.CompositeTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
-import io.javalin.http.Context;
 import io.javalin.rendering.FileRenderer;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
-import io.javalin.http.HttpStatus;
 import io.javalin.http.staticfiles.Location;
-import io.javalin.json.JavalinJackson;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class WebApp {
 
@@ -56,6 +45,7 @@ public class WebApp {
 
   private static void configureStaticFiles(JavalinConfig config) {
     config.staticFiles.add(staticFilesConfig -> {
+      staticFilesConfig.hostedPath = "/static"; 
       staticFilesConfig.directory = "/public";
       staticFilesConfig.location = Location.CLASSPATH;
     });
@@ -70,10 +60,9 @@ public class WebApp {
     HechosController hechos = new HechosController();
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
+    AdminController admin = new AdminController();
 
-
-
-    new Routes().configure(config, hechos, login, coleccion);
+    new Routes().configure(config, hechos, login, coleccion, admin);
   }
 
   private void configureTemplating(JavalinConfig config) {
@@ -91,12 +80,27 @@ public class WebApp {
       return options.inverse(context);
     });
 
-    FileRenderer handlebarsRenderer = (filePath, model, context) -> {
+    FileRenderer handlebarsRenderer = (filePath,
+                                  model,
+                                  ctx) -> {
       try {
         String templateName = filePath.replace(".hbs", "");
-        Template template = handlebars.compile(templateName);
+        Template viewTpl   = handlebars.compile(templateName);
+        String body        = viewTpl.apply(model);   // model: Map<String, ? extends Object>
 
-        return template.apply((Map<String, Object>) model);
+        Map<String, Object> m = new HashMap<>(model);
+
+        m.put("body", body);
+        Rol rol = ctx.sessionAttribute("rol");
+        boolean esAdmin = Rol.ADMIN.equals(rol);
+        boolean rutaAdmin = ctx.path().startsWith("/admin");
+        m.put("isAdmin", esAdmin && rutaAdmin);
+        m.put("bodyClass", (Boolean.TRUE.equals(m.get("isAdmin"))) ? "admin" : "");
+        System.out.println("esAdmin: " + esAdmin);
+        System.out.println("rutaAdmin: " + rutaAdmin);
+        System.out.println("isAdmin: " + m.get("isAdmin"));
+        Template layoutTpl = handlebars.compile("layout");
+        return layoutTpl.apply(m);
       } catch (IOException e) {
         throw new RuntimeException("Error al renderizar la plantilla Handlebars: " + filePath, e);
       }

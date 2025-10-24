@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/style_login.css" />
+  <link rel="stylesheet" href="/static/css/style_form.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body class="{{bodyClass}}" >
+
+  {{> header}}
+    <div class="principal-grid {{#if isAdmin}}with-sidebar{{/if}}">
+    {{#if isAdmin}}
+    <aside class="grid-sidebar">
+      {{> partials/sidebar}}
+    </aside>
+  {{/if}}
+
+  <main class="grid-main">
+    {{{body}}}
+  </main>
+</div>
+  {{> footer}}
+
+</body>
+</html>

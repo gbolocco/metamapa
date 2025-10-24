@@ -1,32 +1,42 @@
 package ar.edu.utn.frba.dds.routes;
 
+import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
-import io.javalin.Javalin;
+import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
-
-
-
-  public void configure(JavalinConfig config, HechosController hechos, LoginController login, ColeccionController coleccionController) {
+  public void configure(
+    JavalinConfig config,
+    HechosController hechos,
+    LoginController login,
+    ColeccionController coleccionController,
+    AdminController admin) {
 
     config.router.apiBuilder(() -> {
       before(ctx -> {
-        // Session configuration for API routes
-        if (ctx.sessionAttribute("user_id") == null) ctx.sessionAttribute("user_id", null);
-        if (ctx.sessionAttribute("loggedIn") == null) ctx.sessionAttribute("loggedIn", false);
-        if (ctx.sessionAttribute("rol") == null) ctx.sessionAttribute("rol", null);
         ctx.attribute("user_id", ctx.sessionAttribute("user_id"));
         ctx.attribute("loggedIn", ctx.sessionAttribute("loggedIn"));
         ctx.attribute("rol", ctx.sessionAttribute("rol"));
-        System.out.println("API before - user_id: " + ctx.attribute("user_id") +
-            ", loggedIn: " + ctx.attribute("loggedIn") +
-            ", rol: " + ctx.attribute("rol"));
       });
+
+      before("/admin/*", ctx -> {
+        Rol rol = ctx.sessionAttribute("rol");
+        if (rol == null || rol != Rol.ADMIN) {
+          ctx.redirect("/login");
+          ctx.status(302);
+          ctx.result("");
+          return;
+        }
+      });
+
+      path("/admin", () -> {
+        get("/dashboard",admin::mostrarDashboard);
+        });
       path("/hechos", () -> {
         get(hechos::listar);
         get("/nuevo", hechos::mostrarFormulario);
@@ -44,24 +54,8 @@ public class Routes {
         get(coleccionController::mostrarColecciones);
       });
 
-      config.router.apiBuilder(() -> {
-        post("/logout", login::logout);
-      });
+      post("/logout", login::logout);
     });
   }
 
-//  public void initialRouting(){
-//    app.get("/", ctx -> {
-//      Long userId = ctx.sessionAttribute("user_id");
-//      if (userId == null) {
-//        ctx.redirect("/login");
-//      } else {
-//        ctx.result("Bienvenido usuario ID " + userId);
-//      }
-//    });
-//  }
-
-//  public void setApp(Javalin app) {
-//    this.app = app;
-//  }
 }
