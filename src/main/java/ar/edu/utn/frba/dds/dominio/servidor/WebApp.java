@@ -2,11 +2,14 @@ package ar.edu.utn.frba.dds.dominio.servidor;
 
 import static io.javalin.apibuilder.ApiBuilder.get;
 
+import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
+import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -34,12 +37,6 @@ import java.util.function.Consumer;
 
 public class WebApp {
 
-  private static final Handlebars handlebars;
-
-  static {
-    TemplateLoader loader = new ClassPathTemplateLoader("/templates");
-    handlebars = new Handlebars(loader);
-  }
 
   public static void main(String[] args) {
     WebApp app = new WebApp();
@@ -65,11 +62,18 @@ public class WebApp {
   }
 
   private void configureRoutes(JavalinConfig config){
-    var repoUsuarios = new RepositorioUsuarios();
+    var repoUsuarios = RepositorioUsuarios.INSTANCE;
+    var repoColecciones = ColeccionRepository.getInstancia();
     var servicioUsuarios = new ServicioUsuarios(repoUsuarios);
+    var servicioColecciones = new ServicioColecciones(repoColecciones);
+
     HechosController hechos = new HechosController();
     LoginController login = new LoginController(servicioUsuarios);
-    new Routes().configure(config, hechos, login);
+    ColeccionController coleccion = new ColeccionController(servicioColecciones);
+
+
+
+    new Routes().configure(config, hechos, login, coleccion);
   }
 
   private void configureTemplating(JavalinConfig config) {
