@@ -8,6 +8,8 @@ import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +69,10 @@ public class Coleccion  {
   private AlgoritmoConsenso algoritmoConsenso;
 
   private String handle;
+
+  @Column(columnDefinition = "DATE")
+  private LocalDateTime fechaDeCreacion;
+
   private static final Logger logger = AppLogger.getLogger(Coleccion.class);
 
 
@@ -89,6 +95,7 @@ public class Coleccion  {
     this.descripcion = descripcion;
     this.criteriosDePertenencia = new ArrayList<>(criteriosDePertenencia);
     this.fuente = fuente;
+    this.fechaDeCreacion = LocalDateTime.now();
     this.handle = handle;
     this.cargarColeccion();
   }

@@ -78,10 +78,7 @@ public class HechosController implements WithSimplePersistenceUnit {
       entityManager().flush();
       entityManager().getTransaction().commit();
 
-      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
-      model.put("rol", ctx.sessionAttribute("rol"));
-      model.put("user_id", ctx.sessionAttribute("user_id"));
-      ctx.render("hechos.hbs", model);
+
       ctx.redirect("/hechos");
     } catch (Exception e) {
       e.printStackTrace();

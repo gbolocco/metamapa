@@ -74,7 +74,8 @@ public class ColeccionController {
       return;
     }
 
-    Collection<Hecho> hechos = coleccion.getFuente().obtenerHechos(new ArrayList<>());
+    //Collection<Hecho> hechos = coleccion.getFuente().obtenerHechos(new ArrayList<>());
+    Collection<Hecho> hechos = coleccion.mostrarHechos();
 
 
 

@@ -18,7 +18,6 @@ public class HechosRepository implements WithSimplePersistenceUnit {
 
   private static final HechosRepository instance = new HechosRepository();
 
-  private final List<Hecho> hechos = new ArrayList<>();
 
   public static HechosRepository getInstancia() {
     return instance;
@@ -56,16 +55,14 @@ public class HechosRepository implements WithSimplePersistenceUnit {
     }
   }
 
-  //HACER QUERY
+  //TODO HACER QUERY
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {
-    return hechos.stream().filter(
-        hecho -> filtros
-            .stream()
-            .allMatch(
-                filtro -> filtro.cumpleFiltro(hecho)
-                   && hecho.getOrigenHecho().equals(origenHecho)))
+    return this.mostrarHechos().stream()
+        .filter(hecho -> hecho.getOrigenHecho().equals(origenHecho))
+        .filter(hecho -> filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho)))
         .toList();
   }
+
 
   public void modificarHecho(Hecho hechoaModificar, RepresentacionDeHecho representacionDeHecho) {
     hechoaModificar.setTitulo(representacionDeHecho.getTitulo());

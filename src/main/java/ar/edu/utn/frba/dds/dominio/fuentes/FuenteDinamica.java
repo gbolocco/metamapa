@@ -17,7 +17,7 @@ public class FuenteDinamica extends Fuente {
   @Override
   public List<Hecho> obtenerHechos(List<Filtro> criterios) {
     return HechosRepository
-        .getInstancia().mostrarHechos();
+        .getInstancia().filtrarHechos(criterios,OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
   }
 
   @Override
