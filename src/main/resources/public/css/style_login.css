@@ -4,6 +4,8 @@ main {
     align-items: center;
     min-height: calc(100vh - 140px);
      background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
+    flex-wrap: wrap;
+    align-content: space-around;
 }
 
 .login-container {
