@@ -35,21 +35,22 @@ body {
 .hecho-contenedor {
     display: flex;
     gap: 0;
-    min-height: 500px;
+    /* --- CAMBIO CLAVE 1: Eliminamos la altura mínima para que se adapte al contenido. --- */
+    /* min-height: 500px; */
     min-width: 800px;
     position: relative;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+    /* overflow: hidden; (Ya lo habías quitado, lo mantenemos sin él para las flechas) */
 }
 
 /* ========================================================================= */
-/* SECCIÓN IMAGEN (IZQUIERDA) - AHORA MÁS GRANDE */
+/* SECCIÓN IMAGEN (IZQUIERDA) */
+/* (Se modifica para que el alto sea determinado por el contenido, la imagen) */
 /* ========================================================================= */
 
 .hecho-imagen {
-    /* Fondo degradado blanco/gris */
-    background: radial-gradient(circle at center, #ffffff 10%, #f0f0f0 70%, #dcdcdc 100%);
-    /* --- CAMBIO: Aumento el ancho de la imagen a 55% --- */
+    /* ... (Estilos existentes) ... */
     width: 55%;
     display: flex;
     justify-content: center;
@@ -57,12 +58,29 @@ body {
     border: 3px solid black;
     box-sizing: border-box;
     padding: 20px;
+
+    /* --- CAMBIO CLAVE 2: Quitamos height: 100% y min-height fijos --- */
+    /* height: 100%; */
+    /* min-height: 500px; */
+    overflow: hidden;
 }
 
-.hecho-imagen p {
-    opacity: 0;
-}
+/* ========================================================================= */
+/* ESTILO DE IMAGENES DENTRO DE hecho-imagen */
+/* (Aseguramos que la imagen use todo el espacio sin desbordar) */
+/* ========================================================================= */
 
+.imagen-principal {
+    /* --- AJUSTE CLAVE 3: Permitimos que la imagen defina el alto del contenedor padre. --- */
+    /* Eliminamos el object-fit y el max-height para que la altura de la imagen
+       fuerce la altura del div padre .hecho-imagen. */
+    width: 100%;
+    height: auto; /* El alto se ajusta automáticamente a la relación de aspecto del 100% de ancho. */
+    max-width: 100%;
+
+    /* Si la imagen es más alta que el contenido del lado derecho,
+       el div derecho se estirará por defecto (Flexbox). */
+}
 /* ========================================================================= */
 /* SECCIÓN DATOS (DERECHA) - AHORA MÁS PEQUEÑA */
 /* ========================================================================= */

@@ -1,12 +1,18 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
+import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -53,6 +60,10 @@ public class Hecho {
 
   @Enumerated(EnumType.STRING)
   private OrigenHecho origenHecho;
+
+
+  @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
 
   @Setter
@@ -122,6 +133,23 @@ public class Hecho {
 
   }
 
+
+  public void addContenidoMultimedia(String url) {
+    // 1. Crear la entidad multimedia
+    ContenidoMultimedia nuevoContenido = new ContenidoMultimedia(url);
+
+    // 2. Establecer la relación bidireccional (¡CLAVE!)
+    nuevoContenido.setHecho(this);
+
+    // 3. Añadir a la lista inicializada
+    this.contenidoMultimedia.add(nuevoContenido);
+  }
+
+  public List<String> getUrlsMultimedia() {
+    return this.getContenidoMultimedia().stream()
+        .map(ContenidoMultimedia::getUrlArchivo)
+        .toList();
+  }
 }
 
 
