@@ -185,3 +185,30 @@ body {
     /* --- CAMBIO CLAVE 4: Usamos el mismo margen negativo para sacarla del borde derecho. --- */
     margin-right: -20px;
 }
+
+/* ========================================================================= */
+/* BOTÓN SOLICITAR ELIMINACIÓN */
+/* ========================================================================= */
+
+.hecho-acciones {
+    margin-top: 30px; /* Espacio entre los datos y el botón */
+    padding-top: 20px;
+    border-top: 1px solid #c0a78b; /* Línea separadora sutil */
+    text-align: center; /* Centrar el botón si el div tiene todo el ancho */
+}
+
+.boton-solicitar {
+    background-color: #a00000; /* Color rojo para indicar acción destructiva/importante */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.boton-solicitar:hover {
+    background-color: #800000; /* Rojo más oscuro al pasar el mouse */
+}
