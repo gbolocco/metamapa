@@ -87,13 +87,11 @@ public class HechosController implements WithSimplePersistenceUnit {
   }
 
   public void mostrar(Context ctx) {
-    Long hechoId = Long.parseLong(ctx.pathParam("hechoId"));
-
-    if (repo.existe(hechoId)) {
-      ctx.json(repo.buscar(hechoId));
-    } else {
-      ctx.status(HttpStatus.NOT_FOUND);
-      ctx.result("Producto no encontrado");
-    }
+    Long id = Long.parseLong(ctx.pathParam("hechoId"));
+    Hecho hecho = repo.buscar(id);
+    Map<String, Object> model = new HashMap<>();
+    model.put("hecho", hecho);
+    ctx.render("hecho.hbs", model);
   }
+
 }

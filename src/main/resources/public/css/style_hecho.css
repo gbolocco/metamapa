@@ -1,0 +1,169 @@
+/* ========================================================================= */
+/* ESTILOS GENERALES Y FONDO */
+/* ========================================================================= */
+
+body {
+    /* Fondo color crema/amarillo claro */
+    background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Contenedor principal del hecho (Incluye la caja marrón/dorada) */
+.hecho-main {
+    padding: 20px;
+    width: 100%;
+    max-width: 1000px;
+    border-top: 5px solid #a0805c;
+    border-bottom: 5px solid #a0805c;
+    box-sizing: border-box;
+    /* --- CAMBIO: Aumenta la separación del "header" de la página. --- */
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+/* ========================================================================= */
+/* CONTENEDOR CENTRAL DEL HECHO */
+/* ========================================================================= */
+
+.hecho-contenedor {
+    display: flex;
+    gap: 0;
+    min-height: 500px;
+    min-width: 800px;
+    position: relative;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+/* ========================================================================= */
+/* SECCIÓN IMAGEN (IZQUIERDA) - AHORA MÁS GRANDE */
+/* ========================================================================= */
+
+.hecho-imagen {
+    /* Fondo degradado blanco/gris */
+    background: radial-gradient(circle at center, #ffffff 10%, #f0f0f0 70%, #dcdcdc 100%);
+    /* --- CAMBIO: Aumento el ancho de la imagen a 55% --- */
+    width: 55%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid black;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.hecho-imagen p {
+    opacity: 0;
+}
+
+/* ========================================================================= */
+/* SECCIÓN DATOS (DERECHA) - AHORA MÁS PEQUEÑA */
+/* ========================================================================= */
+
+.hecho-datos {
+    /* Fondo marrón claro uniforme */
+    background-color: #a0805c;
+    /* --- CAMBIO: Reducción del ancho de los datos a 45% --- */
+    width: 45%;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+}
+
+.hecho-datos h1 {
+    color: #fff;
+    font-size: 5em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.hecho-datos p {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+/* Línea divisoria en la parte inferior de los datos */
+.hecho-datos::after {
+    content: '';
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background-color: #fff;
+    opacity: 0.7;
+}
+
+/* Estilo para simular 'datos del hecho' */
+.hecho-datos p:first-of-type {
+    font-size: 1.5em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: normal;
+}
+
+/* ========================================================================= */
+/* FLECHAS DE NAVEGACIÓN (DEBAJO DE LA IMAGEN) */
+/* ========================================================================= */
+/* ========================================================================= */
+/* FLECHAS DE NAVEGACIÓN (DEBAJO DE LA IMAGEN) */
+/* ========================================================================= */
+
+.hecho-flechas {
+    position: absolute;
+
+    /* Posicionamos el contenedor debajo de la imagen */
+    left: 0;
+    /* --- CAMBIO CLAVE 1: El ancho debe coincidir con el ancho de la imagen (55%) para simetría. --- */
+    width: 45%;
+
+    bottom: -60px;
+    z-index: 100;
+
+    display: flex;
+    /* Mantenemos space-between para máxima separación dentro del ancho. */
+    justify-content: space-between;
+
+    align-items: center;
+    /* --- CAMBIO CLAVE 2: Eliminamos o reducimos el padding horizontal del contenedor. --- */
+    padding: 0;
+    box-sizing: border-box;
+    pointer-events: auto;
+}
+
+.flecha {
+    font-size: 3em;
+    text-decoration: none;
+    color: #6d4c39; /* Color marrón oscuro */
+    font-weight: bold;
+    line-height: 1;
+    /* Reducimos el padding interno de los caracteres para tener más control con el margen. */
+    padding: 10px 5px;
+    transition: color 0.2s;
+}
+
+.flecha:hover {
+    color: #4b3621;
+}
+
+/* Ajustes para que las flechas salgan simétricamente */
+.flecha:first-child {
+    /* --- CAMBIO CLAVE 3: Ajustamos el margen negativo para sacarla del borde izquierdo. --- */
+    margin-left: -20px;
+}
+
+.flecha:last-child {
+    /* --- CAMBIO CLAVE 4: Usamos el mismo margen negativo para sacarla del borde derecho. --- */
+    margin-right: -20px;
+}
