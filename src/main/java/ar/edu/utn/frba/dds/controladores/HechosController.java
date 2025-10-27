@@ -91,6 +91,7 @@ public class HechosController implements WithSimplePersistenceUnit {
     Hecho hecho = repo.buscar(id);
     Map<String, Object> model = new HashMap<>();
     model.put("hecho", hecho);
+
     ctx.render("hecho.hbs", model);
   }
 

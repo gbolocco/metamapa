@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
+import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -134,16 +135,13 @@ public class Hecho {
   }
 
 
-  public void addContenidoMultimedia(String url) {
-    // 1. Crear la entidad multimedia
-    ContenidoMultimedia nuevoContenido = new ContenidoMultimedia(url);
-
-    // 2. Establecer la relación bidireccional (¡CLAVE!)
+  public void addContenidoMultimedia(String url, TipoContenido tipo) {
+    ContenidoMultimedia nuevoContenido = new ContenidoMultimedia(url,tipo);
     nuevoContenido.setHecho(this);
-
-    // 3. Añadir a la lista inicializada
     this.contenidoMultimedia.add(nuevoContenido);
   }
+
+
 
   public List<String> getUrlsMultimedia() {
     return this.getContenidoMultimedia().stream()

@@ -7,23 +7,11 @@
 </head>
 <body>
 
-
 <main class="hecho-main">
     <div class="hecho-contenedor">
-        <div class="hecho-imagen">
 
-            {{#if hecho.contenidoMultimedia}}
-                {{#each hecho.contenidoMultimedia}}
-                    {{#if @first}}
-                        <img
-                                id="imagenPrincipal" src="{{this.urlArchivo}}"
-                                alt="Imagen del Hecho - {{hecho.titulo}}"
-                                class="imagen-principal"
-                        >
-                    {{/if}}
-                {{/each}}
-            {{/if}}
-        </div>
+        <!-- Contenedor dinámico para multimedia -->
+        <div class="hecho-imagen" id="contenedorMultimedia"></div>
 
         <div class="hecho-datos">
             <h1>{{hecho.titulo}}</h1>
@@ -39,6 +27,8 @@
                 </button>
             </div>
         </div>
+
+        <!-- Flechas -->
         <div class="hecho-flechas">
             <a href="#" id="flechaAnterior" class="flecha">⬅</a>
             <a href="#" id="flechaSiguiente" class="flecha">➡</a>
@@ -47,60 +37,87 @@
 </main>
 
 <script>
-    // 1. Generar el array de URLs de imágenes desde el modelo Handlebars
-    // NOTA: Esto asume que Handlebars convierte correctamente el objeto a un array JSON válido.
-    // Si Handlebars no puede hacer JSON.stringify, deberás pre-generar este array en tu Controller.
+    // Arrays de URLs y tipos generados desde Handlebars
     const urlsMultimedia = [
         {{#each hecho.contenidoMultimedia}}
-            "{{this.urlArchivo}}",
+            "{{this.urlArchivo}}"{{#unless @last}},{{/unless}}
         {{/each}}
     ];
 
+    const tiposMultimedia = [
+        {{#each hecho.contenidoMultimedia}}
+            "{{this.tipoContenido}}"{{#unless @last}},{{/unless}}
+        {{/each}}
+    ];
+
+    const hechoTitulo = "{{hecho.titulo}}";
+
     let indiceActual = 0;
-    const imagenElement = document.getElementById('imagenPrincipal');
+    const contenedor = document.getElementById('contenedorMultimedia');
     const flechaAnterior = document.getElementById('flechaAnterior');
     const flechaSiguiente = document.getElementById('flechaSiguiente');
 
-    // Función para actualizar el estado de las flechas (habilitar/deshabilitar)
     function actualizarFlechas() {
         flechaAnterior.style.opacity = (indiceActual === 0) ? 0.5 : 1;
         flechaSiguiente.style.opacity = (indiceActual === urlsMultimedia.length - 1) ? 0.5 : 1;
     }
 
-    // Función para cambiar la imagen
-    function cambiarImagen(nuevoIndice) {
-        if (nuevoIndice >= 0 && nuevoIndice < urlsMultimedia.length) {
-            indiceActual = nuevoIndice;
-            imagenElement.src = urlsMultimedia[indiceActual];
-            actualizarFlechas();
+
+    function renderizarContenido() {
+        const tipo = tiposMultimedia[indiceActual];
+        const url = urlsMultimedia[indiceActual];
+
+        console.log(tipo);
+        console.log(url)
+
+        if(tipo === "VIDEO") {
+            contenedor.innerHTML = `
+                <video id="imagenPrincipal" class="imagen-principal" controls preload="metadata">
+                    <source src="${url}" type="video/mp4">
+                    Tu navegador no soporta videos.
+                </video>
+            `;
+        } else { // IMAGEN
+            contenedor.innerHTML = `
+                <img
+                                id="imagenPrincipal" src="${url}"
+                                class="imagen-principal"
+                >
+            `;
         }
+
+        actualizarFlechas();
     }
 
-    // Evento para flecha Siguiente
-    flechaSiguiente.addEventListener('click', function(event) {
-        event.preventDefault(); // Evita que el enlace recargue la página
-        if (indiceActual < urlsMultimedia.length - 1) {
-            cambiarImagen(indiceActual + 1);
+    // Eventos de navegación
+    flechaSiguiente.addEventListener('click', e => {
+        e.preventDefault();
+        if(indiceActual < urlsMultimedia.length - 1){
+            indiceActual++;
+            renderizarContenido();
         }
     });
 
-    // Evento para flecha Anterior
-    flechaAnterior.addEventListener('click', function(event) {
-        event.preventDefault(); // Evita que el enlace recargue la página
-        if (indiceActual > 0) {
-            cambiarImagen(indiceActual - 1);
+    flechaAnterior.addEventListener('click', e => {
+        e.preventDefault();
+        if(indiceActual > 0){
+            indiceActual--;
+            renderizarContenido();
         }
     });
 
-    // Inicializar el estado de las flechas al cargar la página
-    if (urlsMultimedia.length > 1) {
-        actualizarFlechas();
+    // Inicialización
+    if(urlsMultimedia.length > 0){
+        renderizarContenido();
+        if(urlsMultimedia.length === 1){
+            flechaAnterior.style.display = 'none';
+            flechaSiguiente.style.display = 'none';
+        }
     } else {
-        // Ocultar flechas si solo hay una imagen o ninguna
+        contenedor.innerHTML = "<p>No hay contenido multimedia disponible.</p>";
         flechaAnterior.style.display = 'none';
         flechaSiguiente.style.display = 'none';
     }
-
 </script>
 
 </body>

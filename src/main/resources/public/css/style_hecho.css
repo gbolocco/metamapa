@@ -63,6 +63,7 @@ body {
     /* height: 100%; */
     /* min-height: 500px; */
     overflow: hidden;
+    position: relative; /* Importante para el hijo si tiene position: absolute */
 }
 
 /* ========================================================================= */
@@ -74,12 +75,23 @@ body {
     /* --- AJUSTE CLAVE 3: Permitimos que la imagen defina el alto del contenedor padre. --- */
     /* Eliminamos el object-fit y el max-height para que la altura de la imagen
        fuerce la altura del div padre .hecho-imagen. */
-    width: 100%;
-    height: auto; /* El alto se ajusta automáticamente a la relación de aspecto del 100% de ancho. */
     max-width: 100%;
-
+    height: auto; /* El alto se ajusta automáticamente a la relación de aspecto del 100% de ancho. */
+    max-height: 100%;
+    display: block;
+    object-fit: contain;
+    width: auto;
+    height: auto;
     /* Si la imagen es más alta que el contenido del lado derecho,
        el div derecho se estirará por defecto (Flexbox). */
+}
+.hecho-imagen video.imagen-principal {
+    /* Si el video necesita llenar el 100% del contenedor visible, usa esto.
+       Solo si quieres que el video defina el tamaño del contenedor, usa height: 100% y width: 100% */
+    width: 100%;
+    height: 100%;
+    /* Nota: Si el video define la altura de la caja, el contenedor .hecho-imagen
+             debe tener una altura flexible (no fija). */
 }
 /* ========================================================================= */
 /* SECCIÓN DATOS (DERECHA) - AHORA MÁS PEQUEÑA */
@@ -212,3 +224,4 @@ body {
 .boton-solicitar:hover {
     background-color: #800000; /* Rojo más oscuro al pasar el mouse */
 }
+

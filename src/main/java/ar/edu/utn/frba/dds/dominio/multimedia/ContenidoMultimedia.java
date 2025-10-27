@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.dominio.multimedia;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,8 +22,14 @@ public class ContenidoMultimedia {
 
   private String urlArchivo; // El String de tu lista
 
-  public ContenidoMultimedia(String url) {
+  // Campo para saber si es imagen o video
+  @Enumerated(EnumType.STRING)
+  private TipoContenido tipoContenido;
+
+
+  public ContenidoMultimedia(String url, TipoContenido tipo) {
     this.urlArchivo = url;
+    this.tipoContenido = tipo;
   }
 
   public ContenidoMultimedia() {

@@ -5,12 +5,16 @@ import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
+import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
+import com.github.jknack.handlebars.Helper;
+import com.github.jknack.handlebars.Options;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.CompositeTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
@@ -77,8 +81,27 @@ public class WebApp {
       if (userRole != null && userRole.equals(requiredRole)) {
         return options.fn(context);
       }
+
+
       return options.inverse(context);
     });
+
+    // Registrar el helper booleano 'esVideo'
+    handlebars.registerHelper("esVideo", new Helper<ContenidoMultimedia>() {
+      @Override
+      public CharSequence apply(ContenidoMultimedia multimedia, Options options) throws IOException {
+
+        // Verifica si el tipo de contenido es VIDEO
+        if (multimedia != null && multimedia.getTipoContenido() == TipoContenido.VIDEO) {
+          // Si es un video, ejecuta el bloque 'fn' (el contenido dentro de {{#esVideo}})
+          return options.fn();
+        } else {
+          // Si no es un video, ejecuta el bloque 'inverse' (el {{else}})
+          return options.inverse();
+        }
+      }
+    });
+
 
     FileRenderer handlebarsRenderer = (filePath,
                                   model,
