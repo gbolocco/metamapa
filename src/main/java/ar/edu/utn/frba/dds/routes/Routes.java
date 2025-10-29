@@ -35,6 +35,10 @@ public class Routes {
         }
       });
 
+      path("/", () -> {
+        get("/login",login::mostrarLogin);
+      });
+
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
         });

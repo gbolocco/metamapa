@@ -2,6 +2,12 @@ package ar.edu.utn.frba.dds.controladores;
 
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
+import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
+import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
+import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde;
+import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaHasta;
+import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
@@ -9,6 +15,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.http.Context;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,10 +83,42 @@ public class ColeccionController {
       return;
     }
 
-    //Collection<Hecho> hechos = coleccion.getFuente().obtenerHechos(new ArrayList<>());
-    Collection<Hecho> hechos = coleccion.mostrarHechos();
+//    //Collection<Hecho> hechos = coleccion.getFuente().obtenerHechos(new ArrayList<>());
+//    Collection<Hecho> hechos = coleccion.mostrarHechos();
+
+    // Obtener filtros desde query params, por ejemplo: ?categoria=arte&autor=perez
+    List<Filtro> filtros = new ArrayList<>();
 
 
+    String fechaDesde = ctx.queryParam("fechaDesde");
+    String fechaHasta = ctx.queryParam("fechaHasta");
+    String campoTexto = ctx.queryParam("campoTexto");      // "titulo" o "descripcion"
+    String textoFiltro = ctx.queryParam("textoFiltro");
+
+    // 🕓 Filtros de fecha
+    DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+    if (fechaDesde != null && !fechaDesde.isEmpty()) {
+      filtros.add(new FiltroFechaDesde(LocalDateTime.parse(fechaDesde, formatter), CampoDeHecho.FECHA_ACONTECIMIENTO));
+    }
+    if (fechaHasta != null && !fechaHasta.isEmpty()) {
+      filtros.add(new FiltroFechaHasta(LocalDateTime.parse(fechaHasta, formatter), CampoDeHecho.FECHA_ACONTECIMIENTO));
+    }
+
+    if (textoFiltro != null) {
+
+      CampoDeHecho campo = campoTexto != null && campoTexto.equals("descripcion")
+            ? CampoDeHecho.DESCRIPCION
+            : CampoDeHecho.TITULO;
+      filtros.add(new FiltroContieneTexto(textoFiltro, campo));
+    }
+
+    Collection<Hecho> hechos;
+    if (filtros.isEmpty()) {
+      hechos = coleccion.mostrarHechos();
+    } else {
+      hechos = coleccion.filtrarHechos(filtros, TipoCombinacion.AND);
+    }
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());

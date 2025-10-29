@@ -38,6 +38,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       );
       hechos.forEach(hecho -> hecho.addContenidoMultimedia("https://media.istockphoto.com/id/155666671/es/" +
           "vector/ilustraci%C3%B3n-vectorial-de-red-house-icon.jpg?s=612x612&w=0&k=20&c=3IHzI5tgnVZQuE_4ZdJDIDyMGd44qWuketKv5EOvawQ=", TipoContenido.IMAGEN));
+      hechos.forEach(h-> h.addContenidoMultimedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", TipoContenido.VIDEO));
       hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
       var fuente = new FuenteDinamica();
       var colecciones = Arrays.asList(

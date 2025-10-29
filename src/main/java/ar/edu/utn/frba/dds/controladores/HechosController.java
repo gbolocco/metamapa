@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.controladores;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,6 +61,8 @@ public class HechosController implements WithSimplePersistenceUnit {
       double lat = Double.parseDouble(ctx.formParam("lat"));
       double lon = Double.parseDouble(ctx.formParam("lon"));
       LocalDateTime fechaOcurrencia = LocalDateTime.parse(ctx.formParam("fechaOcurrencia"));
+      String foto = ctx.formParam("foto");
+      String video = ctx.formParam("video");
 
       Hecho hecho = new Hecho(
           titulo,
@@ -70,6 +73,9 @@ public class HechosController implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
       );
+      
+      hecho.addContenidoMultimedia(foto, TipoContenido.IMAGEN);
+      hecho.addContenidoMultimedia(video, TipoContenido.VIDEO);
 
       //todo: deberia pegarle a un service, ese service al repositorio y despues a la base de datos
       repo.cargarHecho(hecho);

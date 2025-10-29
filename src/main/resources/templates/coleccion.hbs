@@ -83,6 +83,124 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+
+
+        /* 🎨 Estilos generales del contenedor */
+        .filtros-container {
+          background: #ffffff;
+          padding: 1.5rem 2rem;
+          border-radius: 12px;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+          margin: 2rem auto;
+          max-width: 900px;
+          transition: all 0.2s ease;
+        }
+
+        .filtros-container:hover {
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .filtros-container h2 {
+          margin-bottom: 1.5rem;
+          font-size: 1.6rem;
+          color: #333;
+          text-align: center;
+        }
+
+        /* 🧩 Formulario */
+        .filtros-form {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.2rem;
+        }
+
+        /* 🪟 Grupos de inputs */
+        .form-group {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .form-group label {
+          margin-bottom: 0.4rem;
+          font-weight: 600;
+          color: #555;
+        }
+
+        /* ✏️ Inputs y selects */
+        .filtros-form input,
+        .filtros-form select {
+          padding: 0.5rem 0.8rem;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          font-size: 0.95rem;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .filtros-form input:focus,
+        .filtros-form select:focus {
+          border-color: #0077ff;
+          box-shadow: 0 0 4px rgba(0, 119, 255, 0.3);
+          outline: none;
+        }
+
+        /* ⚙️ Acciones */
+        .form-actions {
+          grid-column: 1 / -1; /* Ocupa todo el ancho */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+
+        /* 🟦 Botón principal */
+        .form-actions button {
+          background-color: #0077ff;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          padding: 0.6rem 1.4rem;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .form-actions button:hover {
+          background-color: #005fcc;
+          transform: translateY(-1px);
+        }
+
+        /* 🩶 Botón secundario (limpiar) */
+        .btn-secondary {
+          background-color: #e0e0e0;
+          color: #333;
+          text-decoration: none;
+          border-radius: 8px;
+          padding: 0.6rem 1.4rem;
+          font-size: 1rem;
+          transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-secondary:hover {
+          background-color: #cfcfcf;
+          transform: translateY(-1px);
+        }
+
+        /* 📱 Responsivo */
+        @media (max-width: 600px) {
+          .filtros-container {
+            padding: 1rem;
+          }
+
+          .filtros-form {
+            grid-template-columns: 1fr;
+          }
+
+          .form-actions {
+            flex-direction: column;
+          }
+        }
+
     </style>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -92,6 +210,39 @@
 <header>
     <h1>{{coleccion.nombre}}</h1>
 </header>
+
+<div class="filtros-container">
+  <h2>Filtrar Hechos</h2>
+
+  <form method="get" action="/colecciones/{{coleccion.id}}"class="filtros-form">
+    <div class="form-group">
+      <label for="campoTexto">Buscar por:</label>
+      <select name="campoTexto" id="campoTexto">
+        <option value="titulo">Título</option>
+        <option value="descripcion">Descripción</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="textoFiltro">Texto contiene:</label>
+      <input type="text" id="textoFiltro" name="textoFiltro" placeholder="Palabra clave...">
+    </div>
+
+    <div class="form-group">
+      <label for="fechaDesde">Fecha desde:</label>
+      <input type="datetime-local" id="fechaDesde" name="fechaDesde">
+    </div>
+
+    <div class="form-group">
+      <label for="fechaHasta">Fecha hasta:</label>
+      <input type="datetime-local" id="fechaHasta" name="fechaHasta">
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">Aplicar filtros</button>
+    </div>
+  </form>
+</div>
 
 <section>
     <p><strong>Titulo:</strong> {{coleccion.titulo}}</p>
