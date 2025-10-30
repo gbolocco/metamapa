@@ -23,12 +23,16 @@
 
     // Añadir los marcadores
     hechos.forEach(h => {
-        L.marker([h.ubicacion.latitud, h.ubicacion.longitud])
+        const marker = L.marker([h.ubicacion.latitud, h.ubicacion.longitud])
                 .addTo(map)
                 .bindPopup(`
-                <b>${h.titulo}</b><br>
-                ${h.descripcion}<br>
-                (${h.ubicacion.latitud}, ${h.ubicacion.longitud})
-            `);
+      <b>${h.titulo}</b><br>
+      ${h.descripcion}<br>
+      (${h.ubicacion.latitud}, ${h.ubicacion.longitud})<br>
+
+    `);
     });
+
+
+
 </script>

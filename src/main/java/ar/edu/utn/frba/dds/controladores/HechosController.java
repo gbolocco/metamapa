@@ -1,16 +1,21 @@
 package ar.edu.utn.frba.dds.controladores;
 
+import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
+import java.util.ArrayList;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -20,7 +25,7 @@ import java.util.Map;
 
 public class HechosController implements WithSimplePersistenceUnit {
   private HechosRepository repo = HechosRepository.getInstancia();
-  private Map<String, Object> model;
+  private final ObjectMapper mapper = new ObjectMapper();
 
   public void listar(Context ctx) {
     Map<String, Object> model = new HashMap<>();
@@ -29,27 +34,18 @@ public class HechosController implements WithSimplePersistenceUnit {
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("hechos", repo.mostrarHechos());
     ctx.render("hechos.hbs", model);
   }
 
   public void mostrarFormulario(Context ctx) {
-    ctx.render("hechos-form.hbs");
-  }
-
-  public void mostrarMapa(Context ctx) throws JsonProcessingException {
-    Collection<Hecho> hechos = repo.mostrarHechos();
-
     Map<String, Object> model = new HashMap<>();
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(new JavaTimeModule());
-    String hechosJson = mapper.writeValueAsString(hechos);
-
-    model.put("hechosJson", hechosJson);
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
-    ctx.render("mapa.hbs", model);
+    ctx.render("hechos-form.hbs",model);
   }
 
   public void crear(Context ctx) {
@@ -60,6 +56,8 @@ public class HechosController implements WithSimplePersistenceUnit {
       double lat = Double.parseDouble(ctx.formParam("lat"));
       double lon = Double.parseDouble(ctx.formParam("lon"));
       LocalDateTime fechaOcurrencia = LocalDateTime.parse(ctx.formParam("fechaOcurrencia"));
+      String foto = ctx.formParam("foto");
+      String video = ctx.formParam("video");
 
       Hecho hecho = new Hecho(
           titulo,
@@ -70,6 +68,9 @@ public class HechosController implements WithSimplePersistenceUnit {
           LocalDateTime.now(),
           OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
       );
+      
+      hecho.addContenidoMultimedia(foto, TipoContenido.IMAGEN);
+      hecho.addContenidoMultimedia(video, TipoContenido.VIDEO);
 
       //todo: deberia pegarle a un service, ese service al repositorio y despues a la base de datos
       repo.cargarHecho(hecho);
@@ -87,17 +88,56 @@ public class HechosController implements WithSimplePersistenceUnit {
   }
 
   public void mostrar(Context ctx) {
-    Long hechoId = Long.parseLong(ctx.pathParam("hechoId"));
+    try {
+      System.out.println("➡️ Entrando al método mostrar()");
 
-    if (repo.existe(hechoId)) {
-      ctx.json(repo.buscar(hechoId));
+      String idParam = ctx.queryParam("id");
+      String hechoJson = ctx.queryParam("hecho");
+
+      System.out.println("🟢 idParam: " + idParam);
+      System.out.println("🟢 hechoJson: " + hechoJson);
+
+      if (hechoJson == null || hechoJson.isEmpty()) {
+        ctx.status(400).result("Falta el parámetro 'hecho'");
+        return;
+      }
+
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.registerModule(new JavaTimeModule());
+      mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+      Hecho hecho = mapper.readValue(hechoJson, Hecho.class);
+
+      Long id = null;
+      try {
+        if (idParam != null && !idParam.equals("null")) {
+          id = Long.parseLong(idParam);
+          hecho.setContenidoMultimedia(repo.buscar(id).getContenidoMultimedia());
+          System.out.println(hecho.getContenidoMultimedia());
+        }
+          if (hecho.getContenidoMultimedia() == null)
+            hecho.setContenidoMultimedia(new ArrayList<>());
+
+      } catch (NumberFormatException e) {
+        System.err.println("⚠️ id inválido: " + idParam);
+      }
+
+      Map<String, Object> model = new HashMap<>();
+      model.put("hecho", hecho);
       model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
       model.put("rol", ctx.sessionAttribute("rol"));
+      model.put("user_name", ctx.sessionAttribute("user_name"));
       model.put("user_id", ctx.sessionAttribute("user_id"));
-      ctx.render("hechos.hbs", model);
-    } else {
-      ctx.status(HttpStatus.NOT_FOUND);
-      ctx.result("Producto no encontrado");
+
+      ctx.render("hecho.hbs", model);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error interno del servidor: " + e.getMessage());
     }
   }
+
+
+
 }
+

@@ -3,9 +3,12 @@ package ar.edu.utn.frba.dds.script;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
+import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
+import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.modelo.Rol;
@@ -35,10 +38,14 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           new Hecho("Prueba1", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
           new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2,10.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.FUENTE_PROXY)
       );
+      hechos.forEach(hecho -> hecho.addContenidoMultimedia("https://media.istockphoto.com/id/155666671/es/" +
+          "vector/ilustraci%C3%B3n-vectorial-de-red-house-icon.jpg?s=612x612&w=0&k=20&c=3IHzI5tgnVZQuE_4ZdJDIDyMGd44qWuketKv5EOvawQ=", TipoContenido.IMAGEN));
+      hechos.forEach(h-> h.addContenidoMultimedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", TipoContenido.VIDEO));
       hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
       var fuente = new FuenteDinamica();
+      var fuenteEstatica = new FuenteEstatica("./datos/desastres_naturales_processed.csv",new LectorCsv());
       var colecciones = Arrays.asList(
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuenteEstatica,"prueba"),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),

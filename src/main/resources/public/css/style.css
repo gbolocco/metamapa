@@ -4,7 +4,7 @@
 }
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
+    background-color: #333333;
     flex-direction: column;
     margin: 0;
     padding: 0;
@@ -32,7 +32,7 @@ th, td {
 }
 
 th {
-    background-color: #4CAF50;
+    background-color: #75501d;
     color: white;
 }
 
@@ -342,6 +342,14 @@ main {
   padding: 1rem 0;
 }
 
+.dropdown-item{
+  display: flex;
+  align-content: space-between;
+  flex-direction: column;
+}
+.user_name{
+  font-size: 20px;
+}
 /* Contenido principal */
 .grid-main {
   grid-area: main;

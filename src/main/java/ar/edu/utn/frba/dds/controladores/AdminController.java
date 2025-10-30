@@ -15,6 +15,7 @@ public class AdminController implements WithSimplePersistenceUnit {
     model.put("title", "Panel Admin");
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
 
     //model.put("colecciones", colecciones.mostrarColecciones());
