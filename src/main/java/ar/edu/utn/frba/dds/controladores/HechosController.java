@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class HechosController implements WithSimplePersistenceUnit {
   private HechosRepository repo = HechosRepository.getInstancia();
-  private Map<String, Object> model;
+
 
   public void listar(Context ctx) {
     Map<String, Object> model = new HashMap<>();
@@ -30,27 +30,18 @@ public class HechosController implements WithSimplePersistenceUnit {
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("hechos", repo.mostrarHechos());
     ctx.render("hechos.hbs", model);
   }
 
   public void mostrarFormulario(Context ctx) {
-    ctx.render("hechos-form.hbs");
-  }
-
-  public void mostrarMapa(Context ctx) throws JsonProcessingException {
-    Collection<Hecho> hechos = repo.mostrarHechos();
-
     Map<String, Object> model = new HashMap<>();
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(new JavaTimeModule());
-    String hechosJson = mapper.writeValueAsString(hechos);
-
-    model.put("hechosJson", hechosJson);
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
-    ctx.render("mapa.hbs", model);
+    ctx.render("hechos-form.hbs",model);
   }
 
   public void crear(Context ctx) {

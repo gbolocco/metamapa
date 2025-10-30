@@ -13,12 +13,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
 
         header {
             text-align: center;
@@ -107,14 +101,12 @@
           text-align: center;
         }
 
-        /* 🧩 Formulario */
         .filtros-form {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 1.2rem;
         }
 
-        /* 🪟 Grupos de inputs */
         .form-group {
           display: flex;
           flex-direction: column;
@@ -126,7 +118,6 @@
           color: #555;
         }
 
-        /* ✏️ Inputs y selects */
         .filtros-form input,
         .filtros-form select {
           padding: 0.5rem 0.8rem;
@@ -143,7 +134,6 @@
           outline: none;
         }
 
-        /* ⚙️ Acciones */
         .form-actions {
           grid-column: 1 / -1; /* Ocupa todo el ancho */
           display: flex;
@@ -170,7 +160,6 @@
           transform: translateY(-1px);
         }
 
-        /* 🩶 Botón secundario (limpiar) */
         .btn-secondary {
           background-color: #e0e0e0;
           color: #333;
@@ -186,7 +175,6 @@
           transform: translateY(-1px);
         }
 
-        /* 📱 Responsivo */
         @media (max-width: 600px) {
           .filtros-container {
             padding: 1rem;
@@ -259,18 +247,14 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-    // Los datos vienen del backend como un JSON string
-    const hechos = {{{hechosJson}}}; // triple llave para no escapar comillas
+    const hechos = {{{hechosJson}}};
 
-    // Crear el mapa centrado en Buenos Aires (ajustá el zoom si tus puntos están lejos)
     const map = L.map('map').setView([-34.6037, -58.3816], 5);
 
-    // Capa base (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Añadir los marcadores
     hechos.forEach(h => {
         if(h.ubicacion && h.ubicacion.latitud && h.ubicacion.longitud) {
             L.marker([h.ubicacion.latitud, h.ubicacion.longitud])

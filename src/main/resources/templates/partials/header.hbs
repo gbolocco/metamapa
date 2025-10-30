@@ -19,19 +19,45 @@
           <path d="M20.59 22C20.59 18.13 16.74 15 12 15C7.26 15 3.41 18.13 3.41 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <div class="dropdown-menu">
+        <div class="dropdown-menu">
             {{#if loggedIn}}
-                  <span><a href="/admin/dashboard">Panel admin</a></span>
-                  <span><a href="/solicitudes">Solicitudes</a></span>
-
-                <form id="logoutForm" method="post" action="/logout">
-                  <button type="submit">Salir</button>
-                </form>
+                <div class="dropdown-item" id="dropDown-options"></div>
             {{else}}
-        <a href="/login" class="btn">Iniciar Sesión </a>
-         {{/if}}
-      </div>
+                <a href="/login" class="btn">Iniciar Sesión</a>
+            {{/if}}
+        </div>
     </div>
+
 
   </div>
 </header>
+
+<script>
+    // Inyectamos los valores desde Handlebars con comillas
+    const tipoUsuario = "{{rol}}";
+    const nombreUsuario = "{{user_name}}";
+    const estaLogueado = "{{loggedIn}}" === "true";
+
+    const menu = document.getElementById("dropDown-options");
+
+    if (estaLogueado && menu) {
+        let html = `<span class="user_name"><b>${nombreUsuario}</b></span>`;
+
+        if (tipoUsuario === "ADMIN") {
+            html += `
+        <span><a href="/admin/dashboard">Panel admin</a></span>
+        <span><a href="/solicitudes">Solicitudes</a></span>
+        <form id="logoutForm" method="post" action="/logout">
+          <button type="submit">Salir</button>
+        </form>`;
+        } else if (tipoUsuario === "USER") {
+            html += `
+        <span><a href="/solicitudes">Solicitudes</a></span>
+        <form id="logoutForm" method="post" action="/logout">
+          <button type="submit">Salir</button>
+        </form>`;
+        }
+
+        menu.innerHTML = html;
+    }
+</script>

@@ -21,6 +21,7 @@ public class Routes {
 
       before(ctx -> {
         ctx.attribute("user_id", ctx.sessionAttribute("user_id"));
+        ctx.attribute("user_name", ctx.sessionAttribute("nombre"));
         ctx.attribute("loggedIn", ctx.sessionAttribute("loggedIn"));
         ctx.attribute("rol", ctx.sessionAttribute("rol"));
       });
@@ -45,7 +46,7 @@ public class Routes {
       path("/hechos", () -> {
         get(hechos::listar);
         get("/nuevo", hechos::mostrarFormulario);
-        get("/mapa", hechos::mostrarMapa);
+
         post(hechos::crear);
 
       });

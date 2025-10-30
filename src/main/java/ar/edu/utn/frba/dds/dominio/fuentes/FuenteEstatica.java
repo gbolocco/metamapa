@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.lectores.Lector;
+import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 
 import java.util.List;
@@ -26,12 +27,12 @@ public class FuenteEstatica extends Fuente {
 
   public FuenteEstatica(String rutaArchivo, Lector lector) {
     this.rutaArchivo = rutaArchivo;
-    this.lector = lector;
-    this.cargarFuente();
     FuentesRepository.getInstancia().agregarFuente(this);
   }
 
   public List<Hecho> obtenerHechos(List<Filtro> criteriosDePertenencia) {
+    LectorCsv lectorCsv = new LectorCsv();
+    this.hechos = lectorCsv.leer(rutaArchivo);
     return this.hechos.stream()
         .filter(hecho -> cumpleCriterio(hecho, criteriosDePertenencia))
         .collect(Collectors.toList());

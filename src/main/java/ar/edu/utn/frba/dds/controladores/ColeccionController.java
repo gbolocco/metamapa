@@ -67,6 +67,7 @@ public class ColeccionController {
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
 
     ctx.render("colecciones.hbs", model);
   }
@@ -129,6 +130,7 @@ public class ColeccionController {
     model.put("hechosJson", hechosJson);
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
 
     ctx.render("coleccion.hbs", model);

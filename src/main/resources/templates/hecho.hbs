@@ -10,7 +10,6 @@
 <main class="hecho-main">
     <div class="hecho-contenedor">
 
-        <!-- Contenedor dinámico para multimedia -->
         <div class="hecho-imagen" id="contenedorMultimedia"></div>
 
         <div class="hecho-datos">
@@ -28,7 +27,6 @@
             </div>
         </div>
 
-        <!-- Flechas -->
         <div class="hecho-flechas">
             <a href="#" id="flechaAnterior" class="flecha">⬅</a>
             <a href="#" id="flechaSiguiente" class="flecha">➡</a>
@@ -37,7 +35,6 @@
 </main>
 
 <script>
-    // Arrays de URLs y tipos generados desde Handlebars
     const urlsMultimedia = [
         {{#each hecho.contenidoMultimedia}}
             "{{this.urlArchivo}}"{{#unless @last}},{{/unless}}

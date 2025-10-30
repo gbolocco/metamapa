@@ -3,9 +3,11 @@ package ar.edu.utn.frba.dds.script;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
+import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
@@ -41,8 +43,9 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       hechos.forEach(h-> h.addContenidoMultimedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", TipoContenido.VIDEO));
       hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
       var fuente = new FuenteDinamica();
+      var fuenteEstatica = new FuenteEstatica("./datos/desastres_naturales_processed.csv",new LectorCsv());
       var colecciones = Arrays.asList(
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuenteEstatica,"prueba"),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),

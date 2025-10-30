@@ -86,22 +86,6 @@ public class WebApp {
       return options.inverse(context);
     });
 
-    // Registrar el helper booleano 'esVideo'
-    handlebars.registerHelper("esVideo", new Helper<ContenidoMultimedia>() {
-      @Override
-      public CharSequence apply(ContenidoMultimedia multimedia, Options options) throws IOException {
-
-        // Verifica si el tipo de contenido es VIDEO
-        if (multimedia != null && multimedia.getTipoContenido() == TipoContenido.VIDEO) {
-          // Si es un video, ejecuta el bloque 'fn' (el contenido dentro de {{#esVideo}})
-          return options.fn();
-        } else {
-          // Si no es un video, ejecuta el bloque 'inverse' (el {{else}})
-          return options.inverse();
-        }
-      }
-    });
-
 
     FileRenderer handlebarsRenderer = (filePath,
                                   model,

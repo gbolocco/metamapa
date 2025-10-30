@@ -36,10 +36,14 @@ public class LoginController {
       return;
     }
     ctx.sessionAttribute("user_id", usuario.getId());
+    ctx.sessionAttribute("user_name", nombre);
     ctx.sessionAttribute("loggedIn", true);
     ctx.sessionAttribute("rol", usuario.getRol());
+
     if (usuario.getRol() == Rol.ADMIN) {
-        ctx.redirect("/admin/dashboard");
+      ctx.redirect("/admin/dashboard");
+    }if (usuario.getRol() == Rol.USER) {
+      ctx.redirect("/colecciones");
     }
     //ctx.redirect("/hechos");
   }
