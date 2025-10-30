@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds.controladores;
 
+import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +23,7 @@ import java.util.Map;
 
 public class HechosController implements WithSimplePersistenceUnit {
   private HechosRepository repo = HechosRepository.getInstancia();
-
+  private final ObjectMapper mapper = new ObjectMapper();
 
   public void listar(Context ctx) {
     Map<String, Object> model = new HashMap<>();
@@ -83,13 +85,31 @@ public class HechosController implements WithSimplePersistenceUnit {
     }
   }
 
-  public void mostrar(Context ctx) {
-    Long id = Long.parseLong(ctx.pathParam("hechoId"));
-    Hecho hecho = repo.buscar(id);
-    Map<String, Object> model = new HashMap<>();
-    model.put("hecho", hecho);
+  public void mostrar(Context ctx) throws JsonProcessingException {
+    System.out.println("hola");
 
-    ctx.render("hecho.hbs", model);
+    long id = Long.parseLong(ctx.formParam("id"));
+    String hechoJson = ctx.formParam("hecho");
+
+    System.out.println(hechoJson);
+
+    Hecho hecho = mapper.readValue(hechoJson, Hecho.class);
+
+    System.out.println("Hecho: " + hecho.getTitulo());
+    System.out.println("Id: " + id);
+    //Coleccion coleccion = ColeccionRepository.getInstancia().buscarColeccionPorId(coleccionId);
+    //if (coleccion.mostrarHechos().stream().anyMatch(hecho1 -> hecho1.getId().equals(hecho.getId()))) {
+
+      Map<String, Object> model = new HashMap<>();
+      model.put("hecho", hecho);
+      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+      model.put("rol", ctx.sessionAttribute("rol"));
+      model.put("user_name", ctx.sessionAttribute("user_name"));
+      model.put("user_id", ctx.sessionAttribute("user_id"));
+
+      ctx.render("hecho.hbs", model);
+    //}
   }
+
 
 }

@@ -254,29 +254,44 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+    const coleccionId = {{coleccion.id}};
+    const hechos = {{{hechosJson}}};
 
     hechos.forEach(h => {
-        if(h.ubicacion && h.ubicacion.latitud && h.ubicacion.longitud) {
+        if (h.ubicacion && h.ubicacion.latitud && h.ubicacion.longitud) {
+            const hechoJson = JSON.stringify(h).replace(/'/g, "&#39;");
+
             L.marker([h.ubicacion.latitud, h.ubicacion.longitud])
                     .addTo(map)
                     .bindPopup(`
-                    <b>${h.titulo}</b><br>
-                    ${h.descripcion}<br>
-                    (${h.ubicacion.latitud}, ${h.ubicacion.longitud})
-                    <button class="hecho" data-id="${h.id}">Expandir</button>
-                `);
+          <b>${h.titulo}</b><br>
+          ${h.descripcion}<br>
+          (${h.ubicacion.latitud}, ${h.ubicacion.longitud})
+          <form method="POST" action="/colecciones/${coleccionId}/hechos" style="margin-top:8px;">
+            <input type="hidden" name="coleccionId" value="${coleccionId}">
+            <input type="hidden" name="hecho" value='${hechoJson}'>
+            <button type="submit" class="as-link">Expandir</button>
+          </form>
+        `);
         }
     });
 </script>
-<script>
-    document.addEventListener('click', async (e) => {
-        const coleccionId = {{coleccion.id}}
-        if (e.target.classList.contains('hecho')) {
-            const id = e.target.dataset.id;
-            window.location.href = `/colecciones/${coleccionId}/hechos/${id}`;
-        }
-    })
-</script>
 
+<style>
+    /* Para que el botón parezca un link */
+    .as-link {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: #007BFF;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    .as-link:hover {
+        color: #0056b3;
+    }
+</style>
 </body>
 </html>
