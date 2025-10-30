@@ -9,11 +9,13 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
+import java.util.ArrayList;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -85,20 +87,40 @@ public class HechosController implements WithSimplePersistenceUnit {
     }
   }
 
-  public void mostrar(Context ctx) throws JsonProcessingException {
-    System.out.println("hola");
+  public void mostrar(Context ctx) {
+    try {
+      System.out.println("➡️ Entrando al método mostrar()");
 
-    long id = Long.parseLong(ctx.formParam("id"));
-    String hechoJson = ctx.formParam("hecho");
+      String idParam = ctx.queryParam("id");
+      String hechoJson = ctx.queryParam("hecho");
 
-    System.out.println(hechoJson);
+      System.out.println("🟢 idParam: " + idParam);
+      System.out.println("🟢 hechoJson: " + hechoJson);
 
-    Hecho hecho = mapper.readValue(hechoJson, Hecho.class);
+      if (hechoJson == null || hechoJson.isEmpty()) {
+        ctx.status(400).result("Falta el parámetro 'hecho'");
+        return;
+      }
 
-    System.out.println("Hecho: " + hecho.getTitulo());
-    System.out.println("Id: " + id);
-    //Coleccion coleccion = ColeccionRepository.getInstancia().buscarColeccionPorId(coleccionId);
-    //if (coleccion.mostrarHechos().stream().anyMatch(hecho1 -> hecho1.getId().equals(hecho.getId()))) {
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.registerModule(new JavaTimeModule());
+      mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+      Hecho hecho = mapper.readValue(hechoJson, Hecho.class);
+
+      Long id = null;
+      try {
+        if (idParam != null && !idParam.equals("null")) {
+          id = Long.parseLong(idParam);
+          hecho.setContenidoMultimedia(repo.buscar(id).getContenidoMultimedia());
+          System.out.println(hecho.getContenidoMultimedia());
+        }
+          if (hecho.getContenidoMultimedia() == null)
+            hecho.setContenidoMultimedia(new ArrayList<>());
+
+      } catch (NumberFormatException e) {
+        System.err.println("⚠️ id inválido: " + idParam);
+      }
 
       Map<String, Object> model = new HashMap<>();
       model.put("hecho", hecho);
@@ -108,8 +130,14 @@ public class HechosController implements WithSimplePersistenceUnit {
       model.put("user_id", ctx.sessionAttribute("user_id"));
 
       ctx.render("hecho.hbs", model);
-    //}
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error interno del servidor: " + e.getMessage());
+    }
   }
 
 
+
 }
+

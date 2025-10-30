@@ -59,7 +59,7 @@ public class Routes {
       path("/colecciones", () -> {
         get(coleccionController::mostrarColecciones);
         get("/{id}",coleccionController::mostrarColeccion);
-        post("/{id}/hecho", hechos::mostrar);
+        get("/{id}/hechos", hechos::mostrar);
       });
 
       post("/logout", login::logout);

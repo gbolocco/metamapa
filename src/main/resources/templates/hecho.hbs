@@ -4,33 +4,145 @@
     <meta charset="utf-8">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/style_hecho.css">
+    <style>
+        /* ✅ Ajuste dinámico de título */
+        .hecho-datos h1 {
+            font-size: clamp(1.2rem, 2vw + 1rem, 2.8rem);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        /* ✅ Ajuste visual cuando no hay multimedia */
+        .hecho-sin-multimedia .hecho-imagen {
+            display: none;
+        }
+
+        .hecho-sin-multimedia .hecho-datos {
+            flex: 1;
+            width: 100%;
+            text-align: center;
+        }
+
+
+
+        .hecho-imagen {
+            flex: 1;
+            background-color: #d4b27f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid #000;
+        }
+
+        .hecho-datos {
+            flex: 2;
+            padding: 2rem;
+            color: white;
+            background-color: rgba(108, 71, 27, 0.85);
+        }
+
+        .hecho-acciones {
+            margin-top: 1.5rem;
+        }
+
+        .boton-solicitar {
+            background-color: #b30000;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .boton-solicitar:hover {
+            background-color: #800000;
+        }
+
+        /* ********************************************************** */
+        /* CSS LOCAL PARA EVITAR CONFLICTO CON ESTILOS INYECTADOS */
+        /* ********************************************************** */
+
+
+        /* 3. Flechas debajo */
+        .hecho-flechas {
+            /* Quitamos el posicionamiento absoluto */
+            position: static;
+            width: 100%;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center; /* Centrar las flechas */
+            gap: 20px;
+            /* Fondo para que parezca parte del marco */
+            background: rgba(108, 71, 27, 0.85);
+            border-radius: 0 0 8px 8px; /* Bordes redondeados solo abajo */
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1) inset; /* Sombra sutil */
+        }
+
+        .hecho-flechas .flecha {
+            /* Estilos de las flechas */
+            text-decoration: none;
+            font-size: 1.5rem;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 0.3s, background-color 0.3s;
+            /* Aseguramos que los estilos anteriores de margen negativo NO se apliquen */
+            margin: 0 !important;
+        }
+
+        .hecho-flechas .flecha:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Si no hay multimedia, ocultamos las flechas */
+        .hecho-sin-multimedia .hecho-flechas {
+            display: none;
+        }
+
+        /* Corregimos el estilo de la línea divisoria del lado derecho */
+        .hecho-datos::after {
+            content: none !important; /* Anulamos el pseudo-elemento absoluto que causa problemas */
+        }
+
+
+    </style>
 </head>
 <body>
 
 <main class="hecho-main">
-    <div class="hecho-contenedor">
+    <div id="hechoContenedor" class="hecho-contenedor">
 
-        <div class="hecho-imagen" id="contenedorMultimedia"></div>
+        <div class="hecho-contenido-superior">
+            <div class="hecho-imagen" id="contenedorMultimedia"></div>
 
-        <div class="hecho-datos">
-            <h1>{{hecho.titulo}}</h1>
+            <div class="hecho-datos">
+                <h1>{{hecho.titulo}}</h1>
 
-            <p><strong>Categoría:</strong> {{hecho.categoria}}</p>
-            <p><strong>Descripción:</strong> {{hecho.descripcion}}</p>
-            <p><strong>Estado:</strong> {{hecho.estadoHecho}}</p>
-            <p><strong>Fecha del hecho:</strong> {{hecho.fechaAcontecimiento}}</p>
-            <p><strong>Origen:</strong> {{hecho.origenHecho}}</p>
-            <div class="hecho-acciones">
-                <button type="button" class="boton-solicitar">
-                    Solicitar Eliminación
-                </button>
+                <p><strong>Categoría:</strong> {{hecho.categoria}}</p>
+                <p><strong>Descripción:</strong> {{hecho.descripcion}}</p>
+                <p><strong>Estado:</strong> {{hecho.estadoHecho}}</p>
+                <p><strong>Fecha del hecho:</strong> {{hecho.fechaAcontecimiento}}</p>
+                <p><strong>Origen:</strong> {{hecho.origenHecho}}</p>
+
+                <div class="hecho-acciones">
+                    <button type="button" class="boton-solicitar">Solicitar Eliminación</button>
+                </div>
             </div>
         </div>
-
         <div class="hecho-flechas">
             <a href="#" id="flechaAnterior" class="flecha">⬅</a>
             <a href="#" id="flechaSiguiente" class="flecha">➡</a>
         </div>
+
+
     </div>
 </main>
 
@@ -47,25 +159,21 @@
         {{/each}}
     ];
 
-    const hechoTitulo = "{{hecho.titulo}}";
-
-    let indiceActual = 0;
     const contenedor = document.getElementById('contenedorMultimedia');
+    const contenedorPrincipal = document.getElementById('hechoContenedor');
     const flechaAnterior = document.getElementById('flechaAnterior');
     const flechaSiguiente = document.getElementById('flechaSiguiente');
+    let indiceActual = 0;
 
     function actualizarFlechas() {
         flechaAnterior.style.opacity = (indiceActual === 0) ? 0.5 : 1;
         flechaSiguiente.style.opacity = (indiceActual === urlsMultimedia.length - 1) ? 0.5 : 1;
     }
 
-
     function renderizarContenido() {
         const tipo = tiposMultimedia[indiceActual];
         const url = urlsMultimedia[indiceActual];
-
-        console.log(tipo);
-        console.log(url)
+        console.log("renderizando contenido")
 
         if(tipo === "VIDEO") {
             contenedor.innerHTML = `
@@ -74,19 +182,16 @@
                     Tu navegador no soporta videos.
                 </video>
             `;
-        } else { // IMAGEN
+        } else {
             contenedor.innerHTML = `
-                <img
-                                id="imagenPrincipal" src="${url}"
-                                class="imagen-principal"
-                >
+                <img id="imagenPrincipal" src="${url}" class="imagen-principal">
             `;
         }
 
         actualizarFlechas();
     }
 
-    // Eventos de navegación
+    // Navegación
     flechaSiguiente.addEventListener('click', e => {
         e.preventDefault();
         if(indiceActual < urlsMultimedia.length - 1){
@@ -110,8 +215,9 @@
             flechaAnterior.style.display = 'none';
             flechaSiguiente.style.display = 'none';
         }
+        // No es necesario un "else" para mostrar, ya que se asume visible por defecto.
     } else {
-        contenedor.innerHTML = "<p>No hay contenido multimedia disponible.</p>";
+        contenedorPrincipal.classList.add("hecho-sin-multimedia");
         flechaAnterior.style.display = 'none';
         flechaSiguiente.style.display = 'none';
     }

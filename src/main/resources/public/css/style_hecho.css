@@ -1,227 +1,180 @@
 /* ========================================================================= */
-/* ESTILOS GENERALES Y FONDO */
+/* CONTENEDOR CENTRAL DEL HECHO */
+/* (Sección principal que apila la fila superior y las flechas) */
 /* ========================================================================= */
-
-body {
-    /* Fondo color crema/amarillo claro */
-    background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-/* Contenedor principal del hecho (Incluye la caja marrón/dorada) */
 .hecho-main {
     padding: 20px;
     width: 100%;
-    max-width: 1000px;
-    border-top: 5px solid #a0805c;
-    border-bottom: 5px solid #a0805c;
+    /* Asegura que no exceda un ancho razonable, por ejemplo, el 90% */
+    max-width: 1500px; /* Usa el valor que definiste para el tamaño grande */
     box-sizing: border-box;
-    /* --- CAMBIO: Aumenta la separación del "header" de la página. --- */
-    margin-top: 100px;
-    margin-bottom: 100px;
+
+    /* CAMBIOS CLAVE: */
+    /* 1. Fondo: Debe ser transparente. */
+    background-color: transparent !important; /* O asegúrate de que no tenga ninguna regla de color. */
+    background: none !important;
+
+    /* 2. Centrado: Si no está en el body, lo centramos aquí. */
+    margin-left: auto;
+    margin-right: auto;
+    /* Mantenemos tus márgenes verticales si los tenías: */
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
 }
-
-/* ========================================================================= */
-/* CONTENEDOR CENTRAL DEL HECHO */
-/* ========================================================================= */
-
 .hecho-contenedor {
-    display: flex;
-    gap: 0;
-    /* --- CAMBIO CLAVE 1: Eliminamos la altura mínima para que se adapte al contenido. --- */
-    /* min-height: 500px; */
-    min-width: 800px;
-    position: relative;
+    /* Mantenemos tus estilos existentes */
+    /* ... */
+    min-width: 1000px;
+    position: relative; /* Lo mantenemos si lo necesitas, pero no es crítico para este layout */
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
-    /* overflow: hidden; (Ya lo habías quitado, lo mantenemos sin él para las flechas) */
+
+    /* CAMBIOS CLAVE: Cambiar a columna y eliminar bordes/overflow aquí */
+    display: flex;
+    flex-direction: column; /* <--- 1. CLAVE: Apila los contenidos verticalmente */
+    overflow: visible; /* Aseguramos que nada se corte */
+
+    /* Quitamos el fondo y el border-radius de aquí para moverlo a la fila superior */
+    background: none;
 }
+
+
+/* ************************************************************************* */
+/* NUEVA SECCIÓN: Contenedor para Imagen y Datos (Fila Superior) */
+/* ************************************************************************* */
+
+.hecho-contenido-superior {
+    display: flex; /* <-- 2. CLAVE: Mantiene Imagen y Datos en fila */
+    width: 100%;
+    /* Recuperamos los estilos visuales del marco aquí */
+    background: linear-gradient(to bottom, #b48853, #e2c58a);
+    border-radius: 5px 5px 0 0; /* Bordes redondeados solo arriba */
+    overflow: hidden; /* Aseguramos que la imagen se mantenga dentro del borde */
+    /* El box-shadow se mantiene en .hecho-contenedor */
+}
+
 
 /* ========================================================================= */
 /* SECCIÓN IMAGEN (IZQUIERDA) */
-/* (Se modifica para que el alto sea determinado por el contenido, la imagen) */
+/* ========================================================================= */
+
+/* ========================================================================= */
+/* SECCIÓN IMAGEN (IZQUIERDA) */
+/* (Asegura que el contenedor tenga una altura definida por su hermano o por un mínimo) */
 /* ========================================================================= */
 
 .hecho-imagen {
-    /* ... (Estilos existentes) ... */
-    width: 55%;
+    flex: 1; /* Esto le da flexibilidad para crecer */
+    width: 55%; /* Mantiene tu ancho preferido */
+    background-color: #d4b27f;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; /* Centra la imagen/video dentro de su caja */
     border: 3px solid black;
     box-sizing: border-box;
     padding: 20px;
+    min-height: 450px; /* <--- AUMENTAR: De 300px (sugerido antes) a 450px (o el valor deseado) */
 
-    /* --- CAMBIO CLAVE 2: Quitamos height: 100% y min-height fijos --- */
-    /* height: 100%; */
-    /* min-height: 500px; */
+    /* Asegúrate de que las reglas de ajuste sigan siendo las mismas */
     overflow: hidden;
-    position: relative; /* Importante para el hijo si tiene position: absolute */
+    position: relative;
 }
 
 /* ========================================================================= */
-/* ESTILO DE IMAGENES DENTRO DE hecho-imagen */
-/* (Aseguramos que la imagen use todo el espacio sin desbordar) */
+/* ESTILO DE IMAGENES Y VIDEOS DENTRO DE hecho-imagen */
+/* (Aseguramos que la multimedia use todo el espacio sin desbordar y mantenga aspecto) */
 /* ========================================================================= */
 
-.imagen-principal {
-    /* --- AJUSTE CLAVE 3: Permitimos que la imagen defina el alto del contenedor padre. --- */
-    /* Eliminamos el object-fit y el max-height para que la altura de la imagen
-       fuerce la altura del div padre .hecho-imagen. */
-    max-width: 100%;
-    height: auto; /* El alto se ajusta automáticamente a la relación de aspecto del 100% de ancho. */
-    max-height: 100%;
-    display: block;
-    object-fit: contain;
-    width: auto;
-    height: auto;
-    /* Si la imagen es más alta que el contenido del lado derecho,
-       el div derecho se estirará por defecto (Flexbox). */
+.imagen-principal { /* Aplica tanto a <img> como a <video> con este ID/clase */
+    max-width: 100%; /* CLAVE: Nunca exceder el ancho del contenedor */
+    max-height: 100%; /* CLAVE: Nunca exceder el alto del contenedor */
+    width: auto; /* Permite que el ancho se ajuste manteniendo la relación de aspecto */
+    height: auto; /* Permite que el alto se ajuste manteniendo la relación de aspecto */
+    object-fit: contain; /* CLAVE: La imagen/video se escala para que quepa completamente
+                             dentro del contenedor, manteniendo su relación de aspecto.
+                             Puede haber espacio vacío (letterboxing/pillarboxing). */
+    display: block; /* Elimina espacio extra debajo de las imágenes */
 }
+
+/* Puedes añadir un estilo específico para video si lo necesitas,
+   pero `.imagen-principal` ya debería cubrirlo bien. */
 .hecho-imagen video.imagen-principal {
-    /* Si el video necesita llenar el 100% del contenedor visible, usa esto.
-       Solo si quieres que el video defina el tamaño del contenedor, usa height: 100% y width: 100% */
     width: 100%;
     height: 100%;
-    /* Nota: Si el video define la altura de la caja, el contenedor .hecho-imagen
-             debe tener una altura flexible (no fija). */
+    object-fit: contain; /* Asegura que el video también se ajuste */
 }
-/* ========================================================================= */
-/* SECCIÓN DATOS (DERECHA) - AHORA MÁS PEQUEÑA */
-/* ========================================================================= */
 
+/* Opcional: Si quieres que la imagen LLENE por completo la caja,
+   recortando partes si es necesario, usa `object-fit: cover;` */
+/*
+.imagen-principal {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%; // Esto forzaría el ancho a 100%
+    height: 100%; // Esto forzaría el alto a 100%
+    object-fit: cover; // Llenará la caja, recortando si la relación de aspecto no coincide
+    display: block;
+}
+*/
 .hecho-datos {
     /* Fondo marrón claro uniforme */
-    background-color: #a0805c;
+    background-color: rgba(108, 71, 27, 0.85);
     /* --- CAMBIO: Reducción del ancho de los datos a 45% --- */
     width: 45%;
     padding: 40px 60px;
     display: flex;
     flex-direction: column;
     color: #fff;
+    /* Para que el texto interno empuje el alto */
+    flex-grow: 1;
 }
 
-.hecho-datos h1 {
-    color: #fff;
-    font-size: 5em;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-
-.hecho-datos p {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-    line-height: 1.4;
-}
-
-/* Línea divisoria en la parte inferior de los datos */
+/* Línea divisoria en la parte inferior de los datos (PELIGROSA) */
 .hecho-datos::after {
-    content: '';
-    position: absolute;
-    bottom: 30px;
-    left: 40px;
-    right: 40px;
-    height: 1px;
-    background-color: #fff;
-    opacity: 0.7;
+    /* Este pseudo-elemento con position: absolute era la causa de que se solapara. Lo anulamos. */
+    content: none;
 }
 
-/* Estilo para simular 'datos del hecho' */
-.hecho-datos p:first-of-type {
-    font-size: 1.5em;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-weight: normal;
-}
 
 /* ========================================================================= */
-/* FLECHAS DE NAVEGACIÓN (DEBAJO DE LA IMAGEN) */
-/* ========================================================================= */
-/* ========================================================================= */
-/* FLECHAS DE NAVEGACIÓN (DEBAJO DE LA IMAGEN) */
+/* FLECHAS DE NAVEGACIÓN (DEBAJO DEL CONTENEDOR SUPERIOR) */
 /* ========================================================================= */
 
 .hecho-flechas {
-    position: absolute;
+    /* Quitamos todo el posicionamiento absoluto */
+    position: static;
+    top: auto;
+    transform: none;
 
-    /* Posicionamos el contenedor debajo de la imagen */
-    left: 0;
-    /* --- CAMBIO CLAVE 1: El ancho debe coincidir con el ancho de la imagen (55%) para simetría. --- */
-    width: 45%;
-
-    bottom: -60px;
-    z-index: 100;
-
+    width: 100%;
+    padding: 10px 0;
     display: flex;
-    /* Mantenemos space-between para máxima separación dentro del ancho. */
-    justify-content: space-between;
+    justify-content: center; /* <-- 3. CLAVE: Centrar horizontalmente */
+    gap: 20px;
 
-    align-items: center;
-    /* --- CAMBIO CLAVE 2: Eliminamos o reducimos el padding horizontal del contenedor. --- */
-    padding: 0;
-    box-sizing: border-box;
-    pointer-events: auto;
+    /* Estilo del fondo para que parezca el marco inferior */
+    background-color: #a0805c; /* Usamos el color de la caja de datos */
+    border-radius: 0 0 5px 5px; /* Bordes redondeados solo abajo */
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1) inset; /* Sombra sutil en el interior */
 }
 
-.flecha {
-    font-size: 3em;
+.hecho-flechas .flecha {
     text-decoration: none;
-    color: #6d4c39; /* Color marrón oscuro */
-    font-weight: bold;
-    line-height: 1;
-    /* Reducimos el padding interno de los caracteres para tener más control con el margen. */
-    padding: 10px 5px;
-    transition: color 0.2s;
-}
-
-.flecha:hover {
-    color: #4b3621;
-}
-
-/* Ajustes para que las flechas salgan simétricamente */
-.flecha:first-child {
-    /* --- CAMBIO CLAVE 3: Ajustamos el margen negativo para sacarla del borde izquierdo. --- */
-    margin-left: -20px;
-}
-
-.flecha:last-child {
-    /* --- CAMBIO CLAVE 4: Usamos el mismo margen negativo para sacarla del borde derecho. --- */
-    margin-right: -20px;
-}
-
-/* ========================================================================= */
-/* BOTÓN SOLICITAR ELIMINACIÓN */
-/* ========================================================================= */
-
-.hecho-acciones {
-    margin-top: 30px; /* Espacio entre los datos y el botón */
-    padding-top: 20px;
-    border-top: 1px solid #c0a78b; /* Línea separadora sutil */
-    text-align: center; /* Centrar el botón si el div tiene todo el ancho */
-}
-
-.boton-solicitar {
-    background-color: #a00000; /* Color rojo para indicar acción destructiva/importante */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: opacity 0.3s, background-color 0.3s;
+    /* Aseguramos que los estilos anteriores de margen negativo NO se apliquen */
+    margin: 0;
 }
 
-.boton-solicitar:hover {
-    background-color: #800000; /* Rojo más oscuro al pasar el mouse */
+.hecho-flechas .flecha:hover {
+    background-color: rgba(0, 0, 0, 0.4);
 }
-
