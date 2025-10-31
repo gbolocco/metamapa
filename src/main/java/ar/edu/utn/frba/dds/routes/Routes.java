@@ -31,7 +31,7 @@ public class Routes {
       before("/admin/*", ctx -> {
         Rol rol = ctx.sessionAttribute("rol");
         if (rol == null || rol != Rol.ADMIN) {
-          ctx.redirect("/login");
+          ctx.redirect("/login?redirect=" + ctx.path());
           ctx.status(302);
           ctx.result("");
           return;
@@ -45,8 +45,8 @@ public class Routes {
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
         get("/coleccion",admin::mostrarFormColeccion);
-        post("/coleccion", admin::crearColeccion);
         get("/usuarios",admin::mostrarUsuarios);
+        get("/solicitudes", admin::mostrarSolicitudes);
         });
       path("usuarios",() -> {
         put("/{id}/rol",userController::actualizarRolUsuario);

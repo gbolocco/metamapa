@@ -22,10 +22,15 @@ public class SolicitudesRepositoryDB implements
   }
 
   public List<Solicitud> pendientes() {
-    return entityManager()
-        .createQuery("from Solicitud s where s.estadoSolicitud =:estadoSolicitud", Solicitud.class)
-        .setParameter("estadoSolicitud", EstadoSolicitud.PENDIENTE)
-        .getResultList();
+    return withTransaction(() -> {
+      List<Solicitud> resultado = entityManager()
+          .createQuery("from Solicitud s where s.estadoSolicitud =:estadoSolicitud", Solicitud.class)
+          .setParameter("estadoSolicitud", EstadoSolicitud.PENDIENTE)
+          .getResultList();
+      System.out.println("DEBUG: Solicitudes pendientes encontradas: " + resultado.size());
+      resultado.forEach(s -> System.out.println("DEBUG: Solicitud ID: " + s.getId() + ", Estado: " + s.getEstadoSolicitud() + ", Tipo: " + s.getTipoSolicitud()));
+      return resultado;
+    });
   }
 
   public void eliminarSolicitud(Solicitud solicitud) {
@@ -33,10 +38,14 @@ public class SolicitudesRepositoryDB implements
   }
 
   public List<Solicitud> mostrarSolicitudes(TipoSolicitud tipoSolicitud) {
-    return entityManager()
-        .createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
-        .setParameter("tipoSolicitud", tipoSolicitud)
-        .getResultList();
+    return withTransaction(() -> {
+      List<Solicitud> resultado = entityManager()
+          .createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
+          .setParameter("tipoSolicitud", tipoSolicitud)
+          .getResultList();
+      System.out.println("DEBUG: mostrarSolicitudes por tipo " + tipoSolicitud + ": " + resultado.size());
+      return resultado;
+    });
   }
 
   public Solicitud buscarSolicitudPorId(Long id) {

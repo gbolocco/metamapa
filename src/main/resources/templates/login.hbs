@@ -13,7 +13,7 @@
             <p class="error">{{error}}</p>
         {{/if}}
 
-        <form action="/login" method="post">
+        <form action="/login{{#if redirect}}?redirect={{redirect}}{{/if}}" method="post">
             <div class="form-group">
                 <label for="nombre">Usuario</label>
                 <input type="text" id="nombre" name="nombre" required>

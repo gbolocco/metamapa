@@ -13,11 +13,13 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
 import ar.edu.utn.frba.dds.servicios.ServicioHechos;
+import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
@@ -66,16 +68,18 @@ public class WebApp {
     var repoColecciones = ColeccionRepository.getInstancia();
     var repoFuentes = FuentesRepository.getInstancia();
     var repoHechos = HechosRepository.getInstancia();
+    var repoSolicitudes = new SolicitudesRepositoryDB();
 
     var servicioUsuarios = new ServicioUsuarios(repoUsuarios);
     var servicioColecciones = new ServicioColecciones(repoColecciones);
     var servicioFuente = new ServicioFuentes(repoFuentes);
     var servicioHechos = new ServicioHechos(repoHechos);
+    var servicioSolicitudes = new ServicioSolicitudes(repoSolicitudes);
 
     HechosController hechos = new HechosController(servicioHechos);
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
-    AdminController admin = new AdminController(servicioFuente,servicioUsuarios, servicioColecciones);
+    AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
     UserController user = new UserController(servicioUsuarios);
 
     new Routes().configure(config, hechos, login, coleccion, user,admin);

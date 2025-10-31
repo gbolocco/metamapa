@@ -1,0 +1,243 @@
+<style>
+        .solicitudes-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .solicitud-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .solicitud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .solicitud-info {
+            flex: 1;
+        }
+        
+        .solicitud-titulo {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .solicitud-fecha {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .solicitud-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-rechazar {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btn-aceptar {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .collapse-toggle {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 0.5rem;
+        }
+        
+        .collapse-content {
+            display: none;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        
+        .collapse-content.show {
+            display: block;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            text-align: center;
+        }
+        
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn-modal {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btn-confirmar {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-cancelar {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .pagination {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+        
+        .page-btn {
+            background: #007bff;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 0 0.5rem;
+        }
+        
+        .page-btn:hover {
+            background: #0056b3;
+        }
+        
+        .page-info {
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+</style>
+
+<div class="solicitudes-container">
+            <h1>Solicitudes de Eliminación Pendientes</h1>
+            
+            {{#each solicitudes}}
+            <div class="solicitud-card">
+                <div class="solicitud-header">
+                    <div class="solicitud-info">
+                        <div class="solicitud-titulo">{{titulo}}</div>
+                        <div class="solicitud-fecha">{{fecha}}</div>
+                        <button class="collapse-toggle" onclick="toggleCollapse(this)">Ver detalles</button>
+                    </div>
+                    <div class="solicitud-actions">
+                        <button class="btn-rechazar" onclick="rechazar({{id}})">Rechazar</button>
+                        <button class="btn-aceptar" onclick="aceptar({{id}})">Aceptar</button>
+                    </div>
+                </div>
+                <div class="collapse-content">
+                    <p><strong>Justificación:</strong> {{justificacion}}</p>
+                    <p><strong>Solicitante:</strong> {{solicitante}}</p>
+                    <p><strong>Tipo:</strong> {{tipo}}</p>
+                </div>
+            </div>
+            {{/each}}
+            
+            <!-- Paginación -->
+            <div class="pagination">
+                {{#if hasPrevious}}
+                    <a href="?page={{previousPage}}" class="page-btn">&laquo; Anterior</a>
+                {{/if}}
+                
+                <span class="page-info">Página {{currentPage}} de {{totalPages}}</span>
+                
+                {{#if hasNext}}
+                    <a href="?page={{nextPage}}" class="page-btn">Siguiente &raquo;</a>
+                {{/if}}
+            </div>
+</div>
+
+<script>
+        function toggleCollapse(button) {
+            const content = button.closest('.solicitud-card').querySelector('.collapse-content');
+            content.classList.toggle('show');
+            button.textContent = content.classList.contains('show') ? 'Ocultar detalles' : 'Ver detalles';
+        }
+        
+        let currentAction = null;
+        let currentId = null;
+        
+        function aceptar(id) {
+            currentAction = 'aceptar';
+            currentId = id;
+            showModal('¿Está seguro de que desea ACEPTAR esta solicitud de eliminación?');
+        }
+        
+        function rechazar(id) {
+            currentAction = 'rechazar';
+            currentId = id;
+            showModal('¿Está seguro de que desea RECHAZAR esta solicitud de eliminación?');
+        }
+        
+        function showModal(message) {
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            currentAction = null;
+            currentId = null;
+        }
+        
+        function confirmarAccion() {
+            if (currentAction === 'aceptar') {
+                console.log('Aceptar solicitud:', currentId);
+                // Aquí iría la lógica para aceptar
+            } else if (currentAction === 'rechazar') {
+                console.log('Rechazar solicitud:', currentId);
+                // Aquí iría la lógica para rechazar
+            }
+            closeModal();
+        }
+</script>
+
+<!-- Modal de confirmación -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirmación</h3>
+        <p id="modalMessage"></p>
+        <div class="modal-buttons">
+            <button class="btn-modal btn-confirmar" onclick="confirmarAccion()">Confirmar</button>
+            <button class="btn-modal btn-cancelar" onclick="closeModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
