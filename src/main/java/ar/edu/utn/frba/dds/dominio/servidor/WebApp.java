@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.controladores.UserController;
 import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
@@ -74,9 +75,10 @@ public class WebApp {
     HechosController hechos = new HechosController(servicioHechos);
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
-    AdminController admin = new AdminController(servicioFuente);
+    AdminController admin = new AdminController(servicioFuente,servicioUsuarios);
+    UserController user = new UserController(servicioUsuarios);
 
-    new Routes().configure(config, hechos, login, coleccion, admin);
+    new Routes().configure(config, hechos, login, coleccion, user,admin);
   }
 
   private void configureTemplating(JavalinConfig config) {

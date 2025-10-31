@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.controladores.UserController;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
 
@@ -15,6 +16,7 @@ public class Routes {
     HechosController hechos,
     LoginController login,
     ColeccionController coleccionController,
+    UserController userController,
     AdminController admin) {
 
     config.router.apiBuilder(() -> {
@@ -43,7 +45,11 @@ public class Routes {
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
         get("/coleccion",admin::mostrarFormColeccion);
+        get("/usuarios",admin::mostrarUsuarios);
         });
+      path("usuarios",() -> {
+        put("/{userId}/rol",userController::actualizarRolUsuario);
+      });
       path("/hechos", () -> {
         get(hechos::listar);
         get("/nuevo", hechos::mostrarFormulario);

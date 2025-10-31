@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.servicios;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
+import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.util.Optional;
 
@@ -42,4 +43,15 @@ public class ServicioUsuarios {
     //repositorioUsuarios.guardar(usuario);
   }
 
+  public List<Usuario> getUsuarios() {
+    return repositorioUsuarios.getUsuarios();
+  }
+
+  public Usuario buscarPorId(Long id) {
+    return repositorioUsuarios.buscarPorId(id);
+  }
+
+  public void actualizarUsuario(Usuario usuario) {
+    repositorioUsuarios.actualizarUsuario(usuario);
+  }
 }

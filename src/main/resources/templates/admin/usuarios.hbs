@@ -1,0 +1,118 @@
+<main class="main-content">
+    <h1>Gestión de Roles de Usuarios</h1>
+
+    <table class="tabla-usuarios">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre de Usuario</th>
+            <th>Rol Actual</th>
+            <th>Modificar Rol</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each usuarios}}
+            <tr data-id="{{this.id}}">
+                <td>{{this.id}}</td>
+                <td>{{this.nombre}}</td>
+                <td class="rol-actual-{{this.id}}">{{this.rol}}</td>
+                <td class="select-container" data-user-id="{{this.id}}" data-current-role="{{this.rol}}">
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+    <div id="mensaje-feedback" class="feedback hidden"></div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const containers = document.querySelectorAll('.select-container');
+        const feedback = document.getElementById('mensaje-feedback');
+        const API_BASE_URL = '/usuarios';
+
+        // --- Función para crear el elemento SELECT ---
+        function createRoleSelect(userId, currentRole) {
+            const select = document.createElement('select');
+            select.classList.add('select-rol-inmediato');
+            select.setAttribute('data-user-id', userId);
+
+            // Roles disponibles
+            const roles = [
+                { value: 'user', text: 'User' },
+                { value: 'admin', text: 'Admin' }
+            ];
+
+            roles.forEach(role => {
+                const option = document.createElement('option');
+                option.value = role.value;
+                option.textContent = role.text;
+
+                // Marcar la opción actual
+                if (role.value === currentRole) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+
+            return select;
+        }
+
+        // --- Inicialización: Insertar y Añadir Listener ---
+        containers.forEach(container => {
+            const userId = container.dataset.userId;
+            const currentRole = container.dataset.currentRole;
+
+            // 1. Crear el select
+            const selectElement = createRoleSelect(userId, currentRole);
+
+            // 2. Insertar el select en la celda
+            container.appendChild(selectElement);
+
+            // 3. Añadir el listener para el evento 'change'
+            selectElement.addEventListener('change', async (e) => {
+                const newRole = selectElement.value;
+                const rolDisplayElement = document.querySelector(`.rol-actual-${userId}`);
+
+                selectElement.disabled = true;
+                feedback.classList.add('hidden');
+
+                try {
+                    // Ejecutar la solicitud PUT
+                    const response = await fetch(`${API_BASE_URL}/${userId}/rol`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ rol: newRole })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ message: 'Error desconocido.' }));
+                        throw new Error(`Error ${response.status}: ${errorData.message || 'Fallo en el servidor.'}`);
+                    }
+
+                    // Éxito: Actualizar la interfaz
+                    rolDisplayElement.textContent = newRole;
+
+                    feedback.textContent = `✅ Rol de usuario ${userId} actualizado a "${newRole}".`;
+                    feedback.style.backgroundColor = '#d4edda';
+                    feedback.classList.remove('hidden');
+
+                } catch (error) {
+                    // Error: Revertir el cambio visual en el select y mostrar mensaje
+                    const originalRole = rolDisplayElement.textContent;
+                    selectElement.value = originalRole;
+
+                    feedback.textContent = `❌ Fallo al actualizar el rol: ${error.message}`;
+                    feedback.style.backgroundColor = '#f8d7da';
+                    feedback.classList.remove('hidden');
+
+                } finally {
+                    // Habilitar el select de nuevo
+                    selectElement.disabled = false;
+                    setTimeout(() => feedback.classList.add('hidden'), 5000);
+                }
+            });
+        });
+    });
+</script>
