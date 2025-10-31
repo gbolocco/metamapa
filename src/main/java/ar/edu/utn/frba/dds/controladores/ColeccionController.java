@@ -35,7 +35,7 @@ public class ColeccionController {
 
 
   public void mostrarColecciones(Context ctx) {
-    int coleccionesPorPagina = 12;
+    int coleccionesPorPagina = 15;
 
 
     List<Coleccion> colecciones = servicioColecciones.obtenerColecciones();
@@ -74,7 +74,6 @@ public class ColeccionController {
 
 
   public void mostrarColeccion(Context ctx) throws JsonProcessingException {
-    // Obtener el id desde la URL
     String idParam = ctx.pathParam("id");
     Long id = Long.parseLong(idParam);
 
@@ -84,19 +83,14 @@ public class ColeccionController {
       return;
     }
 
-//    //Collection<Hecho> hechos = coleccion.getFuente().obtenerHechos(new ArrayList<>());
-//    Collection<Hecho> hechos = coleccion.mostrarHechos();
-
-    // Obtener filtros desde query params, por ejemplo: ?categoria=arte&autor=perez
     List<Filtro> filtros = new ArrayList<>();
 
 
     String fechaDesde = ctx.queryParam("fechaDesde");
     String fechaHasta = ctx.queryParam("fechaHasta");
-    String campoTexto = ctx.queryParam("campoTexto");      // "titulo" o "descripcion"
+    String campoTexto = ctx.queryParam("campoTexto");
     String textoFiltro = ctx.queryParam("textoFiltro");
 
-    // 🕓 Filtros de fecha
     DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     if (fechaDesde != null && !fechaDesde.isEmpty()) {

@@ -8,10 +8,15 @@ import ar.edu.utn.frba.dds.controladores.LoginController;
 import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
+import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
+import ar.edu.utn.frba.dds.servicios.ServicioHechos;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
@@ -58,13 +63,18 @@ public class WebApp {
   private void configureRoutes(JavalinConfig config){
     var repoUsuarios = RepositorioUsuarios.INSTANCE;
     var repoColecciones = ColeccionRepository.getInstancia();
+    var repoFuentes = FuentesRepository.getInstancia();
+    var repoHechos = HechosRepository.getInstancia();
+
     var servicioUsuarios = new ServicioUsuarios(repoUsuarios);
     var servicioColecciones = new ServicioColecciones(repoColecciones);
+    var servicioFuente = new ServicioFuentes(repoFuentes);
+    var servicioHechos = new ServicioHechos(repoHechos);
 
-    HechosController hechos = new HechosController();
+    HechosController hechos = new HechosController(servicioHechos);
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
-    AdminController admin = new AdminController();
+    AdminController admin = new AdminController(servicioFuente);
 
     new Routes().configure(config, hechos, login, coleccion, admin);
   }
