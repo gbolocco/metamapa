@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.servicios.ServicioHechos;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,8 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HechosController implements WithSimplePersistenceUnit {
-  private HechosRepository repo = HechosRepository.getInstancia();
+  private ServicioHechos servicioHechos;
   private final ObjectMapper mapper = new ObjectMapper();
+
+  public HechosController(ServicioHechos servicioHechos) {
+    this.servicioHechos = servicioHechos;
+  }
 
   public void listar(Context ctx) {
     Map<String, Object> model = new HashMap<>();
@@ -35,7 +40,7 @@ public class HechosController implements WithSimplePersistenceUnit {
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
     model.put("user_name", ctx.sessionAttribute("user_name"));
-    model.put("hechos", repo.mostrarHechos());
+    model.put("hechos", servicioHechos.mostrarHechos());
     ctx.render("hechos.hbs", model);
   }
 
@@ -73,7 +78,7 @@ public class HechosController implements WithSimplePersistenceUnit {
       hecho.addContenidoMultimedia(video, TipoContenido.VIDEO);
 
       //todo: deberia pegarle a un service, ese service al repositorio y despues a la base de datos
-      repo.cargarHecho(hecho);
+      servicioHechos.cargarHecho(hecho);
       //DISCUTIR SI DEJAR ACA O EN cargarHecho()
       entityManager().getTransaction().begin();
       entityManager().flush();
@@ -112,7 +117,7 @@ public class HechosController implements WithSimplePersistenceUnit {
       try {
         if (idParam != null && !idParam.equals("null")) {
           id = Long.parseLong(idParam);
-          hecho.setContenidoMultimedia(repo.buscar(id).getContenidoMultimedia());
+          hecho.setContenidoMultimedia(servicioHechos.buscar(id).getContenidoMultimedia());
           System.out.println(hecho.getContenidoMultimedia());
         }
           if (hecho.getContenidoMultimedia() == null)

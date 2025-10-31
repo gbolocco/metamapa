@@ -355,6 +355,9 @@ main {
   grid-area: main;
   padding: 0.5rem;
   background: linear-gradient(to bottom, #fefce8, #fef9c3);
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 /* Cuando NO hay sidebar (por ejemplo, login, home pública) */
