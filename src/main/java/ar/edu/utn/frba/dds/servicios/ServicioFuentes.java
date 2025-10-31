@@ -6,18 +6,22 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import java.util.List;
 
 public class ServicioFuentes {
-  private final FuentesRepository fuentesRepositoryMemory;
+  private final FuentesRepository fuentesRepository;
 
 
   public ServicioFuentes(FuentesRepository fuentesRepositoryMemory) {
-    this.fuentesRepositoryMemory = fuentesRepositoryMemory;
+    this.fuentesRepository = fuentesRepositoryMemory;
   }
 
   public List<Fuente> getFuentes() {
-    return fuentesRepositoryMemory.getFuentes();
+    return fuentesRepository.getFuentes();
   }
 
   public Fuente buscar(Long fuenteId) {
-    return fuentesRepositoryMemory.buscar(fuenteId);
+    return fuentesRepository.buscar(fuenteId);
+  }
+
+  public void guardarFuente(Fuente fuente) {
+    fuentesRepository.agregarFuente(fuente);
   }
 }
