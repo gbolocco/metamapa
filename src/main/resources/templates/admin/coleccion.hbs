@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <title>Crear Colección</title>
-    <link rel="stylesheet" href="/static/css/style_coleccion_admin.css">
+    <link rel="stylesheet" href="/static/css/style_coleccion_admin.css" />
 </head>
 <body>
 <div class="form-container">
     <h1>Crear nueva Colección</h1>
 
-    <form method="post" action="/colecciones" id="formColeccion">
+    <form method="post" action="/admin/coleccion" id="formColeccion">
         <div class="form-group">
             <label for="titulo">Título:</label>
             <input type="text" id="titulo" name="titulo" required>
@@ -63,52 +63,112 @@
 <script>
     const filtrosContainer = document.getElementById("filtros-container");
     const btnAgregarFiltro = document.getElementById("agregarFiltro");
-    // Contador para asegurar nombres de filtros únicos
     let filtroCount = 0;
+
+    /**
+     * Actualiza el tipo de input del valor en función del filtro seleccionado.
+     * @param {HTMLElement} filtroDiv - El contenedor del filtro individual.
+     */
+    function actualizarInputValor(filtroDiv) {
+        const selectTipo = filtroDiv.querySelector(".tipo-filtro");
+        const selectCampo = filtroDiv.querySelector(".campo-filtro");
+        const inputValor = filtroDiv.querySelector(".valor-filtro");
+        const labelValor = filtroDiv.querySelector("label[for='valor-input']");
+
+        // Determinar el tipo de input
+        let inputType = 'text';
+        let placeholderText = 'Ingrese valor...';
+
+        // Si el tipo de filtro es fecha, forzamos input[type=datetime-local]
+        if (selectTipo.value === 'fechaDesde' || selectTipo.value === 'fechaHasta') {
+            inputType = 'datetime-local';
+            placeholderText = 'Seleccione fecha y hora...';
+        }
+
+        // Crear el nuevo input
+        const nuevoInput = document.createElement("input");
+        nuevoInput.type = inputType;
+        nuevoInput.name = inputValor.name; // Mantiene el name attribute (filtros[i][valor])
+        nuevoInput.className = "valor-filtro"; // Mantiene la clase
+        nuevoInput.placeholder = placeholderText;
+        nuevoInput.required = true;
+
+        // Reemplazar el input existente
+        inputValor.parentNode.replaceChild(nuevoInput, inputValor);
+
+        // Actualizar el label
+        if (labelValor) {
+             labelValor.textContent = (inputType === 'datetime-local') ? 'Fecha y Hora:' : 'Valor:';
+        }
+
+        // Desactivar/Activar el campo para el filtro de texto
+        const campoSelectGroup = filtroDiv.querySelector('.campo-select-group');
+        if (selectTipo.value === 'texto') {
+            // El filtro de texto necesita un campo (título o descripción)
+            selectCampo.disabled = false;
+            campoSelectGroup.style.opacity = 1;
+        } else {
+             // Los filtros de fecha siempre aplican a 'fechaAcontecimiento'
+            selectCampo.value = 'fechaAcontecimiento';
+            selectCampo.disabled = true;
+            campoSelectGroup.style.opacity = 0.5;
+        }
+    }
+
 
     btnAgregarFiltro.addEventListener("click", () => {
         const filtroDiv = document.createElement("div");
         filtroDiv.classList.add("filtro-item");
 
-        // Usar el contador para el name attribute (filtros[0][...], filtros[1][...], etc.)
         const index = filtroCount++;
 
         filtroDiv.innerHTML = `
-      <div class="form-group">
-        <label>Tipo de filtro:</label>
-        <select name="filtros[${index}][tipo]" class="tipo-filtro">
-          <option value="texto">Texto contiene</option>
-          <option value="fechaDesde">Fecha desde</option>
-          <option value="fechaHasta">Fecha hasta</option>
-        </select>
-      </div>
+            <div class="form-group">
+                <label>Tipo de filtro:</label>
+                <select name="filtros[${index}][tipo]" class="tipo-filtro">
+                    <option value="texto">Texto contiene</option>
+                    <option value="fechaDesde">Fecha desde</option>
+                    <option value="fechaHasta">Fecha hasta</option>
+                </select>
+            </div>
 
-      <div class="form-group">
-        <label>Campo:</label>
-        <select name="filtros[${index}][campo]" class="campo-filtro">
-          <option value="titulo">Título</option>
-          <option value="descripcion">Descripción</option>
-          <option value="fechaAcontecimiento">Fecha de acontecimiento</option>
-        </select>
-      </div>
+            <div class="form-group campo-select-group">
+                <label>Campo:</label>
+                <select name="filtros[${index}][campo]" class="campo-filtro">
+                    <option value="titulo">Título</option>
+                    <option value="descripcion">Descripción</option>
+                    </select>
+            </div>
 
-      <div class="form-group">
-        <label>Valor:</label>
-        <input type="text" name="filtros[${index}][valor]" class="valor-filtro" placeholder="Ingrese valor...">
-      </div>
+            <div class="form-group">
+                <label for="valor-input">Valor:</label>
+                <input type="text" id="valor-input" name="filtros[${index}][valor]" class="valor-filtro" placeholder="Ingrese valor..." required>
+            </div>
 
-      <button type="button" class="btn-eliminar">Eliminar</button>
-    `;
+            <button type="button" class="btn-eliminar">Eliminar</button>
+        `;
+
+        // Añadir listeners para los cambios
+        const selectTipo = filtroDiv.querySelector(".tipo-filtro");
+        const selectCampo = filtroDiv.querySelector(".campo-filtro");
+
+        selectTipo.addEventListener("change", () => actualizarInputValor(filtroDiv));
+        selectCampo.addEventListener("change", () => actualizarInputValor(filtroDiv));
+
 
         filtroDiv.querySelector(".btn-eliminar").addEventListener("click", () => {
             filtroDiv.remove();
         });
 
         filtrosContainer.appendChild(filtroDiv);
+
+        // Inicializar el input al crear el filtro (en este caso, siempre será texto por defecto)
+        actualizarInputValor(filtroDiv);
     });
 </script>
 
 <script>
+    // --- Lógica del Dropdown y Chips de Fuentes (Sin cambios) ---
     const dropdownBtn = document.getElementById("dropdownBtn");
     const dropdownList = document.getElementById("dropdownList");
     const contenedorChips = document.getElementById("fuentesSeleccionadas");
@@ -116,7 +176,6 @@
 
     let seleccionadas = [];
 
-    // Lógica del Dropdown
     dropdownBtn.addEventListener("click", () => {
         dropdownList.classList.toggle("hidden");
     });
@@ -131,7 +190,6 @@
         }
     });
 
-    // Lógica de Chips
     function actualizarChips() {
         contenedorChips.innerHTML = "";
         seleccionadas.forEach(id => {
@@ -151,7 +209,6 @@
         }
     });
 
-    // Cerrar el dropdown al hacer clic fuera
     document.addEventListener("click", (e) => {
         if (!dropdownBtn.contains(e.target) && !dropdownList.contains(e.target)) {
             dropdownList.classList.add("hidden");

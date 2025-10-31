@@ -62,7 +62,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2")
       );
       colecciones.forEach(c -> ColeccionRepository.getInstancia().agregarColeccion(c));
-
+      //Coleccion otraColeccionMas = new Coleccion("hola","hola",new ArrayList<>(), fuente,"hola");
     });
 
   }
