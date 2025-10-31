@@ -31,7 +31,6 @@ public class Bootstrap implements WithSimplePersistenceUnit {
   }
 
   public void init() {
-    withTransaction(() -> {
 
       // Solo crear usuarios si no existen
       try {
@@ -75,6 +74,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
 
       colecciones.forEach(c -> entityManager().persist(c));
 
+<<<<<<< HEAD
       // Crear solicitudes de eliminación
       var representacion1 = new RepresentacionDeHecho();
       representacion1.setTitulo("Terremoto en Mendoza");
@@ -110,6 +110,8 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       }
     });
 
+=======
+>>>>>>> feature/hechos-mapa
   }
 
 }

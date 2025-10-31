@@ -84,10 +84,8 @@ public class AdminController {
           CampoDeHecho campo;
 
           try {
-            // Aseguramos mayúsculas y eliminamos espacios
             campo = CampoDeHecho.valueOf(campoStr.trim().toUpperCase());
           } catch (IllegalArgumentException e) {
-            // Si el campo no existe en el enum, lo saltamos
             i++;
             continue;
           }
@@ -99,7 +97,7 @@ public class AdminController {
 
             case "fechaDesde":
               try {
-                filtros.add(new FiltroFechaDesde(LocalDateTime.parse(valor, formatter), campo));
+                filtros.add(new FiltroFechaDesde(LocalDateTime.parse(valor, formatter), CampoDeHecho.FECHA_ACONTECIMIENTO));
               } catch (DateTimeParseException e) {
                 System.err.println("Error al parsear fechaDesde: " + valor);
               }
@@ -107,7 +105,7 @@ public class AdminController {
 
             case "fechaHasta":
               try {
-                filtros.add(new FiltroFechaHasta(LocalDateTime.parse(valor, formatter), campo));
+                filtros.add(new FiltroFechaHasta(LocalDateTime.parse(valor, formatter), CampoDeHecho.FECHA_ACONTECIMIENTO));
               } catch (DateTimeParseException e) {
                 System.err.println("Error al parsear fechaHasta: " + valor);
               }
@@ -122,10 +120,6 @@ public class AdminController {
         i++;
       }
 
-      // Debug opcional: ver la cantidad de filtros que llegan
-      System.out.println("Número de filtros procesados: " + filtros.size());
-      filtros.forEach(f -> System.out.println(f.getClass().getSimpleName()));
-      System.out.println("Fuentes seleccionadas IDs: " + idsFuentes);
 
       Fuente fuente;
 
@@ -139,12 +133,14 @@ public class AdminController {
         });
 
         fuente = new FuenteAgregadora(fuentesInput);
+        servicioFuentes.guardarFuente(fuente);
+
       }else {
         fuente = servicioFuentes.buscar(idsFuentes.get(0));
       }
 
 
-      servicioFuentes.guardarFuente(fuente);
+
       servicioColecciones.guardarColeccion(new Coleccion(titulo, descripcion, filtros, fuente, "handle"));
 
 
