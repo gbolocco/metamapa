@@ -38,6 +38,10 @@ public class FuentesRepository implements WithSimplePersistenceUnit {
         .toList();
   }
 
+  public Fuente buscar(Long id) {
+    return entityManager().find(Fuente.class, id);
+  }
+
   public int getCantidadFuentes() {
     return  getFuentes().size();
   }

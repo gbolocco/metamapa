@@ -16,4 +16,8 @@ public class ServicioFuentes {
   public List<Fuente> getFuentes() {
     return fuentesRepositoryMemory.getFuentes();
   }
+
+  public Fuente buscar(Long fuenteId) {
+    return fuentesRepositoryMemory.buscar(fuenteId);
+  }
 }

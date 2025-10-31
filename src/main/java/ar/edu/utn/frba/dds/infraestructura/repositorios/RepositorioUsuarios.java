@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
+import java.util.List;
 import javax.persistence.NoResultException;
 import java.util.Optional;
 
@@ -26,5 +27,20 @@ public class RepositorioUsuarios implements SimplePersistenceTest {
     } catch (NoResultException e) {
       return Optional.empty();
     }
+  }
+
+
+  public List<Usuario> getUsuarios() {
+    return entityManager().createQuery("from Usuario").getResultList();
+  }
+
+  public Usuario buscarPorId(Long id) {
+    return entityManager().find(Usuario.class, id);
+  }
+
+  public void actualizarUsuario(Usuario usuario) {
+    entityManager().getTransaction().begin();
+    entityManager().merge(usuario);
+    entityManager().getTransaction().commit();
   }
 }

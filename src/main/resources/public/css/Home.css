@@ -12,7 +12,7 @@
 .colecciones-container{
     max-height: 100%;
     max-width: 100%;
-    
+
 }
 /* Título principal */
 .main-content h1 {
@@ -45,6 +45,7 @@
     max-width: 230px;
     border-radius: 14px;
     text-align: center;
+    align-content: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.25);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
