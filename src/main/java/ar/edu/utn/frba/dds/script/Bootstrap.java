@@ -27,7 +27,6 @@ public class Bootstrap implements WithSimplePersistenceUnit {
   }
 
   public void init() {
-    withTransaction(() -> {
 
       var usuarios = Arrays.asList(
           new Usuario("feli", "feli", Rol.USER),
@@ -68,9 +67,6 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       FuentesRepository.getInstancia().agregarFuente(fuenteEstatica);
 
       colecciones.forEach(c -> ColeccionRepository.getInstancia().agregarColeccion(c));
-
-      //Coleccion otraColeccionMas = new Coleccion("hola","hola",new ArrayList<>(), fuente,"hola");
-    });
 
   }
 
