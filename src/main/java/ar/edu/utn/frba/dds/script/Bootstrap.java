@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
@@ -42,8 +43,10 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           "vector/ilustraci%C3%B3n-vectorial-de-red-house-icon.jpg?s=612x612&w=0&k=20&c=3IHzI5tgnVZQuE_4ZdJDIDyMGd44qWuketKv5EOvawQ=", TipoContenido.IMAGEN));
       hechos.forEach(h-> h.addContenidoMultimedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", TipoContenido.VIDEO));
       hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
+
       var fuente = new FuenteDinamica();
       var fuenteEstatica = new FuenteEstatica("./datos/desastres_naturales_processed.csv",new LectorCsv());
+
       var colecciones = Arrays.asList(
           new Coleccion("prueba","prueba",new ArrayList<>(), fuenteEstatica,"prueba"),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
@@ -61,7 +64,11 @@ public class Bootstrap implements WithSimplePersistenceUnit {
           new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2"),
           new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2")
       );
+      FuentesRepository.getInstancia().agregarFuente(fuente);
+      FuentesRepository.getInstancia().agregarFuente(fuenteEstatica);
+
       colecciones.forEach(c -> ColeccionRepository.getInstancia().agregarColeccion(c));
+
       //Coleccion otraColeccionMas = new Coleccion("hola","hola",new ArrayList<>(), fuente,"hola");
     });
 

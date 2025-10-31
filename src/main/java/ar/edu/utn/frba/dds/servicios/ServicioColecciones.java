@@ -11,6 +11,10 @@ public class ServicioColecciones {
     this.coleccionRepository = coleccionRepository;
   }
 
+  public void guardarColeccion(Coleccion coleccion){
+    this.coleccionRepository.agregarColeccion(coleccion);
+  }
+
   public List<Coleccion> obtenerColecciones(){
     return coleccionRepository.mostrarColecciones();
   }

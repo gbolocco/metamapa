@@ -11,11 +11,14 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 import ar.edu.utn.frba.dds.modelo.Usuario;
+import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,14 +26,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AdminController implements WithSimplePersistenceUnit {
+public class AdminController {
 
   private ServicioFuentes servicioFuentes;
   private ServicioUsuarios servicioUsuarios;
+  private ServicioColecciones servicioColecciones;
 
-  public AdminController(ServicioFuentes servicioFuentes, ServicioUsuarios servicioUsuarios) {
+  public AdminController(ServicioFuentes servicioFuentes, ServicioUsuarios servicioUsuarios, ServicioColecciones servicioColecciones) {
     this.servicioFuentes = servicioFuentes;
     this.servicioUsuarios = servicioUsuarios;
+    this.servicioColecciones = servicioColecciones;
   }
   public void mostrarDashboard(Context ctx) {
     Map<String, Object> model = new HashMap<>();
@@ -59,46 +64,63 @@ public class AdminController implements WithSimplePersistenceUnit {
             .map(String::trim)
             .filter(s -> !s.isEmpty())
             .map(Long::parseLong)
-            .collect(Collectors.toList());
+            .toList();
       }
 
       List<Filtro> filtros = new ArrayList<>();
-      int i = 0;
+      DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-      // Iterar por índice (i=0, i=1, i=2...) hasta que ya no exista el parámetro 'filtros[i][tipo]'
+      int i = 0;
       while (ctx.formParam("filtros[" + i + "][tipo]") != null) {
         String tipo = ctx.formParam("filtros[" + i + "][tipo]");
         String campoStr = ctx.formParam("filtros[" + i + "][campo]");
         String valor = ctx.formParam("filtros[" + i + "][valor]");
 
-        if (tipo != null && campoStr != null && valor != null) {
-          // Asegúrate de que CampoDeHecho tenga los valores correctos (TITULO, DESCRIPCION, FECHAACONTENICIMIENTO)
-          // Nota: Aquí se usa FECHAACONTENICIMIENTO porque así lo estás forzando en el JS para filtros de fecha.
-          CampoDeHecho campo = CampoDeHecho.valueOf(campoStr.toUpperCase());
+        if (tipo != null && campoStr != null && valor != null && !valor.isEmpty()) {
+          CampoDeHecho campo;
+
+          try {
+            // Aseguramos mayúsculas y eliminamos espacios
+            campo = CampoDeHecho.valueOf(campoStr.trim().toUpperCase());
+          } catch (IllegalArgumentException e) {
+            // Si el campo no existe en el enum, lo saltamos
+            i++;
+            continue;
+          }
 
           switch (tipo) {
             case "texto":
               filtros.add(new FiltroContieneTexto(valor, campo));
               break;
+
             case "fechaDesde":
-              // Parsear el valor como LocalDateTime
-              filtros.add(new FiltroFechaDesde(LocalDateTime.parse(valor), campo));
+              try {
+                filtros.add(new FiltroFechaDesde(LocalDateTime.parse(valor, formatter), campo));
+              } catch (DateTimeParseException e) {
+                System.err.println("Error al parsear fechaDesde: " + valor);
+              }
               break;
+
             case "fechaHasta":
-              // Parsear el valor como LocalDateTime
-              filtros.add(new FiltroFechaHasta(LocalDateTime.parse(valor), campo));
+              try {
+                filtros.add(new FiltroFechaHasta(LocalDateTime.parse(valor, formatter), campo));
+              } catch (DateTimeParseException e) {
+                System.err.println("Error al parsear fechaHasta: " + valor);
+              }
               break;
-            // Si hay un tipo desconocido, simplemente se ignora y no se agrega
+
+            default:
+              // Ignorar tipos desconocidos
+              break;
           }
         }
+
         i++;
       }
 
       // Debug opcional: ver la cantidad de filtros que llegan
       System.out.println("Número de filtros procesados: " + filtros.size());
-      // --- FIN OBTENER FILTROS ---
-
-      // Debug opcional: ver los ids que llegan
+      filtros.forEach(f -> System.out.println(f.getClass().getSimpleName()));
       System.out.println("Fuentes seleccionadas IDs: " + idsFuentes);
 
       Fuente fuente;
@@ -118,9 +140,9 @@ public class AdminController implements WithSimplePersistenceUnit {
       }
 
 
-      // Crear y guardar la colección (se agrega al repo cuando se instancia)
-      Coleccion coleccion = new Coleccion(titulo, descripcion, new ArrayList<>(), fuente, "handle");
-      ColeccionRepository.getInstancia().agregarColeccion(coleccion);
+      servicioFuentes.guardarFuente(fuente);
+      servicioColecciones.guardarColeccion(new Coleccion(titulo, descripcion, filtros, fuente, "handle"));
+
 
       ctx.redirect("/admin/dashboard");
 
