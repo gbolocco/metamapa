@@ -48,7 +48,7 @@ public class Routes {
         get("/usuarios",admin::mostrarUsuarios);
         });
       path("usuarios",() -> {
-        put("/{userId}/rol",userController::actualizarRolUsuario);
+        put("/{id}/rol",userController::actualizarRolUsuario);
       });
       path("/hechos", () -> {
         get(hechos::listar);

@@ -35,10 +35,12 @@ public class RepositorioUsuarios implements SimplePersistenceTest {
   }
 
   public Usuario buscarPorId(Long id) {
-    return entityManager().createQuery("from Usuario u where id = u.id",Usuario.class).getSingleResult();
+    return entityManager().find(Usuario.class, id);
   }
 
   public void actualizarUsuario(Usuario usuario) {
+    entityManager().getTransaction().begin();
     entityManager().merge(usuario);
+    entityManager().getTransaction().commit();
   }
 }

@@ -43,63 +43,6 @@ public class AdminController implements WithSimplePersistenceUnit {
     ctx.render("admin/dashboard.hbs", model);
   }
 
-  public void crearColeccion(Context ctx) {
-    try {
-      String titulo = ctx.formParam("titulo");
-      String descripcion = ctx.formParam("descripcion");
-      String consensoStr = ctx.formParam("consenso");
-      List<Long> fuentesSeleccionadas = ctx.formParam("fuentesSeleccionadas");
-
-      //TipoConsenso consenso = TipoConsenso.valueOf(consensoStr);
-
-      List<Long> idsFuentes = new ArrayList<>();
-      if (fuentesSeleccionadas != null && !fuentesSeleccionadas.isEmpty()) {
-        //idsFuentes = Arrays.asList(fuentesSeleccionadas.split(","));
-      }
-
-      // --- Obtener filtros dinámicos ---
-      List<Filtro> filtros = new ArrayList<>();
-
-      // Buscar parámetros tipo filtros[0][tipo], filtros[0][campo], filtros[0][valor], etc.
-      ctx.formParamMap().forEach((key, values) -> {
-        if (key.startsWith("filtros[")) {
-          String tipo = ctx.formParam(key.replaceAll("\\[.*", "[tipo]"));
-          String campoStr = ctx.formParam(key.replaceAll("\\[.*", "[campo]"));
-          String valor = ctx.formParam(key.replaceAll("\\[.*", "[valor]"));
-
-          if (tipo != null && campoStr != null && valor != null) {
-            CampoDeHecho campo = CampoDeHecho.valueOf(campoStr.toUpperCase());
-
-            switch (tipo) {
-              case "texto":
-                filtros.add(new FiltroContieneTexto(valor, campo));
-                break;
-              case "fechaDesde":
-                filtros.add(new FiltroFechaDesde(LocalDateTime.parse(valor), campo));
-                break;
-              case "fechaHasta":
-                filtros.add(new FiltroFechaHasta(LocalDateTime.parse(valor), campo));
-                break;
-            }
-          }
-        }
-      });
-
-      // Crear la colección
-      //Coleccion coleccion = new Coleccion();
-
-
-      // Guardar (ejemplo usando repo o servicio)
-      //ColeccionRepository repo = new ColeccionRepository();
-      //repo.guardar(coleccion);
-
-      ctx.redirect("/admin/dashboard");
-    } catch (Exception e) {
-      e.printStackTrace();
-      ctx.status(500).result("Error al crear la colección: " + e.getMessage());
-    }
-  }
-
   public void mostrarFormColeccion(Context ctx) {
     List<Fuente> fuentes = servicioFuentes.getFuentes();
 

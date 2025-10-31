@@ -13,17 +13,42 @@ public class UserController {
   }
 
   public void actualizarRolUsuario(Context ctx) {
-    String rol = ctx.pathParam("rol");
-    Long id = Long.parseLong(ctx.pathParam("id"));
-    Usuario usuario = servicioUsuarios.buscarPorId(id);
-    if (rol == null) {
-      return;
-    }else if (rol.equals("admin")) {
-      usuario.setRol(Rol.ADMIN);
-    }else if (rol.equals("user")) {
-      usuario.setRol(Rol.USER);
+    try{
+      Long id = Long.parseLong(ctx.pathParam("id"));
+      System.out.println(id);
+      Usuario usuario = servicioUsuarios.buscarPorId(id);
+
+      // 2. ✅ SOLUCIÓN: OBTENER el nuevo rol del BODY (JSON)
+      RolUpdateRequest requestBody = ctx.bodyAsClass(RolUpdateRequest.class);
+      String rol = requestBody.getRol(); // Ahora 'rol' viene del JSON
+
+      System.out.println("ID: " + id + ", Nuevo Rol: " + rol);
+
+
+      if (rol == null) {
+        return;
+      }else if (rol.equals("ADMIN")) {
+        usuario.setRol(Rol.ADMIN);
+      }else if (rol.equals("USER")) {
+        usuario.setRol(Rol.USER);
+      }
+      servicioUsuarios.actualizarUsuario(usuario);
+      ctx.status(200);
+    }catch(Exception e){
+      e.printStackTrace();
+      System.out.println("Error al actualizar rol");
+      ctx.status(500).result("Error interno del servidor: " + e.getMessage());
     }
-    servicioUsuarios.actualizarUsuario(usuario);
-    ctx.status(200);
+
+  }
+  // Archivo: RolUpdateRequest.java
+  public static class RolUpdateRequest {
+    private String rol;
+
+    // Necesario para Jackson (aunque Spring/Javalin a veces lo infieren)
+    public RolUpdateRequest() {}
+
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
   }
 }
