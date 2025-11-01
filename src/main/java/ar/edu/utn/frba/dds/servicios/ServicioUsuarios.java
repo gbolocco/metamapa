@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.servicios;
 
-import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosTableRepositoryDB;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.Optional;
 
 public class ServicioUsuarios {
-  private final RepositorioUsuarios repositorioUsuarios;
+  private final UsuariosTableRepositoryDB usuariosTableRepositoryDB;
 
-  public ServicioUsuarios(RepositorioUsuarios repositorioUsuarios) {
-    this.repositorioUsuarios = repositorioUsuarios;
+  public ServicioUsuarios(UsuariosTableRepositoryDB usuariosTableRepositoryDB) {
+    this.usuariosTableRepositoryDB = usuariosTableRepositoryDB;
   }
 
   public Usuario autenticar(String nombre, String password) {
@@ -33,25 +33,24 @@ public class ServicioUsuarios {
     if (nombre == null || nombre.isBlank()) {
       return null;
     }
-    Optional<Usuario> usuario = repositorioUsuarios.buscarPorNombre(nombre.trim().toLowerCase());
+    Optional<Usuario> usuario = usuariosTableRepositoryDB.buscarPorNombre(nombre.trim());
     return usuario.orElse(null);
   }
 
   public void registrarUsuario(String nombre, String password, Rol rol) {
     String hash = DigestUtils.sha256Hex(password);
-    Usuario usuario = new Usuario(nombre, password, rol); // tu constructor ya hace el hash
-    //repositorioUsuarios.guardar(usuario);
+    new Usuario(nombre, hash, rol);
   }
 
   public List<Usuario> getUsuarios() {
-    return repositorioUsuarios.getUsuarios();
+    return usuariosTableRepositoryDB.getUsuarios();
   }
 
   public Usuario buscarPorId(Long id) {
-    return repositorioUsuarios.buscarPorId(id);
+    return usuariosTableRepositoryDB.buscarPorId(id);
   }
 
   public void actualizarUsuario(Usuario usuario) {
-    repositorioUsuarios.actualizarUsuario(usuario);
+    usuariosTableRepositoryDB.actualizarUsuario(usuario);
   }
 }

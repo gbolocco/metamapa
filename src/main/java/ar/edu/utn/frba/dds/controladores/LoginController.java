@@ -1,12 +1,9 @@
 package ar.edu.utn.frba.dds.controladores;
 
-import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import io.javalin.http.Context;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
-import io.javalin.http.Handler;
-import org.jetbrains.annotations.NotNull;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -48,7 +45,6 @@ public class LoginController {
     } else if (usuario.getRol() == Rol.USER) {
       ctx.redirect("/colecciones");
     }
-    //ctx.redirect("/hechos");
   }
 
   public void logout(Context ctx) {

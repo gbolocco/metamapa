@@ -1,0 +1,200 @@
+<div class="container">
+    <h1>Mis Solicitudes</h1>
+    
+    <div class="actions-bar">
+        <a href="/solicitudes?tipo=carga" class="btn btn-primary">+ Crear Solicitud de Carga</a>
+        <a href="/solicitudes?tipo=modificacion" class="btn btn-secondary">+ Crear Solicitud de Modificación</a>
+    </div>
+    
+    <div class="solicitudes-grid">
+        <!-- Solicitud de Creación 1 -->
+        <div class="solicitud-card">
+            <div class="card-header">
+                <h3>Solicitud de Creación</h3>
+                <span class="status-badge status-pendiente">Pendiente</span>
+            </div>
+            <div class="card-body">
+                <h4>Terremoto en San Juan</h4>
+                <p class="description">Terremoto de magnitud 5.8 registrado en la provincia de San Juan</p>
+                <div class="card-meta">
+                    <span class="date">Creada: 30/10/2025</span>
+                    <span class="type">Tipo: Creación de Hecho</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Solicitud de Creación 2 -->
+        <div class="solicitud-card">
+            <div class="card-header">
+                <h3>Solicitud de Creación</h3>
+                <span class="status-badge status-aceptada">Aceptada</span>
+            </div>
+            <div class="card-body">
+                <h4>Inundación en La Plata</h4>
+                <p class="description">Inundación severa en el centro de La Plata por lluvias intensas</p>
+                <div class="card-meta">
+                    <span class="date">Creada: 28/10/2025</span>
+                    <span class="type">Tipo: Creación de Hecho</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Solicitud de Eliminación 1 -->
+        <div class="solicitud-card">
+            <div class="card-header">
+                <h3>Solicitud de Eliminación</h3>
+                <span class="status-badge status-pendiente">Pendiente</span>
+            </div>
+            <div class="card-body">
+                <h4>Eliminar: Tornado en Córdoba</h4>
+                <p class="description">Solicitud para eliminar registro duplicado del tornado</p>
+                <div class="card-meta">
+                    <span class="date">Creada: 29/10/2025</span>
+                    <span class="type">Tipo: Eliminación de Hecho</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Solicitud de Eliminación 2 -->
+        <div class="solicitud-card">
+            <div class="card-header">
+                <h3>Solicitud de Eliminación</h3>
+                <span class="status-badge status-rechazada">Rechazada</span>
+            </div>
+            <div class="card-body">
+                <h4>Eliminar: Granizada en Mendoza</h4>
+                <p class="description">Solicitud para eliminar registro con información incorrecta</p>
+                <div class="card-meta">
+                    <span class="date">Creada: 27/10/2025</span>
+                    <span class="type">Tipo: Eliminación de Hecho</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+
+.actions-bar {
+    margin: 20px 0;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+.btn-secondary {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-secondary:hover {
+    background-color: #e0a800;
+}
+
+.solicitudes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.solicitud-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s;
+}
+
+.solicitud-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-aceptada {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-rechazada {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.card-body h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.description {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.card-meta span {
+    font-size: 12px;
+    color: #888;
+}
+
+.date {
+    font-weight: 500;
+}
+
+.type {
+    font-style: italic;
+}
+</style>

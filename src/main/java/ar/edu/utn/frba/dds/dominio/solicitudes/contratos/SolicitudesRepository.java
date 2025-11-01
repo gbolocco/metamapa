@@ -11,8 +11,14 @@ public interface SolicitudesRepository {
 
   List<Solicitud> pendientes();
 
+  List<Solicitud> pendientesPorTipo(TipoSolicitud tipoSolicitud);
+
   void eliminarSolicitud(Solicitud solicitud);
 
 
   List<Solicitud> mostrarSolicitudes(TipoSolicitud tipoSolicitud);
+
+  List<Solicitud> todas();
+
+  void actualizar(Solicitud solicitud);
 }

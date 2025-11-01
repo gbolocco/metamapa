@@ -1,13 +1,25 @@
 package ar.edu.utn.frba.dds.servicios;
 
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
+import ar.edu.utn.frba.dds.dominio.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
+import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+import ar.edu.utn.frba.dds.modelo.Usuario;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ServicioSolicitudes {
   
   private SolicitudesRepositoryDB repositorioSolicitudes;
+  private Solicitud solicitud;
   
   public ServicioSolicitudes(SolicitudesRepositoryDB repositorioSolicitudes) {
     this.repositorioSolicitudes = repositorioSolicitudes;
@@ -17,7 +29,72 @@ public class ServicioSolicitudes {
     return repositorioSolicitudes.pendientes();
   }
   
-  //public Solicitud buscarSolicitud(Long id) {
-    //return repositorioSolicitudes.buscar(id);
-  //}
+  public List<Solicitud> obtenerTodasLasSolicitudes() {
+    return repositorioSolicitudes.todas();
+  }
+  
+  public List<Solicitud> obtenerSolicitudesPendientesPorTipo(TipoSolicitud tipoSolicitud) {
+    return repositorioSolicitudes.pendientesPorTipo(tipoSolicitud);
+  }
+
+  public void crearHecho(Optional<Usuario> usuario, Hecho hecho, TipoSolicitud tipoSolicitud) {
+    
+    var representacionDeHecho = new RepresentacionDeHecho(
+        hecho.getTitulo(),
+        hecho.getDescripcion(),
+        hecho.getCategoria(),
+        hecho.getUbicacion(),
+        hecho.getFechaAcontecimiento(),
+        hecho.getFechaDeCarga(),
+        OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
+    );
+    
+    RepresentacionHechosRepository.getInstancia().cargarRepresentacionDeHecho(representacionDeHecho);
+    
+    switch (tipoSolicitud) {
+      case CARGA_HECHO:
+        solicitud = new SolicitudDeCargaHecho();
+        break;
+      case ELIMINACION_HECHO:
+        solicitud = new SolicitudEliminacion();
+        break;
+      case MODIFICACION_HECHO:
+        solicitud = new SolicitudModificacion();
+        break;
+      default:
+        throw new IllegalArgumentException("Tipo de solicitud no soportado: " + tipoSolicitud);
+    }
+    
+    solicitud.setRepresentacionDeHecho(representacionDeHecho);
+    solicitud.setUsuario(usuario.orElse(null));
+    solicitud.setTipoSolicitud(tipoSolicitud);
+    solicitud.setEstadoSolicitud(EstadoSolicitud.PENDIENTE);
+    solicitud.setFechaSolicitud(new java.util.Date());
+    
+    repositorioSolicitudes.agregar(solicitud);
+  }
+
+  
+  public void crearSolicitud(Usuario usuario, Hecho hecho, TipoSolicitud tipoSolicitud, String justificacion) {
+    crearHecho(Optional.ofNullable(usuario), hecho, tipoSolicitud);
+    
+    if (solicitud != null && justificacion != null) {
+      solicitud.setJustificacion(justificacion);
+      repositorioSolicitudes.actualizar(solicitud);
+    }
+  }
+  
+  public void confirmarSolicitud(Long solicitudId) {
+    var solicitud = repositorioSolicitudes.buscarSolicitudPorId(solicitudId);
+    if (solicitud != null) {
+      solicitud.aceptar();
+    }
+  }
+  
+  public void rechazarSolicitud(Long solicitudId) {
+    var solicitud = repositorioSolicitudes.buscarSolicitudPorId(solicitudId);
+    if (solicitud != null) {
+      solicitud.rechazar();
+    }
+  }
 }

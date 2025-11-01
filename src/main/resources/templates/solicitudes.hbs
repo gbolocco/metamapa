@@ -145,10 +145,172 @@
             margin: 0 1rem;
             font-weight: bold;
         }
+        
+        .botones-filtro {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-filtro {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-carga {
+            background: #28a745;
+        }
+        
+        .btn-carga:hover {
+            background: #218838;
+        }
+        
+        .btn-eliminacion {
+            background: #dc3545;
+        }
+        
+        .btn-eliminacion:hover {
+            background: #c82333;
+        }
+        
+        .btn-modificacion {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-modificacion:hover {
+            background: #e0a800;
+        }
+        
+        .btn-todas {
+            background: #6f42c1;
+        }
+        
+        .btn-todas:hover {
+            background: #5a32a3;
+        }
+        
+        .tabla-container {
+            overflow-x: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tabla-solicitudes {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .tabla-solicitudes th,
+        .tabla-solicitudes td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tabla-solicitudes th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .tabla-solicitudes tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+        
+        .badge-Carga {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .badge-Eliminacion {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-Modificacion {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-Pendiente {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-Aceptada {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-Rechazada {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn-filtro.activo {
+            opacity: 0.8;
+            transform: scale(0.98);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
 </style>
 
 <div class="solicitudes-container">
-            <h1>Solicitudes de Eliminación Pendientes</h1>
+            {{#if mostrarBotones}}
+            <h1>Gestión de Solicitudes</h1>
+            <div class="botones-filtro">
+                <a href="/admin/solicitudes?tipo=carga" class="btn-filtro btn-carga {{#eq tipoActivo 'carga'}}activo{{/eq}}">Solicitudes de Carga</a>
+                <a href="/admin/solicitudes?tipo=eliminacion" class="btn-filtro btn-eliminacion {{#eq tipoActivo 'eliminacion'}}activo{{/eq}}">Solicitudes de Eliminación</a>
+                <a href="/admin/solicitudes?tipo=modificacion" class="btn-filtro btn-modificacion {{#eq tipoActivo 'modificacion'}}activo{{/eq}}">Solicitudes de Modificación</a>
+                <a href="/admin/solicitudes?tipo=todas" class="btn-filtro btn-todas {{#eq tipoActivo 'todas'}}activo{{/eq}}">Todas las Solicitudes</a>
+            </div>
+            {{/if}}
+            
+            {{#if mostrarTabla}}
+            <h1>{{titulo}}</h1>
+            <div class="tabla-container">
+                <table class="tabla-solicitudes">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Tipo</th>
+                            <th>Solicitante</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each todasSolicitudes}}
+                        <tr>
+                            <td>{{id}}</td>
+                            <td>{{titulo}}</td>
+                            <td><span class="badge badge-{{tipo}}">{{tipo}}</span></td>
+                            <td>{{solicitante}}</td>
+                            <td>{{fecha}}</td>
+                            <td><span class="badge badge-{{estado}}">{{estado}}</span></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{else}}
+            <h1>{{titulo}}</h1>
             
             {{#each solicitudes}}
             <div class="solicitud-card">
@@ -183,6 +345,7 @@
                     <a href="?page={{nextPage}}" class="page-btn">Siguiente &raquo;</a>
                 {{/if}}
             </div>
+            {{/if}}
 </div>
 
 <script>
@@ -219,13 +382,24 @@
         }
         
         function confirmarAccion() {
-            if (currentAction === 'aceptar') {
-                console.log('Aceptar solicitud:', currentId);
-                // Aquí iría la lógica para aceptar
-            } else if (currentAction === 'rechazar') {
-                console.log('Rechazar solicitud:', currentId);
-                // Aquí iría la lógica para rechazar
-            }
+            const endpoint = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
+            const accionTexto = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
+            
+            fetch(`/solicitudes/${currentId}/${endpoint}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert(`Error al ${accionTexto} la solicitud`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`Error al ${accionTexto} la solicitud`);
+            });
+            
             closeModal();
         }
 </script>

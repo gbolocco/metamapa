@@ -18,9 +18,8 @@ public class UserController {
       System.out.println(id);
       Usuario usuario = servicioUsuarios.buscarPorId(id);
 
-      // 2. ✅ SOLUCIÓN: OBTENER el nuevo rol del BODY (JSON)
       RolUpdateRequest requestBody = ctx.bodyAsClass(RolUpdateRequest.class);
-      String rol = requestBody.getRol(); // Ahora 'rol' viene del JSON
+      String rol = requestBody.getRol();
 
       System.out.println("ID: " + id + ", Nuevo Rol: " + rol);
 
@@ -39,13 +38,32 @@ public class UserController {
       System.out.println("Error al actualizar rol");
       ctx.status(500).result("Error interno del servidor: " + e.getMessage());
     }
-
   }
-  // Archivo: RolUpdateRequest.java
+
+  public void mostrarMisSolicitudes(Context ctx) {
+    try {
+      Long userId = ctx.sessionAttribute("user_id");
+      if (userId == null) {
+        ctx.redirect("/login");
+        return;
+      }
+      
+      java.util.Map<String, Object> model = new java.util.HashMap<>();
+      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+      model.put("rol", ctx.sessionAttribute("rol"));
+      model.put("user_name", ctx.sessionAttribute("user_name"));
+      model.put("user_id", userId);
+      
+      ctx.render("mis-solicitudes.hbs", model);
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error interno del servidor: " + e.getMessage());
+    }
+  }
+
   public static class RolUpdateRequest {
     private String rol;
 
-    // Necesario para Jackson (aunque Spring/Javalin a veces lo infieren)
     public RolUpdateRequest() {}
 
     public String getRol() { return rol; }

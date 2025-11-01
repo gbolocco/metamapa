@@ -1,18 +1,15 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
-import static io.javalin.apibuilder.ApiBuilder.get;
 import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.controladores.SolicitudesController;
 import ar.edu.utn.frba.dds.controladores.UserController;
-import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
-import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosTableRepositoryDB;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
@@ -21,8 +18,6 @@ import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
 import ar.edu.utn.frba.dds.servicios.ServicioHechos;
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
-import com.github.jknack.handlebars.Helper;
-import com.github.jknack.handlebars.Options;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.CompositeTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
@@ -64,7 +59,7 @@ public class WebApp {
   }
 
   private void configureRoutes(JavalinConfig config){
-    var repoUsuarios = RepositorioUsuarios.INSTANCE;
+    var repoUsuarios = UsuariosTableRepositoryDB.INSTANCE;
     var repoColecciones = ColeccionRepository.getInstancia();
     var repoFuentes = FuentesRepository.getInstancia();
     var repoHechos = HechosRepository.getInstancia();
@@ -81,8 +76,9 @@ public class WebApp {
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
     AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
     UserController user = new UserController(servicioUsuarios);
+    SolicitudesController solicitudesController = new SolicitudesController(servicioSolicitudes);
 
-    new Routes().configure(config, hechos, login, coleccion, user,admin);
+    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController);
   }
 
   private void configureTemplating(JavalinConfig config) {
@@ -99,6 +95,15 @@ public class WebApp {
       }
 
 
+      return options.inverse(context);
+    });
+
+    handlebars.registerHelper("eq", (context, options) -> {
+      Object param1 = options.param(0, null);
+      Object param2 = options.param(1, null);
+      if (param1 != null && param1.equals(param2)) {
+        return options.fn(context);
+      }
       return options.inverse(context);
     });
 
@@ -131,38 +136,3 @@ public class WebApp {
     config.fileRenderer(handlebarsRenderer);
   }
 }
-
-//  private static Consumer<JavalinConfig> config() {
-//    return config -> {
-//      ObjectMapper mapper = new ObjectMapper();
-//      mapper.registerModule(new JavaTimeModule());
-//      mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // fechas ISO-8601
-//      config.jsonMapper(new JavalinJackson(mapper));
-//
-//      config.staticFiles.add(staticFiles -> {
-//        staticFiles.hostedPath = "/";
-//        staticFiles.directory = "/public";
-//      });
-//      TemplateLoader mainLoader = new ClassPathTemplateLoader("/templates", ".hbs");
-//      TemplateLoader partialsLoader = new ClassPathTemplateLoader("/templates/partials", ".hbs");
-//      Handlebars handlebars = new Handlebars(new CompositeTemplateLoader(mainLoader, partialsLoader));
-//
-//      config.fileRenderer((path, model, ctx) -> {
-//        try {
-//          Template template = handlebars.compile(path.replace(".hbs", ""));
-//          Map<String, Object> m = new HashMap<>();
-//
-//          // Add session/context attributes
-//          model.put("isLogged", ctx.attribute("isLogged"));
-//          model.put("role", ctx.attribute("role"));
-//          model.put("isAdmin", ctx.attribute("isAdmin"));
-//
-//          return template.apply(m);
-//        } catch (IOException e) {
-//          ctx.status(HttpStatus.NOT_FOUND);
-//          return "No se encuentra la página indicada...";
-//        }
-//      }, ".hbs");
-//    };
-//  }
-//}

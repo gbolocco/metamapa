@@ -7,27 +7,28 @@ import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaHasta;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteAgregadora;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
-import ar.edu.utn.frba.dds.modelo.Usuario;
+import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
+
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
-import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-import io.javalin.http.Context;
 
+import ar.edu.utn.frba.dds.modelo.Usuario;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import io.javalin.http.Context;
 
 public class AdminController {
 
@@ -139,8 +140,6 @@ public class AdminController {
         fuente = servicioFuentes.buscar(idsFuentes.get(0));
       }
 
-
-
       servicioColecciones.guardarColeccion(new Coleccion(titulo, descripcion, filtros, fuente, "handle"));
 
 
@@ -165,6 +164,7 @@ public class AdminController {
 
     ctx.render("admin/coleccion.hbs", model);
   }
+
   public void mostrarUsuarios(Context ctx) {
 
     try{
@@ -182,31 +182,62 @@ public class AdminController {
 
   }
 
-
   public void mostrarSolicitudes(Context ctx) {
-    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudes();
+    String tipo = ctx.queryParam("tipo");
+    
+    if (tipo != null) {
+      switch (tipo) {
+        case "carga":
+          mostrarSolicitudesCarga(ctx);
+          return;
+        case "eliminacion":
+          mostrarSolicitudesEliminacion(ctx);
+          return;
+        case "modificacion":
+          mostrarSolicitudesModificacion(ctx);
+          return;
+        case "todas":
+          mostrarTodasLasSolicitudes(ctx);
+          return;
+      }
+    }
+    
+    mostrarTodasLasSolicitudes(ctx);
+  }
+  
+  private void mostrarSolicitudesCarga(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.CARGA_HECHO);
+
+    List<Map<String, Object>> solicitudes;
+    if (solicitudesRepo.isEmpty()) {
+      solicitudes = List.of(
+        Map.of("id", 101, "titulo", "Solicitud de Carga - Terremoto Mendoza", "fecha", "2025-10-30 09:15", "justificacion", "Solicitud para cargar nuevo registro de terremoto de magnitud 5.8 en Mendoza detectado por estación sísmica local.", "solicitante", "Instituto Sismológico", "tipo", "Carga"),
+        Map.of("id", 102, "titulo", "Solicitud de Carga - Inundación Litoral", "fecha", "2025-10-29 16:30", "justificacion", "Solicitud para cargar registro de inundación en zona del litoral argentino debido a crecida del río Paraná.", "solicitante", "Servicio Meteorológico", "tipo", "Carga")
+      );
+    } else {
+      solicitudes = solicitudesRepo.stream()
+        .map(s -> {
+          Map<String, Object> solicitudMap = new HashMap<>();
+          solicitudMap.put("id", s.getId());
+          solicitudMap.put("titulo", "Solicitud de Carga - " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
+          solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+          solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
+          solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+          solicitudMap.put("tipo", "Carga");
+          return solicitudMap;
+        })
+        .collect(Collectors.toList());
+    }
+    
+    renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Carga", "carga");
+  }
+  
+  private void mostrarSolicitudesEliminacion(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.ELIMINACION_HECHO);
     System.out.println("DEBUG AdminController: Solicitudes del repo: " + solicitudesRepo.size());
     
     List<Map<String, Object>> todasSolicitudes;
     if (solicitudesRepo.isEmpty()) {
-      todasSolicitudes = List.of(
-      Map.of("id", 1, "titulo", "Solicitud de Eliminación - Terremoto Duplicado", "fecha", "2025-10-29 14:30", "justificacion", "Solicitud para eliminar registro duplicado del terremoto de magnitud 6.2 en Mendoza.", "solicitante", "Juan Pérez", "tipo", "Eliminación"),
-      Map.of("id", 2, "titulo", "Solicitud de Eliminación - Inundación Errónea", "fecha", "2025-10-29 10:15", "justificacion", "Solicitud para eliminar registro de inundación que fue cargado por error.", "solicitante", "María González", "tipo", "Eliminación"),
-      Map.of("id", 3, "titulo", "Solicitud de Eliminación - Incendio Desactualizado", "fecha", "2025-10-28 16:45", "justificacion", "Solicitud para eliminar registro de incendio forestal en Córdoba.", "solicitante", "Carlos Rodríguez", "tipo", "Eliminación"),
-      Map.of("id", 4, "titulo", "Solicitud de Eliminación - Tornado Falso", "fecha", "2025-10-27 09:20", "justificacion", "Solicitud para eliminar registro de tornado que nunca ocurrió.", "solicitante", "Ana Martínez", "tipo", "Eliminación"),
-      Map.of("id", 5, "titulo", "Solicitud de Eliminación - Granizada Duplicada", "fecha", "2025-10-26 15:30", "justificacion", "Solicitud para eliminar registro duplicado de granizada en Buenos Aires.", "solicitante", "Luis García", "tipo", "Eliminación"),
-      Map.of("id", 6, "titulo", "Solicitud de Eliminación - Sequía Incorrecta", "fecha", "2025-10-25 11:45", "justificacion", "Solicitud para eliminar registro de sequía con datos incorrectos.", "solicitante", "Elena Fernández", "tipo", "Eliminación"),
-      Map.of("id", 7, "titulo", "Solicitud de Eliminación - Avalancha Test", "fecha", "2025-10-24 13:15", "justificacion", "Solicitud para eliminar registro de avalancha creado para pruebas.", "solicitante", "Pedro Sánchez", "tipo", "Eliminación"),
-      Map.of("id", 8, "titulo", "Solicitud de Eliminación - Huracán Obsoleto", "fecha", "2025-10-23 08:30", "justificacion", "Solicitud para eliminar registro de huracán con información obsoleta.", "solicitante", "Carmen López", "tipo", "Eliminación"),
-      Map.of("id", 9, "titulo", "Solicitud de Eliminación - Tsunami Erróneo", "fecha", "2025-10-22 17:00", "justificacion", "Solicitud para eliminar registro de tsunami que fue una falsa alarma.", "solicitante", "Roberto Díaz", "tipo", "Eliminación"),
-      Map.of("id", 10, "titulo", "Solicitud de Eliminación - Erupción Duplicada", "fecha", "2025-10-21 12:20", "justificacion", "Solicitud para eliminar registro duplicado de erupción volcánica.", "solicitante", "Sofía Ruiz", "tipo", "Eliminación"),
-      Map.of("id", 11, "titulo", "Solicitud de Eliminación - Tormenta Falsa", "fecha", "2025-10-20 14:45", "justificacion", "Solicitud para eliminar registro de tormenta que no ocurrió.", "solicitante", "Miguel Torres", "tipo", "Eliminación"),
-      Map.of("id", 12, "titulo", "Solicitud de Eliminación - Deslizamiento Test", "fecha", "2025-10-19 10:30", "justificacion", "Solicitud para eliminar registro de deslizamiento creado para testing.", "solicitante", "Laura Morales", "tipo", "Eliminación"),
-      Map.of("id", 13, "titulo", "Solicitud de Eliminación - Helada Incorrecta", "fecha", "2025-10-18 16:15", "justificacion", "Solicitud para eliminar registro de helada con datos erróneos.", "solicitante", "Diego Vargas", "tipo", "Eliminación"),
-      Map.of("id", 14, "titulo", "Solicitud de Eliminación - Viento Duplicado", "fecha", "2025-10-17 09:45", "justificacion", "Solicitud para eliminar registro duplicado de vientos fuertes.", "solicitante", "Patricia Jiménez", "tipo", "Eliminación"),
-        Map.of("id", 15, "titulo", "Solicitud de Eliminación - Niebla Obsoleta", "fecha", "2025-10-16 11:00", "justificacion", "Solicitud para eliminar registro de niebla con información desactualizada.", "solicitante", "Andrés Castro", "tipo", "Eliminación")
-      );
-    } else {
       todasSolicitudes = solicitudesRepo.stream()
         .map(s -> {
           Map<String, Object> solicitudMap = new HashMap<>();
@@ -245,7 +276,128 @@ public class AdminController {
     model.put("previousPage", page - 1);
     model.put("nextPage", page + 1);
     
+    renderizarSolicitudes(ctx, solicitudesPagina, "Solicitudes de Eliminación", "eliminacion");
+  }
+  
+  private void mostrarSolicitudesModificacion(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.MODIFICACION_HECHO);
+    
+    List<Map<String, Object>> solicitudes;
+    if (solicitudesRepo.isEmpty()) {
+      solicitudes = List.of(
+        Map.of("id", 201, "titulo", "Solicitud de Modificación - Huracán Categoría", "fecha", "2025-10-30 11:45", "justificacion", "Solicitud para modificar la categoría del huracán registrado, se detectó error en la clasificación inicial.", "solicitante", "Centro Meteorológico", "tipo", "Modificación"),
+        Map.of("id", 202, "titulo", "Solicitud de Modificación - Coordenadas Incendio", "fecha", "2025-10-29 14:20", "justificacion", "Solicitud para corregir las coordenadas del incendio forestal, se registraron coordenadas incorrectas.", "solicitante", "Bomberos Voluntarios", "tipo", "Modificación")
+      );
+    } else {
+      solicitudes = solicitudesRepo.stream()
+        .map(s -> {
+          Map<String, Object> solicitudMap = new HashMap<>();
+          solicitudMap.put("id", s.getId());
+          solicitudMap.put("titulo", "Solicitud de Modificación - " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
+          solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+          solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
+          solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+          solicitudMap.put("tipo", "Modificación");
+          return solicitudMap;
+        })
+        .collect(Collectors.toList());
+    }
+    
+    renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Modificación", "modificacion");
+  }
+  
+  private void mostrarTodasLasSolicitudes(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerTodasLasSolicitudes();
+    
+    List<Map<String, Object>> todasSolicitudes = new ArrayList<>();
+    
+    // Agregar solicitudes reales de la base de datos
+    todasSolicitudes.addAll(solicitudesRepo.stream()
+      .map(s -> {
+        Map<String, Object> solicitudMap = new HashMap<>();
+        solicitudMap.put("id", s.getId());
+        solicitudMap.put("titulo", "Solicitud de " + s.getTipoSolicitud().toString().replace("_", " "));
+        solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+        solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+        solicitudMap.put("tipo", s.getTipoSolicitud().toString().replace("_", " "));
+        solicitudMap.put("estado", s.getEstadoSolicitud().toString());
+        return solicitudMap;
+      })
+      .collect(Collectors.toList()));
+    
+    // Si no hay solicitudes en la BD, agregar mocks para demostración
+    if (todasSolicitudes.isEmpty()) {
+      todasSolicitudes.addAll(List.of(
+        Map.of("id", 101, "titulo", "Solicitud de Carga - Terremoto Mendoza", "fecha", "2025-10-30 09:15", "solicitante", "Instituto Sismológico", "tipo", "Carga", "estado", "Pendiente"),
+        Map.of("id", 102, "titulo", "Solicitud de Eliminación - Inundación Errónea", "fecha", "2025-10-29 16:30", "solicitante", "Servicio Meteorológico", "tipo", "Eliminación", "estado", "Pendiente")
+      ));
+    }
+    
+    Map<String, Object> model = new HashMap<>();
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("todasSolicitudes", todasSolicitudes);
+    model.put("titulo", "Todas las Solicitudes");
+    model.put("mostrarTabla", true);
+    model.put("mostrarBotones", true);
+    model.put("tipoActivo", "todas");
+    
     ctx.render("solicitudes.hbs", model);
+  }
+  
+  private void renderizarSolicitudes(Context ctx, List<Map<String, Object>> solicitudes, String titulo, String tipoActivo) {
+    String pageParam = ctx.queryParam("page");
+    int page = pageParam != null ? Integer.parseInt(pageParam) : 1;
+    int pageSize = 10;
+    int totalSolicitudes = solicitudes.size();
+    int totalPages = (int) Math.ceil((double) totalSolicitudes / pageSize);
+    
+    int startIndex = (page - 1) * pageSize;
+    int endIndex = Math.min(startIndex + pageSize, totalSolicitudes);
+    
+    List<Map<String, Object>> solicitudesPagina = solicitudes.subList(startIndex, endIndex);
+    
+    Map<String, Object> model = new HashMap<>();
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("solicitudes", solicitudesPagina);
+    model.put("currentPage", page);
+    model.put("totalPages", totalPages);
+    model.put("hasPrevious", page > 1);
+    model.put("hasNext", page < totalPages);
+    model.put("previousPage", page - 1);
+    model.put("nextPage", page + 1);
+    model.put("titulo", titulo);
+    model.put("mostrarBotones", true);
+    model.put("tipoActivo", tipoActivo);
+    
+    ctx.render("solicitudes.hbs", model);
+  }
+  
+  public void confirmar(Context ctx) {
+    try {
+      Long solicitudId = Long.parseLong(ctx.pathParam("id"));
+      servicioSolicitudes.confirmarSolicitud(solicitudId);
+      ctx.status(200).result("Solicitud confirmada exitosamente");
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al confirmar la solicitud");
+    }
+  }
+
+  public void rechazar(Context ctx) {
+    try {
+      Long solicitudId = Long.parseLong(ctx.pathParam("id"));
+      servicioSolicitudes.rechazarSolicitud(solicitudId);
+      ctx.status(200).result("Solicitud rechazada exitosamente");
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al rechazar la solicitud");
+    }
   }
 
 }
