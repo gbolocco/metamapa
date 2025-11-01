@@ -236,9 +236,7 @@ public class AdminController {
     List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.ELIMINACION_HECHO);
     System.out.println("DEBUG AdminController: Solicitudes del repo: " + solicitudesRepo.size());
     
-    List<Map<String, Object>> todasSolicitudes;
-    if (solicitudesRepo.isEmpty()) {
-      todasSolicitudes = solicitudesRepo.stream()
+    List<Map<String, Object>> todasSolicitudes = solicitudesRepo.stream()
         .map(s -> {
           Map<String, Object> solicitudMap = new HashMap<>();
           solicitudMap.put("id", s.getId());
@@ -250,7 +248,6 @@ public class AdminController {
           return solicitudMap;
         })
         .collect(Collectors.toList());
-    }
     
     String pageParam = ctx.queryParam("page");
     int page = pageParam != null ? Integer.parseInt(pageParam) : 1;
