@@ -172,12 +172,29 @@ public class AdminController {
       model.put("user_name", ctx.sessionAttribute("user_name"));
       model.put("user_id", ctx.sessionAttribute("user_id"));
       model.put("usuarios", usuarios);
+      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
       ctx.render("admin/usuarios.hbs", model);
+
     }catch (Exception e){
       e.printStackTrace();
       ctx.status(500).result("Error interno del servidor: " + e.getMessage());
     }
 
+  }
+
+  public void mostrarFuentes(Context ctx) {
+    Map<String, Object> model = new HashMap<>();
+
+    List<Fuente> fuentes = servicioFuentes.getFuentes();
+
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+
+    model.put("fuentes", fuentes);
+
+    ctx.render("admin/fuentes.hbs", model);
   }
 
 }

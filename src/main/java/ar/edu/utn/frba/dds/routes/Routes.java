@@ -47,7 +47,9 @@ public class Routes {
         get("/coleccion",admin::mostrarFormColeccion);
         post("/coleccion", admin::crearColeccion);
         get("/usuarios",admin::mostrarUsuarios);
+        get("/fuentes", admin::mostrarFuentes);
         });
+
       path("usuarios",() -> {
         put("/{id}/rol",userController::actualizarRolUsuario);
       });
