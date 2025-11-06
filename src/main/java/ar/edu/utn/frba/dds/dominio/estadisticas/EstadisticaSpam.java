@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class EstadisticaSpam extends Estadistica {
 
   public String calcular(List<Hecho> hechos) {
     List<Solicitud> solicitudesDeEliminacionSpan =
-        SolicitudesRepository
+        SolicitudesRepositoryDB
             .getInstancia()
             .mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO)
             .stream()
