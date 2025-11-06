@@ -7,8 +7,8 @@ import java.util.Optional;
 import javax.persistence.NoResultException;
 
 
-public class UsuariosTableRepositoryDB implements SimplePersistenceTest {
-  public static UsuariosTableRepositoryDB INSTANCE = new UsuariosTableRepositoryDB();
+public class UsuariosRepository implements SimplePersistenceTest {
+  public static UsuariosRepository INSTANCE = new UsuariosRepository();
 
   public void registrar(Usuario usuario) {
     entityManager().persist(usuario);

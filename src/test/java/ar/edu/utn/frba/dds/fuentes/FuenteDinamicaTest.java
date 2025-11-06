@@ -13,7 +13,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -75,7 +75,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   void contribuyentePuedeGenerarUnaSolicitudCreacion(){
     //entityManager().getTransaction().commit();
     Assertions.assertTrue(
-        SolicitudesRepositoryDB.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitud));
+        SolicitudesRepository.getInstancia().mostrarSolicitudes(TipoSolicitud.CARGA_HECHO).contains(solicitud));
   }
 
   @Test
@@ -97,7 +97,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
 
   @Test
   void puedeAceptarSolicitudDespuesDeApagar(){
-    Solicitud solicitud1 = SolicitudesRepositoryDB.getInstancia().buscarSolicitudPorId(solicitud.getId());
+    Solicitud solicitud1 = SolicitudesRepository.getInstancia().buscarSolicitudPorId(solicitud.getId());
     solicitud1.aceptar();
     //entityManager().getTransaction().commit();
     Assertions.assertTrue(solicitud1.getEstadoSolicitud() == EstadoSolicitud.ACEPTADA);

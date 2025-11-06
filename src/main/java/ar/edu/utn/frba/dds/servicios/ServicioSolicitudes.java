@@ -10,7 +10,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.modelo.Usuario;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepository;
 
 import java.util.List;
@@ -18,10 +18,10 @@ import java.util.Optional;
 
 public class ServicioSolicitudes {
   
-  private SolicitudesRepositoryDB repositorioSolicitudes;
+  private SolicitudesRepository repositorioSolicitudes;
   private Solicitud solicitud;
   
-  public ServicioSolicitudes(SolicitudesRepositoryDB repositorioSolicitudes) {
+  public ServicioSolicitudes(SolicitudesRepository repositorioSolicitudes) {
     this.repositorioSolicitudes = repositorioSolicitudes;
   }
   

@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import java.time.LocalDateTime;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -23,7 +23,7 @@ public class SolicitudDeCargaHecho extends Solicitud {
     //Validacion.validarNoNulo(hecho, "hecho");
     //hecho.setEstadoHecho(EstadoHecho.PENDIENTE_DE_APROBACION);
 
-    SolicitudesRepositoryDB.getInstancia().agregar(this);
+    SolicitudesRepository.getInstancia().agregar(this);
   }
 
   public SolicitudDeCargaHecho() {

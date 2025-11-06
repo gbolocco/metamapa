@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.DiscriminatorValue;
@@ -21,7 +21,7 @@ public class SolicitudModificacion extends Solicitud {
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
     this.representacionDeHecho = representacionDeHecho;
     this.idHecho = idHecho;
-    SolicitudesRepositoryDB.getInstancia().agregar(this);
+    SolicitudesRepository.getInstancia().agregar(this);
   }
 
   public SolicitudModificacion() {
