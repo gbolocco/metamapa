@@ -187,14 +187,27 @@ public class AdminController {
 
     List<Fuente> fuentes = servicioFuentes.getFuentes();
 
+    // Convertimos las fuentes a mapas con todas las propiedades necesarias
+    List<Map<String, Object>> fuentesDTO = fuentes.stream()
+        .map(f -> {
+          Map<String, Object> map = new HashMap<>();
+          map.put("id", f.getId());
+          map.put("tipo_fuente", f.getTipoFuente());  // Se ejecuta el método acá
+          return map;
+        })
+        .collect(Collectors.toList());
+
+    // Atributos de sesión
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
 
-    model.put("fuentes", fuentes);
+    // Pasamos la lista procesada
+    model.put("fuentes", fuentesDTO);
 
     ctx.render("admin/fuentes.hbs", model);
   }
+
 
 }
