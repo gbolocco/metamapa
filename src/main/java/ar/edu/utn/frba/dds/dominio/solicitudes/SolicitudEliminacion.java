@@ -5,14 +5,13 @@ import ar.edu.utn.frba.dds.dominio.hechos.EstadoRepresentacionHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Entity
 @DiscriminatorValue("eliminacion")
@@ -38,7 +37,7 @@ public class SolicitudEliminacion  extends Solicitud {
 
 
   public void agregarSolicitud() {
-    SolicitudesRepository.getInstancia().agregar(this);
+    SolicitudesRepositoryDB.getInstancia().agregar(this);
   }
 
   public SolicitudEliminacion() {
@@ -56,16 +55,14 @@ public class SolicitudEliminacion  extends Solicitud {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     this.representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.ELIMINADO);
     FuentesRepository.getInstancia().actualizarListasFuentes();
-    //HechosRepositoryMemory
-    // .getInstancia().buscar(this.idHechoAEliminar).setEstadoHecho(EstadoHecho.ELIMINADO);
-
+    SolicitudesRepositoryDB.getInstancia().actualizar(this);
   }
 
   @Override
   public void rechazar() {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
     representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.RECHAZADO);
-
+    SolicitudesRepositoryDB.getInstancia().actualizar(this);
   }
   
 }

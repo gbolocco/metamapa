@@ -26,6 +26,11 @@
         <class>ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde</class>
         <class>ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho</class>
         <class>ar.edu.utn.frba.dds.dominio.usuario.Contribuyente</class>
+        <class>ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud</class>
+        <class>ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion</class>
+        <class>ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho</class>
+        <class>ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion</class>
+        <class>ar.edu.utn.frba.dds.modelo.Usuario</class>
         <properties>
             <!--property name="hibernate.search.default.indexBase" value="./indexes"/-->
             <property name="hibernate.search.backend.directory.root"

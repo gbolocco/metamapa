@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Crear Colección</title>
+    <link rel="stylesheet" href="/static/css/style_coleccion_admin.css" />
+</head>
+<body>
+<div class="form-container">
+    <h1>Crear nueva Colección</h1>
+
+    <form method="post" action="/admin/coleccion" id="formColeccion">
+        <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="3" required></textarea>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label for="consenso">Algoritmo de consenso:</label>
+            <select id="consenso" name="consenso" required>
+                <option value="">Seleccionar...</option>
+                <option value="ABSOLUTA">Absoluta</option>
+                <option value="MULTIPLES_MENCIONES">Múltiples menciones</option>
+                <option value="MAYORIA_SIMPLE">Mayoría simple</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fuentes">Seleccionar fuentes:</label>
+
+            <div class="dropdown-container">
+                <button type="button" id="dropdownBtn" class="dropdown-btn">Agregar fuente ▼</button>
+                <div id="dropdownList" class="dropdown-list hidden">
+                    {{#each fuentes}}
+                        <div class="dropdown-item" data-id="{{this.id}}">{{this.id}}</div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <div id="fuentesSeleccionadas" class="chips-container"></div>
+            <input type="hidden" name="fuentesSeleccionadas" id="fuentesSeleccionadasInput">
+        </div>
+
+
+        <h2>Criterio de pertenencia</h2>
+        <div id="filtros-container"></div>
+        <button type="button" id="agregarFiltro" class="btn-secondary">Agregar Filtro</button>
+
+        <div class="form-actions">
+            <button type="submit">Guardar Colección</button>
+            <a href="/" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    const filtrosContainer = document.getElementById("filtros-container");
+    const btnAgregarFiltro = document.getElementById("agregarFiltro");
+    let filtroCount = 0;
+
+    /**
+     * Actualiza el tipo de input del valor en función del filtro seleccionado.
+     * @param {HTMLElement} filtroDiv - El contenedor del filtro individual.
+     */
+    function actualizarInputValor(filtroDiv) {
+        const selectTipo = filtroDiv.querySelector(".tipo-filtro");
+        const selectCampo = filtroDiv.querySelector(".campo-filtro");
+        const inputValor = filtroDiv.querySelector(".valor-filtro");
+        const labelValor = filtroDiv.querySelector("label[for='valor-input']");
+
+        // Determinar el tipo de input
+        let inputType = 'text';
+        let placeholderText = 'Ingrese valor...';
+
+        // Si el tipo de filtro es fecha, forzamos input[type=datetime-local]
+        if (selectTipo.value === 'fechaDesde' || selectTipo.value === 'fechaHasta') {
+            inputType = 'datetime-local';
+            placeholderText = 'Seleccione fecha y hora...';
+        }
+
+        // Crear el nuevo input
+        const nuevoInput = document.createElement("input");
+        nuevoInput.type = inputType;
+        nuevoInput.name = inputValor.name; // Mantiene el name attribute (filtros[i][valor])
+        nuevoInput.className = "valor-filtro"; // Mantiene la clase
+        nuevoInput.placeholder = placeholderText;
+        nuevoInput.required = true;
+
+        // Reemplazar el input existente
+        inputValor.parentNode.replaceChild(nuevoInput, inputValor);
+
+        // Actualizar el label
+        if (labelValor) {
+             labelValor.textContent = (inputType === 'datetime-local') ? 'Fecha y Hora:' : 'Valor:';
+        }
+
+        // Desactivar/Activar el campo para el filtro de texto
+        const campoSelectGroup = filtroDiv.querySelector('.campo-select-group');
+        if (selectTipo.value === 'texto') {
+            // El filtro de texto necesita un campo (título o descripción)
+            selectCampo.disabled = false;
+            campoSelectGroup.style.opacity = 1;
+        } else {
+             // Los filtros de fecha siempre aplican a 'fechaAcontecimiento'
+            selectCampo.value = 'fechaAcontecimiento';
+            selectCampo.disabled = true;
+            campoSelectGroup.style.opacity = 0.5;
+        }
+    }
+
+
+    btnAgregarFiltro.addEventListener("click", () => {
+        const filtroDiv = document.createElement("div");
+        filtroDiv.classList.add("filtro-item");
+
+        const index = filtroCount++;
+
+        filtroDiv.innerHTML = `
+            <div class="form-group">
+                <label>Tipo de filtro:</label>
+                <select name="filtros[${index}][tipo]" class="tipo-filtro">
+                    <option value="texto">Texto contiene</option>
+                    <option value="fechaDesde">Fecha desde</option>
+                    <option value="fechaHasta">Fecha hasta</option>
+                </select>
+            </div>
+
+            <div class="form-group campo-select-group">
+                <label>Campo:</label>
+                <select name="filtros[${index}][campo]" class="campo-filtro">
+                    <option value="titulo">Título</option>
+                    <option value="descripcion">Descripción</option>
+                    </select>
+            </div>
+
+            <div class="form-group">
+                <label for="valor-input">Valor:</label>
+                <input type="text" id="valor-input" name="filtros[${index}][valor]" class="valor-filtro" placeholder="Ingrese valor..." required>
+            </div>
+
+            <button type="button" class="btn-eliminar">Eliminar</button>
+        `;
+
+        // Añadir listeners para los cambios
+        const selectTipo = filtroDiv.querySelector(".tipo-filtro");
+        const selectCampo = filtroDiv.querySelector(".campo-filtro");
+
+        selectTipo.addEventListener("change", () => actualizarInputValor(filtroDiv));
+        selectCampo.addEventListener("change", () => actualizarInputValor(filtroDiv));
+
+
+        filtroDiv.querySelector(".btn-eliminar").addEventListener("click", () => {
+            filtroDiv.remove();
+        });
+
+        filtrosContainer.appendChild(filtroDiv);
+
+        // Inicializar el input al crear el filtro (en este caso, siempre será texto por defecto)
+        actualizarInputValor(filtroDiv);
+    });
+</script>
+
+<script>
+    // --- Lógica del Dropdown y Chips de Fuentes (Sin cambios) ---
+    const dropdownBtn = document.getElementById("dropdownBtn");
+    const dropdownList = document.getElementById("dropdownList");
+    const contenedorChips = document.getElementById("fuentesSeleccionadas");
+    const inputHidden = document.getElementById("fuentesSeleccionadasInput");
+
+    let seleccionadas = [];
+
+    dropdownBtn.addEventListener("click", () => {
+        dropdownList.classList.toggle("hidden");
+    });
+
+    dropdownList.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("dropdown-item")) return;
+        const id = e.target.dataset.id;
+
+        if (!seleccionadas.includes(id)) {
+            seleccionadas.push(id);
+            actualizarChips();
+        }
+    });
+
+    function actualizarChips() {
+        contenedorChips.innerHTML = "";
+        seleccionadas.forEach(id => {
+            const chip = document.createElement("div");
+            chip.className = "chip";
+            chip.innerHTML = `${id} <span data-id="${id}">×</span>`;
+            contenedorChips.appendChild(chip);
+        });
+        inputHidden.value = seleccionadas.join(",");
+    }
+
+    contenedorChips.addEventListener("click", (e) => {
+        if (e.target.tagName === "SPAN") {
+            const id = e.target.dataset.id;
+            seleccionadas = seleccionadas.filter(f => f !== id);
+            actualizarChips();
+        }
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!dropdownBtn.contains(e.target) && !dropdownList.contains(e.target)) {
+            dropdownList.classList.add("hidden");
+        }
+    });
+
+
+</script>
+</body>
+</html>

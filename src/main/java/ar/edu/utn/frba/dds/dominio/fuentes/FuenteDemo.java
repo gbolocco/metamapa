@@ -12,9 +12,13 @@ import java.util.stream.Collectors;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @DiscriminatorValue("fuenteDemo")
+@Getter
+@Setter
 public class FuenteDemo extends Fuente {
   @Transient
   private Conexion conexion;

@@ -26,7 +26,9 @@ public class FuentesRepository implements WithSimplePersistenceUnit {
   }
 
   public void agregarFuente(Fuente fuente) {
+    entityManager().getTransaction().begin();
     entityManager().persist(fuente);
+    entityManager().getTransaction().commit();
   }
 
   // metodos para algoritmos de consenso
@@ -36,6 +38,10 @@ public class FuentesRepository implements WithSimplePersistenceUnit {
     return getFuentes().stream()
         .map(fuente -> fuente.obtenerHechos(criterios))
         .toList();
+  }
+
+  public Fuente buscar(Long id) {
+    return entityManager().find(Fuente.class, id);
   }
 
   public int getCantidadFuentes() {

@@ -9,7 +9,11 @@
     min-height: calc(100vh - 140px); /* compensa header + footer */
     box-sizing: border-box;
 }
+.colecciones-container{
+    max-height: 100%;
+    max-width: 100%;
 
+}
 /* Título principal */
 .main-content h1 {
     font-size: 2rem;
@@ -26,8 +30,9 @@
     gap: 30px;
     justify-items: center;
     align-items: stretch;
-    max-width: 1200px;
+    max-width: 1400px;
     width: 100%;
+    height: 100%;
     margin: 0 auto 60px auto;
     padding: 0 20px;
 }
@@ -40,6 +45,7 @@
     max-width: 230px;
     border-radius: 14px;
     text-align: center;
+    align-content: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.25);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }

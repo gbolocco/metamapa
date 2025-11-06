@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
+import ar.edu.utn.frba.dds.controladores.SolicitudesController;
+import ar.edu.utn.frba.dds.controladores.UserController;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
 
@@ -15,7 +17,9 @@ public class Routes {
     HechosController hechos,
     LoginController login,
     ColeccionController coleccionController,
-    AdminController admin) {
+    UserController userController,
+    AdminController admin,
+    SolicitudesController solicitudesController) {
 
     config.router.apiBuilder(() -> {
 
@@ -29,7 +33,7 @@ public class Routes {
       before("/admin/*", ctx -> {
         Rol rol = ctx.sessionAttribute("rol");
         if (rol == null || rol != Rol.ADMIN) {
-          ctx.redirect("/login");
+          ctx.redirect("/login?redirect=" + ctx.path());
           ctx.status(302);
           ctx.result("");
           return;
@@ -42,7 +46,17 @@ public class Routes {
 
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
+        get("/coleccion",admin::mostrarFormColeccion);
+        get("/usuarios",admin::mostrarUsuarios);
+        get("/solicitudes", admin::mostrarSolicitudes);
+        post("/solicitudes/{id}/confirmar", admin::confirmar);
+        post("/solicitudes/{id}/rechazar", admin::rechazar);
+        get("/fuentes", admin::mostrarFuentes);
         });
+
+      path("usuarios",() -> {
+        put("/{id}/rol",userController::actualizarRolUsuario);
+      });
       path("/hechos", () -> {
         get(hechos::listar);
         get("/nuevo", hechos::mostrarFormulario);
@@ -62,7 +76,23 @@ public class Routes {
         get("/{id}/hechos", hechos::mostrar);
       });
 
+      path("/solicitudes", () -> {
+        get(solicitudesController::mostrarFormulario);
+        post(solicitudesController::crear);
+      });
+
       post("/logout", login::logout);
+      
+      before("/mis-solicitudes", ctx -> {
+        if (ctx.sessionAttribute("user_id") == null) {
+          ctx.redirect("/login?redirect=" + ctx.path());
+          return;
+        }
+      });
+      
+      get("/mis-solicitudes", userController::mostrarMisSolicitudes);
+      
+      
     });
   }
 

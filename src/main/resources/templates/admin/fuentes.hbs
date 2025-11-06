@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Fuentes</title>
+    <link rel="stylesheet" href="/static/css/style_fuentes.css">
+    <style>
+        .btn-crear {
+            display: inline-block;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        .btn-crear:hover {
+            background-color: #45a049;
+        }
+        .contenedor-boton {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor-boton">
+    <a href="/admin/fuentes/nueva" class="btn-crear">+ Crear Fuente</a>
+</div>
+
+<main id="contenedor-fuentes"></main>
+
+<script>
+    // Construimos un array de fuentes directamente en JS usando Handlebars
+    const fuentes = [
+        {{#each fuentes}}
+            {
+                id: "{{this.id}}",
+                tipoFuente: "{{this.tipo_fuente}}"
+            }{{#unless @last}},{{/unless}}
+        {{/each}}
+    ];
+
+    const contenedor = document.getElementById('contenedor-fuentes');
+
+    if (fuentes.length > 0) {
+        const tabla = document.createElement('table');
+        tabla.innerHTML = `
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${fuentes.map(fuente => `
+                    <tr>
+                        <td>${fuente.id}</td>
+                        <td>${fuente.tipoFuente || '-'}</td>
+                        <td class="acciones">
+                            <form method="POST" action="/admin/fuentes/${fuente.id}/eliminar" style="display:inline;">
+                                <button type="submit" class="btn-eliminar">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        `;
+        contenedor.appendChild(tabla);
+    } else {
+        const mensaje = document.createElement('p');
+        mensaje.className = 'sin-fuentes';
+        mensaje.textContent = 'No hay fuentes registradas.';
+        contenedor.appendChild(mensaje);
+    }
+</script>
+
+</body>
+</html>

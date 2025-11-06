@@ -97,16 +97,11 @@ public class Coleccion  {
     this.fuente = fuente;
     this.fechaDeCreacion = LocalDateTime.now();
     this.handle = handle;
-    this.cargarColeccion();
   }
 
   public Coleccion() {
   }
 
-
-  public void cargarColeccion() {
-    ColeccionRepository.getInstancia().agregarColeccion(this);
-  }
 
   // MODOS DE VISUALIZACION
 

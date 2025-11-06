@@ -1,31 +1,28 @@
 package ar.edu.utn.frba.dds.controladores;
 
-import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import ar.edu.utn.frba.dds.servicios.ServicioHechos;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
-import io.javalin.http.Handler;
-import io.javalin.http.HttpStatus;
 import java.util.ArrayList;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HechosController implements WithSimplePersistenceUnit {
-  private HechosRepository repo = HechosRepository.getInstancia();
+  private ServicioHechos servicioHechos;
   private final ObjectMapper mapper = new ObjectMapper();
+
+  public HechosController(ServicioHechos servicioHechos) {
+    this.servicioHechos = servicioHechos;
+  }
 
   public void listar(Context ctx) {
     Map<String, Object> model = new HashMap<>();
@@ -35,7 +32,18 @@ public class HechosController implements WithSimplePersistenceUnit {
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
     model.put("user_name", ctx.sessionAttribute("user_name"));
-    model.put("hechos", repo.mostrarHechos());
+    model.put("hechos", servicioHechos.mostrarHechos());
+    
+    String success = ctx.queryParam("success");
+    if ("solicitud_creada".equals(success)) {
+      model.put("successMessage", "Solicitud creada exitosamente");
+    }
+    
+    String error = ctx.queryParam("error");
+    if (error != null) {
+      model.put("errorMessage", "Error al crear solicitud: " + error);
+    }
+    
     ctx.render("hechos.hbs", model);
   }
 
@@ -59,7 +67,7 @@ public class HechosController implements WithSimplePersistenceUnit {
       String foto = ctx.formParam("foto");
       String video = ctx.formParam("video");
 
-      Hecho hecho = new Hecho(
+    Hecho hecho = new Hecho(
           titulo,
           descripcion,
           categoria,
@@ -73,12 +81,12 @@ public class HechosController implements WithSimplePersistenceUnit {
       hecho.addContenidoMultimedia(video, TipoContenido.VIDEO);
 
       //todo: deberia pegarle a un service, ese service al repositorio y despues a la base de datos
-      repo.cargarHecho(hecho);
+      servicioHechos.cargarHecho(hecho);
       //DISCUTIR SI DEJAR ACA O EN cargarHecho()
       entityManager().getTransaction().begin();
       entityManager().flush();
       entityManager().getTransaction().commit();
-
+      entityManager().clear();
 
       ctx.redirect("/hechos");
     } catch (Exception e) {
@@ -89,16 +97,44 @@ public class HechosController implements WithSimplePersistenceUnit {
 
   public void mostrar(Context ctx) {
     try {
-      System.out.println("➡️ Entrando al método mostrar()");
-
       String idParam = ctx.queryParam("id");
       String hechoJson = ctx.queryParam("hecho");
 
-      System.out.println("🟢 idParam: " + idParam);
-      System.out.println("🟢 hechoJson: " + hechoJson);
-
       if (hechoJson == null || hechoJson.isEmpty()) {
-        ctx.status(400).result("Falta el parámetro 'hecho'");
+        // Si no hay hechoJson pero sí hay id, buscar el hecho en la BD
+        if (idParam != null && !idParam.equals("null")) {
+          try {
+            Long id = Long.parseLong(idParam);
+            var hechoFromDB = servicioHechos.buscar(id);
+            if (hechoFromDB != null) {
+              Map<String, Object> model = new HashMap<>();
+              model.put("hecho", hechoFromDB);
+              model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+              model.put("rol", ctx.sessionAttribute("rol"));
+              model.put("user_name", ctx.sessionAttribute("user_name"));
+              model.put("user_id", ctx.sessionAttribute("user_id"));
+              
+              // Manejar mensajes de sesión
+              String successMessage = ctx.sessionAttribute("successMessage");
+              if (successMessage != null) {
+                model.put("successMessage", successMessage);
+                ctx.sessionAttribute("successMessage", null);
+              }
+              
+              String errorMessage = ctx.sessionAttribute("errorMessage");
+              if (errorMessage != null) {
+                model.put("errorMessage", errorMessage);
+                ctx.sessionAttribute("errorMessage", null);
+              }
+              
+              ctx.render("hecho.hbs", model);
+              return;
+            }
+          } catch (NumberFormatException e) {
+            System.err.println("⚠️ id inválido: " + idParam);
+          }
+        }
+        ctx.status(400).result("Falta el parámetro 'hecho' o 'id' válido");
         return;
       }
 
@@ -112,11 +148,15 @@ public class HechosController implements WithSimplePersistenceUnit {
       try {
         if (idParam != null && !idParam.equals("null")) {
           id = Long.parseLong(idParam);
-          hecho.setContenidoMultimedia(repo.buscar(id).getContenidoMultimedia());
-          System.out.println(hecho.getContenidoMultimedia());
+          var hechoFromDB = servicioHechos.buscar(id);
+          if (hechoFromDB != null) {
+            hecho.setContenidoMultimedia(hechoFromDB.getContenidoMultimedia());
+          }
         }
-          if (hecho.getContenidoMultimedia() == null)
-            hecho.setContenidoMultimedia(new ArrayList<>());
+        
+        if (hecho.getContenidoMultimedia() == null) {
+          hecho.setContenidoMultimedia(new ArrayList<>());
+        }
 
       } catch (NumberFormatException e) {
         System.err.println("⚠️ id inválido: " + idParam);
@@ -128,6 +168,30 @@ public class HechosController implements WithSimplePersistenceUnit {
       model.put("rol", ctx.sessionAttribute("rol"));
       model.put("user_name", ctx.sessionAttribute("user_name"));
       model.put("user_id", ctx.sessionAttribute("user_id"));
+      
+      // Manejar mensajes de sesión
+      String successMessage = ctx.sessionAttribute("successMessage");
+      if (successMessage != null) {
+        model.put("successMessage", successMessage);
+        ctx.sessionAttribute("successMessage", null); // Limpiar mensaje
+      }
+      
+      String errorMessage = ctx.sessionAttribute("errorMessage");
+      if (errorMessage != null) {
+        model.put("errorMessage", errorMessage);
+        ctx.sessionAttribute("errorMessage", null); // Limpiar mensaje
+      }
+      
+      // También manejar parámetros de URL (fallback)
+      String success = ctx.queryParam("success");
+      if ("solicitud_creada".equals(success)) {
+        model.put("successMessage", "Solicitud creada exitosamente");
+      }
+      
+      String error = ctx.queryParam("error");
+      if (error != null) {
+        model.put("errorMessage", "Error al crear solicitud: " + error);
+      }
 
       ctx.render("hecho.hbs", model);
 

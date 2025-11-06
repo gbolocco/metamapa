@@ -35,27 +35,6 @@ public class Contribuyente {
 
   }
 
-  public RepresentacionDeHecho crearHecho(
-      String titulo,
-      String descripcion,
-      String categoria,
-      Ubicacion ubicacion,
-      LocalDateTime fechaAcontecimiento,
-      LocalDateTime fechaDeCarga) {
-
-
-    return new RepresentacionDeHecho(
-        titulo,
-        descripcion,
-        categoria,
-        ubicacion,
-        fechaAcontecimiento,
-        fechaDeCarga,
-        OrigenHecho.PROVISTO_POR_CONTRIBUYENTE,
-        this
-    );
-
-  }
 
   public void setId(Long id) {
     this.id = id;

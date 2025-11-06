@@ -44,7 +44,7 @@ main {
   background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
   border-radius: 8px;
   flex: 1;
-  width: 100%;
+
 }
 
 /* Header Styles */
@@ -355,6 +355,8 @@ main {
   grid-area: main;
   padding: 0.5rem;
   background: linear-gradient(to bottom, #fefce8, #fef9c3);
+  align-items: center;
+  justify-content: center;
 }
 
 /* Cuando NO hay sidebar (por ejemplo, login, home pública) */
