@@ -1,75 +1,27 @@
 <div class="container">
     <h1>Mis Solicitudes</h1>
     
-    <div class="actions-bar">
-        <a href="/solicitudes?tipo=carga" class="btn btn-primary">+ Crear Solicitud de Carga</a>
-        <a href="/solicitudes?tipo=modificacion" class="btn btn-secondary">+ Crear Solicitud de Modificación</a>
-    </div>
-    
     <div class="solicitudes-grid">
-        <!-- Solicitud de Creación 1 -->
+        {{#each solicitudes}}
         <div class="solicitud-card">
             <div class="card-header">
-                <h3>Solicitud de Creación</h3>
-                <span class="status-badge status-pendiente">Pendiente</span>
+                <h3>Solicitud de {{tipo}}</h3>
+                <span class="status-badge status-{{estado}}">{{estado}}</span>
             </div>
             <div class="card-body">
-                <h4>Terremoto en San Juan</h4>
-                <p class="description">Terremoto de magnitud 5.8 registrado en la provincia de San Juan</p>
+                <h4>Solicitud #{{id}}</h4>
+                <p class="description">{{justificacion}}</p>
                 <div class="card-meta">
-                    <span class="date">Creada: 30/10/2025</span>
-                    <span class="type">Tipo: Creación de Hecho</span>
+                    <span class="date">Creada: {{fecha}}</span>
+                    <span class="type">Tipo: {{tipo}}</span>
                 </div>
             </div>
         </div>
-        
-        <!-- Solicitud de Creación 2 -->
-        <div class="solicitud-card">
-            <div class="card-header">
-                <h3>Solicitud de Creación</h3>
-                <span class="status-badge status-aceptada">Aceptada</span>
-            </div>
-            <div class="card-body">
-                <h4>Inundación en La Plata</h4>
-                <p class="description">Inundación severa en el centro de La Plata por lluvias intensas</p>
-                <div class="card-meta">
-                    <span class="date">Creada: 28/10/2025</span>
-                    <span class="type">Tipo: Creación de Hecho</span>
-                </div>
-            </div>
+        {{else}}
+        <div class="no-solicitudes">
+            <p>No tienes solicitudes creadas aún.</p>
         </div>
-        
-        <!-- Solicitud de Eliminación 1 -->
-        <div class="solicitud-card">
-            <div class="card-header">
-                <h3>Solicitud de Eliminación</h3>
-                <span class="status-badge status-pendiente">Pendiente</span>
-            </div>
-            <div class="card-body">
-                <h4>Eliminar: Tornado en Córdoba</h4>
-                <p class="description">Solicitud para eliminar registro duplicado del tornado</p>
-                <div class="card-meta">
-                    <span class="date">Creada: 29/10/2025</span>
-                    <span class="type">Tipo: Eliminación de Hecho</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Solicitud de Eliminación 2 -->
-        <div class="solicitud-card">
-            <div class="card-header">
-                <h3>Solicitud de Eliminación</h3>
-                <span class="status-badge status-rechazada">Rechazada</span>
-            </div>
-            <div class="card-body">
-                <h4>Eliminar: Granizada en Mendoza</h4>
-                <p class="description">Solicitud para eliminar registro con información incorrecta</p>
-                <div class="card-meta">
-                    <span class="date">Creada: 27/10/2025</span>
-                    <span class="type">Tipo: Eliminación de Hecho</span>
-                </div>
-            </div>
-        </div>
+        {{/each}}
     </div>
 </div>
 
@@ -162,9 +114,27 @@
     color: #155724;
 }
 
-.status-rechazada {
+.status-rechazada, .status-RECHAZADA {
     background-color: #f8d7da;
     color: #721c24;
+}
+
+.status-PENDIENTE {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-ACEPTADA {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.no-solicitudes {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
 }
 
 .card-body h4 {

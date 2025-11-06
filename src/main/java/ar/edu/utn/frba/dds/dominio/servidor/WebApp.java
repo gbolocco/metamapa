@@ -75,7 +75,7 @@ public class WebApp {
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
     AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
-    UserController user = new UserController(servicioUsuarios);
+    UserController user = new UserController(servicioUsuarios, servicioSolicitudes);
     SolicitudesController solicitudesController = new SolicitudesController(servicioSolicitudes);
 
     new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController);

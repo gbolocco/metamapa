@@ -36,6 +36,10 @@ public class ServicioSolicitudes {
   public List<Solicitud> obtenerSolicitudesPendientesPorTipo(TipoSolicitud tipoSolicitud) {
     return repositorioSolicitudes.pendientesPorTipo(tipoSolicitud);
   }
+  
+  public List<Solicitud> obtenerSolicitudesPorUsuario(Long usuarioId) {
+    return repositorioSolicitudes.buscarPorUsuario(usuarioId);
+  }
 
   public void crearHecho(Optional<Usuario> usuario, Hecho hecho, TipoSolicitud tipoSolicitud) {
     

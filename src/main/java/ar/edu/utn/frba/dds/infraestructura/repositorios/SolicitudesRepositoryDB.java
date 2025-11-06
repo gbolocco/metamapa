@@ -63,6 +63,13 @@ public class SolicitudesRepositoryDB implements
       entityManager().merge(solicitud);
     });
   }
+  
+  public List<Solicitud> buscarPorUsuario(Long usuarioId) {
+    return entityManager()
+        .createQuery("FROM Solicitud s WHERE s.usuario.id = :usuarioId ORDER BY s.fechaSolicitud DESC", Solicitud.class)
+        .setParameter("usuarioId", usuarioId)
+        .getResultList();
+  }
 
 }
 
