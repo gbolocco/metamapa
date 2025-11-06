@@ -47,6 +47,7 @@ public class Routes {
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
         get("/coleccion",admin::mostrarFormColeccion);
+        post("/coleccion",admin::crearColeccion);
         get("/usuarios",admin::mostrarUsuarios);
         get("/solicitudes", admin::mostrarSolicitudes);
         post("/solicitudes/{id}/confirmar", admin::confirmar);

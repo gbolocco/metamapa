@@ -15,16 +15,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "algoritmoConsenso")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "algoritmo", discriminatorType = DiscriminatorType.STRING)
 public abstract class AlgoritmoConsenso {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "algoritmo_Id")
-  private Long id;
 
   public abstract Boolean estaConsensuado(Hecho hecho, List<List<Hecho>> hechosCacheFiltrados);
 
@@ -53,11 +45,4 @@ public abstract class AlgoritmoConsenso {
         && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento());
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Long getId() {
-    return id;
-  }
 }
