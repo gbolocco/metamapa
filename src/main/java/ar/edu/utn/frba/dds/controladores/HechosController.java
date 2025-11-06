@@ -107,7 +107,6 @@ public class HechosController implements WithSimplePersistenceUnit {
             Long id = Long.parseLong(idParam);
             var hechoFromDB = servicioHechos.buscar(id);
             if (hechoFromDB != null) {
-              // Usar el hecho de la BD directamente
               Map<String, Object> model = new HashMap<>();
               model.put("hecho", hechoFromDB);
               model.put("loggedIn", ctx.sessionAttribute("loggedIn"));

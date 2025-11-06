@@ -51,7 +51,9 @@ public class Routes {
         get("/solicitudes", admin::mostrarSolicitudes);
         post("/solicitudes/{id}/confirmar", admin::confirmar);
         post("/solicitudes/{id}/rechazar", admin::rechazar);
+        get("/fuentes", admin::mostrarFuentes);
         });
+
       path("usuarios",() -> {
         put("/{id}/rol",userController::actualizarRolUsuario);
       });

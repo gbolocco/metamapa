@@ -174,7 +174,9 @@ public class AdminController {
       model.put("user_name", ctx.sessionAttribute("user_name"));
       model.put("user_id", ctx.sessionAttribute("user_id"));
       model.put("usuarios", usuarios);
+      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
       ctx.render("admin/usuarios.hbs", model);
+
     }catch (Exception e){
       e.printStackTrace();
       ctx.status(500).result("Error interno del servidor: " + e.getMessage());
@@ -308,7 +310,6 @@ public class AdminController {
     
     List<Map<String, Object>> todasSolicitudes = new ArrayList<>();
     
-    // Agregar solicitudes reales de la base de datos
     todasSolicitudes.addAll(solicitudesRepo.stream()
       .map(s -> {
         Map<String, Object> solicitudMap = new HashMap<>();
@@ -322,7 +323,6 @@ public class AdminController {
       })
       .collect(Collectors.toList()));
     
-    // Si no hay solicitudes en la BD, agregar mocks para demostración
     if (todasSolicitudes.isEmpty()) {
       todasSolicitudes.addAll(List.of(
         Map.of("id", 101, "titulo", "Solicitud de Carga - Terremoto Mendoza", "fecha", "2025-10-30 09:15", "solicitante", "Instituto Sismológico", "tipo", "Carga", "estado", "Pendiente"),
@@ -395,6 +395,33 @@ public class AdminController {
       e.printStackTrace();
       ctx.status(500).result("Error al rechazar la solicitud");
     }
+  }
+
+  public void mostrarFuentes(Context ctx) {
+    Map<String, Object> model = new HashMap<>();
+
+    List<Fuente> fuentes = servicioFuentes.getFuentes();
+
+    // Convertimos las fuentes a mapas con todas las propiedades necesarias
+    List<Map<String, Object>> fuentesDTO = fuentes.stream()
+        .map(f -> {
+          Map<String, Object> map = new HashMap<>();
+          map.put("id", f.getId());
+          map.put("tipo_fuente", f.getTipoFuente());  // Se ejecuta el método acá
+          return map;
+        })
+        .collect(Collectors.toList());
+
+    // Atributos de sesión
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+
+    // Pasamos la lista procesada
+    model.put("fuentes", fuentesDTO);
+
+    ctx.render("admin/fuentes.hbs", model);
   }
 
 }
