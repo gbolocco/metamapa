@@ -47,7 +47,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
               new Hecho("Robo a mano armada","Comerciantes de Córdoba denuncian una serie de robos en locales del centro.","Seguridad",new Ubicacion(-31.420,-64.188),LocalDateTime.of(2025,11,5,21,10),LocalDateTime.of(2025,11,6,23,50),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
               new Hecho("Contaminación por humo","Incendios rurales generan humo que afecta la calidad del aire en Rosario.","Contaminación",new Ubicacion(-32.958,-60.639),LocalDateTime.of(2025,11,3,15,30),LocalDateTime.of(2025,11,7,11,0),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
               new Hecho("Caída de poste eléctrico","Un poste cayó sobre la vereda en Mendoza capital, bloqueando el paso.","Infraestructura",new Ubicacion(-32.890,-68.845),LocalDateTime.of(2025,10,31,17,40),LocalDateTime.of(2025,11,2,8,15),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
-              new Hecho("Asalto en transporte público","Un pasajero fue asaltado en un colectivo de la línea 60 en Vicente López.","Seguridad",new Ubicacion(-34.528,-58.489),LocalDateTime.of(2025,11,5,22,5),LocalDateTime.of(2025,11,6,0,30),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
+              new Hecho("Asalto en transporte público","Un pasajero fue asaltado en un colectivo de la línea 60 en Vicente López.","Seguridad",new Ubicacion(-34.5601, -58.4624),LocalDateTime.of(2025,11,5,22,5),LocalDateTime.of(2025,11,6,0,30),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
               new Hecho("Clínica clausurada por falta de higiene","El Ministerio de Salud clausuró una clínica en Tucumán por incumplir normas sanitarias.","Salud",new Ubicacion(-26.808,-65.217),LocalDateTime.of(2025,11,4,10,0),LocalDateTime.of(2025,11,6,12,45),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
               new Hecho("Prueba1", "Prueba1", "Prueba1", new Ubicacion(30.2,30.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.PROVISTO_POR_CONTRIBUYENTE),
               new Hecho("Prueba2", "Prueba2", "Prueba2", new Ubicacion(20.2,10.2), LocalDateTime.now(), LocalDateTime.now(), OrigenHecho.FUENTE_PROXY)
@@ -56,8 +56,8 @@ public class Bootstrap implements WithSimplePersistenceUnit {
 
 
       withTransaction(() -> {
-      var usuarioFeli = UsuariosTableRepositoryDB.INSTANCE.buscarPorNombre("feli");
-      var usuarioDani = UsuariosTableRepositoryDB.INSTANCE.buscarPorNombre("dani");
+      var usuarioFeli = UsuariosRepository.INSTANCE.buscarPorNombre("feli");
+      var usuarioDani = UsuariosRepository.INSTANCE.buscarPorNombre("dani");
       
       if (usuarioFeli.isEmpty()) {
         var usuarios = Arrays.asList(
