@@ -33,4 +33,8 @@ public class Usuario {
     this.rol = rol;
   }
 
+  public void setPassword(String password) {
+    this.hashPassword = DigestUtils.sha256Hex(password);
+  }
+
 }

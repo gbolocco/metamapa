@@ -58,3 +58,34 @@ button:hover {
     text-align: center;
     margin-bottom: 1rem;
 }
+
+.success {
+    color: green;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.register-section {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.register-section p {
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.btn-register {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+.btn-register:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
