@@ -250,7 +250,7 @@ public class AdminController {
           solicitudMap.put("titulo", "Solicitud de Carga - " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
           solicitudMap.put("fecha", s.getFechaSolicitud().toString());
           solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
-          solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
           solicitudMap.put("tipo", "Carga");
           return solicitudMap;
         })
@@ -271,7 +271,7 @@ public class AdminController {
           solicitudMap.put("titulo", "Solicitud de " + s.getTipoSolicitud());
           solicitudMap.put("fecha", s.getFechaSolicitud().toString());
           solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
-          solicitudMap.put("solicitante", "Hecho: " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
+          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
           solicitudMap.put("tipo", s.getTipoSolicitud().toString());
           return solicitudMap;
         })
@@ -321,7 +321,7 @@ public class AdminController {
           solicitudMap.put("titulo", "Solicitud de Modificación - " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
           solicitudMap.put("fecha", s.getFechaSolicitud().toString());
           solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
-          solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
           solicitudMap.put("tipo", "Modificación");
           return solicitudMap;
         })
@@ -342,7 +342,7 @@ public class AdminController {
         solicitudMap.put("id", s.getId());
         solicitudMap.put("titulo", "Solicitud de " + s.getTipoSolicitud().toString().replace("_", " "));
         solicitudMap.put("fecha", s.getFechaSolicitud().toString());
-        solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+        solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
         solicitudMap.put("tipo", s.getTipoSolicitud().toString().replace("_", " "));
         solicitudMap.put("estado", s.getEstadoSolicitud().toString());
         return solicitudMap;

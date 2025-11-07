@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
+import ar.edu.utn.frba.dds.modelo.Usuario;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -88,5 +89,11 @@ public class HechosRepository implements WithSimplePersistenceUnit {
     return entityManager().find(Hecho.class, id);
   }
 
+  public List<Hecho> buscarPorUsuario(Usuario usuario) {
+    return entityManager()
+        .createQuery("FROM Hecho h WHERE h.usuario = :usuario", Hecho.class)
+        .setParameter("usuario", usuario)
+        .getResultList();
+  }
 
 }

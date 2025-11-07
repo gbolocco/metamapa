@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.dominio.hechos;
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
-import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
+import ar.edu.utn.frba.dds.modelo.Usuario;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class Hecho {
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   @ManyToOne
-  private Contribuyente contribuyente;
+  private Usuario usuario;
 
   public Hecho() {
 
@@ -104,7 +104,7 @@ public class Hecho {
     this.fechaDeCarga = fechaDeCarga;
     this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
     this.estadoHecho = EstadoHecho.VISUALIZABLE;
-    this.contribuyente = null;
+    this.usuario = null;
   }
 
   public OrigenHecho getOrigenHecho() {

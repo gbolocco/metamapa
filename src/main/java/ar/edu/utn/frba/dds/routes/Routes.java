@@ -17,6 +17,7 @@ public class Routes {
     UserController userController,
     AdminController admin,
     SolicitudesController solicitudesController,
+    HomeController homeController) {
     EstadisticaController estadisticController
     ) {
 
@@ -40,14 +41,7 @@ public class Routes {
       });
 
       get("/", ctx -> ctx.redirect("/home"));
-      get("/home", ctx -> {
-        Map<String, Object> model = new HashMap<>();
-        model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
-        model.put("rol", ctx.sessionAttribute("rol"));
-        model.put("user_name", ctx.sessionAttribute("user_name"));
-        model.put("user_id", ctx.sessionAttribute("user_id"));
-        ctx.render("home.hbs", model);
-      });
+      get("/home", homeController::mostrarHome);
       
       path("/", () -> {
           get("/login",login::mostrarLogin);
@@ -109,7 +103,15 @@ public class Routes {
         }
       });
       
+      before("/mis-hechos", ctx -> {
+        if (ctx.sessionAttribute("user_id") == null) {
+          ctx.redirect("/login?redirect=" + ctx.path());
+          return;
+        }
+      });
+      
       get("/mis-solicitudes", userController::mostrarMisSolicitudes);
+      get("/mis-hechos", userController::mostrarMisHechos);
       
       
     });

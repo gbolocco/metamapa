@@ -70,6 +70,7 @@ public class WebApp {
     var servicioHechos = new ServicioHechos(repoHechos);
     var servicioSolicitudes = new ServicioSolicitudes(repoSolicitudes);
 
+    HechosController hechos = new HechosController(servicioHechos, servicioSolicitudes, servicioUsuarios);
 
 
     HechosController hechos = new HechosController(servicioHechos);
@@ -78,6 +79,9 @@ public class WebApp {
     AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
     UserController user = new UserController(servicioUsuarios, servicioSolicitudes);
     SolicitudesController solicitudesController = new SolicitudesController(servicioSolicitudes);
+    HomeController home = new HomeController();
+
+    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, home);
     EstadisticaController estadisticaController = new EstadisticaController();
 
     new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, estadisticaController);
