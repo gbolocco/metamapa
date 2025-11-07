@@ -53,4 +53,12 @@ public class ServicioUsuarios {
   public void actualizarUsuario(Usuario usuario) {
     usuariosTableRepositoryDB.actualizarUsuario(usuario);
   }
+  
+  public boolean existeUsuario(String nombre) {
+    return buscarPorNombre(nombre) != null;
+  }
+  
+  public void crearUsuario(Usuario usuario) {
+    usuariosTableRepositoryDB.agregarUsuario(usuario);
+  }
 }

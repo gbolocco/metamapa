@@ -69,6 +69,9 @@ public class Routes {
         get(login::mostrarLogin);
         post(login::login);
       });
+      
+      get("/registro", login::mostrarRegistro);
+      post("/registro", login::registrar);
 
       path("/colecciones", () -> {
         get(coleccionController::mostrarColecciones);
