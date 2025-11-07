@@ -1,12 +1,9 @@
 package ar.edu.utn.frba.dds.controladores;
 
-import ar.edu.utn.frba.dds.infraestructura.repositorios.RepositorioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import io.javalin.http.Context;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
-import io.javalin.http.Handler;
-import org.jetbrains.annotations.NotNull;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -40,12 +37,14 @@ public class LoginController {
     ctx.sessionAttribute("loggedIn", true);
     ctx.sessionAttribute("rol", usuario.getRol());
 
-    if (usuario.getRol() == Rol.ADMIN) {
+    String redirectUrl = ctx.queryParam("redirect");
+    if (redirectUrl != null && !redirectUrl.isEmpty()) {
+      ctx.redirect(redirectUrl);
+    } else if (usuario.getRol() == Rol.ADMIN) {
       ctx.redirect("/admin/dashboard");
-    }if (usuario.getRol() == Rol.USER) {
+    } else if (usuario.getRol() == Rol.USER) {
       ctx.redirect("/colecciones");
     }
-    //ctx.redirect("/hechos");
   }
 
   public void logout(Context ctx) {
@@ -70,6 +69,11 @@ public class LoginController {
     String errorMsg = ctx.queryParam("error");
     if (errorMsg != null && !errorMsg.isEmpty()) {
       model.put("error", errorMsg);
+    }
+    
+    String redirectUrl = ctx.queryParam("redirect");
+    if (redirectUrl != null && !redirectUrl.isEmpty()) {
+      model.put("redirect", redirectUrl);
     }
 
     ctx.render("login.hbs", model);

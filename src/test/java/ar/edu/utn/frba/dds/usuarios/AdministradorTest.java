@@ -24,7 +24,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 
@@ -57,7 +57,7 @@ public class AdministradorTest implements SimplePersistenceTest {
   private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(RepresentacionDeHecho representacionDeHecho) {
     String justificacionLarga = "a".repeat(501);
     SolicitudEliminacion s = new SolicitudEliminacion(representacionDeHecho, justificacionLarga);
-    SolicitudesRepository.getInstancia().agregar(s);
+    SolicitudesRepositoryDB.getInstancia().agregar(s);
     s.setDetectorDeSpam(detectorDeSpam);
     return s;
   }
@@ -119,7 +119,7 @@ public class AdministradorTest implements SimplePersistenceTest {
     logger.info("Iniciando test de Administrador");
     // Crear mock de Hecho
     hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDateTime.now(),LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
-    representacionDeHecho = new RepresentacionDeHecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDateTime.now(),LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA,null);
+    representacionDeHecho = new RepresentacionDeHecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDateTime.now(),LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
     detectorDeSpam = mock(DetectorDeSpam.class);
     fuenteEstatica = new FuenteEstatica("ruta.csv",mock(LectorCsv.class));
     solicitud = crearUnaSolicitudDeEliminacionParaTest(representacionDeHecho);
@@ -140,7 +140,7 @@ public class AdministradorTest implements SimplePersistenceTest {
   void puedeAceptarUnaSolicitudDeEliminacion() {
 
     assertTrue(solicitud.estaPendiente());
-    assertTrue(SolicitudesRepository.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
+    assertTrue(SolicitudesRepositoryDB.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     solicitud.aceptar();
     entityManager().getTransaction().commit();
     Assertions.assertEquals(representacionDeHecho.getEstadoRepresentacionHecho(), EstadoRepresentacionHecho.ELIMINADO);
@@ -173,7 +173,7 @@ public class AdministradorTest implements SimplePersistenceTest {
         "incendio forestal en la rioja", "incendios forestales",
         ubi,LocalDateTime.of(2024, 5, 1,0,0,0),
         LocalDateTime.now(),
-        OrigenHecho.FUENTE_PROXY,null);
+        OrigenHecho.FUENTE_PROXY);
 
     SolicitudEliminacion solicitud = crearUnaSolicitudDeEliminacionParaTest(representacion);
 

@@ -124,6 +124,9 @@ public class AlgoritmosTest implements SimplePersistenceTest {
     FuenteEstatica fuenteEstatica2 = fuenteEstatica(new ArrayList<>(Arrays.asList(hecho4,hecho5,hecho6)));
     FuenteMetaMapa fuenteMetaMapa = fuenteMetaMapa(List.of(hecho1,hecho2));
 
+    //entityManager().getTransaction().begin();
+
+    entityManager().getTransaction().commit();
     Absoluta algoritmo = new Absoluta();
 
     List<Hecho> hechosConsensuados = algoritmo.hechosConsensuados(hechosColeccion,filtrosCategoria);

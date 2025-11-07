@@ -7,35 +7,41 @@ import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaHasta;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteAgregadora;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
-import ar.edu.utn.frba.dds.modelo.Usuario;
+import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
+
+import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
-import io.javalin.http.Context;
+
+import ar.edu.utn.frba.dds.modelo.Usuario;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import io.javalin.http.Context;
 
 public class AdminController {
 
   private ServicioFuentes servicioFuentes;
   private ServicioUsuarios servicioUsuarios;
   private ServicioColecciones servicioColecciones;
+  private ServicioSolicitudes servicioSolicitudes;
 
-  public AdminController(ServicioFuentes servicioFuentes, ServicioUsuarios servicioUsuarios, ServicioColecciones servicioColecciones) {
+  public AdminController(ServicioFuentes servicioFuentes, ServicioUsuarios servicioUsuarios, ServicioColecciones servicioColecciones, ServicioSolicitudes servicioSolicitudes) {
     this.servicioFuentes = servicioFuentes;
     this.servicioUsuarios = servicioUsuarios;
     this.servicioColecciones = servicioColecciones;
+    this.servicioSolicitudes = servicioSolicitudes;
   }
   public void mostrarDashboard(Context ctx) {
     Map<String, Object> model = new HashMap<>();
@@ -50,7 +56,6 @@ public class AdminController {
 
     ctx.render("admin/dashboard.hbs", model);
   }
-
   public void crearColeccion(Context ctx) {
     try {
       String titulo = ctx.formParam("titulo");
@@ -135,8 +140,6 @@ public class AdminController {
         fuente = servicioFuentes.buscar(idsFuentes.get(0));
       }
 
-
-
       servicioColecciones.guardarColeccion(new Coleccion(titulo, descripcion, filtros, fuente, "handle"));
 
 
@@ -159,7 +162,6 @@ public class AdminController {
     model.put("user_id", ctx.sessionAttribute("user_id"));
     model.put("fuentes", fuentes);
 
-
     ctx.render("admin/coleccion.hbs", model);
   }
 
@@ -180,6 +182,219 @@ public class AdminController {
       ctx.status(500).result("Error interno del servidor: " + e.getMessage());
     }
 
+  }
+
+  public void mostrarSolicitudes(Context ctx) {
+    String tipo = ctx.queryParam("tipo");
+    
+    if (tipo != null) {
+      switch (tipo) {
+        case "carga":
+          mostrarSolicitudesCarga(ctx);
+          return;
+        case "eliminacion":
+          mostrarSolicitudesEliminacion(ctx);
+          return;
+        case "modificacion":
+          mostrarSolicitudesModificacion(ctx);
+          return;
+        case "todas":
+          mostrarTodasLasSolicitudes(ctx);
+          return;
+      }
+    }
+    
+    mostrarTodasLasSolicitudes(ctx);
+  }
+  
+  private void mostrarSolicitudesCarga(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.CARGA_HECHO);
+
+    List<Map<String, Object>> solicitudes;
+    if (solicitudesRepo.isEmpty()) {
+      solicitudes = List.of(
+        Map.of("id", 101, "titulo", "Solicitud de Carga - Terremoto Mendoza", "fecha", "2025-10-30 09:15", "justificacion", "Solicitud para cargar nuevo registro de terremoto de magnitud 5.8 en Mendoza detectado por estación sísmica local.", "solicitante", "Instituto Sismológico", "tipo", "Carga"),
+        Map.of("id", 102, "titulo", "Solicitud de Carga - Inundación Litoral", "fecha", "2025-10-29 16:30", "justificacion", "Solicitud para cargar registro de inundación en zona del litoral argentino debido a crecida del río Paraná.", "solicitante", "Servicio Meteorológico", "tipo", "Carga")
+      );
+    } else {
+      solicitudes = solicitudesRepo.stream()
+        .map(s -> {
+          Map<String, Object> solicitudMap = new HashMap<>();
+          solicitudMap.put("id", s.getId());
+          solicitudMap.put("titulo", "Solicitud de Carga - " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
+          solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+          solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
+          solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+          solicitudMap.put("tipo", "Carga");
+          return solicitudMap;
+        })
+        .collect(Collectors.toList());
+    }
+    
+    renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Carga", "carga");
+  }
+  
+  private void mostrarSolicitudesEliminacion(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.ELIMINACION_HECHO);
+    System.out.println("DEBUG AdminController: Solicitudes del repo: " + solicitudesRepo.size());
+    
+    List<Map<String, Object>> todasSolicitudes = solicitudesRepo.stream()
+        .map(s -> {
+          Map<String, Object> solicitudMap = new HashMap<>();
+          solicitudMap.put("id", s.getId());
+          solicitudMap.put("titulo", "Solicitud de " + s.getTipoSolicitud());
+          solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+          solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
+          solicitudMap.put("solicitante", "Hecho: " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
+          solicitudMap.put("tipo", s.getTipoSolicitud().toString());
+          return solicitudMap;
+        })
+        .collect(Collectors.toList());
+    
+    String pageParam = ctx.queryParam("page");
+    int page = pageParam != null ? Integer.parseInt(pageParam) : 1;
+    int pageSize = 10;
+    int totalSolicitudes = todasSolicitudes.size();
+    int totalPages = (int) Math.ceil((double) totalSolicitudes / pageSize);
+    
+    int startIndex = (page - 1) * pageSize;
+    int endIndex = Math.min(startIndex + pageSize, totalSolicitudes);
+    
+    List<Map<String, Object>> solicitudesPagina = todasSolicitudes.subList(startIndex, endIndex);
+    
+    Map<String, Object> model = new HashMap<>();
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("solicitudes", solicitudesPagina);
+    model.put("currentPage", page);
+    model.put("totalPages", totalPages);
+    model.put("hasPrevious", page > 1);
+    model.put("hasNext", page < totalPages);
+    model.put("previousPage", page - 1);
+    model.put("nextPage", page + 1);
+    
+    renderizarSolicitudes(ctx, solicitudesPagina, "Solicitudes de Eliminación", "eliminacion");
+  }
+  
+  private void mostrarSolicitudesModificacion(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.MODIFICACION_HECHO);
+    
+    List<Map<String, Object>> solicitudes;
+    if (solicitudesRepo.isEmpty()) {
+      solicitudes = List.of(
+        Map.of("id", 201, "titulo", "Solicitud de Modificación - Huracán Categoría", "fecha", "2025-10-30 11:45", "justificacion", "Solicitud para modificar la categoría del huracán registrado, se detectó error en la clasificación inicial.", "solicitante", "Centro Meteorológico", "tipo", "Modificación"),
+        Map.of("id", 202, "titulo", "Solicitud de Modificación - Coordenadas Incendio", "fecha", "2025-10-29 14:20", "justificacion", "Solicitud para corregir las coordenadas del incendio forestal, se registraron coordenadas incorrectas.", "solicitante", "Bomberos Voluntarios", "tipo", "Modificación")
+      );
+    } else {
+      solicitudes = solicitudesRepo.stream()
+        .map(s -> {
+          Map<String, Object> solicitudMap = new HashMap<>();
+          solicitudMap.put("id", s.getId());
+          solicitudMap.put("titulo", "Solicitud de Modificación - " + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
+          solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+          solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
+          solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+          solicitudMap.put("tipo", "Modificación");
+          return solicitudMap;
+        })
+        .collect(Collectors.toList());
+    }
+    
+    renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Modificación", "modificacion");
+  }
+  
+  private void mostrarTodasLasSolicitudes(Context ctx) {
+    List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerTodasLasSolicitudes();
+    
+    List<Map<String, Object>> todasSolicitudes = new ArrayList<>();
+    
+    todasSolicitudes.addAll(solicitudesRepo.stream()
+      .map(s -> {
+        Map<String, Object> solicitudMap = new HashMap<>();
+        solicitudMap.put("id", s.getId());
+        solicitudMap.put("titulo", "Solicitud de " + s.getTipoSolicitud().toString().replace("_", " "));
+        solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+        solicitudMap.put("solicitante", "Usuario ID: " + (s.getUsuario() != null ? s.getUsuario().getId() : "N/A"));
+        solicitudMap.put("tipo", s.getTipoSolicitud().toString().replace("_", " "));
+        solicitudMap.put("estado", s.getEstadoSolicitud().toString());
+        return solicitudMap;
+      })
+      .collect(Collectors.toList()));
+    
+    if (todasSolicitudes.isEmpty()) {
+      todasSolicitudes.addAll(List.of(
+        Map.of("id", 101, "titulo", "Solicitud de Carga - Terremoto Mendoza", "fecha", "2025-10-30 09:15", "solicitante", "Instituto Sismológico", "tipo", "Carga", "estado", "Pendiente"),
+        Map.of("id", 102, "titulo", "Solicitud de Eliminación - Inundación Errónea", "fecha", "2025-10-29 16:30", "solicitante", "Servicio Meteorológico", "tipo", "Eliminación", "estado", "Pendiente")
+      ));
+    }
+    
+    Map<String, Object> model = new HashMap<>();
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("todasSolicitudes", todasSolicitudes);
+    model.put("titulo", "Todas las Solicitudes");
+    model.put("mostrarTabla", true);
+    model.put("mostrarBotones", true);
+    model.put("tipoActivo", "todas");
+    
+    ctx.render("solicitudes.hbs", model);
+  }
+  
+  private void renderizarSolicitudes(Context ctx, List<Map<String, Object>> solicitudes, String titulo, String tipoActivo) {
+    String pageParam = ctx.queryParam("page");
+    int page = pageParam != null ? Integer.parseInt(pageParam) : 1;
+    int pageSize = 10;
+    int totalSolicitudes = solicitudes.size();
+    int totalPages = (int) Math.ceil((double) totalSolicitudes / pageSize);
+    
+    int startIndex = (page - 1) * pageSize;
+    int endIndex = Math.min(startIndex + pageSize, totalSolicitudes);
+    
+    List<Map<String, Object>> solicitudesPagina = solicitudes.subList(startIndex, endIndex);
+    
+    Map<String, Object> model = new HashMap<>();
+    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+    model.put("rol", ctx.sessionAttribute("rol"));
+    model.put("user_name", ctx.sessionAttribute("user_name"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("solicitudes", solicitudesPagina);
+    model.put("currentPage", page);
+    model.put("totalPages", totalPages);
+    model.put("hasPrevious", page > 1);
+    model.put("hasNext", page < totalPages);
+    model.put("previousPage", page - 1);
+    model.put("nextPage", page + 1);
+    model.put("titulo", titulo);
+    model.put("mostrarBotones", true);
+    model.put("tipoActivo", tipoActivo);
+    
+    ctx.render("solicitudes.hbs", model);
+  }
+  
+  public void confirmar(Context ctx) {
+    try {
+      Long solicitudId = Long.parseLong(ctx.pathParam("id"));
+      servicioSolicitudes.confirmarSolicitud(solicitudId);
+      ctx.status(200).result("Solicitud confirmada exitosamente");
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al confirmar la solicitud");
+    }
+  }
+
+  public void rechazar(Context ctx) {
+    try {
+      Long solicitudId = Long.parseLong(ctx.pathParam("id"));
+      servicioSolicitudes.rechazarSolicitud(solicitudId);
+      ctx.status(200).result("Solicitud rechazada exitosamente");
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al rechazar la solicitud");
+    }
   }
 
   public void mostrarFuentes(Context ctx) {
@@ -208,6 +423,5 @@ public class AdminController {
 
     ctx.render("admin/fuentes.hbs", model);
   }
-
 
 }

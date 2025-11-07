@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.DiscriminatorValue;
@@ -21,7 +21,7 @@ public class SolicitudModificacion extends Solicitud {
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
     this.representacionDeHecho = representacionDeHecho;
     this.idHecho = idHecho;
-    SolicitudesRepository.getInstancia().agregar(this);
+    SolicitudesRepositoryDB.getInstancia().agregar(this);
   }
 
   public SolicitudModificacion() {
@@ -37,10 +37,6 @@ public class SolicitudModificacion extends Solicitud {
     long dias = ChronoUnit.DAYS.between(fechaInicial, fechaFinal);
     return dias >= 0 && dias <= 7;
   }
-
-  /*public LocalDateTime getFechaDeCarga() {
-    return hecho.getFechaDeCarga();
-  }*/
 
   @Override
   public void aceptar() {

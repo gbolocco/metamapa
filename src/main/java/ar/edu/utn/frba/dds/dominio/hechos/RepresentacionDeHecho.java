@@ -30,15 +30,13 @@ public class RepresentacionDeHecho {
                                Ubicacion ubicacion,
                                LocalDateTime fechaAcontecimiento,
                                LocalDateTime fechaDeCarga,
-                               OrigenHecho origenHecho,
-                               Contribuyente contribuyente) {
+                               OrigenHecho origenHecho) {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
     this.ubicacion = ubicacion;
     this.fechaAcontecimiento = fechaAcontecimiento;
     this.estadoRepresentacionHecho = EstadoRepresentacionHecho.PENDIENTE;
-    this.contribuyente = contribuyente;
     this.hecho = null;
   }
 
@@ -53,8 +51,7 @@ public class RepresentacionDeHecho {
   private LocalDateTime fechaAcontecimiento;
   @Enumerated(EnumType.STRING)
   private EstadoRepresentacionHecho estadoRepresentacionHecho;
-  @ManyToOne
-  private Contribuyente contribuyente;
+
   @OneToOne
   private Hecho hecho;
 }
