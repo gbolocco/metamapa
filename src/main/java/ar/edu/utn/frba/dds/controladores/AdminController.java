@@ -1,9 +1,5 @@
 package ar.edu.utn.frba.dds.controladores;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
@@ -15,6 +11,7 @@ import ar.edu.utn.frba.dds.dominio.fuentes.FuenteAgregadora;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 
+import ar.edu.utn.frba.dds.infraestructura.repositorios.EstadisticasRepository;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
 
@@ -32,7 +29,6 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import io.javalin.http.Context;
 
@@ -49,19 +45,34 @@ public class AdminController {
     this.servicioColecciones = servicioColecciones;
     this.servicioSolicitudes = servicioSolicitudes;
   }
-  public void mostrarDashboard(Context ctx) {
-    Map<String, Object> model = new HashMap<>();
-    model.put("title", "Panel Admin");
-    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
-    model.put("rol", ctx.sessionAttribute("rol"));
-    model.put("user_name", ctx.sessionAttribute("user_name"));
-    model.put("user_id", ctx.sessionAttribute("user_id"));
 
-    //model.put("colecciones", colecciones.mostrarColecciones());
-    //model.put("solicitudes", solicitudes.mostrarSolicitudes());
+    public void mostrarDashboard(Context ctx) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("title", "Panel Admin");
+        model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+        model.put("rol", ctx.sessionAttribute("rol"));
+        model.put("user_name", ctx.sessionAttribute("user_name"));
+        model.put("user_id", ctx.sessionAttribute("user_id"));
 
-    ctx.render("admin/dashboard.hbs", model);
-  }
+        List<Map<String, Object>> pendientes = EstadisticasRepository.getInstancia().getEstadisticasPendientes()
+                .stream()
+                .filter(e -> !e.fueCalculada())
+                .map(e -> {
+                    Map<String, Object> datos = new HashMap<>();
+                    datos.put("tipo", e.getClass().getSimpleName());
+                    datos.put("categoria", e.getCategoria());
+                    datos.put("publica", e.getPublica());
+                    return datos;
+                })
+                .toList();
+
+        model.put("pendientes", pendientes);
+
+        ctx.render("admin/dashboard.hbs", model);
+    }
+
+
+
   public void crearColeccion(Context ctx) {
     try {
       String titulo = ctx.formParam("titulo");

@@ -26,9 +26,9 @@ public class FuentesRepository implements WithSimplePersistenceUnit {
   }
 
   public void agregarFuente(Fuente fuente) {
-    entityManager().getTransaction().begin();
+    //entityManager().getTransaction().begin();
     entityManager().persist(fuente);
-    entityManager().getTransaction().commit();
+    //entityManager().getTransaction().commit();
   }
 
   public void eliminar(Long id){

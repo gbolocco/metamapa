@@ -1,2 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Estadística</title>
+    <style>
+        body {
+            background: #fefce8;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-<h1>Dashboard</h1>
+        .estadistica-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 700px;
+            margin: 2rem auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            text-align: center;
+            color: #5b3a0f;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: #5b3a0f;
+            box-shadow: 0 0 0 3px rgba(91, 58, 15, 0.2);
+            outline: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-submit {
+            display: inline-block;
+            background-color: #5b3a0f;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 1.6rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #4b2f0c;
+            transform: scale(1.03);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .d-none {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th {
+            background-color: #5b3a0f;
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .alert {
+            margin-top: 1rem;
+            background: #e6ffe6;
+            border-left: 5px solid #5b3a0f;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .acciones {
+            text-align: right;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="estadistica-card">
+    <h3>Crear Estadística</h3>
+
+    <form action="/estadisticas" method="POST">
+        <div class="form-group">
+            <label for="tipo">Seleccioná el tipo de estadística</label>
+            <select id="tipo" name="tipo" required>
+                <option value="" selected disabled>Elegí una opción...</option>
+                <option value="mayorHechosProvincia">Provincia con más hechos reportados</option>
+                <option value="categoriaMayorHechos">Categoría con más hechos reportados</option>
+                <option value="cantidadPorCategoria">Cantidad de hechos por categoría</option>
+                <option value="mayorHechosProvinciaCategoria">Provincia con más hechos de una categoría</option>
+                <option value="horaMayorHechosCategoria">Hora con más hechos de una categoría</option>
+                <option value="solicitudesSpam">Porcentaje de solicitudes marcadas como spam</option>
+            </select>
+        </div>
+
+        <div class="form-group d-none" id="categoria-container">
+            <label for="categoria">Categoría</label>
+            <input type="text" id="categoria" name="categoria" placeholder="Ej: robo, incendio, accidente...">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn-submit">Crear Estadística</button>
+        </div>
+    </form>
+
+    <div class="container mt-4">
+        <h2 class="mb-3">Estadísticas pendientes</h2>
+
+        {{#if pendientes.length}}
+            <table>
+                <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Categoría</th>
+                    <th>¿Pública?</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each pendientes}}
+                    <tr>
+                        <td>{{this.tipo}}</td>
+                        <td>{{#if this.categoria}}{{this.categoria}}{{else}}—{{/if}}</td>
+                        <td>{{#if this.publica}}Sí{{else}}No{{/if}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+
+            <div class="acciones">
+                <form action="/estadisticas/calcular" method="POST">
+                    <button type="submit" class="btn-submit">Calcular todas las estadísticas</button>
+                </form>
+            </div>
+        {{else}}
+            <div class="alert">
+                No hay estadísticas pendientes por calcular.
+            </div>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+    const tipoSelect = document.getElementById('tipo');
+    const categoriaContainer = document.getElementById('categoria-container');
+    const categoriaInput = document.getElementById('categoria');
+
+    tipoSelect.addEventListener('change', () => {
+        const tipo = tipoSelect.value;
+        if (['cantidadPorCategoria', 'mayorHechosProvinciaCategoria', 'horaMayorHechosCategoria'].includes(tipo)) {
+            categoriaContainer.classList.remove('d-none');
+            categoriaInput.required = true;
+        } else {
+            categoriaContainer.classList.add('d-none');
+            categoriaInput.required = false;
+            categoriaInput.value = '';
+        }
+    });
+</script>
+
+</body>
+</html>

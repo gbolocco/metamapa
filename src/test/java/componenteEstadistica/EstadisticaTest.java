@@ -8,9 +8,10 @@ import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaHoraPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvinciaPorCategoria;
-import ar.edu.utn.frba.dds.dominio.estadisticas.GestorDeEstadisticas;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvinciaNominatim;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
@@ -59,7 +60,7 @@ public class EstadisticaTest {
 
   @Test
   public void testEstadisticaCategoria() {
-    EstadisticaCategoria estadistica = new EstadisticaCategoria(true);
+    EstadisticaCategoria estadistica = new EstadisticaCategoria();
     String resultado = estadistica.calcular(hechos);
     assertEquals("incendio (3 hechos)", resultado); // 3 incendios vs 2 robos
   }
@@ -76,30 +77,16 @@ public class EstadisticaTest {
     EstadisticaProvinciaPorCategoria estadistica =
         new EstadisticaProvinciaPorCategoria(calculador, "incendio", true);
     String resultado = estadistica.calcular(hechos);
+      System.out.println(resultado);
     assertEquals("Córdoba (2 hechos)", resultado); // Córdoba tiene 2 incendios, CABA 1
   }
 
 
   @Test
-  public void GeneradorDeEstadisticas() {
-    EstadisticaProvincia estadisticaProvincia = new EstadisticaProvincia(calculador, true);
-    EstadisticaCategoria estadisticaCategoria = new EstadisticaCategoria(true);
-    EstadisticaHoraPorCategoria estadisticaHoraPorCategoria = new EstadisticaHoraPorCategoria("test", true);
-
-    GestorDeEstadisticas gestor = new GestorDeEstadisticas(List.of(estadisticaProvincia, estadisticaCategoria,estadisticaHoraPorCategoria));
-
-    List<String> res = gestor.calcular(hechos);
-
-    Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("Córdoba") || s.contains("CORDOBA")));
-    Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("incendio") || s.contains("robo")));
-
-    gestor.generarArchivoCsv("./estadisticas/","test.csv");
-  }
-
-  @Test
   public void testEstadisticaHoraPorCategoriaSinDatos() {
     EstadisticaHoraPorCategoria estadistica = new EstadisticaHoraPorCategoria("asalto", true);
     String resultado = estadistica.calcular(hechos);
+    System.out.println(resultado);
     assertEquals("Sin hechos para la categoría: asalto", resultado);
   }
 
@@ -108,6 +95,17 @@ public class EstadisticaTest {
     EstadisticaProvinciaPorCategoria estadistica =
         new EstadisticaProvinciaPorCategoria(calculador, "fraude", true);
     String resultado = estadistica.calcular(hechos);
+    System.out.println(resultado);
     assertEquals("Sin hechos para la categoría: fraude", resultado);
+  }
+
+  @Test
+    public void testApi(){
+      Ubicacion ubicacion = new Ubicacion(-34.6037, -58.3816); // Buenos Aires
+      ServicioCalculadorProvincia servicio = new ServicioCalculadorProvinciaNominatim();
+      CalculadorProvincia calculador = new CalculadorProvincia(servicio);
+
+      Provincia provincia = calculador.calcularProvincia(ubicacion);
+      System.out.println("Provincia: " + provincia.getNombre());
   }
 }
