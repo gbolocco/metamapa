@@ -2,6 +2,9 @@ package ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.List;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 
 public class MultiplesMenciones extends AlgoritmoConsenso {
 

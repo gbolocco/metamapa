@@ -1,11 +1,9 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
-import ar.edu.utn.frba.dds.controladores.AdminController;
-import ar.edu.utn.frba.dds.controladores.ColeccionController;
-import ar.edu.utn.frba.dds.controladores.HechosController;
-import ar.edu.utn.frba.dds.controladores.LoginController;
-import ar.edu.utn.frba.dds.controladores.SolicitudesController;
-import ar.edu.utn.frba.dds.controladores.UserController;
+import ar.edu.utn.frba.dds.controladores.*;
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
@@ -28,6 +26,7 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import io.javalin.http.staticfiles.Location;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,14 +70,21 @@ public class WebApp {
     var servicioHechos = new ServicioHechos(repoHechos);
     var servicioSolicitudes = new ServicioSolicitudes(repoSolicitudes);
 
+    HechosController hechos = new HechosController(servicioHechos, servicioSolicitudes, servicioUsuarios);
+
+
     HechosController hechos = new HechosController(servicioHechos);
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
     AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
     UserController user = new UserController(servicioUsuarios, servicioSolicitudes);
     SolicitudesController solicitudesController = new SolicitudesController(servicioSolicitudes);
+    HomeController home = new HomeController();
 
-    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController);
+    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, home);
+    EstadisticaController estadisticaController = new EstadisticaController();
+
+    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, estadisticaController);
   }
 
   private void configureTemplating(JavalinConfig config) {

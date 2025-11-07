@@ -1,11 +1,6 @@
 package ar.edu.utn.frba.dds.routes;
 
-import ar.edu.utn.frba.dds.controladores.AdminController;
-import ar.edu.utn.frba.dds.controladores.ColeccionController;
-import ar.edu.utn.frba.dds.controladores.HechosController;
-import ar.edu.utn.frba.dds.controladores.LoginController;
-import ar.edu.utn.frba.dds.controladores.SolicitudesController;
-import ar.edu.utn.frba.dds.controladores.UserController;
+import ar.edu.utn.frba.dds.controladores.*;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
 import java.util.HashMap;
@@ -21,7 +16,10 @@ public class Routes {
     ColeccionController coleccionController,
     UserController userController,
     AdminController admin,
-    SolicitudesController solicitudesController) {
+    SolicitudesController solicitudesController,
+    HomeController homeController) {
+    EstadisticaController estadisticController
+    ) {
 
     config.router.apiBuilder(() -> {
 
@@ -43,27 +41,27 @@ public class Routes {
       });
 
       get("/", ctx -> ctx.redirect("/home"));
-      get("/home", ctx -> {
-        Map<String, Object> model = new HashMap<>();
-        model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
-        model.put("rol", ctx.sessionAttribute("rol"));
-        model.put("user_name", ctx.sessionAttribute("user_name"));
-        model.put("user_id", ctx.sessionAttribute("user_id"));
-        ctx.render("home.hbs", model);
-      });
+      get("/home", homeController::mostrarHome);
       
       path("/", () -> {
-        get("/login",login::mostrarLogin);
+          get("/login",login::mostrarLogin);
+          get("/estadisticas" ,estadisticController::mostrarEstadisticas);
+          post("/estadisticas",estadisticController::crearEstadistica);
+          post("/estadisticas/descargar", estadisticController::descargarSeleccionadas);
+          post("/estadisticas/calcular",estadisticController::calcularEstadisticas);
       });
 
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
         get("/coleccion",admin::mostrarFormColeccion);
+        post("/coleccion",admin::crearColeccion);
         get("/usuarios",admin::mostrarUsuarios);
         get("/solicitudes", admin::mostrarSolicitudes);
         post("/solicitudes/{id}/confirmar", admin::confirmar);
         post("/solicitudes/{id}/rechazar", admin::rechazar);
         get("/fuentes", admin::mostrarFuentes);
+          delete("/fuentes/{id}", admin::eliminarFuente);
+          post("/fuentes/nueva", admin::crearFuente);
         });
 
       path("usuarios",() -> {
@@ -105,7 +103,15 @@ public class Routes {
         }
       });
       
+      before("/mis-hechos", ctx -> {
+        if (ctx.sessionAttribute("user_id") == null) {
+          ctx.redirect("/login?redirect=" + ctx.path());
+          return;
+        }
+      });
+      
       get("/mis-solicitudes", userController::mostrarMisSolicitudes);
+      get("/mis-hechos", userController::mostrarMisHechos);
       
       
     });

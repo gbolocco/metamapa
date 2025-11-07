@@ -11,7 +11,8 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudDeCargaHecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
-import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
+import ar.edu.utn.frba.dds.modelo.Usuario;
+import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
@@ -31,7 +32,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   RepresentacionDeHecho representacionDeHecho;
   SolicitudDeCargaHecho solicitud;
   FuenteDinamica fuente;
-  Contribuyente contribuyente;
+  Usuario usuario;
   Hecho hechoContribuyente;
   RepresentacionDeHecho representacionDeHechoContribuyente;
   @BeforeEach
@@ -60,18 +61,15 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
 
   public void crearSolicitudDeCarga(LocalDateTime fecha){
     contribuyente = new Contribuyente("juan", 21);
-/*
-    representacionDeHechoContribuyente = contribuyente.crearHecho(
-        "incendio en la pampa",
-        "incendio forestal en la pampa",
-        "incendios forestales",
-        mock(Ubicacion.class),
-        mock(LocalDateTime.class),
-        fecha);
-    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(representacionDeHechoContribuyente);
-    solicitudContribuyente.aceptar();
-
- */
+//    representacionDeHechoContribuyente = contribuyente.crearHecho(
+//        "incendio en la pampa",
+//        "incendio forestal en la pampa",
+//        "incendios forestales",
+//        mock(Ubicacion.class),
+//        mock(LocalDateTime.class),
+//        fecha);
+//    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(representacionDeHechoContribuyente);
+//    solicitudContribuyente.aceptar();
   }
 
   @Test
@@ -95,7 +93,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
     crearSolicitudDeCarga(LocalDateTime.now());
     //entityManager().getTransaction().commit();
     Assertions.assertFalse(HechosRepository.getInstancia().mostrarHechos().isEmpty());
-    Assertions.assertEquals(representacionDeHechoContribuyente.getHecho().getContribuyente().getId(),contribuyente.getId());
+    Assertions.assertEquals(representacionDeHechoContribuyente.getHecho().getUsuario().getId(),usuario.getId());
   }
 
   @Test

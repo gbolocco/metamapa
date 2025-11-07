@@ -1,6 +1,12 @@
 <div class="container">
     <h1>Mis Solicitudes</h1>
     
+    {{#if successMessage}}
+    <div class="alert alert-success">
+        {{successMessage}}
+    </div>
+    {{/if}}
+    
     <div class="solicitudes-grid">
         {{#each solicitudes}}
         <div class="solicitud-card">
@@ -10,7 +16,9 @@
             </div>
             <div class="card-body">
                 <h4>Solicitud #{{id}}</h4>
+                {{#unless (eq tipo "CARGA_HECHO")}}
                 <p class="description">{{justificacion}}</p>
+                {{/unless}}
                 <div class="card-meta">
                     <span class="date">Creada: {{fecha}}</span>
                     <span class="type">Tipo: {{tipo}}</span>
@@ -166,5 +174,18 @@
 
 .type {
     font-style: italic;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
 }
 </style>

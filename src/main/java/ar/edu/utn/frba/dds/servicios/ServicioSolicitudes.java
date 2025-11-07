@@ -15,6 +15,8 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepo
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class ServicioSolicitudes {
   
@@ -57,21 +59,21 @@ public class ServicioSolicitudes {
     
     switch (tipoSolicitud) {
       case CARGA_HECHO:
-        solicitud = new SolicitudDeCargaHecho();
+        solicitud = new SolicitudDeCargaHecho(representacionDeHecho);
         break;
       case ELIMINACION_HECHO:
         solicitud = new SolicitudEliminacion();
+        solicitud.setRepresentacionDeHecho(representacionDeHecho);
         break;
       case MODIFICACION_HECHO:
         solicitud = new SolicitudModificacion();
+        solicitud.setRepresentacionDeHecho(representacionDeHecho);
         break;
       default:
         throw new IllegalArgumentException("Tipo de solicitud no soportado: " + tipoSolicitud);
     }
     
-    solicitud.setRepresentacionDeHecho(representacionDeHecho);
     solicitud.setUsuario(usuario.orElse(null));
-    solicitud.setTipoSolicitud(tipoSolicitud);
     solicitud.setEstadoSolicitud(EstadoSolicitud.PENDIENTE);
     solicitud.setFechaSolicitud(new java.util.Date());
     
@@ -87,7 +89,7 @@ public class ServicioSolicitudes {
       repositorioSolicitudes.actualizar(solicitud);
     }
   }
-  
+
   public void confirmarSolicitud(Long solicitudId) {
     var solicitud = repositorioSolicitudes.buscarSolicitudPorId(solicitudId);
     if (solicitud != null) {
