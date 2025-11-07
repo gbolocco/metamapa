@@ -13,6 +13,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.RollbackException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PersistenciaTest implements SimplePersistenceTest {
     repo.cargarHecho(hecho2);
 
     //entityManager().flush();
-    //entityManager().getTransaction().commit();
+    entityManager().getTransaction().commit();
     assertEquals(2, repo.mostrarHechos().size());
   }
 

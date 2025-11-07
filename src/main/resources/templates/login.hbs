@@ -12,6 +12,10 @@
         {{#if error}}
             <p class="error">{{error}}</p>
         {{/if}}
+        
+        {{#if success}}
+            <p class="success">{{success}}</p>
+        {{/if}}
 
         <form action="/login{{#if redirect}}?redirect={{redirect}}{{/if}}" method="post">
             <div class="form-group">
@@ -26,4 +30,9 @@
 
             <button type="submit">Ingresar</button>
         </form>
+        
+        <div class="register-section">
+            <p>¿No tienes cuenta?</p>
+            <a href="/registro" class="btn-register">Registrarme</a>
+        </div>
     </div>

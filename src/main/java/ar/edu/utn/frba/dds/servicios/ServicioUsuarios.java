@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.servicios;
 
-import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosTableRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosRepository;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.Optional;
 
 public class ServicioUsuarios {
-  private final UsuariosTableRepositoryDB usuariosTableRepositoryDB;
+  private final UsuariosRepository usuariosRepository;
 
-  public ServicioUsuarios(UsuariosTableRepositoryDB usuariosTableRepositoryDB) {
-    this.usuariosTableRepositoryDB = usuariosTableRepositoryDB;
+  public ServicioUsuarios(UsuariosRepository usuariosRepository) {
+    this.usuariosRepository = usuariosRepository;
   }
 
   public Usuario autenticar(String nombre, String password) {
@@ -33,7 +33,7 @@ public class ServicioUsuarios {
     if (nombre == null || nombre.isBlank()) {
       return null;
     }
-    Optional<Usuario> usuario = usuariosTableRepositoryDB.buscarPorNombre(nombre.trim());
+    Optional<Usuario> usuario = usuariosRepository.buscarPorNombre(nombre.trim());
     return usuario.orElse(null);
   }
 
@@ -43,14 +43,22 @@ public class ServicioUsuarios {
   }
 
   public List<Usuario> getUsuarios() {
-    return usuariosTableRepositoryDB.getUsuarios();
+    return usuariosRepository.getUsuarios();
   }
 
   public Usuario buscarPorId(Long id) {
-    return usuariosTableRepositoryDB.buscarPorId(id);
+    return usuariosRepository.buscarPorId(id);
   }
 
   public void actualizarUsuario(Usuario usuario) {
-    usuariosTableRepositoryDB.actualizarUsuario(usuario);
+    usuariosRepository.actualizarUsuario(usuario);
+  }
+  
+  public boolean existeUsuario(String nombre) {
+    return buscarPorNombre(nombre) != null;
+  }
+  
+  public void crearUsuario(Usuario usuario) {
+    usuariosTableRepositoryDB.agregarUsuario(usuario);
   }
 }
