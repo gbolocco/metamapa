@@ -268,11 +268,11 @@ public class AdminController {
         .map(s -> {
           Map<String, Object> solicitudMap = new HashMap<>();
           solicitudMap.put("id", s.getId());
-          solicitudMap.put("titulo", "Solicitud de " + s.getTipoSolicitud());
+          solicitudMap.put("titulo", "Solicitud de " + (s.getTipoSolicitud() != null ? s.getTipoSolicitud() : "N/A"));
           solicitudMap.put("fecha", s.getFechaSolicitud().toString());
           solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
           solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
-          solicitudMap.put("tipo", s.getTipoSolicitud().toString());
+          solicitudMap.put("tipo", s.getTipoSolicitud() != null ? s.getTipoSolicitud().toString() : "N/A");
           return solicitudMap;
         })
         .collect(Collectors.toList());
@@ -340,10 +340,10 @@ public class AdminController {
       .map(s -> {
         Map<String, Object> solicitudMap = new HashMap<>();
         solicitudMap.put("id", s.getId());
-        solicitudMap.put("titulo", "Solicitud de " + s.getTipoSolicitud().toString().replace("_", " "));
+        solicitudMap.put("titulo", "Solicitud de " + (s.getTipoSolicitud() != null ? s.getTipoSolicitud().toString().replace("_", " ") : "N/A"));
         solicitudMap.put("fecha", s.getFechaSolicitud().toString());
         solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
-        solicitudMap.put("tipo", s.getTipoSolicitud().toString().replace("_", " "));
+        solicitudMap.put("tipo", s.getTipoSolicitud() != null ? s.getTipoSolicitud().toString().replace("_", " ") : "N/A");
         solicitudMap.put("estado", s.getEstadoSolicitud().toString());
         return solicitudMap;
       })
