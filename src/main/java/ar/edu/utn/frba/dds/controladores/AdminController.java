@@ -1,5 +1,10 @@
 package ar.edu.utn.frba.dds.controladores;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
@@ -27,6 +32,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import io.javalin.http.Context;
 
@@ -62,6 +68,7 @@ public class AdminController {
       String descripcion = ctx.formParam("descripcion");
       String consensoStr = ctx.formParam("consenso");
       String fuentesSeleccionadasStr = ctx.formParam("fuentesSeleccionadas");
+
 
       List<Long> idsFuentes = new ArrayList<>();
       if (fuentesSeleccionadasStr != null && !fuentesSeleccionadasStr.isEmpty()) {
@@ -121,6 +128,13 @@ public class AdminController {
         i++;
       }
 
+      assert consensoStr != null;
+      TipoConsenso tipoConsenso = switch (consensoStr) {
+        case "ABSOLUTA" -> TipoConsenso.ABSOLUTA;
+        case "MAYORIA_SIMPLE" -> TipoConsenso.MAYORIA_SIMPLE;
+        case "MULTIPLES_MENCIONES" -> TipoConsenso.MULTIPLES_MENCIONES;
+        default -> throw new IllegalArgumentException("Tipo de consenso desconocido: " + consensoStr);
+      };
 
       Fuente fuente;
 
@@ -140,8 +154,9 @@ public class AdminController {
         fuente = servicioFuentes.buscar(idsFuentes.get(0));
       }
 
-      servicioColecciones.guardarColeccion(new Coleccion(titulo, descripcion, filtros, fuente, "handle"));
+      Coleccion coleccion = new Coleccion(titulo, descripcion, filtros, fuente, "handle",tipoConsenso );
 
+      servicioColecciones.guardarColeccion(coleccion);
 
       ctx.redirect("/admin/dashboard");
 

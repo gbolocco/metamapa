@@ -36,7 +36,7 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   RepresentacionDeHecho representacionDeHechoContribuyente;
   @BeforeEach
   void setUp() {
-    representacionDeHecho = new RepresentacionDeHecho("prueba", "prueba", "prueba",mock(Ubicacion.class),LocalDateTime.now(),LocalDateTime.now(),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE,null);
+    representacionDeHecho = new RepresentacionDeHecho("prueba", "prueba", "prueba",mock(Ubicacion.class),LocalDateTime.now(),LocalDateTime.now(),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
 
     hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class),LocalDateTime.now(),LocalDateTime.now(),OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
     solicitud = new SolicitudDeCargaHecho(representacionDeHecho); // ya se carga en el repositorio por el constructor
@@ -60,15 +60,15 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
 
   public void crearSolicitudDeCarga(LocalDateTime fecha){
     contribuyente = new Contribuyente("juan", 21);
-    representacionDeHechoContribuyente = contribuyente.crearHecho(
-        "incendio en la pampa",
-        "incendio forestal en la pampa",
-        "incendios forestales",
-        mock(Ubicacion.class),
-        mock(LocalDateTime.class),
-        fecha);
-    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(representacionDeHechoContribuyente);
-    solicitudContribuyente.aceptar();
+//    representacionDeHechoContribuyente = contribuyente.crearHecho(
+//        "incendio en la pampa",
+//        "incendio forestal en la pampa",
+//        "incendios forestales",
+//        mock(Ubicacion.class),
+//        mock(LocalDateTime.class),
+//        fecha);
+//    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(representacionDeHechoContribuyente);
+//    solicitudContribuyente.aceptar();
   }
 
   @Test

@@ -84,12 +84,13 @@ public class ColeccionController {
     }
 
     List<Filtro> filtros = new ArrayList<>();
-
+    boolean navegacionCurada = false;
 
     String fechaDesde = ctx.queryParam("fechaDesde");
     String fechaHasta = ctx.queryParam("fechaHasta");
     String campoTexto = ctx.queryParam("campoTexto");
     String textoFiltro = ctx.queryParam("textoFiltro");
+    navegacionCurada = Boolean.parseBoolean(ctx.queryParam("navegacionCurada"));
 
     DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -110,9 +111,9 @@ public class ColeccionController {
 
     Collection<Hecho> hechos;
     if (filtros.isEmpty()) {
-      hechos = coleccion.mostrarHechos();
+      hechos = coleccion.navegarHechos(navegacionCurada);
     } else {
-      hechos = coleccion.filtrarHechos(filtros, TipoCombinacion.AND);
+      hechos = coleccion.filtrarHechos(filtros, TipoCombinacion.AND, navegacionCurada);
     }
 
     ObjectMapper mapper = new ObjectMapper();
