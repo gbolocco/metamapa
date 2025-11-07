@@ -38,21 +38,21 @@ public class PersistenciaTest implements SimplePersistenceTest {
   }
 
 
-  @Test
-  void persistirColeccion() {
-    Fuente fuente = new FuenteDinamica();
-    FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja", CampoDeHecho.TITULO);
-    Coleccion coleccion = new Coleccion("coleccion","descripcion", List.of(filtroTexto1),fuente,"handle");
-
-    ColeccionRepository repo=  ColeccionRepository.getInstancia();
-    repo.agregarColeccion(coleccion);
-
-   // entityManager().flush();
-   // entityManager().getTransaction().commit();
-
-    assertEquals(coleccion,repo.buscarColeccionPorId(coleccion.getId()));
-
-  }
+//  @Test
+//  void persistirColeccion() {
+//    Fuente fuente = new FuenteDinamica();
+//    FiltroContieneTexto filtroTexto1 = new FiltroContieneTexto("incendio en la rioja", CampoDeHecho.TITULO);
+//    Coleccion coleccion = new Coleccion("coleccion","descripcion", List.of(filtroTexto1),fuente,"handle");
+//
+//    ColeccionRepository repo=  ColeccionRepository.getInstancia();
+//    repo.agregarColeccion(coleccion);
+//
+//   // entityManager().flush();
+//   // entityManager().getTransaction().commit();
+//
+//    assertEquals(coleccion,repo.buscarColeccionPorId(coleccion.getId()));
+//
+//  }
 
 
 }

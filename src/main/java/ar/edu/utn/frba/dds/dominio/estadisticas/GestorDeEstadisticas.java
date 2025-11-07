@@ -29,7 +29,7 @@ public class GestorDeEstadisticas {
   }
 
   public void generarArchivoCsv(String path, String fileName) {
-
+    fileName = fileName + ".csv";
     List<String[]> data = IntStream.range(0, estadisticas.size())
         .mapToObj(i -> new String[] {
             estadisticas.get(i).getClass().getSimpleName(),
