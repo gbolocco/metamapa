@@ -7,8 +7,8 @@ import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosTableRepositoryDB;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
@@ -58,11 +58,11 @@ public class WebApp {
   }
 
   private void configureRoutes(JavalinConfig config){
-    var repoUsuarios = UsuariosTableRepositoryDB.INSTANCE;
+    var repoUsuarios = UsuariosRepository.INSTANCE;
     var repoColecciones = ColeccionRepository.getInstancia();
     var repoFuentes = FuentesRepository.getInstancia();
     var repoHechos = HechosRepository.getInstancia();
-    var repoSolicitudes = new SolicitudesRepositoryDB();
+    var repoSolicitudes = new SolicitudesRepository();
 
     var servicioUsuarios = new ServicioUsuarios(repoUsuarios);
     var servicioColecciones = new ServicioColecciones(repoColecciones);

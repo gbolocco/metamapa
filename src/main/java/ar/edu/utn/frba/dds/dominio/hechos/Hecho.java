@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class Hecho {
   @Enumerated(EnumType.STRING)
   private OrigenHecho origenHecho;
 
-
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
@@ -144,10 +145,12 @@ public class Hecho {
 
 
   public List<String> getUrlsMultimedia() {
-    return this.getContenidoMultimedia().stream()
+    List<String> urls = this.getContenidoMultimedia().stream()
         .map(ContenidoMultimedia::getUrlArchivo)
-        .toList();
+        .collect(Collectors.toList());
+    return new ArrayList<>(urls);
   }
+
 }
 
 

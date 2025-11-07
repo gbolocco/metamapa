@@ -25,7 +25,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 
@@ -58,7 +58,7 @@ public class AdministradorTest implements SimplePersistenceTest {
   private SolicitudEliminacion crearUnaSolicitudDeEliminacionParaTest(RepresentacionDeHecho representacionDeHecho) {
     String justificacionLarga = "a".repeat(501);
     SolicitudEliminacion s = new SolicitudEliminacion(representacionDeHecho, justificacionLarga);
-    SolicitudesRepositoryDB.getInstancia().agregar(s);
+    SolicitudesRepository.getInstancia().agregar(s);
     s.setDetectorDeSpam(detectorDeSpam);
     return s;
   }
@@ -142,7 +142,7 @@ public class AdministradorTest implements SimplePersistenceTest {
   void puedeAceptarUnaSolicitudDeEliminacion() {
 
     assertTrue(solicitud.estaPendiente());
-    assertTrue(SolicitudesRepositoryDB.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
+    assertTrue(SolicitudesRepository.getInstancia().mostrarSolicitudes(TipoSolicitud.ELIMINACION_HECHO).contains(solicitud));
     solicitud.aceptar();
     entityManager().getTransaction().commit();
     Assertions.assertEquals(representacionDeHecho.getEstadoRepresentacionHecho(), EstadoRepresentacionHecho.ELIMINADO);

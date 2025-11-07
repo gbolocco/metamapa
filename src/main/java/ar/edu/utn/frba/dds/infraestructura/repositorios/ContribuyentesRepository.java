@@ -4,11 +4,11 @@ import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import java.util.List;
 
-public class UsuarioRepositoryDB implements WithSimplePersistenceUnit {
+public class ContribuyentesRepository implements WithSimplePersistenceUnit {
 
-  private static final UsuarioRepositoryDB instance = new UsuarioRepositoryDB();
+  private static final ContribuyentesRepository instance = new ContribuyentesRepository();
 
-  public static UsuarioRepositoryDB getInstance() {
+  public static ContribuyentesRepository getInstance() {
     return instance;
   }
 

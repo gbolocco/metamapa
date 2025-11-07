@@ -31,6 +31,9 @@ public abstract class  Fuente {
   @Column(unique = true, nullable = false, name = "id_Fuente")
   private Long id;
 
+  String nombre;
+
+  public String url;
 
   @Transient
   public List<Hecho> hechos;

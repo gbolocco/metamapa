@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.controladores;
 
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosTableRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosRepository;
 
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 
@@ -58,7 +58,7 @@ public class SolicitudesController {
       Long coleccionId = Long.parseLong(ctx.formParam("coleccionId"));
       
       TipoSolicitud tipoSolicitud = TipoSolicitud.valueOf(tipoSolicitudStr);
-      var usuario = userId != null ? UsuariosTableRepositoryDB.INSTANCE.buscarPorId(userId) : null;
+      var usuario = userId != null ? UsuariosRepository.INSTANCE.buscarPorId(userId) : null;
 
       var hecho = HechosRepository.getInstancia().buscar(hechoId);
       if (hecho == null) {

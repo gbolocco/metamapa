@@ -12,10 +12,10 @@ import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosTableRepositoryDB;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosRepository;
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
@@ -36,7 +36,6 @@ public class Bootstrap implements WithSimplePersistenceUnit {
     entityManager().persist(fuente);
 
     var fuenteEstatica = new FuenteEstatica("./datos/desastres_naturales_processed.csv",new LectorCsv());
-
 
 
       List<Hecho> hechos = List.of(
@@ -67,11 +66,11 @@ public class Bootstrap implements WithSimplePersistenceUnit {
             new Usuario("umi", "umi", Rol.ADMIN)
         );
         usuarios.forEach((usuario) -> {
-          UsuariosTableRepositoryDB.INSTANCE.registrar(usuario);
+          UsuariosRepository.INSTANCE.registrar(usuario);
         });
         
-        usuarioFeli = UsuariosTableRepositoryDB.INSTANCE.buscarPorNombre("feli");
-        usuarioDani = UsuariosTableRepositoryDB.INSTANCE.buscarPorNombre("dani");
+        usuarioFeli = UsuariosRepository.INSTANCE.buscarPorNombre("feli");
+        usuarioDani = UsuariosRepository.INSTANCE.buscarPorNombre("dani");
       }
       hechos.forEach(hecho -> hecho.addContenidoMultimedia("https://media.istockphoto.com/id/155666671/es/" +
           "vector/ilustraci%C3%B3n-vectorial-de-red-house-icon.jpg?s=612x612&w=0&k=20&c=3IHzI5tgnVZQuE_4ZdJDIDyMGd44qWuketKv5EOvawQ=", TipoContenido.IMAGEN));
@@ -102,7 +101,7 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       Long count = countQuery.getSingleResult();
       
       if (count == 0) {
-        var servicioSolicitudes = new ServicioSolicitudes(new SolicitudesRepositoryDB());
+        var servicioSolicitudes = new ServicioSolicitudes(new SolicitudesRepository());
         
         var hecho1 = new Hecho("Terremoto en Mendoza", "Terremoto de magnitud 6.2", "Desastre Natural", 
                                new Ubicacion(-32.8895, -68.8458), LocalDateTime.now(), LocalDateTime.now(), 

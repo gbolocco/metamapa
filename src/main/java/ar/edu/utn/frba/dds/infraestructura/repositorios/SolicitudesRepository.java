@@ -6,13 +6,13 @@ import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
 import java.util.List;
 
-public class SolicitudesRepositoryDB implements
+public class SolicitudesRepository implements
     ar.edu.utn.frba.dds.dominio.solicitudes.contratos.SolicitudesRepository, WithSimplePersistenceUnit {
 
-  private static final SolicitudesRepositoryDB instance =
-      new SolicitudesRepositoryDB();
+  private static final SolicitudesRepository instance =
+      new SolicitudesRepository();
 
-  public static SolicitudesRepositoryDB getInstancia() {
+  public static SolicitudesRepository getInstancia() {
     return instance;
   }
 

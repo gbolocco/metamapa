@@ -31,7 +31,15 @@ public class FuentesRepository implements WithSimplePersistenceUnit {
     //entityManager().getTransaction().commit();
   }
 
-  // metodos para algoritmos de consenso
+  public void eliminar(Long id){
+    entityManager().getTransaction().begin();
+    Fuente fuente = entityManager().find(Fuente.class, id);
+    if (fuente != null) {
+      entityManager().remove(fuente);
+    }
+    entityManager().getTransaction().commit();
+  }
+  
 
   //TODO
   public List<List<Hecho>> obtenerHechosDeFuentes(List<Filtro> criterios) {
