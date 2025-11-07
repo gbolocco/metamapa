@@ -1,28 +1,28 @@
 package ar.edu.utn.frba.dds.dominio.estadisticas;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EstadisticaHoraPorCategoria extends Estadistica {
 
-  private final String categoriaBuscada;
-
-  public EstadisticaHoraPorCategoria(String categoriaBuscada, boolean publica) {
+  public EstadisticaHoraPorCategoria(String categoria, boolean publica) {
     super(publica);
-    this.categoriaBuscada = categoriaBuscada;
+    this.categoria = categoria;
   }
 
   @Override
   public String calcular(List<Hecho> hechos) {
 
     List<Hecho> filtrados = hechos.stream()
-        .filter(h -> h.getCategoria().equalsIgnoreCase(categoriaBuscada))
+        .filter(h -> h.getCategoria().equalsIgnoreCase(categoria))
         .toList();
 
     if (filtrados.isEmpty()) {
-        this.respuesta = "Sin hechos para la categoría: " + categoriaBuscada;
+        this.respuesta = "Sin hechos para la categoría: " + categoria;
     }
 
     Map<Integer, Long> conteoPorHora = filtrados.stream()
@@ -36,8 +36,10 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
 
     assert maxHora != null;
 
-    this.respuesta = "Hora con más hechos de lacategoría " + categoriaBuscada + ": "
+    this.respuesta = "Hora con más hechos de lacategoría " + categoria + ": "
         + maxHora.getKey() + " hs (" + maxHora.getValue() + " hechos)";
+
+    this.fechaDeCalculo = LocalDateTime.now();
 
     return respuesta;
   }

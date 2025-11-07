@@ -36,7 +36,6 @@ public class EstadisticasRepository {
                 .toList();
     }
 
-
     public List<String> calcular(List<Hecho> hechos) {
 
         return estadisticas.stream()

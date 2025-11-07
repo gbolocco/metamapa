@@ -31,6 +31,9 @@ public class EstadisticaController {
 
         CalculadorProvincia calculadorProvincia = new CalculadorProvincia(new ServicioCalculadorProvinciaNominatim());
 
+        System.out.println(tipo);
+        System.out.println(categoria);
+
         switch (tipo) {
             case "mayorHechosProvincia":
                 estadistica = new EstadisticaProvincia(calculadorProvincia, true);
@@ -42,6 +45,7 @@ public class EstadisticaController {
 
             case "cantidadPorCategoria":
                 estadistica = new EstadisticaCantidadPorCategoria(categoria,false);
+                break;
 
             case "mayorHechosProvinciaCategoria":
                 estadistica = new EstadisticaProvinciaPorCategoria(calculadorProvincia, categoria, true);
@@ -83,9 +87,9 @@ public class EstadisticaController {
         model.put("user_name", ctx.sessionAttribute("user_name"));
         model.put("user_id", ctx.sessionAttribute("user_id"));
 
-        List<String> resultadosEstadisticas = EstadisticasRepository.getInstancia().getRespuestas();
+        List<Estadistica> estadisticas = EstadisticasRepository.getInstancia().getEstadisticas().stream().filter(e -> e.getRespuesta() != null).collect(Collectors.toList());
 
-        model.put("estadisticas", resultadosEstadisticas);
+        model.put("estadisticas", estadisticas);
 
         ctx.render("estadisticas.hbs", model);
     }
@@ -93,11 +97,29 @@ public class EstadisticaController {
     public void descargarSeleccionadas(Context ctx) {
         List<String> seleccionadas = ctx.formParams("seleccionadas");
 
-        String csv = seleccionadas.stream()
-                .map(s -> "\"" + s.replace("\"", "\"\"") + "\"") // escapado simple
-                .collect(Collectors.joining("\n"));
+        if (seleccionadas == null || seleccionadas.isEmpty()) {
+            ctx.result("No se seleccionaron estadísticas para descargar.");
+            return;
+        }
+
+        // Trae todas las estadísticas calculadas del repositorio
+        List<Estadistica> todas = EstadisticasRepository.getInstancia().getEstadisticas().stream().filter(Estadistica::fueCalculada).toList();
+
+        // Filtra las seleccionadas
+        List<Estadistica> seleccionadasDatos = todas.stream()
+                .filter(e -> seleccionadas.contains(e.getRespuesta()))
+                .toList();
+
+        // Arma el CSV con encabezado y datos
+        String csv = seleccionadasDatos.stream()
+                .map(e -> String.format("\"%s\",\"%s\"",
+                        e.getRespuesta().replace("\"", "\"\""),
+                        e.getFechaDeCalculo() != null ? e.getFechaDeCalculo().toString() : "")
+                )
+                .collect(Collectors.joining("\n", "Respuesta,Fecha de Cálculo\n", ""));
 
         ctx.header("Content-Disposition", "attachment; filename=estadisticas.csv");
+        ctx.header("Content-Type", "text/csv; charset=UTF-8");
         ctx.result(csv);
     }
 }

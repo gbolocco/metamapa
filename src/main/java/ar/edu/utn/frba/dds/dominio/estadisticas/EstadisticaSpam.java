@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryDB;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EstadisticaSpam extends Estadistica {
@@ -27,7 +28,9 @@ public class EstadisticaSpam extends Estadistica {
             .toList();
     int cantidadSolicitudesSpan = solicitudesDeEliminacionSpan.size();
 
-      this.respuesta = cantidadSolicitudesSpan + " solicitudes de eliminacion son Spam";
-      return respuesta;
+    this.fechaDeCalculo = LocalDateTime.now();
+
+    this.respuesta = cantidadSolicitudesSpan + " solicitudes de eliminacion son Spam";
+    return respuesta;
   }
 }

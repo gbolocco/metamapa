@@ -1,22 +1,33 @@
 package ar.edu.utn.frba.dds.dominio.estadisticas;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class Estadistica {
 
-  private boolean publica;
-
+  public boolean publica;
+  @Getter
+  public String categoria;
+  @Getter
   public String respuesta = null;
+  @Getter
+  public LocalDateTime fechaDeCalculo;
   
   public Estadistica(boolean publica) {
     this.publica = publica;
   }
 
-  public String getRespuesta() {
-      return respuesta;
+    public abstract String calcular(List<Hecho> hechos);
+
+  public boolean fueCalculada() {
+      return  this.respuesta != null;
   }
 
-  public abstract String calcular(List<Hecho> hechos);
+  public boolean getPublica() {
+      return this.publica;
+  }
 
 }

@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConse
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
+import ar.edu.utn.frba.dds.dominio.estadisticas.Estadistica;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaHoraPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
@@ -58,6 +59,7 @@ public class AdminController {
     this.servicioColecciones = servicioColecciones;
     this.servicioSolicitudes = servicioSolicitudes;
   }
+
     public void mostrarDashboard(Context ctx) {
         Map<String, Object> model = new HashMap<>();
         model.put("title", "Panel Admin");
@@ -65,6 +67,20 @@ public class AdminController {
         model.put("rol", ctx.sessionAttribute("rol"));
         model.put("user_name", ctx.sessionAttribute("user_name"));
         model.put("user_id", ctx.sessionAttribute("user_id"));
+
+        List<Map<String, Object>> pendientes = EstadisticasRepository.getInstancia().getEstadisticas()
+                .stream()
+                .filter(e -> !e.fueCalculada())
+                .map(e -> {
+                    Map<String, Object> datos = new HashMap<>();
+                    datos.put("tipo", e.getClass().getSimpleName());
+                    datos.put("categoria", e.getCategoria());
+                    datos.put("publica", e.getPublica());
+                    return datos;
+                })
+                .toList();
+
+        model.put("pendientes", pendientes);
 
         ctx.render("admin/dashboard.hbs", model);
     }

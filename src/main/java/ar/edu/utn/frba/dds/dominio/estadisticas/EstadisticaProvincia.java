@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.dominio.estadisticas;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +30,7 @@ public class EstadisticaProvincia extends Estadistica {
         .map(e -> "La provincia con mas hechos ocurridos es: " + e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
         .orElse("Sin datos");
 
+      this.fechaDeCalculo = LocalDateTime.now();
       return respuesta;
   }
 

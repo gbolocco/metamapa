@@ -4,28 +4,97 @@
     <meta charset="UTF-8">
     <title>Estadísticas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #fefce8, #fef9c3);
+            font-family: "Segoe UI", Roboto, sans-serif;
+        }
+        h1 {
+            color: #7b341e;
+            font-weight: 600;
+            text-align: center;
+        }
+        .card {
+            background-color: #fffdf5;
+            border: 1px solid #d6b68a;
+            border-radius: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background-color: #8b5e34;
+            color: #fff;
+        }
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #fefce8;
+        }
+        tbody tr:hover {
+            background-color: #f5f5dc;
+            transition: background-color 0.2s ease;
+        }
+        .btn-primary {
+            background-color: #8b5e34;
+            border: none;
+            border-radius: 0.3rem;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(139, 94, 52, 0.25);
+        }
+        .btn-primary:hover {
+            background-color: #a47148;
+        }
+        small {
+            color: #6b7280;
+        }
+        .checkbox-cell {
+            width: 50px;
+            text-align: center;
+        }
+    </style>
 </head>
-<body class="bg-light p-4">
+<body class="p-4">
 
-<div class="container">
+<div class="container mt-4">
     <h1 class="mb-4">Resultados de Estadísticas</h1>
 
     <form method="post" action="/estadisticas/descargar">
-        <div class="card p-3 shadow-sm">
+        <div class="card p-4 shadow-sm">
             {{#if estadisticas}}
-                <ul class="list-group mb-3">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th class="checkbox-cell"></th>
+                        <th>Descripción</th>
+                        <th>Fecha de cálculo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {{#each estadisticas}}
-                        <li class="list-group-item d-flex align-items-center">
-                            <input type="checkbox" class="form-check-input me-2" name="seleccionadas" value="{{this}}">
-                            <span>{{this}}</span>
-                        </li>
+                        <tr>
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="form-check-input" name="seleccionadas" value="{{respuesta}}">
+                            </td>
+                            <td><strong>{{respuesta}}</strong></td>
+                            <td><small>{{fechaDeCalculo}}</small></td>
+                        </tr>
                     {{/each}}
-                </ul>
-                <button type="submit" class="btn btn-primary">
-                    Descargar seleccionadas en CSV
-                </button>
+                    </tbody>
+                </table>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        Descargar seleccionadas en CSV
+                    </button>
+                </div>
             {{else}}
-                <p>No hay estadísticas disponibles.</p>
+                <p class="text-center text-muted fs-5">No hay estadísticas disponibles.</p>
             {{/if}}
         </div>
     </form>

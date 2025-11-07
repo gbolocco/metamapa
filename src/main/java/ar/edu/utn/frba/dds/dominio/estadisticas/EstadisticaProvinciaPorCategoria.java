@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.dominio.estadisticas;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,24 +12,23 @@ import java.util.stream.Collectors;
 public class EstadisticaProvinciaPorCategoria extends Estadistica {
 
   private final CalculadorProvincia calculadorProvincia;
-  private final String categoriaBuscada;
 
   public EstadisticaProvinciaPorCategoria(CalculadorProvincia calculadorProvincia,
-                                          String categoriaBuscada, boolean publica) {
+                                          String categoria, boolean publica) {
     super(publica);
     this.calculadorProvincia = calculadorProvincia;
-    this.categoriaBuscada = categoriaBuscada;
+    this.categoria = categoria;
   }
 
   @Override
   public String calcular(List<Hecho> hechos) {
 
     List<Hecho> filtrados = hechos.stream()
-        .filter(h -> h.getCategoria().equalsIgnoreCase(categoriaBuscada))
+        .filter(h -> h.getCategoria().equalsIgnoreCase(categoria))
         .toList();
 
     if (filtrados.isEmpty()) {
-        this.respuesta = "Sin hechos para la categoría: " + categoriaBuscada;
+        this.respuesta = "Sin hechos para la categoría: " + categoria;
     }
 
     // Contamos por provincia usando el calculador externo
@@ -37,8 +38,11 @@ public class EstadisticaProvinciaPorCategoria extends Estadistica {
 
       this.respuesta = conteo.entrySet().stream()
         .max(Map.Entry.comparingByValue())
-        .map(e -> e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
-        .orElse("No hay datos para la categoria "+ categoriaBuscada);
+        .map(e -> "La ¨Provincia con mas hechos para la categoria " + categoria + " es: " + e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
+        .orElse("No hay datos para la categoria "+ categoria);
+
+      this.fechaDeCalculo = LocalDateTime.now();
+
 
       return respuesta;
   }
