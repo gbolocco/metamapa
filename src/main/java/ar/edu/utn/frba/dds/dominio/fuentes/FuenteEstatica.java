@@ -19,27 +19,27 @@ import lombok.Getter;
 public class FuenteEstatica extends Fuente {
   @Transient
   private Lector lector;
-  private String rutaArchivo;
   
   public FuenteEstatica() {
 
   }
 
   public FuenteEstatica(String rutaArchivo, Lector lector) {
-    this.rutaArchivo = rutaArchivo;
+    this.url = rutaArchivo;
+    this.nombre = "Fuente Estatica".concat(rutaArchivo);
     FuentesRepository.getInstancia().agregarFuente(this);
   }
 
   public List<Hecho> obtenerHechos(List<Filtro> criteriosDePertenencia) {
     LectorCsv lectorCsv = new LectorCsv();
-    this.hechos = lectorCsv.leer(rutaArchivo);
+    this.hechos = lectorCsv.leer(url);
     return this.hechos.stream()
         .filter(hecho -> cumpleCriterio(hecho, criteriosDePertenencia))
         .collect(Collectors.toList());
   }
 
   public void  cargarFuente() {
-    this.hechos = lector.leer(rutaArchivo);
+    this.hechos = lector.leer(url);
   }
 
   @Override

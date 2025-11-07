@@ -22,9 +22,9 @@ public class ColeccionRepository implements WithSimplePersistenceUnit {
   }
 
   public void agregarColeccion(Coleccion coleccion) {
-    //entityManager().getTransaction().begin();
+    entityManager().getTransaction().begin();
     entityManager().persist(coleccion);
-    //entityManager().getTransaction().commit();
+    entityManager().getTransaction().commit();
   }
 
   public Coleccion buscarColeccionPorId(Long id) {

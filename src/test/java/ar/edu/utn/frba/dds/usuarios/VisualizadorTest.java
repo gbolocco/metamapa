@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
@@ -38,7 +39,8 @@ public class VisualizadorTest {
         "Hechos de incendios",
         List.of(),  // Lista vacía
         fuente,
-            "A1302"
+            "A1302",
+            TipoConsenso.ABSOLUTA
     );
 
     filtroTexto1 = new FiltroContieneTexto("Geophysical", CampoDeHecho.CATEGORIA);

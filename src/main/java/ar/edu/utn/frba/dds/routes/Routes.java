@@ -1,12 +1,6 @@
 package ar.edu.utn.frba.dds.routes;
 
-import ar.edu.utn.frba.dds.controladores.AdminController;
-import ar.edu.utn.frba.dds.controladores.ColeccionController;
-import ar.edu.utn.frba.dds.controladores.HechosController;
-import ar.edu.utn.frba.dds.controladores.HomeController;
-import ar.edu.utn.frba.dds.controladores.LoginController;
-import ar.edu.utn.frba.dds.controladores.SolicitudesController;
-import ar.edu.utn.frba.dds.controladores.UserController;
+import ar.edu.utn.frba.dds.controladores.*;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
 import java.util.HashMap;
@@ -24,6 +18,8 @@ public class Routes {
     AdminController admin,
     SolicitudesController solicitudesController,
     HomeController homeController) {
+    EstadisticaController estadisticController
+    ) {
 
     config.router.apiBuilder(() -> {
 
@@ -48,17 +44,24 @@ public class Routes {
       get("/home", homeController::mostrarHome);
       
       path("/", () -> {
-        get("/login",login::mostrarLogin);
+          get("/login",login::mostrarLogin);
+          get("/estadisticas" ,estadisticController::mostrarEstadisticas);
+          post("/estadisticas",estadisticController::crearEstadistica);
+          post("/estadisticas/descargar", estadisticController::descargarSeleccionadas);
+          post("/estadisticas/calcular",estadisticController::calcularEstadisticas);
       });
 
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
         get("/coleccion",admin::mostrarFormColeccion);
+        post("/coleccion",admin::crearColeccion);
         get("/usuarios",admin::mostrarUsuarios);
         get("/solicitudes", admin::mostrarSolicitudes);
         post("/solicitudes/{id}/confirmar", admin::confirmar);
         post("/solicitudes/{id}/rechazar", admin::rechazar);
         get("/fuentes", admin::mostrarFuentes);
+          delete("/fuentes/{id}", admin::eliminarFuente);
+          post("/fuentes/nueva", admin::crearFuente);
         });
 
       path("usuarios",() -> {

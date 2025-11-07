@@ -2,10 +2,15 @@ package ar.edu.utn.frba.dds.dominio.colecciones;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
 import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.TipoCombinacion;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
+import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
 import java.time.LocalDate;
@@ -16,6 +21,8 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,9 +68,10 @@ public class Coleccion  {
   private List<Hecho> hechosConsensuados;
 
 
-  @ManyToOne
-  @JoinColumn(name = "algoritmo_Id")
-  private AlgoritmoConsenso algoritmoConsenso;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "tipo_consenso", nullable = false)
+  private TipoConsenso tipoConsenso;
+
 
   private String handle;
 
@@ -78,7 +86,8 @@ public class Coleccion  {
         String descripcion,
         List<Filtro> criteriosDePertenencia,
         Fuente fuente,
-        String handle
+        String handle,
+        TipoConsenso tipoConsenso
   ) {
     Validacion.validarStringNoVacio(titulo, "título");
     Validacion.validarNoNulo(descripcion, "descripción"); //descripcion puede ser nula?
@@ -94,6 +103,7 @@ public class Coleccion  {
     this.fuente = fuente;
     this.fechaDeCreacion = LocalDateTime.now();
     this.handle = handle;
+    this.tipoConsenso = tipoConsenso;
   }
 
   public Coleccion() {
@@ -102,9 +112,9 @@ public class Coleccion  {
 
   // MODOS DE VISUALIZACION
 
-  public List<Hecho> navegarHechos(ModoNavegacion modoNavegacion) {
-    if (modoNavegacion == ModoNavegacion.RESTRICTO) {
-      return this.hechosConsensuados;
+  public List<Hecho> navegarHechos(boolean navegacionCurada) {
+    if (navegacionCurada) {
+      return this.mostrarHechosConsensuados();
     }
     return this.mostrarHechos();
   }
@@ -113,12 +123,19 @@ public class Coleccion  {
     return new ArrayList<>(fuente.obtenerHechos(criteriosDePertenencia));
   }
 
-  /*public void consensuarHechos() {
-    this.hechosConsensuados = this.algoritmoConsenso.hechosConsensuados(
-        this.hechos, this.criteriosDePertenencia).stream()
+  public List<Hecho> mostrarHechosConsensuados() {
+    if (this.hechosConsensuados == null) {
+      this.hechosConsensuados = this.consensuarHechos();
+    }
+    return this.hechosConsensuados;
+  }
+
+  public List<Hecho> consensuarHechos() {
+    return this.getAlgoritmo().hechosConsensuados(
+        this.mostrarHechos(), this.criteriosDePertenencia).stream()
         .filter(hecho -> hecho.getEstadoHecho().equals(EstadoHecho.VISUALIZABLE))
         .toList();
-  }*/
+  }
     
   //metodos relacionados a los hechos
 
@@ -130,14 +147,21 @@ public class Coleccion  {
     }
   }
 
-  public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
-    return this.mostrarHechos()
+  public List<Hecho> filtrarHechos(List<Filtro> filtros, TipoCombinacion tipoCombinacion, boolean navegacionCurada) {
+    return this.navegarHechos(navegacionCurada)
         .stream()
         .filter(h -> cumpleFiltros(h, filtros, tipoCombinacion))
         .collect(Collectors.toList());
   }
 
 
+  public AlgoritmoConsenso getAlgoritmo() {
+    return switch (tipoConsenso) {
+      case ABSOLUTA -> new Absoluta();
+      case MAYORIA_SIMPLE -> new MayoriaSimple();
+      case MULTIPLES_MENCIONES -> new MultiplesMenciones();
+    };
+  }
   /*
   public void imprimirColeccion(List<Filtro> filtros, TipoCombinacion tipoCombinacion) {
     logger.info("Coleccion: {}", this.titulo);

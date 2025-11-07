@@ -1,3 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Metamapa</title>
+
+    <style>
+        .home-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .home-container h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .welcome-section h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .action-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .action-card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #117a8b;
+        }
+
+        .btn-admin {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-admin:hover {
+            background-color: #c82333;
+        }
+
+        .btn-login {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+    </style>
+</head>
 <div class="home-container">
     <h1>Bienvenido al Sistema de Gestión de Hechos</h1>
     
@@ -20,9 +155,9 @@
         
         <div class="actions-grid">
             <div class="action-card">
-                <h3>Explorar Hechos</h3>
-                <p>Consulta la base de datos de hechos registrados</p>
-                <a href="/hechos" class="btn btn-primary">Ver Hechos</a>
+                <h3>Explorar Estadisticas</h3>
+                <p>Conoce mas respecto a las colecciones</p>
+                <a href="/estadisticas" class="btn btn-primary">Ver Estadisticas</a>
             </div>
             
             <div class="action-card">

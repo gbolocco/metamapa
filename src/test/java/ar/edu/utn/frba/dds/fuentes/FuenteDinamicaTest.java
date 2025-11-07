@@ -60,19 +60,16 @@ public class FuenteDinamicaTest implements SimplePersistenceTest {
   }
 
   public void crearSolicitudDeCarga(LocalDateTime fecha){
-    usuario = new Usuario("juan", "password", Rol.USER);
-/*
-    representacionDeHechoContribuyente = contribuyente.crearHecho(
-        "incendio en la pampa",
-        "incendio forestal en la pampa",
-        "incendios forestales",
-        mock(Ubicacion.class),
-        mock(LocalDateTime.class),
-        fecha);
-    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(representacionDeHechoContribuyente);
-    solicitudContribuyente.aceptar();
-
- */
+    contribuyente = new Contribuyente("juan", 21);
+//    representacionDeHechoContribuyente = contribuyente.crearHecho(
+//        "incendio en la pampa",
+//        "incendio forestal en la pampa",
+//        "incendios forestales",
+//        mock(Ubicacion.class),
+//        mock(LocalDateTime.class),
+//        fecha);
+//    SolicitudDeCargaHecho solicitudContribuyente = new SolicitudDeCargaHecho(representacionDeHechoContribuyente);
+//    solicitudContribuyente.aceptar();
   }
 
   @Test

@@ -6,80 +6,322 @@
     <link rel="stylesheet" href="/static/css/style_fuentes.css">
     <style>
         .btn-crear {
-            display: inline-block;
-            padding: 10px 16px;
-            margin-bottom: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
+            display: inline-block; padding: 10px 16px; margin-bottom: 20px;
+            background-color: #4CAF50; color: white; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 15px; text-decoration: none; transition: background-color 0.2s ease;
         }
-        .btn-crear:hover {
-            background-color: #45a049;
+        .btn-crear:hover { background-color: #45a049; }
+
+        .btn-eliminar {
+            background-color: #e74c3c; color: white; border: none; border-radius: 5px;
+            padding: 6px 12px; cursor: pointer; font-size: 14px;
         }
-        .contenedor-boton {
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 10px;
+        .btn-eliminar:hover { background-color: #c0392b; }
+
+        .contenedor-boton { text-align: center; margin-top: 20px; margin-bottom: 10px; }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,.4);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
         }
+        .modal {
+            background: #fff; width: 95%; max-width: 560px; border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.2); padding: 20px;
+        }
+        .modal header { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+        .modal .row { margin-bottom: 12px; }
+        .modal label { display: block; font-size: 14px; margin-bottom: 6px; }
+        .modal input, .modal select {
+            width: 100%; padding: 10px; border: 1px solid #d3d3d3; border-radius: 6px; font-size: 14px;
+        }
+        .modal .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+        .btn-sec { background:#f1f1f1; color:#333; border:1px solid #dcdcdc; border-radius:6px; padding:8px 12px; cursor:pointer; }
+        .btn-pri { background:#4CAF50; color:#fff; border:none; border-radius:6px; padding:8px 12px; cursor:pointer; }
+        .helper { font-size: 12px; color: #666; margin-top: 4px; }
+        .error { color: #c0392b; font-size: 13px; display:none; }
+
+        /* Lista de componentes */
+        .componentes {
+            max-height: 180px; overflow: auto; border: 1px solid #e5e5e5; border-radius: 6px; padding: 8px;
+        }
+        .componentes .item { display:flex; gap:8px; align-items:center; padding:4px 0; }
+        .muted { color:#666; font-size:12px; }
+        .badge { display:inline-block; background:#eef3ff; border:1px solid #cfe0ff; color:#244; padding:2px 6px; border-radius:8px; font-size:12px; }
     </style>
 </head>
 <body>
 
 <div class="contenedor-boton">
-    <a href="/admin/fuentes/nueva" class="btn-crear">+ Crear Fuente</a>
+    <button id="btn-abrir-modal" class="btn-crear">+ Crear Fuente</button>
 </div>
 
 <main id="contenedor-fuentes"></main>
 
+<!-- Modal Crear Fuente -->
+<div id="modal-backdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <header id="modal-title">Crear fuente</header>
+        <form id="form-crear-fuente">
+            <div class="row">
+                <label for="tipoFuente">Tipo de fuente</label>
+                <select id="tipoFuente" name="tipo_fuente" required>
+                    <option value="">Seleccioná una opción</option>
+                    <option value="estatica">Estática</option>
+                    <option value="fuenteDinamica">Dinámica</option>
+                    <option value="metamapa">Metamapa</option>
+                    <option value="demo">Demo</option>
+                    <option value="agregadora">Agregadora</option>
+                </select>
+            </div>
+
+            <div class="row" id="row-url">
+                <label for="url">URL</label>
+                <input type="text" id="url" name="url" placeholder="./datos/archivo.csv">
+                <div class="helper">Para Dinámica, y Agregadora la URL no es necesaria</div>
+            </div>
+
+            <!-- Selector para fuentes componente (solo Agregadora) -->
+            <div class="row" id="row-componentes" style="display:none;">
+                <label>Combinar fuentes existentes <span class="muted">(elegí una o más)</span></label>
+                <div id="componentes" class="componentes"></div>
+                <div class="helper">La agregadora se construye a partir de las fuentes seleccionadas.</div>
+            </div>
+
+            <div class="error" id="error-form"></div>
+
+            <div class="actions">
+                <button type="button" class="btn-sec" id="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-pri">Crear</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    // Construimos un array de fuentes directamente en JS usando Handlebars
+    // Datos iniciales (inyectados por Handlebars)
     const fuentes = [
         {{#each fuentes}}
             {
                 id: "{{this.id}}",
-                tipoFuente: "{{this.tipo_fuente}}"
+                tipoFuente: "{{this.tipo_fuente}}",
+                url:"{{this.url}}"
             }{{#unless @last}},{{/unless}}
         {{/each}}
     ];
 
     const contenedor = document.getElementById('contenedor-fuentes');
 
-    if (fuentes.length > 0) {
-        const tabla = document.createElement('table');
-        tabla.innerHTML = `
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${fuentes.map(fuente => `
+    function renderTabla() {
+        contenedor.innerHTML = '';
+        if (fuentes.length > 0) {
+            const tabla = document.createElement('table');
+            tabla.innerHTML = `
+                <thead>
                     <tr>
-                        <td>${fuente.id}</td>
-                        <td>${fuente.tipoFuente || '-'}</td>
-                        <td class="acciones">
-                            <form method="POST" action="/admin/fuentes/${fuente.id}/eliminar" style="display:inline;">
-                                <button type="submit" class="btn-eliminar">Eliminar</button>
-                            </form>
-                        </td>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>URL</th>
+                        <th>Acciones</th>
                     </tr>
-                `).join('')}
-            </tbody>
-        `;
-        contenedor.appendChild(tabla);
-    } else {
-        const mensaje = document.createElement('p');
-        mensaje.className = 'sin-fuentes';
-        mensaje.textContent = 'No hay fuentes registradas.';
-        contenedor.appendChild(mensaje);
+                </thead>
+                <tbody>
+                    ${fuentes.map(fuente => `
+                        <tr id="fuente-${fuente.id}">
+                            <td>${fuente.id}</td>
+                            <td>${fuente.tipoFuente || '-'}</td>
+                            <td>${fuente.url || '-'}</td>
+                            <td class="acciones">
+                                <button class="btn-eliminar" data-id="${fuente.id}">Eliminar</button>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+            contenedor.appendChild(tabla);
+        } else {
+            const mensaje = document.createElement('p');
+            mensaje.className = 'sin-fuentes';
+            mensaje.textContent = 'No hay fuentes registradas.';
+            contenedor.appendChild(mensaje);
+        }
     }
+    renderTabla();
+    // Delegación: cualquier click en un .btn-eliminar dentro de 'contenedor'
+    contenedor.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-eliminar');
+        if (!btn) return;
+        const id = btn.dataset.id;        // siempre string; sirve igual
+        eliminarFuente(id);
+    });
+
+    // ==== Eliminar con DELETE ====
+    async function eliminarFuente(id) {
+        console.log("eliminando fuente")
+        if (!confirm("¿Seguro que deseas eliminar esta fuente?")) return;
+        try {
+            const resp = await fetch(`/admin/fuentes/${id}`, { method: 'DELETE' });
+            if (resp.ok) {
+                document.getElementById(`fuente-${id}`).remove();
+                const idx = fuentes.findIndex(f => String(f.id) === String(id));
+                if (idx >= 0) fuentes.splice(idx, 1);
+                alert("Fuente eliminada correctamente.");
+            } else {
+                const err = await resp.text();
+                alert("Error al eliminar la fuente: " + err);
+            }
+        } catch (e) {
+            alert("Error de conexión: " + e.message);
+        }
+    }
+    window.eliminarFuente = eliminarFuente;
+
+    // ==== Modal crear ====
+    const backdrop = document.getElementById('modal-backdrop');
+    const btnAbrirModal = document.getElementById('btn-abrir-modal');
+    const btnCancelar = document.getElementById('btn-cancelar');
+    const formCrear = document.getElementById('form-crear-fuente');
+    const tipoSelect = document.getElementById('tipoFuente');
+    const urlInput = document.getElementById('url');
+    const rowUrl = document.getElementById('row-url');
+    const rowComponentes = document.getElementById('row-componentes');
+    const compContainer = document.getElementById('componentes');
+    const errBox = document.getElementById('error-form');
+
+    function abrirModal(){ backdrop.style.display = 'flex'; backdrop.setAttribute('aria-hidden','false'); buildComponentes(); }
+    function cerrarModal(){ backdrop.style.display = 'none'; backdrop.setAttribute('aria-hidden','true'); formCrear.reset(); errBox.style.display='none'; toggleFields(); }
+    btnAbrirModal.addEventListener('click', abrirModal);
+    btnCancelar.addEventListener('click', cerrarModal);
+    backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) cerrarModal(); });
+
+    // Construye el checklist de componentes (excluye agregadoras para evitar recursión indeseada)
+    function buildComponentes() {
+        compContainer.innerHTML = '';
+        if (!fuentes.length) {
+            compContainer.innerHTML = '<div class="muted">No hay fuentes disponibles para combinar.</div>';
+            return;
+        }
+
+        // Opcional: evitá usar agregadoras como componentes para no anidar
+        const candidatas = fuentes.filter(f => f.tipoFuente !== 'agregadora');
+
+        candidatas.forEach(f => {
+            // Normalizo a mayúsculas para la badge
+            const tipoPretty = (f.tipoFuente || '-').toUpperCase();
+
+            const label = document.createElement('label');
+            label.className = 'comp-item';
+            label.setAttribute('for', `comp-${f.id}`);
+
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = `comp-${f.id}`;
+            input.value = f.id;
+
+            const meta = document.createElement('div');
+            meta.className = 'comp-meta';
+            meta.innerHTML = `
+      <span class="comp-id">#${f.id}</span>
+      <span class="badge">${tipoPretty}</span>
+      ${f.url ? `<span class="muted">— ${f.url}</span>` : ''}
+    `;
+
+            label.appendChild(input);
+            label.appendChild(meta);
+            compContainer.appendChild(label);
+        });
+    }
+
+    // Mostrar/ocultar campos según tipo
+    function toggleFields() {
+        const tipo = tipoSelect.value;
+
+
+        if (tipo === 'fuenteDinamica'|| tipo === 'agregadora') {
+            rowUrl.style.display = 'none';
+            urlInput.value = '';
+            urlInput.removeAttribute('required');
+        } else {
+            rowUrl.style.display = 'block';
+            if (tipo === 'estatica') {
+                urlInput.setAttribute('required','required');
+            } else {
+                urlInput.removeAttribute('required'); // metamapa, demo, agregadora: opcional
+            }
+        }
+
+        // Componentes solo en 'agregadora'
+        if (tipo === 'agregadora') {
+            rowComponentes.style.display = 'block';
+            buildComponentes();
+        } else {
+            rowComponentes.style.display = 'none';
+        }
+    }
+    tipoSelect.addEventListener('change', toggleFields);
+    toggleFields();
+
+    // Enviar creación
+    formCrear.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errBox.style.display = 'none';
+
+        const tipo_fuente = tipoSelect.value;
+        const url = urlInput.value?.trim() || null;
+
+        // Validaciones
+        if (!tipo_fuente) {
+            errBox.textContent = 'Seleccioná el tipo de fuente.'; errBox.style.display='block'; return;
+        }
+        if (tipo_fuente === 'estatica' && !url) {
+            errBox.textContent = 'La URL es obligatoria para la fuente estática.'; errBox.style.display='block'; return;
+        }
+
+        let componentes = [];
+        if (tipo_fuente === 'agregadora') {
+            componentes = Array.from(compContainer.querySelectorAll('input[type="checkbox"]:checked'))
+                    .map(i => i.value);
+            if (componentes.length === 0) {
+                errBox.textContent = 'Seleccioná al menos una fuente para la agregadora.'; errBox.style.display='block'; return;
+            }
+        }
+
+        try {
+            const payload = {
+                tipo_fuente,
+                url: (tipo_fuente === 'fuenteDinamica') ? null : url,
+                componentes: (tipo_fuente === 'agregadora') ? componentes : undefined
+
+            };
+
+            const resp = await fetch('/admin/fuentes/nueva', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRF-TOKEN': '<tu_token_aqui>'  // <-- si tu backend lo requiere
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (resp.ok) {
+                const creada = await resp.json().catch(() => null);
+
+                const nueva = {
+                    id: creada?.id,
+                    tipoFuente: creada?.tipo_fuente ?? tipo_fuente,
+                    url: creada?.url ?? payload.url
+                };
+                fuentes.push(nueva);
+                renderTabla();
+                cerrarModal();
+            } else {
+                const err = await resp.text();
+                errBox.textContent = err || 'No se pudo crear la fuente.'; errBox.style.display='block';
+            }
+        } catch (ex) {
+            errBox.textContent = 'Error de conexión: ' + ex.message; errBox.style.display='block';
+        }
+    });
 </script>
 
 </body>

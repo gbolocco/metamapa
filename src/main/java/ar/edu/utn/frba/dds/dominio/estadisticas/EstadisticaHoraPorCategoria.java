@@ -1,28 +1,36 @@
 package ar.edu.utn.frba.dds.dominio.estadisticas;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Entity
+@DiscriminatorValue("horaPorCat")
 public class EstadisticaHoraPorCategoria extends Estadistica {
 
-  private final String categoriaBuscada;
+    public EstadisticaHoraPorCategoria() {
 
-  public EstadisticaHoraPorCategoria(String categoriaBuscada, boolean publica) {
-    super(publica);
-    this.categoriaBuscada = categoriaBuscada;
+    }
+
+  public EstadisticaHoraPorCategoria(String categoria, boolean publica) {
+      this.publica = publica;
+      this.categoria = categoria;
   }
 
   @Override
   public String calcular(List<Hecho> hechos) {
 
     List<Hecho> filtrados = hechos.stream()
-        .filter(h -> h.getCategoria().equalsIgnoreCase(categoriaBuscada))
+        .filter(h -> h.getCategoria().equalsIgnoreCase(categoria))
         .toList();
 
     if (filtrados.isEmpty()) {
-      return "Sin hechos para la categoría: " + categoriaBuscada;
+        this.respuesta = "Sin hechos para la categoría: " + categoria;
     }
 
     Map<Integer, Long> conteoPorHora = filtrados.stream()
@@ -36,7 +44,11 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
 
     assert maxHora != null;
 
-    return "Hora con más hechos de categoría " + categoriaBuscada + ": "
+    this.respuesta = "Hora con más hechos de lacategoría " + categoria + ": "
         + maxHora.getKey() + " hs (" + maxHora.getValue() + " hechos)";
+
+    this.fechaDeCalculo = LocalDateTime.now();
+
+    return respuesta;
   }
 }
