@@ -23,10 +23,12 @@ public class EstadisticaProvincia extends Estadistica {
         .map(h -> calculadorProvincia.calcularProvincia(h.getUbicacion()))
         .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
 
-    return conteo.entrySet().stream()
+      this.respuesta = conteo.entrySet().stream()
         .max(Map.Entry.comparingByValue())
         .map(e -> "La provincia con mas hechos ocurridos es: " + e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
         .orElse("Sin datos");
+
+      return respuesta;
   }
 
 }

@@ -27,6 +27,7 @@ public class EstadisticaSpam extends Estadistica {
             .toList();
     int cantidadSolicitudesSpan = solicitudesDeEliminacionSpan.size();
 
-    return cantidadSolicitudesSpan + " solicitudes de eliminacion son Spam";
+      this.respuesta = cantidadSolicitudesSpan + " solicitudes de eliminacion son Spam";
+      return respuesta;
   }
 }

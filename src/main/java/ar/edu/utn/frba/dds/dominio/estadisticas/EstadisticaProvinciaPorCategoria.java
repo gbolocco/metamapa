@@ -27,7 +27,7 @@ public class EstadisticaProvinciaPorCategoria extends Estadistica {
         .toList();
 
     if (filtrados.isEmpty()) {
-      return "Sin hechos para la categoría: " + categoriaBuscada;
+        this.respuesta = "Sin hechos para la categoría: " + categoriaBuscada;
     }
 
     // Contamos por provincia usando el calculador externo
@@ -35,10 +35,12 @@ public class EstadisticaProvinciaPorCategoria extends Estadistica {
         .map(h -> calculadorProvincia.calcularProvincia(h.getUbicacion()))
         .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
 
-    return conteo.entrySet().stream()
+      this.respuesta = conteo.entrySet().stream()
         .max(Map.Entry.comparingByValue())
         .map(e -> e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
-        .orElse("Sin datos");
+        .orElse("No hay datos para la categoria "+ categoriaBuscada);
+
+      return respuesta;
   }
 
 }

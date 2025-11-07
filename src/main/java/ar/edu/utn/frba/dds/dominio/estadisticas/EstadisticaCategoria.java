@@ -17,9 +17,11 @@ public class EstadisticaCategoria extends Estadistica {
         .collect(Collectors.groupingBy(Hecho::getCategoria, Collectors.counting()));
 
 
-    return conteo.entrySet().stream()
+    this.respuesta = conteo.entrySet().stream()
         .max(Map.Entry.comparingByValue())
-        .map(e -> e.getKey() + " (" + e.getValue() + " hechos)")
+        .map(e -> "La categoria con la mayor cantidad de hechos del sistema es:" + e.getKey() + " (" + e.getValue() + " hechos)")
         .orElse("Sin datos");
+
+    return respuesta;
   }
 }

@@ -8,7 +8,6 @@ import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaHoraPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
-import ar.edu.utn.frba.dds.dominio.estadisticas.GestorDeEstadisticas;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvinciaNominatim;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -66,23 +65,6 @@ public class AdminController {
         model.put("rol", ctx.sessionAttribute("rol"));
         model.put("user_name", ctx.sessionAttribute("user_name"));
         model.put("user_id", ctx.sessionAttribute("user_id"));
-
-        ServicioCalculadorProvinciaNominatim servicioAPI = new ServicioCalculadorProvinciaNominatim();
-        CalculadorProvincia calculadoraProvinciasArgentinas = new CalculadorProvincia(servicioAPI);
-
-        EstadisticaHoraPorCategoria est1 = new EstadisticaHoraPorCategoria("Infraestructura", true);
-        EstadisticaProvincia est2 = new EstadisticaProvincia(calculadoraProvinciasArgentinas, true);
-
-        EstadisticasRepository.getInstancia().addEstadistica(est1);
-        EstadisticasRepository.getInstancia().addEstadistica(est2);
-
-        GestorDeEstadisticas gestor = new GestorDeEstadisticas(EstadisticasRepository.getInstancia().getEstadisticas());
-        List<Hecho> todosLosHechos = HechosRepository.getInstancia().mostrarHechos();
-
-        List<String> resultadosEstadisticas = gestor.calcular(todosLosHechos);
-        resultadosEstadisticas.forEach(System.out::println);
-
-        model.put("estadisticas", resultadosEstadisticas);
 
         ctx.render("admin/dashboard.hbs", model);
     }

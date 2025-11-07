@@ -37,18 +37,17 @@ public class Routes {
         }
       });
 
-      path("/", () -> {
-        get("/login",login::mostrarLogin);
-      });
-
 
       path("/", () -> {
+          get("/login",login::mostrarLogin);
+          get("/estadisticas" ,estadisticController::mostrarEstadisticas);
+          post("/estadisticas",estadisticController::crearEstadistica);
           post("/estadisticas/descargar", estadisticController::descargarSeleccionadas);
+          post("/estadisticas/calcular",estadisticController::calcularEstadisticas);
       });
 
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
-        get("/crearEstadistica", estadisticController::crearEstadistica);
         get("/coleccion",admin::mostrarFormColeccion);
         post("/coleccion",admin::crearColeccion);
         get("/usuarios",admin::mostrarUsuarios);

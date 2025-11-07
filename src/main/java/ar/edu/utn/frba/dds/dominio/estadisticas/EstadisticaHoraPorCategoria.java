@@ -22,7 +22,7 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
         .toList();
 
     if (filtrados.isEmpty()) {
-      return "Sin hechos para la categoría: " + categoriaBuscada;
+        this.respuesta = "Sin hechos para la categoría: " + categoriaBuscada;
     }
 
     Map<Integer, Long> conteoPorHora = filtrados.stream()
@@ -36,7 +36,9 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
 
     assert maxHora != null;
 
-    return "Hora con más hechos de lacategoría " + categoriaBuscada + ": "
+    this.respuesta = "Hora con más hechos de lacategoría " + categoriaBuscada + ": "
         + maxHora.getKey() + " hs (" + maxHora.getValue() + " hechos)";
+
+    return respuesta;
   }
 }

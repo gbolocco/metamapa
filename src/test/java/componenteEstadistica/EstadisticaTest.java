@@ -8,7 +8,6 @@ import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaHoraPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvinciaPorCategoria;
-import ar.edu.utn.frba.dds.dominio.estadisticas.GestorDeEstadisticas;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvincia;
@@ -82,22 +81,6 @@ public class EstadisticaTest {
     assertEquals("Córdoba (2 hechos)", resultado); // Córdoba tiene 2 incendios, CABA 1
   }
 
-
-  @Test
-  public void GeneradorDeEstadisticas() {
-    EstadisticaProvincia estadisticaProvincia = new EstadisticaProvincia(calculador, true);
-    EstadisticaCategoria estadisticaCategoria = new EstadisticaCategoria(true);
-    EstadisticaHoraPorCategoria estadisticaHoraPorCategoria = new EstadisticaHoraPorCategoria("test", true);
-
-    GestorDeEstadisticas gestor = new GestorDeEstadisticas(List.of(estadisticaProvincia, estadisticaCategoria,estadisticaHoraPorCategoria));
-
-    List<String> res = gestor.calcular(hechos);
-
-    Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("Córdoba") || s.contains("CORDOBA")));
-    Assertions.assertTrue(res.stream().anyMatch(s -> s.contains("incendio") || s.contains("robo")));
-
-    gestor.generarArchivoCsv("./estadisticas/","test.csv");
-  }
 
   @Test
   public void testEstadisticaHoraPorCategoriaSinDatos() {
