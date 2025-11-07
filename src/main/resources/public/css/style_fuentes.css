@@ -91,3 +91,53 @@ tr:hover {
     color: #666;
     padding: 2rem;
 }
+
+/* Lista de componentes (agregadora) */
+.componentes{
+    max-height: 200px;
+    overflow: auto;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comp-item{
+    display: grid;
+    grid-template-columns: auto 1fr; /* checkbox | contenido */
+    align-items: start;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.comp-item:hover{
+    background: #f8f9fb;
+}
+
+.comp-item input[type="checkbox"]{
+    margin-top: 3px; /* alinea con la primera línea del texto */
+}
+
+.comp-meta{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px; /* espacio entre #id, badge, url */
+    line-height: 1.35;
+}
+
+.comp-id{ font-weight: 600; }
+.badge{
+    display: inline-block;
+    background: #eef3ff;
+    border: 1px solid #cfe0ff;
+    color: #244;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+.muted{ color:#666; font-size:12px; }

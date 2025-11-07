@@ -53,6 +53,8 @@ public class Routes {
         post("/solicitudes/{id}/confirmar", admin::confirmar);
         post("/solicitudes/{id}/rechazar", admin::rechazar);
         get("/fuentes", admin::mostrarFuentes);
+          delete("/fuentes/{id}", admin::eliminarFuente);
+          post("/fuentes/nueva", admin::crearFuente);
         });
 
       path("usuarios",() -> {
