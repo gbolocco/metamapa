@@ -48,16 +48,13 @@ public class Coleccion  {
   private String descripcion;
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(
-      name = "coleccion_filtro",
-      joinColumns = @JoinColumn(name = "id_coleccion"),
-      inverseJoinColumns = @JoinColumn(name = "filtro_Id")
-  )
   private List<Filtro> criteriosDePertenencia;
 
-  @ManyToOne(targetEntity = Fuente.class)
+
+  @ManyToOne(targetEntity = Fuente.class, cascade = CascadeType.PERSIST)
   @JoinColumn(name = "fuente_id")
   private Fuente fuente;
+
 
 
   @Transient

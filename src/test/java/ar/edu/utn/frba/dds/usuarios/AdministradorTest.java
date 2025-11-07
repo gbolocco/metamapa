@@ -119,7 +119,7 @@ public class AdministradorTest implements SimplePersistenceTest {
     logger.info("Iniciando test de Administrador");
     // Crear mock de Hecho
     hecho = new Hecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDateTime.now(),LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
-    representacionDeHecho = new RepresentacionDeHecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDateTime.now(),LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA,null);
+    representacionDeHecho = new RepresentacionDeHecho("prueba", "prueba", "prueba",mock(Ubicacion.class), LocalDateTime.now(),LocalDateTime.now(), OrigenHecho.FUENTE_ESTATICA);
     detectorDeSpam = mock(DetectorDeSpam.class);
     fuenteEstatica = new FuenteEstatica("ruta.csv",mock(LectorCsv.class));
     solicitud = crearUnaSolicitudDeEliminacionParaTest(representacionDeHecho);
@@ -173,7 +173,7 @@ public class AdministradorTest implements SimplePersistenceTest {
         "incendio forestal en la rioja", "incendios forestales",
         ubi,LocalDateTime.of(2024, 5, 1,0,0,0),
         LocalDateTime.now(),
-        OrigenHecho.FUENTE_PROXY,null);
+        OrigenHecho.FUENTE_PROXY);
 
     SolicitudEliminacion solicitud = crearUnaSolicitudDeEliminacionParaTest(representacion);
 
