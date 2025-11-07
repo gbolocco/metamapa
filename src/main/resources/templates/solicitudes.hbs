@@ -301,7 +301,7 @@
                             <td>{{id}}</td>
                             <td>{{titulo}}</td>
                             <td><span class="badge badge-{{tipo}}">{{tipo}}</span></td>
-                            <td>{{solicitante}}</td>
+                            <td>{{#if solicitante}}{{solicitante}}{{else}}ANONIMO{{/if}}</td>
                             <td>{{fecha}}</td>
                             <td><span class="badge badge-{{estado}}">{{estado}}</span></td>
                         </tr>
@@ -326,8 +326,10 @@
                     </div>
                 </div>
                 <div class="collapse-content">
+                    {{#unless (eq tipo "CARGA_HECHO")}}
                     <p><strong>Justificación:</strong> {{justificacion}}</p>
-                    <p><strong>Solicitante:</strong> {{solicitante}}</p>
+                    {{/unless}}
+                    <p><strong>Solicitante:</strong> {{#if solicitante}}{{solicitante}}{{else}}ANONIMO{{/if}}</p>
                     <p><strong>Tipo:</strong> {{tipo}}</p>
                 </div>
             </div>

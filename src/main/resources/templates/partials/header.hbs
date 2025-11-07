@@ -8,6 +8,7 @@
     <nav class="main-nav" aria-label="Principal">
       <a href="/colecciones">Navegar Colecciones</a>
       <a href="/hechos/nuevo">Subí tu Hecho</a>
+      <a href="/mis-hechos" id="misHechos" style="display: none;">Mis Hechos</a>
       <a href="/mis-solicitudes" id="misSolicitudes" style="display: none;">Mis Solicitudes</a>
     </nav>
 
@@ -39,9 +40,15 @@
 
     const menu = document.getElementById("dropDown-options");
     const misSolicitudes = document.getElementById("misSolicitudes");
+    const misHechos = document.getElementById("misHechos");
 
-    if (estaLogueado && tipoUsuario === "USER" && misSolicitudes) {
-        misSolicitudes.style.display = "inline";
+    if (estaLogueado && tipoUsuario === "USER") {
+        if (misSolicitudes) {
+            misSolicitudes.style.display = "inline";
+        }
+        if (misHechos) {
+            misHechos.style.display = "inline";
+        }
     }
 
     if (estaLogueado && menu) {

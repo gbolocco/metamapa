@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.dominio.servidor;
 import ar.edu.utn.frba.dds.controladores.AdminController;
 import ar.edu.utn.frba.dds.controladores.ColeccionController;
 import ar.edu.utn.frba.dds.controladores.HechosController;
+import ar.edu.utn.frba.dds.controladores.HomeController;
 import ar.edu.utn.frba.dds.controladores.LoginController;
 import ar.edu.utn.frba.dds.controladores.SolicitudesController;
 import ar.edu.utn.frba.dds.controladores.UserController;
@@ -71,14 +72,15 @@ public class WebApp {
     var servicioHechos = new ServicioHechos(repoHechos);
     var servicioSolicitudes = new ServicioSolicitudes(repoSolicitudes);
 
-    HechosController hechos = new HechosController(servicioHechos);
+    HechosController hechos = new HechosController(servicioHechos, servicioSolicitudes, servicioUsuarios);
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
     AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
     UserController user = new UserController(servicioUsuarios, servicioSolicitudes);
     SolicitudesController solicitudesController = new SolicitudesController(servicioSolicitudes);
+    HomeController home = new HomeController();
 
-    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController);
+    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, home);
   }
 
   private void configureTemplating(JavalinConfig config) {

@@ -1,11 +1,67 @@
 <div class="container">
-    <h1>Mis Hechos</h1>
+    <div class="header-section">
+        <h1>Mis Hechos</h1>
+        <div class="actions-bar">
+            <a href="/hechos/nuevo" class="btn btn-primary">+ Solicitar Nuevo Hecho</a>
+        </div>
+    </div>
+    
+    {{#if hechos}}
+    <div class="hechos-stats">
+        <div class="stat-card">
+            <span class="stat-number">{{hechos.length}}</span>
+            <span class="stat-label">Hechos Totales</span>
+        </div>
+    </div>
+    {{/if}}
     
     <div class="hechos-grid">
-        <div class="no-hechos">
-            <p>Aún no has creado ningún hecho.</p>
-            <p>Los hechos que crees aparecerán aquí para que puedas gestionarlos.</p>
+        {{#each hechos}}
+        <div class="hecho-card">
+            <div class="card-header">
+                <h3>{{titulo}}</h3>
+                <span class="status-badge status-{{estado}}">{{estado}}</span>
+            </div>
+            <div class="card-body">
+                <p class="description">{{descripcion}}</p>
+                <div class="card-meta">
+                    <div class="meta-row">
+                        <span class="meta-label">Categoría:</span>
+                        <span class="category">{{categoria}}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Acontecimiento:</span>
+                        <span class="date">{{fechaAcontecimiento}}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Fecha de carga:</span>
+                        <span class="date">{{fechaCarga}}</span>
+                    </div>
+                    {{#if ubicacion}}
+                    <div class="meta-row">
+                        <span class="meta-label">Ubicación:</span>
+                        <span class="location">({{ubicacion.latitud}}, {{ubicacion.longitud}})</span>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-view" onclick="verDetalle({{id}})">Ver Detalle</button>
+                {{#if (eq estado 'VISUALIZABLE')}}
+                <button class="btn-action btn-edit" onclick="solicitarModificacion({{id}})">Solicitar Modificación</button>
+                <button class="btn-action btn-delete" onclick="solicitarEliminacion({{id}})">Solicitar Eliminación</button>
+                {{/if}}
+            </div>
         </div>
+        {{else}}
+        <div class="no-hechos">
+            <div class="empty-state">
+                <h3>No tienes hechos creados aún</h3>
+                <p>Comienza creando tu primer hecho haciendo clic en el botón de arriba.</p>
+                <a href="/hechos/nuevo" class="btn btn-primary">Crear Mi Primer Hecho</a>
+            </div>
+        </div>
+        {{/each}}
     </div>
 </div>
 
@@ -13,14 +69,75 @@
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 20px;
 }
 
-.container h1 {
-    color: #333;
-    margin-bottom: 40px;
-    font-size: 2.2rem;
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.header-section h1 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 2.5rem;
+}
+
+.actions-bar {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+}
+
+.hechos-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
     text-align: center;
+    min-width: 150px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
 }
 
 .hechos-grid {
@@ -53,7 +170,7 @@
 .card-header h3 {
     margin: 0;
     color: #333;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .status-badge {
@@ -64,65 +181,152 @@
     text-transform: uppercase;
 }
 
-.status-activo {
+.status-VISUALIZABLE {
     background-color: #d4edda;
     color: #155724;
 }
 
-.status-inactivo {
+.status-ELIMINADO {
     background-color: #f8d7da;
     color: #721c24;
+}
+
+.no-hechos {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
 }
 
 .card-body h4 {
     margin: 0 0 10px 0;
     color: #333;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .description {
     color: #666;
     margin-bottom: 15px;
     line-height: 1.4;
-    font-size: 14px;
 }
 
 .card-meta {
+    margin-top: 15px;
+}
+
+.meta-row {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f8f9fa;
 }
 
-.card-meta span {
+.meta-label {
     font-size: 12px;
-    color: #888;
-}
-
-.date {
+    color: #6c757d;
     font-weight: 500;
+    text-transform: uppercase;
 }
 
 .category {
-    font-style: italic;
-}
-
-.no-hechos {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    color: #666;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 2px dashed #dee2e6;
-}
-
-.no-hechos p {
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-.no-hechos p:first-child {
     font-weight: 500;
+    color: #007bff;
+    background: #e3f2fd;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.date {
+    font-size: 12px;
     color: #495057;
 }
+
+.location {
+    font-size: 12px;
+    color: #28a745;
+    font-family: monospace;
+}
+
+.card-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-view {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #138496;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state h3 {
+    margin-bottom: 10px;
+    color: #495057;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+}
 </style>
+
+<script>
+function verDetalle(hechoId) {
+    window.location.href = `/hechos/${hechoId}`;
+}
+
+function solicitarModificacion(hechoId) {
+    if (confirm('¿Deseas solicitar la modificación de este hecho?')) {
+        // TODO: Implementar solicitud de modificación
+        alert('Funcionalidad de modificación en desarrollo');
+    }
+}
+
+function solicitarEliminacion(hechoId) {
+    if (confirm('¿Estás seguro de que deseas solicitar la eliminación de este hecho?')) {
+        // TODO: Implementar solicitud de eliminación
+        alert('Funcionalidad de eliminación en desarrollo');
+    }
+}
+</script>

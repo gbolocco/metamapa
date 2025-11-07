@@ -2,9 +2,16 @@ package ar.edu.utn.frba.dds.controladores;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
+import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.servicios.ServicioHechos;
+import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
+import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
+import ar.edu.utn.frba.dds.modelo.Usuario;
+import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -18,10 +25,14 @@ import java.util.Map;
 
 public class HechosController implements WithSimplePersistenceUnit {
   private ServicioHechos servicioHechos;
+  private ServicioSolicitudes servicioSolicitudes;
+  private ServicioUsuarios servicioUsuarios;
   private final ObjectMapper mapper = new ObjectMapper();
 
-  public HechosController(ServicioHechos servicioHechos) {
+  public HechosController(ServicioHechos servicioHechos, ServicioSolicitudes servicioSolicitudes, ServicioUsuarios servicioUsuarios) {
     this.servicioHechos = servicioHechos;
+    this.servicioSolicitudes = servicioSolicitudes;
+    this.servicioUsuarios = servicioUsuarios;
   }
 
   public void listar(Context ctx) {
@@ -36,7 +47,7 @@ public class HechosController implements WithSimplePersistenceUnit {
     
     String success = ctx.queryParam("success");
     if ("solicitud_creada".equals(success)) {
-      model.put("successMessage", "Solicitud creada exitosamente");
+      model.put("successMessage", "Solicitud generada exitosamente");
     }
     
     String error = ctx.queryParam("error");
@@ -67,7 +78,7 @@ public class HechosController implements WithSimplePersistenceUnit {
       String foto = ctx.formParam("foto");
       String video = ctx.formParam("video");
 
-    Hecho hecho = new Hecho(
+      Hecho hecho = new Hecho(
           titulo,
           descripcion,
           categoria,
@@ -77,21 +88,42 @@ public class HechosController implements WithSimplePersistenceUnit {
           OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
       );
       
+      // Obtener usuario si está logueado y asignarlo al hecho
+      Long userId = ctx.sessionAttribute("user_id");
+      Usuario usuario = null;
+      if (userId != null) {
+        usuario = servicioUsuarios.buscarPorId(userId);
+        if (usuario != null) {
+          hecho.setUsuario(usuario);
+        }
+      }
+      
       hecho.addContenidoMultimedia(foto, TipoContenido.IMAGEN);
       hecho.addContenidoMultimedia(video, TipoContenido.VIDEO);
 
-      //todo: deberia pegarle a un service, ese service al repositorio y despues a la base de datos
       servicioHechos.cargarHecho(hecho);
-      //DISCUTIR SI DEJAR ACA O EN cargarHecho()
       entityManager().getTransaction().begin();
       entityManager().flush();
       entityManager().getTransaction().commit();
       entityManager().clear();
+      
+      // Crear solicitud de carga pasándole el hecho
+      Usuario usuarioFinal = null;
+      if (userId != null) {
+        usuarioFinal = servicioUsuarios.buscarPorId(userId);
+      }
+      servicioSolicitudes.crearSolicitud(usuarioFinal, hecho, TipoSolicitud.CARGA_HECHO, null);
 
-      ctx.redirect("/hechos");
+      if (userId != null) {
+        // Usuario logueado -> ir a mis solicitudes
+        ctx.redirect("/mis-solicitudes?success=solicitud_creada");
+      } else {
+        // Usuario anónimo -> ir a home
+        ctx.redirect("/home?success=solicitud_creada");
+      }
     } catch (Exception e) {
       e.printStackTrace();
-      ctx.status(400).result("Error al crear el hecho");
+      ctx.redirect("/hechos?error=" + e.getMessage());
     }
   }
 

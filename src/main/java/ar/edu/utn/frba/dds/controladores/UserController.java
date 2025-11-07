@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.modelo.Usuario;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import io.javalin.http.Context;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,7 +77,51 @@ public class UserController {
       model.put("user_id", userId);
       model.put("solicitudes", solicitudes);
       
+      String success = ctx.queryParam("success");
+      if ("solicitud_creada".equals(success)) {
+        model.put("successMessage", "Solicitud generada exitosamente");
+      }
+      
       ctx.render("mis-solicitudes.hbs", model);
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error interno del servidor: " + e.getMessage());
+    }
+  }
+
+  public void mostrarMisHechos(Context ctx) {
+    try {
+      Long userId = ctx.sessionAttribute("user_id");
+      if (userId == null) {
+        ctx.redirect("/login");
+        return;
+      }
+      
+      Usuario usuario = servicioUsuarios.buscarPorId(userId);
+      List<Hecho> hechosUsuario = HechosRepository.getInstancia().buscarPorUsuario(usuario);
+      
+      List<java.util.Map<String, Object>> hechos = hechosUsuario.stream()
+        .map(h -> {
+          java.util.Map<String, Object> hechoMap = new java.util.HashMap<>();
+          hechoMap.put("id", h.getId());
+          hechoMap.put("titulo", h.getTitulo());
+          hechoMap.put("descripcion", h.getDescripcion());
+          hechoMap.put("categoria", h.getCategoria());
+          hechoMap.put("fechaAcontecimiento", h.getFechaAcontecimiento().toString());
+          hechoMap.put("fechaCarga", h.getFechaDeCarga().toString());
+          hechoMap.put("estado", h.getEstadoHecho().toString());
+          return hechoMap;
+        })
+        .collect(Collectors.toList());
+      
+      java.util.Map<String, Object> model = new java.util.HashMap<>();
+      model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+      model.put("rol", ctx.sessionAttribute("rol"));
+      model.put("user_name", ctx.sessionAttribute("user_name"));
+      model.put("user_id", userId);
+      model.put("hechos", hechos);
+      
+      ctx.render("mis-hechos.hbs", model);
     } catch (Exception e) {
       e.printStackTrace();
       ctx.status(500).result("Error interno del servidor: " + e.getMessage());
