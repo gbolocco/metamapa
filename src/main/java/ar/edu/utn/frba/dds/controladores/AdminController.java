@@ -1,16 +1,6 @@
 package ar.edu.utn.frba.dds.controladores;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
-import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
-import ar.edu.utn.frba.dds.dominio.estadisticas.Estadistica;
-import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCategoria;
-import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaHoraPorCategoria;
-import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
-import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
-import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvinciaNominatim;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
@@ -18,13 +8,10 @@ import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaHasta;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteAgregadora;
-import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 
 import ar.edu.utn.frba.dds.infraestructura.repositorios.EstadisticasRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
 
@@ -42,7 +29,6 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import io.javalin.http.Context;
 
@@ -68,7 +54,7 @@ public class AdminController {
         model.put("user_name", ctx.sessionAttribute("user_name"));
         model.put("user_id", ctx.sessionAttribute("user_id"));
 
-        List<Map<String, Object>> pendientes = EstadisticasRepository.getInstancia().getEstadisticas()
+        List<Map<String, Object>> pendientes = EstadisticasRepository.getInstancia().getEstadisticasPendientes()
                 .stream()
                 .filter(e -> !e.fueCalculada())
                 .map(e -> {

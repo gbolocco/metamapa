@@ -2,13 +2,23 @@ package ar.edu.utn.frba.dds.dominio.estadisticas;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("cantPorCat")
 public class EstadisticaCantidadPorCategoria extends Estadistica {
 
+
+
+    protected EstadisticaCantidadPorCategoria() {
+
+    }
+
     public EstadisticaCantidadPorCategoria(String categoria, boolean publica) {
-        super(publica);
+        this.publica = publica;
         this.categoria = categoria;
     }
 

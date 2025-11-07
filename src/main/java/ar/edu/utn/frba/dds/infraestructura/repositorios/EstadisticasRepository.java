@@ -1,18 +1,18 @@
 package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.estadisticas.Estadistica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class EstadisticasRepository {
+public class EstadisticasRepository implements WithSimplePersistenceUnit {
 
     private static final EstadisticasRepository instance = new EstadisticasRepository();
 
-    private List<Estadistica> estadisticas = new ArrayList<>();
+    private List<Estadistica> estadisticasPendientes = new ArrayList<>();
 
     private EstadisticasRepository() {
     }
@@ -21,26 +21,42 @@ public class EstadisticasRepository {
         return instance;
     }
 
-    public List<Estadistica> getEstadisticas() {
-        return estadisticas;
-    }
 
     public void addEstadistica(Estadistica estadistica) {
-        this.estadisticas.add(estadistica);
+        this.estadisticasPendientes.add(estadistica);
     }
 
-    public List<String> getRespuestas() {
-        return estadisticas.stream()
-                .map(Estadistica::getRespuesta)
-                .filter(Objects::nonNull)
-                .toList();
+    public void actualizarEstadistica(Estadistica estadistica, String respuesta) {
+        entityManager()
+                .createQuery("UPDATE Estadistica SET respuesta = :respuesta WHERE id = :id")
+                .setParameter("respuesta", respuesta)
+                .setParameter("id", estadistica.getId());
     }
 
-    public List<String> calcular(List<Hecho> hechos) {
 
-        return estadisticas.stream()
-               .flatMap(e -> e.calcular(hechos).lines())
-               .toList();
+
+    public void persistirEstadistica(Estadistica estadistica) {
+        withTransaction(() -> entityManager().persist(estadistica));
     }
 
+    public List<Estadistica> getEstadisticas() {
+        return entityManager()
+                .createQuery("FROM Estadistica e", Estadistica.class)
+                .getResultList();
+    }
+
+    public List<Estadistica> getEstadisticasPendientes() {
+        return this.estadisticasPendientes;
+    }
+
+
+    public void calcular(List<Hecho> hechos) {
+        withTransaction(() -> {
+            for (Estadistica estadistica : estadisticasPendientes) {
+                estadistica.calcular(hechos);
+                entityManager().persist(estadistica);
+            }
+            estadisticasPendientes.clear();
+        });
+    }
 }

@@ -4,47 +4,56 @@ import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Calc
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Entity
+@DiscriminatorValue("provPorCat")
 public class EstadisticaProvinciaPorCategoria extends Estadistica {
 
-  private final CalculadorProvincia calculadorProvincia;
+    @Transient
+    private CalculadorProvincia calculadorProvincia;
 
-  public EstadisticaProvinciaPorCategoria(CalculadorProvincia calculadorProvincia,
-                                          String categoria, boolean publica) {
-    super(publica);
-    this.calculadorProvincia = calculadorProvincia;
-    this.categoria = categoria;
-  }
+      public EstadisticaProvinciaPorCategoria() {
 
-  @Override
-  public String calcular(List<Hecho> hechos) {
+      }
 
-    List<Hecho> filtrados = hechos.stream()
-        .filter(h -> h.getCategoria().equalsIgnoreCase(categoria))
-        .toList();
+      public EstadisticaProvinciaPorCategoria(CalculadorProvincia calculadorProvincia, String categoria, boolean publica) {
+        this.publica = publica;
+        this.calculadorProvincia = calculadorProvincia;
+        this.categoria = categoria;
+      }
 
-    if (filtrados.isEmpty()) {
-        this.respuesta = "Sin hechos para la categoría: " + categoria;
-    }
+      @Override
+      public String calcular(List<Hecho> hechos) {
 
-    // Contamos por provincia usando el calculador externo
-    Map<Provincia, Long> conteo = filtrados.stream()
-        .map(h -> calculadorProvincia.calcularProvincia(h.getUbicacion()))
-        .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+        List<Hecho> filtrados = hechos.stream()
+            .filter(h -> h.getCategoria().equalsIgnoreCase(categoria))
+            .toList();
 
-      this.respuesta = conteo.entrySet().stream()
-        .max(Map.Entry.comparingByValue())
-        .map(e -> "La ¨Provincia con mas hechos para la categoria " + categoria + " es: " + e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
-        .orElse("No hay datos para la categoria "+ categoria);
+        if (filtrados.isEmpty()) {
+            this.respuesta = "Sin hechos para la categoría: " + categoria;
+        }
 
-      this.fechaDeCalculo = LocalDateTime.now();
+        // Contamos por provincia usando el calculador externo
+        Map<Provincia, Long> conteo = filtrados.stream()
+            .map(h -> calculadorProvincia.calcularProvincia(h.getUbicacion()))
+            .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+
+          this.respuesta = conteo.entrySet().stream()
+            .max(Map.Entry.comparingByValue())
+            .map(e -> "La Provincia con mas hechos para la categoria " + categoria + " es: " + e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
+            .orElse("No hay datos para la categoria "+ categoria);
+
+          this.fechaDeCalculo = LocalDateTime.now();
 
 
-      return respuesta;
-  }
+          return respuesta;
+      }
 
 }

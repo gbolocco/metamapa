@@ -2,17 +2,20 @@ package ar.edu.utn.frba.dds.dominio.estadisticas;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Entity
+@DiscriminatorValue("maxCat")
 public class EstadisticaCategoria extends Estadistica {
 
-  public EstadisticaCategoria(boolean publica) {
-    super(publica);
+  public EstadisticaCategoria() {
   }
 
+  @Override
   public String calcular(List<Hecho> hechos) {
 
     Map<String, Long> conteo = hechos.stream()

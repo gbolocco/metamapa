@@ -60,7 +60,7 @@ public class EstadisticaTest {
 
   @Test
   public void testEstadisticaCategoria() {
-    EstadisticaCategoria estadistica = new EstadisticaCategoria(true);
+    EstadisticaCategoria estadistica = new EstadisticaCategoria();
     String resultado = estadistica.calcular(hechos);
     assertEquals("incendio (3 hechos)", resultado); // 3 incendios vs 2 robos
   }

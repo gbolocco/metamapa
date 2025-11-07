@@ -5,12 +5,11 @@ import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCantidadPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvinciaNominatim;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.EstadisticasRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
-import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import io.javalin.http.Context;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class EstadisticaController {
                 break;
 
             case "categoriaMayorHechos":
-                estadistica = new EstadisticaCategoria(true);
+                estadistica = new EstadisticaCategoria();
                 break;
 
             case "cantidadPorCategoria":
@@ -58,12 +57,12 @@ public class EstadisticaController {
             case "solicitudesSpam":
                 // estadistica = new EstadisticaSpam(new DetectorDeSpam());
                 // break;
-                estadistica = new EstadisticaCategoria(true); // placeholder
+                estadistica = new EstadisticaCategoria(); // placeholder
                 break;
 
             default:
                 System.out.println("Tipo no reconocido: " + tipo);
-                estadistica = new EstadisticaCategoria(true);
+                estadistica = new EstadisticaCategoria();
         }
 
         EstadisticasRepository.getInstancia().addEstadistica(estadistica);
@@ -87,7 +86,7 @@ public class EstadisticaController {
         model.put("user_name", ctx.sessionAttribute("user_name"));
         model.put("user_id", ctx.sessionAttribute("user_id"));
 
-        List<Estadistica> estadisticas = EstadisticasRepository.getInstancia().getEstadisticas().stream().filter(e -> e.getRespuesta() != null).collect(Collectors.toList());
+        List<Estadistica> estadisticas = EstadisticasRepository.getInstancia().getEstadisticas();
 
         model.put("estadisticas", estadisticas);
 
@@ -102,24 +101,23 @@ public class EstadisticaController {
             return;
         }
 
-        // Trae todas las estadísticas calculadas del repositorio
-        List<Estadistica> todas = EstadisticasRepository.getInstancia().getEstadisticas().stream().filter(Estadistica::fueCalculada).toList();
+        List<Estadistica> todas = EstadisticasRepository.getInstancia().getEstadisticas();
 
-        // Filtra las seleccionadas
         List<Estadistica> seleccionadasDatos = todas.stream()
-                .filter(e -> seleccionadas.contains(e.getRespuesta()))
+                .filter(e -> seleccionadas.contains(String.valueOf(e.getId())))
                 .toList();
 
-        // Arma el CSV con encabezado y datos
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
         String csv = seleccionadasDatos.stream()
                 .map(e -> String.format("\"%s\",\"%s\"",
-                        e.getRespuesta().replace("\"", "\"\""),
-                        e.getFechaDeCalculo() != null ? e.getFechaDeCalculo().toString() : "")
-                )
+                        e.getRespuesta() != null ? e.getRespuesta().replace("\"", "\"\"") : "",
+                        e.getFechaDeCalculo() != null ? e.getFechaDeCalculo().format(formatter) : ""))
                 .collect(Collectors.joining("\n", "Respuesta,Fecha de Cálculo\n", ""));
 
         ctx.header("Content-Disposition", "attachment; filename=estadisticas.csv");
         ctx.header("Content-Type", "text/csv; charset=UTF-8");
-        ctx.result(csv);
+        ctx.result("\uFEFF" + csv); // BOM para UTF-8
     }
+
 }
