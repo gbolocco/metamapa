@@ -47,4 +47,11 @@ public class UsuariosRepository implements SimplePersistenceTest {
     entityManager().merge(usuario);
     entityManager().getTransaction().commit();
   }
+  
+  public void agregarUsuario(Usuario usuario) {
+    entityManager().getTransaction().begin();
+    entityManager().persist(usuario);
+    entityManager().getTransaction().commit();
+  }
+
 }
