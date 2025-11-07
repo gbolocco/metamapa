@@ -25,7 +25,7 @@ public class EstadisticaProvincia extends Estadistica {
 
     return conteo.entrySet().stream()
         .max(Map.Entry.comparingByValue())
-        .map(e -> e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
+        .map(e -> "La provincia con mas hechos ocurridos es: " + e.getKey().getNombre() + " (" + e.getValue() + " hechos)")
         .orElse("Sin datos");
   }
 

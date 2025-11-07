@@ -78,6 +78,7 @@ public class EstadisticaTest {
     EstadisticaProvinciaPorCategoria estadistica =
         new EstadisticaProvinciaPorCategoria(calculador, "incendio", true);
     String resultado = estadistica.calcular(hechos);
+      System.out.println(resultado);
     assertEquals("Córdoba (2 hechos)", resultado); // Córdoba tiene 2 incendios, CABA 1
   }
 
@@ -102,6 +103,7 @@ public class EstadisticaTest {
   public void testEstadisticaHoraPorCategoriaSinDatos() {
     EstadisticaHoraPorCategoria estadistica = new EstadisticaHoraPorCategoria("asalto", true);
     String resultado = estadistica.calcular(hechos);
+    System.out.println(resultado);
     assertEquals("Sin hechos para la categoría: asalto", resultado);
   }
 
@@ -110,6 +112,7 @@ public class EstadisticaTest {
     EstadisticaProvinciaPorCategoria estadistica =
         new EstadisticaProvinciaPorCategoria(calculador, "fraude", true);
     String resultado = estadistica.calcular(hechos);
+    System.out.println(resultado);
     assertEquals("Sin hechos para la categoría: fraude", resultado);
   }
 

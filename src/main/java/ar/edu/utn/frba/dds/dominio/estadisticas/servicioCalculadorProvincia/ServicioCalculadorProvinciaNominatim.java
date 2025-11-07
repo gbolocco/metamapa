@@ -47,7 +47,8 @@ public class ServicioCalculadorProvinciaNominatim implements ServicioCalculadorP
             }
 
             if (provincia == null) {
-                throw new RuntimeException("No se pudo determinar la provincia para: " + lat + ", " + lon);
+                System.err.println("Advertencia: No se pudo determinar la provincia para: " + lat + ", " + lon);
+                return "Desconocida";
             }
 
             return provincia;

@@ -36,7 +36,7 @@ public class EstadisticaHoraPorCategoria extends Estadistica {
 
     assert maxHora != null;
 
-    return "Hora con más hechos de categoría " + categoriaBuscada + ": "
+    return "Hora con más hechos de lacategoría " + categoriaBuscada + ": "
         + maxHora.getKey() + " hs (" + maxHora.getValue() + " hechos)";
   }
 }

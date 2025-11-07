@@ -1,11 +1,6 @@
 package ar.edu.utn.frba.dds.routes;
 
-import ar.edu.utn.frba.dds.controladores.AdminController;
-import ar.edu.utn.frba.dds.controladores.ColeccionController;
-import ar.edu.utn.frba.dds.controladores.HechosController;
-import ar.edu.utn.frba.dds.controladores.LoginController;
-import ar.edu.utn.frba.dds.controladores.SolicitudesController;
-import ar.edu.utn.frba.dds.controladores.UserController;
+import ar.edu.utn.frba.dds.controladores.*;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
 
@@ -19,7 +14,9 @@ public class Routes {
     ColeccionController coleccionController,
     UserController userController,
     AdminController admin,
-    SolicitudesController solicitudesController) {
+    SolicitudesController solicitudesController,
+    EstadisticaController estadisticController
+    ) {
 
     config.router.apiBuilder(() -> {
 
@@ -44,8 +41,14 @@ public class Routes {
         get("/login",login::mostrarLogin);
       });
 
+
+      path("/", () -> {
+          post("/estadisticas/descargar", estadisticController::descargarSeleccionadas);
+      });
+
       path("/admin", () -> {
         get("/dashboard",admin::mostrarDashboard);
+        get("/crearEstadistica", estadisticController::crearEstadistica);
         get("/coleccion",admin::mostrarFormColeccion);
         post("/coleccion",admin::crearColeccion);
         get("/usuarios",admin::mostrarUsuarios);

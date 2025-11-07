@@ -5,6 +5,12 @@ import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConse
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones;
 import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
+import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCategoria;
+import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaHoraPorCategoria;
+import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.GestorDeEstadisticas;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvinciaNominatim;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
@@ -12,9 +18,13 @@ import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDesde;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaHasta;
 import ar.edu.utn.frba.dds.dominio.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteAgregadora;
+import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 
+import ar.edu.utn.frba.dds.infraestructura.repositorios.EstadisticasRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
 import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
 
@@ -49,19 +59,36 @@ public class AdminController {
     this.servicioColecciones = servicioColecciones;
     this.servicioSolicitudes = servicioSolicitudes;
   }
-  public void mostrarDashboard(Context ctx) {
-    Map<String, Object> model = new HashMap<>();
-    model.put("title", "Panel Admin");
-    model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
-    model.put("rol", ctx.sessionAttribute("rol"));
-    model.put("user_name", ctx.sessionAttribute("user_name"));
-    model.put("user_id", ctx.sessionAttribute("user_id"));
+    public void mostrarDashboard(Context ctx) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("title", "Panel Admin");
+        model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+        model.put("rol", ctx.sessionAttribute("rol"));
+        model.put("user_name", ctx.sessionAttribute("user_name"));
+        model.put("user_id", ctx.sessionAttribute("user_id"));
 
-    //model.put("colecciones", colecciones.mostrarColecciones());
-    //model.put("solicitudes", solicitudes.mostrarSolicitudes());
+        ServicioCalculadorProvinciaNominatim servicioAPI = new ServicioCalculadorProvinciaNominatim();
+        CalculadorProvincia calculadoraProvinciasArgentinas = new CalculadorProvincia(servicioAPI);
 
-    ctx.render("admin/dashboard.hbs", model);
-  }
+        EstadisticaHoraPorCategoria est1 = new EstadisticaHoraPorCategoria("Infraestructura", true);
+        EstadisticaProvincia est2 = new EstadisticaProvincia(calculadoraProvinciasArgentinas, true);
+
+        EstadisticasRepository.getInstancia().addEstadistica(est1);
+        EstadisticasRepository.getInstancia().addEstadistica(est2);
+
+        GestorDeEstadisticas gestor = new GestorDeEstadisticas(EstadisticasRepository.getInstancia().getEstadisticas());
+        List<Hecho> todosLosHechos = HechosRepository.getInstancia().mostrarHechos();
+
+        List<String> resultadosEstadisticas = gestor.calcular(todosLosHechos);
+        resultadosEstadisticas.forEach(System.out::println);
+
+        model.put("estadisticas", resultadosEstadisticas);
+
+        ctx.render("admin/dashboard.hbs", model);
+    }
+
+
+
   public void crearColeccion(Context ctx) {
     try {
       String titulo = ctx.formParam("titulo");

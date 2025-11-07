@@ -28,7 +28,10 @@ public enum Provincia {
     SANTA_FE("Santa Fe"),
     SANTIAGO_DEL_ESTERO("Santiago del Estero"),
     TIERRA_DEL_FUEGO("Tierra del Fuego, Antártida e Islas del Atlántico Sur"),
-    TUCUMAN("Tucumán");
+    TUCUMAN("Tucumán"),
+    DESCONOCIDA("Desconocida");
+
+
 
     private final String nombre;
     private static final Map<String, Provincia> MAPA = new HashMap<>();
@@ -55,19 +58,12 @@ public enum Provincia {
     }
 
     public static Provincia fromString(String valor) {
-        if (valor == null) {
-            throw new IllegalArgumentException("El valor no puede ser null");
-        }
+        if (valor == null) return DESCONOCIDA;
 
         String clave = normalizar(valor);
-        Provincia provincia = MAPA.get(clave);
-
-        if (provincia == null) {
-            throw new IllegalArgumentException("Provincia desconocida: " + valor);
-        }
-
-        return provincia;
+        return MAPA.getOrDefault(clave, DESCONOCIDA);
     }
+
 
     private static String normalizar(String texto) {
         return Normalizer
