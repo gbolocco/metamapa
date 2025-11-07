@@ -24,7 +24,6 @@ public class FuenteMetaMapa extends Fuente {
   public FuenteMetaMapa(FuenteMetaMapaAdapter adapter) {
     this.adapter = adapter;
     this.hechos = new ArrayList<>();
-    FuentesRepository.getInstancia().agregarFuente(this);
   }
 
   public FuenteMetaMapa() {

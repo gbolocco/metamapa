@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroFechaDeCargaDesde;
@@ -45,7 +47,8 @@ public class FuenteProxyTest implements SimplePersistenceTest {
         "Hechos de incendios",
         List.of(filtroTexto1,filtroFechaDeCargaDesde),
         fuente,
-        handle
+        handle,
+        TipoConsenso.ABSOLUTA
     );
 
   }

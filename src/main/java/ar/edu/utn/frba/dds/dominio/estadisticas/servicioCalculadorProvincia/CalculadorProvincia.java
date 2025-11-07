@@ -1,4 +1,5 @@
-package ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia;
+package ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvincia;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 

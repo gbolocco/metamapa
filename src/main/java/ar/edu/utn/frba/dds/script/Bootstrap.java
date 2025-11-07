@@ -1,10 +1,14 @@
 package ar.edu.utn.frba.dds.script;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.fuentes.FuenteDinamica;
+import ar.edu.utn.frba.dds.dominio.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
@@ -25,6 +29,11 @@ public class Bootstrap implements WithSimplePersistenceUnit {
   }
 
   public void init() {
+    var fuente = new FuenteDinamica();
+    entityManager().persist(fuente);
+
+    var fuenteEstatica = new FuenteEstatica("./datos/desastres_naturales_processed.csv",new LectorCsv());
+
     withTransaction(() -> {
       var usuarioFeli = UsuariosRepository.INSTANCE.buscarPorNombre("feli");
       var usuarioDani = UsuariosRepository.INSTANCE.buscarPorNombre("dani");
@@ -51,24 +60,23 @@ public class Bootstrap implements WithSimplePersistenceUnit {
       hechos.forEach(h-> h.addContenidoMultimedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", TipoContenido.VIDEO));
       hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
 
-      var fuente = new FuenteDinamica();
-      entityManager().persist(fuente);
+
 
       var colecciones = Arrays.asList(
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba"),
-          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2"),
-          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2"),
-          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2")
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2", TipoConsenso.ABSOLUTA),
+          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2", TipoConsenso.ABSOLUTA)
       );
 
       colecciones.forEach(c -> entityManager().persist(c));

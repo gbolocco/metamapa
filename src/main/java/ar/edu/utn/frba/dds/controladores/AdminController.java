@@ -1,5 +1,10 @@
 package ar.edu.utn.frba.dds.controladores;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.Absoluta;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MayoriaSimple;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.MultiplesMenciones;
+import ar.edu.utn.frba.dds.dominio.colecciones.algoritmosConsenso.TipoConsenso;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.filtros.FiltroContieneTexto;
@@ -27,6 +32,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import io.javalin.http.Context;
 
@@ -62,6 +68,7 @@ public class AdminController {
       String descripcion = ctx.formParam("descripcion");
       String consensoStr = ctx.formParam("consenso");
       String fuentesSeleccionadasStr = ctx.formParam("fuentesSeleccionadas");
+
 
       List<Long> idsFuentes = new ArrayList<>();
       if (fuentesSeleccionadasStr != null && !fuentesSeleccionadasStr.isEmpty()) {
@@ -121,6 +128,13 @@ public class AdminController {
         i++;
       }
 
+      assert consensoStr != null;
+      TipoConsenso tipoConsenso = switch (consensoStr) {
+        case "ABSOLUTA" -> TipoConsenso.ABSOLUTA;
+        case "MAYORIA_SIMPLE" -> TipoConsenso.MAYORIA_SIMPLE;
+        case "MULTIPLES_MENCIONES" -> TipoConsenso.MULTIPLES_MENCIONES;
+        default -> throw new IllegalArgumentException("Tipo de consenso desconocido: " + consensoStr);
+      };
 
       Fuente fuente;
 
@@ -140,8 +154,9 @@ public class AdminController {
         fuente = servicioFuentes.buscar(idsFuentes.get(0));
       }
 
-      servicioColecciones.guardarColeccion(new Coleccion(titulo, descripcion, filtros, fuente, "handle"));
+      Coleccion coleccion = new Coleccion(titulo, descripcion, filtros, fuente, "handle",tipoConsenso );
 
+      servicioColecciones.guardarColeccion(coleccion);
 
       ctx.redirect("/admin/dashboard");
 
@@ -186,7 +201,7 @@ public class AdminController {
 
   public void mostrarSolicitudes(Context ctx) {
     String tipo = ctx.queryParam("tipo");
-    
+
     if (tipo != null) {
       switch (tipo) {
         case "carga":
@@ -203,10 +218,10 @@ public class AdminController {
           return;
       }
     }
-    
+
     mostrarTodasLasSolicitudes(ctx);
   }
-  
+
   private void mostrarSolicitudesCarga(Context ctx) {
     List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.CARGA_HECHO);
 
@@ -230,14 +245,14 @@ public class AdminController {
         })
         .collect(Collectors.toList());
     }
-    
+
     renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Carga", "carga");
   }
-  
+
   private void mostrarSolicitudesEliminacion(Context ctx) {
     List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.ELIMINACION_HECHO);
     System.out.println("DEBUG AdminController: Solicitudes del repo: " + solicitudesRepo.size());
-    
+
     List<Map<String, Object>> todasSolicitudes = solicitudesRepo.stream()
         .map(s -> {
           Map<String, Object> solicitudMap = new HashMap<>();
@@ -250,18 +265,18 @@ public class AdminController {
           return solicitudMap;
         })
         .collect(Collectors.toList());
-    
+
     String pageParam = ctx.queryParam("page");
     int page = pageParam != null ? Integer.parseInt(pageParam) : 1;
     int pageSize = 10;
     int totalSolicitudes = todasSolicitudes.size();
     int totalPages = (int) Math.ceil((double) totalSolicitudes / pageSize);
-    
+
     int startIndex = (page - 1) * pageSize;
     int endIndex = Math.min(startIndex + pageSize, totalSolicitudes);
-    
+
     List<Map<String, Object>> solicitudesPagina = todasSolicitudes.subList(startIndex, endIndex);
-    
+
     Map<String, Object> model = new HashMap<>();
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
@@ -274,13 +289,13 @@ public class AdminController {
     model.put("hasNext", page < totalPages);
     model.put("previousPage", page - 1);
     model.put("nextPage", page + 1);
-    
+
     renderizarSolicitudes(ctx, solicitudesPagina, "Solicitudes de Eliminación", "eliminacion");
   }
-  
+
   private void mostrarSolicitudesModificacion(Context ctx) {
     List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerSolicitudesPendientesPorTipo(TipoSolicitud.MODIFICACION_HECHO);
-    
+
     List<Map<String, Object>> solicitudes;
     if (solicitudesRepo.isEmpty()) {
       solicitudes = List.of(
@@ -301,15 +316,15 @@ public class AdminController {
         })
         .collect(Collectors.toList());
     }
-    
+
     renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Modificación", "modificacion");
   }
-  
+
   private void mostrarTodasLasSolicitudes(Context ctx) {
     List<Solicitud> solicitudesRepo = servicioSolicitudes.obtenerTodasLasSolicitudes();
-    
+
     List<Map<String, Object>> todasSolicitudes = new ArrayList<>();
-    
+
     todasSolicitudes.addAll(solicitudesRepo.stream()
       .map(s -> {
         Map<String, Object> solicitudMap = new HashMap<>();
@@ -322,14 +337,14 @@ public class AdminController {
         return solicitudMap;
       })
       .collect(Collectors.toList()));
-    
+
     if (todasSolicitudes.isEmpty()) {
       todasSolicitudes.addAll(List.of(
         Map.of("id", 101, "titulo", "Solicitud de Carga - Terremoto Mendoza", "fecha", "2025-10-30 09:15", "solicitante", "Instituto Sismológico", "tipo", "Carga", "estado", "Pendiente"),
         Map.of("id", 102, "titulo", "Solicitud de Eliminación - Inundación Errónea", "fecha", "2025-10-29 16:30", "solicitante", "Servicio Meteorológico", "tipo", "Eliminación", "estado", "Pendiente")
       ));
     }
-    
+
     Map<String, Object> model = new HashMap<>();
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
@@ -340,22 +355,22 @@ public class AdminController {
     model.put("mostrarTabla", true);
     model.put("mostrarBotones", true);
     model.put("tipoActivo", "todas");
-    
+
     ctx.render("solicitudes.hbs", model);
   }
-  
+
   private void renderizarSolicitudes(Context ctx, List<Map<String, Object>> solicitudes, String titulo, String tipoActivo) {
     String pageParam = ctx.queryParam("page");
     int page = pageParam != null ? Integer.parseInt(pageParam) : 1;
     int pageSize = 10;
     int totalSolicitudes = solicitudes.size();
     int totalPages = (int) Math.ceil((double) totalSolicitudes / pageSize);
-    
+
     int startIndex = (page - 1) * pageSize;
     int endIndex = Math.min(startIndex + pageSize, totalSolicitudes);
-    
+
     List<Map<String, Object>> solicitudesPagina = solicitudes.subList(startIndex, endIndex);
-    
+
     Map<String, Object> model = new HashMap<>();
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
@@ -371,10 +386,10 @@ public class AdminController {
     model.put("titulo", titulo);
     model.put("mostrarBotones", true);
     model.put("tipoActivo", tipoActivo);
-    
+
     ctx.render("solicitudes.hbs", model);
   }
-  
+
   public void confirmar(Context ctx) {
     try {
       Long solicitudId = Long.parseLong(ctx.pathParam("id"));
@@ -402,12 +417,17 @@ public class AdminController {
 
     List<Fuente> fuentes = servicioFuentes.getFuentes();
 
+    for (Fuente fuente : fuentes) {
+      System.out.println(fuente.getId());
+    }
+
     // Convertimos las fuentes a mapas con todas las propiedades necesarias
     List<Map<String, Object>> fuentesDTO = fuentes.stream()
         .map(f -> {
           Map<String, Object> map = new HashMap<>();
           map.put("id", f.getId());
-          map.put("tipo_fuente", f.getTipoFuente());  // Se ejecuta el método acá
+          map.put("tipo_fuente", f.getTipoFuente());
+          map.put("url",f.getUrl());
           return map;
         })
         .collect(Collectors.toList());
@@ -421,7 +441,45 @@ public class AdminController {
     // Pasamos la lista procesada
     model.put("fuentes", fuentesDTO);
 
+
     ctx.render("admin/fuentes.hbs", model);
   }
+
+
+  public void eliminarFuente(Context ctx) {
+    try {
+      Long idFuente = Long.valueOf(ctx.pathParam("id"));
+      servicioFuentes.eliminar(idFuente);
+      ctx.status(200);
+    }catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al eliminar la fuente");
+    }
+  }
+
+
+  public void crearFuente(Context ctx) {
+    try{
+      Map<String, Object> body = ctx.bodyAsClass(Map.class);
+
+      String url = body.get("url") != null ? String.valueOf(body.get("url")) : null;
+      String tipo = String.valueOf(body.get("tipo_fuente"));
+      String componentes = body.get("componentes") != null ? String.valueOf(body.get("componentes")) : null;
+
+      Fuente fuenteCreada = servicioFuentes.crearFuente(url,tipo,componentes);
+
+      Map<String, Object> response = new HashMap<>();
+      response.put("id", fuenteCreada.getId());
+      response.put("tipo_fuente", fuenteCreada.getTipoFuente().name());
+      response.put("url", fuenteCreada.getUrl());
+
+      ctx.json(response);
+      ctx.status(200);
+    }catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al crear la fuente");
+    }
+  }
+
 
 }

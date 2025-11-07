@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.estadisticas;
 
-import ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia.CalculadorProvincia;
-import ar.edu.utn.frba.dds.dominio.estadisticas.serviciocalculadorprovincia.Provincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class EstadisticaProvincia extends Estadistica {
 
-  private CalculadorProvincia calculadorProvincia;
+  private final CalculadorProvincia calculadorProvincia;
 
   public EstadisticaProvincia(CalculadorProvincia calculadorProvincia,  boolean publica) {
     super(publica);

@@ -153,6 +153,57 @@
             background-color: #005fcc;
             transform: translateY(-1px);
         }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.8rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #0077ff;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
 
         .btn-secondary {
             background-color: #e0e0e0;
@@ -207,34 +258,42 @@
 <div class="filtros-container">
     <h2>Filtrar Hechos</h2>
 
-    <form method="get" action="/colecciones/{{coleccion.id}}" class="filtros-form">
-        <div class="form-group">
-            <label for="campoTexto">Buscar por:</label>
-            <select name="campoTexto" id="campoTexto">
-                <option value="titulo">Título</option>
-                <option value="descripcion">Descripción</option>
-            </select>
-        </div>
+<form method="get" action="/colecciones/{{coleccion.id}}" class="filtros-form">
+    <div class="form-group">
+        <label for="campoTexto">Buscar por:</label>
+        <select name="campoTexto" id="campoTexto">
+            <option value="titulo">Título</option>
+            <option value="descripcion">Descripción</option>
+        </select>
+    </div>
 
-        <div class="form-group">
-            <label for="textoFiltro">Texto contiene:</label>
-            <input type="text" id="textoFiltro" name="textoFiltro" placeholder="Palabra clave...">
-        </div>
+    <div class="form-group">
+        <label for="textoFiltro">Texto contiene:</label>
+        <input type="text" id="textoFiltro" name="textoFiltro" placeholder="Palabra clave...">
+    </div>
 
-        <div class="form-group">
-            <label for="fechaDesde">Fecha desde:</label>
-            <input type="datetime-local" id="fechaDesde" name="fechaDesde">
-        </div>
+    <div class="form-group">
+        <label for="fechaDesde">Fecha desde:</label>
+        <input type="datetime-local" id="fechaDesde" name="fechaDesde">
+    </div>
 
-        <div class="form-group">
-            <label for="fechaHasta">Fecha hasta:</label>
-            <input type="datetime-local" id="fechaHasta" name="fechaHasta">
-        </div>
+    <div class="form-group">
+        <label for="fechaHasta">Fecha hasta:</label>
+        <input type="datetime-local" id="fechaHasta" name="fechaHasta">
+    </div>
 
-        <div class="form-actions">
-            <button type="submit">Aplicar filtros</button>
-        </div>
-    </form>
+    <div class="form-group toggle-container">
+        <label for="navegacionCurada">Modo de navegación curada:</label>
+        <label class="switch">
+            <input type="checkbox" id="navegacionCurada" name="navegacionCurada" value="true">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit">Aplicar filtros</button>
+    </div>
+</form>
 </div>
 
 <section>
