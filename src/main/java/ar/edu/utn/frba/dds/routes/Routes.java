@@ -8,6 +8,8 @@ import ar.edu.utn.frba.dds.controladores.SolicitudesController;
 import ar.edu.utn.frba.dds.controladores.UserController;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import io.javalin.config.JavalinConfig;
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
@@ -40,6 +42,16 @@ public class Routes {
         }
       });
 
+      get("/", ctx -> ctx.redirect("/home"));
+      get("/home", ctx -> {
+        Map<String, Object> model = new HashMap<>();
+        model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+        model.put("rol", ctx.sessionAttribute("rol"));
+        model.put("user_name", ctx.sessionAttribute("user_name"));
+        model.put("user_id", ctx.sessionAttribute("user_id"));
+        ctx.render("home.hbs", model);
+      });
+      
       path("/", () -> {
         get("/login",login::mostrarLogin);
       });
@@ -69,6 +81,9 @@ public class Routes {
         get(login::mostrarLogin);
         post(login::login);
       });
+      
+      get("/registro", login::mostrarRegistro);
+      post("/registro", login::registrar);
 
       path("/colecciones", () -> {
         get(coleccionController::mostrarColecciones);

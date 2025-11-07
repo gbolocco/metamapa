@@ -71,12 +71,67 @@ public class LoginController {
       model.put("error", errorMsg);
     }
     
+    String successMsg = ctx.queryParam("success");
+    if (successMsg != null && !successMsg.isEmpty()) {
+      model.put("success", successMsg);
+    }
+    
     String redirectUrl = ctx.queryParam("redirect");
     if (redirectUrl != null && !redirectUrl.isEmpty()) {
       model.put("redirect", redirectUrl);
     }
 
     ctx.render("login.hbs", model);
+  }
+  
+  public void mostrarRegistro(Context ctx) {
+    if (ctx.sessionAttribute("user_id") != null) {
+      ctx.redirect("/");
+      return;
+    }
+
+    Map<String, Object> model = new HashMap<>();
+    String errorMsg = ctx.queryParam("error");
+    if (errorMsg != null && !errorMsg.isEmpty()) {
+      model.put("error", errorMsg);
+    }
+
+    ctx.render("registro.hbs", model);
+  }
+  
+  public void registrar(Context ctx) {
+    try {
+      String nombre = ctx.formParam("nombre");
+      String password = ctx.formParam("password");
+      String confirmPassword = ctx.formParam("confirmPassword");
+
+      if (nombre == null || password == null || confirmPassword == null) {
+        ctx.redirect("/registro?error=" + URLEncoder.encode("Todos los campos son obligatorios", StandardCharsets.UTF_8));
+        return;
+      }
+
+      if (!password.equals(confirmPassword)) {
+        ctx.redirect("/registro?error=" + URLEncoder.encode("Las contraseñas no coinciden", StandardCharsets.UTF_8));
+        return;
+      }
+
+      if (servicio.existeUsuario(nombre)) {
+        ctx.redirect("/registro?error=" + URLEncoder.encode("El nombre de usuario ya existe", StandardCharsets.UTF_8));
+        return;
+      }
+
+      Usuario nuevoUsuario = new Usuario();
+      nuevoUsuario.setNombre(nombre);
+      nuevoUsuario.setPassword(password);
+      nuevoUsuario.setRol(Rol.USER);
+
+      servicio.crearUsuario(nuevoUsuario);
+
+      ctx.redirect("/login?success=" + URLEncoder.encode("Usuario creado exitosamente. Inicia sesión", StandardCharsets.UTF_8));
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.redirect("/registro?error=" + URLEncoder.encode("Error al crear el usuario", StandardCharsets.UTF_8));
+    }
   }
 
 }
