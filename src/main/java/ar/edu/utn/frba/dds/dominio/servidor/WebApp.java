@@ -72,19 +72,15 @@ public class WebApp {
 
     HechosController hechos = new HechosController(servicioHechos, servicioSolicitudes, servicioUsuarios);
 
-
-    HechosController hechos = new HechosController(servicioHechos);
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
     AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
     UserController user = new UserController(servicioUsuarios, servicioSolicitudes);
     SolicitudesController solicitudesController = new SolicitudesController(servicioSolicitudes);
     HomeController home = new HomeController();
-
-    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, home);
     EstadisticaController estadisticaController = new EstadisticaController();
 
-    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, estadisticaController);
+    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController,home,estadisticaController);
   }
 
   private void configureTemplating(JavalinConfig config) {

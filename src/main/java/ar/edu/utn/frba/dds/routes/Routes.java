@@ -17,7 +17,7 @@ public class Routes {
     UserController userController,
     AdminController admin,
     SolicitudesController solicitudesController,
-    HomeController homeController) {
+    HomeController homeController,
     EstadisticaController estadisticController
     ) {
 
