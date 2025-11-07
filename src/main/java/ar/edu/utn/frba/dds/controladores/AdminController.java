@@ -417,12 +417,16 @@ public class AdminController {
 
     List<Fuente> fuentes = servicioFuentes.getFuentes();
 
+    for (Fuente fuente : fuentes) {
+      System.out.println(fuente.getId());
+    }
+
     // Convertimos las fuentes a mapas con todas las propiedades necesarias
     List<Map<String, Object>> fuentesDTO = fuentes.stream()
         .map(f -> {
           Map<String, Object> map = new HashMap<>();
           map.put("id", f.getId());
-          map.put("tipo_fuente", f.getTipoFuente());  // Se ejecuta el método acá
+          map.put("tipo_fuente", f.getTipoFuente());
           map.put("url",f.getUrl());
           return map;
         })
@@ -456,17 +460,21 @@ public class AdminController {
 
   public void crearFuente(Context ctx) {
     try{
-        Map<String, Object> body = ctx.bodyAsClass(Map.class);
+      Map<String, Object> body = ctx.bodyAsClass(Map.class);
 
-        String url = body.get("url") != null ? String.valueOf(body.get("url")) : null;
-        String tipo = String.valueOf(body.get("tipo_fuente"));
-        String componentes = body.get("componentes") != null ? String.valueOf(body.get("componentes")) : null;
+      String url = body.get("url") != null ? String.valueOf(body.get("url")) : null;
+      String tipo = String.valueOf(body.get("tipo_fuente"));
+      String componentes = body.get("componentes") != null ? String.valueOf(body.get("componentes")) : null;
 
-        Fuente fuenteCreada = servicioFuentes.crearFuente(url,tipo,componentes);
+      Fuente fuenteCreada = servicioFuentes.crearFuente(url,tipo,componentes);
 
-        System.out.println(fuenteCreada.getId());
+      Map<String, Object> response = new HashMap<>();
+      response.put("id", fuenteCreada.getId());
+      response.put("tipo_fuente", fuenteCreada.getTipoFuente().name());
+      response.put("url", fuenteCreada.getUrl());
 
-        ctx.status(200);
+      ctx.json(response);
+      ctx.status(200);
     }catch (Exception e) {
       e.printStackTrace();
       ctx.status(500).result("Error al crear la fuente");

@@ -305,8 +305,9 @@
 
             if (resp.ok) {
                 const creada = await resp.json().catch(() => null);
+
                 const nueva = {
-                    id: creada?.id ?? Date.now(),
+                    id: creada?.id,
                     tipoFuente: creada?.tipo_fuente ?? tipo_fuente,
                     url: creada?.url ?? payload.url
                 };

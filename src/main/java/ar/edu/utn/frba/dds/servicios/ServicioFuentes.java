@@ -43,34 +43,78 @@ public class ServicioFuentes {
   }
 
   public Fuente crearFuente(String url, String tipoFuente, String componentes) {
-    Fuente fuente = null;
-    List<Long> idsFuentes = new ArrayList<>();
-    if (componentes != null && !componentes.isEmpty()) {
-      idsFuentes = Arrays.stream(componentes.split(","))
-          .map(String::trim)
-          .filter(s -> !s.isEmpty())
-          .map(Long::parseLong)
-          .toList();
+    if (tipoFuente == null || tipoFuente.isBlank()) {
+      throw new IllegalArgumentException("tipoFuente es obligatorio");
     }
 
+    final String tipo = tipoFuente.trim().toLowerCase(); // normalizamos
+
+    // 1) Parsear componentes a List<Long>
+    List<Long> idsFuentes = parsearComponentes(componentes);
+
+    // 2) Resolver entidades componentes
     List<Fuente> fuentes = new ArrayList<>();
     for (Long id : idsFuentes) {
-      fuentes.add( fuentesRepository.buscar(id));
+      Fuente comp = fuentesRepository.buscar(id);
+      if (comp == null) {
+        throw new IllegalArgumentException("Componente con id=" + id + " no existe");
+      }
+      fuentes.add(comp);
     }
 
-    if (tipoFuente.equals("estatica")) {
-          fuente = new FuenteEstatica(url,new LectorCsv());
-    }else if (tipoFuente.equals("metamapa")) {
-          fuente = new FuenteMetaMapa(new FuenteMetaMapaAdapter(url));
-    }else if (tipoFuente.equals("fuenteDemo")) {
-          fuente = new FuenteDemo();
-    }else if (tipoFuente.equals("fuenteDinamica")) {
-          fuente = new FuenteDinamica();
-    }else if (tipoFuente.equals("fuenteAgregadora") && !fuentes.isEmpty()) {
-          fuente = new FuenteAgregadora(fuentes);
+    // 3) Construir la fuente según el tipo
+    Fuente fuente;
+    switch (tipo) {
+      case "estatica" -> {
+        if (url == null || url.isBlank()) {
+          throw new IllegalArgumentException("URL es obligatoria para fuente estática");
+        }
+        fuente = new FuenteEstatica(url, new LectorCsv());
+      }
+      case "metamapa" -> {
+        if (url == null || url.isBlank()) {
+          throw new IllegalArgumentException("URL es obligatoria para fuente metamapa");
+        }
+        fuente = new FuenteMetaMapa(new FuenteMetaMapaAdapter(url));
+      }
+      case "fuentedemo", "demo" -> {
+        fuente = new FuenteDemo();
+      }
+      case "fuentedinamica", "dinamica", "fuente_dinamica" -> {
+        // sin URL
+        fuente = new FuenteDinamica();
+      }
+      case "fuenteagregadora", "agregadora", "fuente_agregadora" -> {
+        if (fuentes.isEmpty()) {
+          throw new IllegalArgumentException("La fuente agregadora requiere al menos un componente");
+        }
+        fuente = new FuenteAgregadora(fuentes);
+      }
+      default -> throw new IllegalArgumentException("tipoFuente inválido: " + tipoFuente);
     }
 
+    // 4) Persistir (solo si NO es null)
     fuentesRepository.agregarFuente(fuente);
     return fuente;
   }
+
+  private static List<Long> parsearComponentes(String componentes) {
+    if (componentes == null || componentes.isBlank()) return List.of();
+    // elimina corchetes y espacios: "[1, 2]" -> "1,2"
+    String limpio = componentes.replaceAll("[\\[\\]\\s]", "");
+    if (limpio.isEmpty()) return List.of();
+
+    String[] tokens = limpio.split(",");
+    List<Long> ids = new ArrayList<>(tokens.length);
+    for (String t : tokens) {
+      if (t.isEmpty()) continue;
+      try { ids.add(Long.parseLong(t)); }
+      catch (NumberFormatException e) {
+        throw new IllegalArgumentException("ID de componente inválido: " + t);
+      }
+    }
+    return ids;
+  }
+
+
 }
