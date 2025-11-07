@@ -10,7 +10,9 @@ import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaProvinciaPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.GestorDeEstadisticas;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.Provincia;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvincia;
+import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.ServicioCalculadorProvinciaNominatim;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
@@ -109,5 +111,15 @@ public class EstadisticaTest {
         new EstadisticaProvinciaPorCategoria(calculador, "fraude", true);
     String resultado = estadistica.calcular(hechos);
     assertEquals("Sin hechos para la categoría: fraude", resultado);
+  }
+
+  @Test
+    public void testApi(){
+      Ubicacion ubicacion = new Ubicacion(-34.6037, -58.3816); // Buenos Aires
+      ServicioCalculadorProvincia servicio = new ServicioCalculadorProvinciaNominatim();
+      CalculadorProvincia calculador = new CalculadorProvincia(servicio);
+
+      Provincia provincia = calculador.calcularProvincia(ubicacion);
+      System.out.println("Provincia: " + provincia.getNombre());
   }
 }
