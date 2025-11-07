@@ -33,7 +33,6 @@ public class UsuariosRepository implements SimplePersistenceTest {
     }
   }
 
-
   public List<Usuario> getUsuarios() {
     return entityManager().createQuery("from Usuario").getResultList();
   }
