@@ -53,4 +53,5 @@ public class UsuariosTableRepositoryDB implements SimplePersistenceTest {
     entityManager().persist(usuario);
     entityManager().getTransaction().commit();
   }
+
 }
