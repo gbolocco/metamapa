@@ -117,7 +117,7 @@ public class EstadisticaController {
 
         ctx.header("Content-Disposition", "attachment; filename=estadisticas.csv");
         ctx.header("Content-Type", "text/csv; charset=UTF-8");
-        ctx.result("\uFEFF" + csv); // BOM para UTF-8
+        ctx.result("\uFEFF" + csv);
     }
 
 }
