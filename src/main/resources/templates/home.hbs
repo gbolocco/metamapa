@@ -25,27 +25,13 @@
                 <a href="/colecciones" class="btn btn-secondary">Ver Colecciones</a>
             </div>
             
-            {{#if loggedIn}}
-                <div class="action-card">
-                    <h3>Mis Solicitudes</h3>
-                    <p>Gestiona tus solicitudes de cambios</p>
-                    <a href="/mis-solicitudes" class="btn btn-info">Ver Solicitudes</a>
-                </div>
-                
-                {{#if (eq rol "ADMIN")}}
-                <div class="action-card">
-                    <h3>Panel Admin</h3>
-                    <p>Administra el sistema y usuarios</p>
-                    <a href="/admin/dashboard" class="btn btn-admin">Panel Admin</a>
-                </div>
-                {{/if}}
-            {{else}}
+            {{#unless loggedIn}}
                 <div class="action-card">
                     <h3>Iniciar Sesión</h3>
                     <p>Accede a funciones adicionales</p>
                     <a href="/login" class="btn btn-login">Iniciar Sesión</a>
                 </div>
-            {{/if}}
+            {{/unless}}
         </div>
     </div>
 </div>
@@ -166,6 +152,15 @@
 }
 
 .btn-login:hover {
+    background-color: #1e7e34;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
     background-color: #1e7e34;
 }
 </style>
