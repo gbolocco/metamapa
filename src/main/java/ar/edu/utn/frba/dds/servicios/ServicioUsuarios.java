@@ -59,6 +59,6 @@ public class ServicioUsuarios {
   }
   
   public void crearUsuario(Usuario usuario) {
-    usuariosTableRepositoryDB.agregarUsuario(usuario);
+    usuariosRepository.agregarUsuario(usuario);
   }
 }
