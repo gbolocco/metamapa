@@ -1,0 +1,50 @@
+services:
+  app:
+    build: .
+    container_name: tp-dds   # 👈 esto es string plano
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./tpa-2025-02:/workspace
+      - ~/.m2:/root/.m2
+    working_dir: /workspace
+    depends_on:
+      - mysql_db
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    command: bash
+    ports:
+      - "8080:8080"
+    networks:
+      - appnet
+
+  mysql_db:   # 👈 este tiene que estar dentro de services:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: metamapa
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: 1234
+      TZ: UTC
+    command: [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_general_ci",
+      "--lower_case_table_names=1"
+    ]
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - appnet
+
+volumes:
+  db_data:
+
+networks:
+  appnet:
+    driver: bridge

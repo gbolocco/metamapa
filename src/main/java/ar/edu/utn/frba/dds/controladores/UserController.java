@@ -62,7 +62,7 @@ public class UserController {
         .map(s -> {
           java.util.Map<String, Object> solicitudMap = new java.util.HashMap<>();
           solicitudMap.put("id", s.getId());
-          solicitudMap.put("tipo", s.getTipoSolicitud().toString().replace("_HECHO", ""));
+          solicitudMap.put("tipo", s.getTipoSolicitud() != null ? s.getTipoSolicitud().toString().replace("_HECHO", "") : "N/A");
           solicitudMap.put("fecha", s.getFechaSolicitud().toString());
           solicitudMap.put("estado", s.getEstadoSolicitud().toString());
           solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
