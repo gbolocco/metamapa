@@ -1,180 +1,162 @@
-/* ========================================================================= */
-/* CONTENEDOR CENTRAL DEL HECHO */
-/* (Sección principal que apila la fila superior y las flechas) */
-/* ========================================================================= */
+/* --- A. Estilos Generales y Estructura (Corrección Radical) --- */
+
 .hecho-main {
     padding: 20px;
-    width: 100%;
-    /* Asegura que no exceda un ancho razonable, por ejemplo, el 90% */
-    max-width: 1500px; /* Usa el valor que definiste para el tamaño grande */
-    box-sizing: border-box;
-
-    /* CAMBIOS CLAVE: */
-    /* 1. Fondo: Debe ser transparente. */
-    background-color: transparent !important; /* O asegúrate de que no tenga ninguna regla de color. */
-    background: none !important;
-
-    /* 2. Centrado: Si no está en el body, lo centramos aquí. */
-    margin-left: auto;
-    margin-right: auto;
-    /* Mantenemos tus márgenes verticales si los tenías: */
-    margin-top: 50px;
-    margin-bottom: 50px;
-    background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
+    background-color: #fcf7e3; /* Fondo de la página en crema */
 }
+
 .hecho-contenedor {
-    /* Mantenemos tus estilos existentes */
-    /* ... */
-    min-width: 1000px;
-    position: relative; /* Lo mantenemos si lo necesitas, pero no es crítico para este layout */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
-
-    /* CAMBIOS CLAVE: Cambiar a columna y eliminar bordes/overflow aquí */
-    display: flex;
-    flex-direction: column; /* <--- 1. CLAVE: Apila los contenidos verticalmente */
-    overflow: visible; /* Aseguramos que nada se corte */
-
-    /* Quitamos el fondo y el border-radius de aquí para moverlo a la fila superior */
-    background: none;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden; /* ← CLAVE: evita que nada sobresalga */
+    padding: 0;
 }
-
-
-/* ************************************************************************* */
-/* NUEVA SECCIÓN: Contenedor para Imagen y Datos (Fila Superior) */
-/* ************************************************************************* */
-
-.hecho-contenido-superior {
-    display: flex; /* <-- 2. CLAVE: Mantiene Imagen y Datos en fila */
-    width: 100%;
-    /* Recuperamos los estilos visuales del marco aquí */
-    background: linear-gradient(to bottom, #b48853, #e2c58a);
-    border-radius: 5px 5px 0 0; /* Bordes redondeados solo arriba */
-    overflow: hidden; /* Aseguramos que la imagen se mantenga dentro del borde */
-    /* El box-shadow se mantiene en .hecho-contenedor */
-}
-
-
-/* ========================================================================= */
-/* SECCIÓN IMAGEN (IZQUIERDA) */
-/* ========================================================================= */
-
-/* ========================================================================= */
-/* SECCIÓN IMAGEN (IZQUIERDA) */
-/* (Asegura que el contenedor tenga una altura definida por su hermano o por un mínimo) */
-/* ========================================================================= */
 
 .hecho-imagen {
-    flex: 1; /* Esto le da flexibilidad para crecer */
-    width: 55%; /* Mantiene tu ancho preferido */
-    background-color: #d4b27f;
+    width: 100%;
+    min-height: 250px;
+    max-height: 400px;
     display: flex;
     justify-content: center;
-    align-items: center; /* Centra la imagen/video dentro de su caja */
-    border: 3px solid black;
-    box-sizing: border-box;
-    padding: 20px;
-    min-height: 450px; /* <--- AUMENTAR: De 300px (sugerido antes) a 450px (o el valor deseado) */
-
-    /* Asegúrate de que las reglas de ajuste sigan siendo las mismas */
+    align-items: center;
+    background-color: #000;
     overflow: hidden;
     position: relative;
 }
 
-/* ========================================================================= */
-/* ESTILO DE IMAGENES Y VIDEOS DENTRO DE hecho-imagen */
-/* (Aseguramos que la multimedia use todo el espacio sin desbordar y mantenga aspecto) */
-/* ========================================================================= */
-
-.imagen-principal { /* Aplica tanto a <img> como a <video> con este ID/clase */
-    max-width: 100%; /* CLAVE: Nunca exceder el ancho del contenedor */
-    max-height: 100%; /* CLAVE: Nunca exceder el alto del contenedor */
-    width: auto; /* Permite que el ancho se ajuste manteniendo la relación de aspecto */
-    height: auto; /* Permite que el alto se ajuste manteniendo la relación de aspecto */
-    object-fit: contain; /* CLAVE: La imagen/video se escala para que quepa completamente
-                             dentro del contenedor, manteniendo su relación de aspecto.
-                             Puede haber espacio vacío (letterboxing/pillarboxing). */
-    display: block; /* Elimina espacio extra debajo de las imágenes */
-}
-
-/* Puedes añadir un estilo específico para video si lo necesitas,
-   pero `.imagen-principal` ya debería cubrirlo bien. */
-.hecho-imagen video.imagen-principal {
+.imagen-principal {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Asegura que el video también se ajuste */
-}
-
-/* Opcional: Si quieres que la imagen LLENE por completo la caja,
-   recortando partes si es necesario, usa `object-fit: cover;` */
-/*
-.imagen-principal {
-    max-width: 100%;
-    max-height: 100%;
-    width: 100%; // Esto forzaría el ancho a 100%
-    height: 100%; // Esto forzaría el alto a 100%
-    object-fit: cover; // Llenará la caja, recortando si la relación de aspecto no coincide
+    object-fit: contain; /* Ajusta el video o imagen sin cortarlo */
     display: block;
 }
-*/
+
+.hecho-descripcion {
+    max-width: 95%;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
 .hecho-datos {
-    /* Fondo marrón claro uniforme */
-    background-color: rgba(108, 71, 27, 0.85);
-    /* --- CAMBIO: Reducción del ancho de los datos a 45% --- */
-    width: 45%;
-    padding: 40px 60px;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    /* Para que el texto interno empuje el alto */
-    flex-grow: 1;
+    width: 100%;
+    padding: 1.8rem 2rem;
+    color: #333;
+    background-color: #fff;
 }
 
-/* Línea divisoria en la parte inferior de los datos (PELIGROSA) */
-.hecho-datos::after {
-    /* Este pseudo-elemento con position: absolute era la causa de que se solapara. Lo anulamos. */
-    content: none;
+/* Título */
+.hecho-datos h1 {
+    font-size: clamp(1.8rem, 3vw + 1rem, 2.5rem); /* Título grande */
+    color: #75501d; /* Color base de la marca */
+    text-align: left; /* Alineado a la izquierda */
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eeeeee; /* Separador sutil */
+    word-wrap: normal;
+    overflow-wrap: normal;
+    line-height: 1.2;
+    max-width: 95%;
 }
 
+/* Párrafos de datos */
+.hecho-datos p {
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    font-size: 1rem;
+}
 
-/* ========================================================================= */
-/* FLECHAS DE NAVEGACIÓN (DEBAJO DEL CONTENEDOR SUPERIOR) */
-/* ========================================================================= */
+/* Etiquetas (Categoría, Descripción, etc.) */
+.hecho-datos strong {
+    color: #555555; /* Tono de gris para las etiquetas */
+    font-weight: 600;
+}
+
+/* --- D. Acciones y Botones --- */
+.hecho-acciones {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0f0f0;
+    justify-content: flex-start; /* Botones alineados a la izquierda */
+    gap: 15px; /* Más espacio entre botones */
+}
+
+.boton-solicitar {
+    color: white;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.boton-solicitar.boton-modificacion {
+    background-color: #a37d45; /* Color de acento cálido */
+    color: white;
+}
+
+.boton-solicitar.boton-modificacion:hover {
+    background-color: #8f6c3c;
+}
+
+.boton-solicitar:not(.boton-modificacion) { /* Aplica a "Solicitar Eliminación" */
+    background-color: #b53d3d; /* Rojo serio */
+}
+
+.boton-solicitar:not(.boton-modificacion):hover {
+    background-color: #993333;
+}
 
 .hecho-flechas {
-    /* Quitamos todo el posicionamiento absoluto */
-    position: static;
-    top: auto;
-    transform: none;
-
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 10px 0;
-    display: flex;
-    justify-content: center; /* <-- 3. CLAVE: Centrar horizontalmente */
-    gap: 20px;
-
-    /* Estilo del fondo para que parezca el marco inferior */
-    background-color: #a0805c; /* Usamos el color de la caja de datos */
-    border-radius: 0 0 5px 5px; /* Bordes redondeados solo abajo */
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1) inset; /* Sombra sutil en el interior */
+    height: 100%;
+    /*transform: translateY(-50%);*/
+    pointer-events: none;
 }
 
 .hecho-flechas .flecha {
-    text-decoration: none;
-    font-size: 1.5rem;
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
+    position: absolute;
+    pointer-events: auto;
+    font-size: 2rem;
+    color: #a37d45;
+    background: #ffffff;
+    border: 1px solid #d4d4d4;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: opacity 0.3s, background-color 0.3s;
-    /* Aseguramos que los estilos anteriores de margen negativo NO se apliquen */
-    margin: 0;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    text-decoration: none;
+
+    /* ESTA ES LA ALINEACIÓN HORIZONTAL CORRECTA */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Flecha izquierda */
+.hecho-flechas .flecha-izq {
+    left: 150px;   /* ajustás esta distancia */
+    right: auto;
+}
+
+/* Flecha derecha */
+.hecho-flechas .flecha-der {
+    left: auto;
+    right: 150px;  /* y esta también */
 }
 
 .hecho-flechas .flecha:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #f0f0f0;
+    color: #8f6c3c;
 }
