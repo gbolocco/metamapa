@@ -1,9 +1,6 @@
 package ar.edu.utn.frba.dds.controladores;
 
-import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
-import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+import ar.edu.utn.frba.dds.dominio.hechos.*;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.servicios.ServicioHechos;
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
@@ -11,6 +8,8 @@ import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
+
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -127,6 +126,45 @@ public class HechosController implements WithSimplePersistenceUnit {
     }
   }
 
+  private String formatearFecha(LocalDateTime fecha) {
+    if (fecha == null) {
+      return "Fecha Desconocida";
+    }
+    // Definimos el patrón: día-mes-año
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    return fecha.format(formatter);
+  }
+
+    private String formatearOrigen(OrigenHecho origen) {
+    if (origen == null) {
+      return "Desconocido";
+    }
+    switch (origen) {
+      case PROVISTO_POR_CONTRIBUYENTE:
+        return "Provisto por Contribuyente";
+      // Añade otros casos si hay más constantes
+      default:
+        return origen.name();
+    }
+  }
+
+  private String formatearEstado(EstadoHecho estado) {
+    if (estado == null) {
+      return "Desconocido";
+    }
+    switch (estado) {
+
+      case VISUALIZABLE:
+        return "Visualizable";
+      case PENDIENTE_DE_APROBACION:
+        return "Pendiente de aprobacion";
+      case ELIMINADO:
+        return "Eliminado";
+      default:
+        return estado.name();
+    }
+  }
+
   public void mostrar(Context ctx) {
     try {
       String idParam = ctx.queryParam("id");
@@ -141,6 +179,19 @@ public class HechosController implements WithSimplePersistenceUnit {
             if (hechoFromDB != null) {
               Map<String, Object> model = new HashMap<>();
               model.put("hecho", hechoFromDB);
+
+              if (hechoFromDB.getOrigenHecho() != null) {
+                model.put("origenFormateado", formatearOrigen(hechoFromDB.getOrigenHecho()));
+              }
+
+              if (hechoFromDB.getEstadoHecho() != null) {
+                model.put("estadoFormateado", formatearEstado(hechoFromDB.getEstadoHecho()));
+              }
+
+              if (hechoFromDB.getFechaAcontecimiento() != null) {
+                model.put("fechaFormateada", formatearFecha(hechoFromDB.getFechaAcontecimiento()));
+              }
+
               model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
               model.put("rol", ctx.sessionAttribute("rol"));
               model.put("user_name", ctx.sessionAttribute("user_name"));
@@ -196,6 +247,19 @@ public class HechosController implements WithSimplePersistenceUnit {
 
       Map<String, Object> model = new HashMap<>();
       model.put("hecho", hecho);
+
+      if (hecho.getFechaAcontecimiento() != null) {
+        model.put("fechaFormateada", formatearFecha(hecho.getFechaAcontecimiento()));
+      }
+
+      if (hecho.getOrigenHecho() != null) {
+        model.put("origenFormateado", formatearOrigen(hecho.getOrigenHecho()));
+      }
+
+      if (hecho.getEstadoHecho() != null) {
+        model.put("estadoFormateado", formatearEstado(hecho.getEstadoHecho()));
+      }
+
       model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
       model.put("rol", ctx.sessionAttribute("rol"));
       model.put("user_name", ctx.sessionAttribute("user_name"));
