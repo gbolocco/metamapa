@@ -9,7 +9,7 @@
 }
 
 .form-container h1 {
-    color: #007bff;
+    color: #5b3a0f;
     border-bottom: 2px solid #e9ecef;
     padding-bottom: 15px;
     margin-bottom: 25px;
@@ -96,13 +96,14 @@ button, .btn-secondary, a[type="submit"] {
 
 
 /* Principal */
-button[type="submit"] {
-    background-color: #007bff;
+.save-colection {
+    background-color: #5b3a0f;
     color: #0a0101;
 }
 
-button[type="submit"]:hover {
-    background-color: #0069d9;
+.save-colection:hover {
+    background-color: #4b2f0c;
+    transform: scale(1.03);
 }
 
 /* Secundario */
@@ -201,6 +202,32 @@ button[type="submit"]:hover {
     margin-left: 8px;
     cursor: pointer;
     font-weight: bold;
+}
+
+.login-dropdown .profile-btn {
+    display: inline-grid !important;  /* grid centrado pero manteniendo el flow inline */
+    place-items: center !important;    /* centra horizontal y vertical */
+    padding: 0 !important;
+    margin: 0;
+    box-sizing: border-box;
+    line-height: 0 !important;         /* evita offset vertical por baseline */
+    vertical-align: middle;            /* para que se alinee con texto/inline siblings */
+    width: 40px;                       /* asegurar tamaño esperado */
+    height: 40px;
+}
+
+/* Aseguramos que el SVG no genere espacio extra y tenga el tamaño correcto */
+.login-dropdown .profile-btn svg {
+    display: block;    /* quita el gap de línea base del inline-svg */
+    width: 20px;       /* tamaño visual deseado */
+    height: 20px;
+}
+
+/* Si algo sigue pisando reglas: versión con más especificidad */
+body .login-dropdown .profile-btn {
+    display: inline-grid;
+    place-items: center;
+    line-height: 0;
 }
 
 /* --- Acciones y Separador --- */
