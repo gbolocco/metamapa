@@ -1,5 +1,3 @@
-/* --- A. Estilos Generales y Estructura (Corrección Radical) --- */
-
 .hecho-main {
     padding: 20px;
     background-color: #fcf7e3; /* Fondo de la página en crema */
@@ -11,7 +9,7 @@
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    overflow: hidden; /* ← CLAVE: evita que nada sobresalga */
+    overflow: hidden;
     padding: 0;
 }
 
@@ -48,40 +46,36 @@
     background-color: #fff;
 }
 
-/* Título */
 .hecho-datos h1 {
-    font-size: clamp(1.8rem, 3vw + 1rem, 2.5rem); /* Título grande */
-    color: #75501d; /* Color base de la marca */
-    text-align: left; /* Alineado a la izquierda */
+    font-size: clamp(1.8rem, 3vw + 1rem, 2.5rem);
+    color: #75501d;
+    text-align: left;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eeeeee; /* Separador sutil */
+    border-bottom: 1px solid #eeeeee;
     word-wrap: normal;
     overflow-wrap: normal;
     line-height: 1.2;
     max-width: 95%;
 }
 
-/* Párrafos de datos */
 .hecho-datos p {
     margin-bottom: 0.8rem;
     line-height: 1.5;
     font-size: 1rem;
 }
 
-/* Etiquetas (Categoría, Descripción, etc.) */
 .hecho-datos strong {
-    color: #555555; /* Tono de gris para las etiquetas */
+    color: #555555;
     font-weight: 600;
 }
 
-/* --- D. Acciones y Botones --- */
 .hecho-acciones {
     margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid #f0f0f0;
-    justify-content: flex-start; /* Botones alineados a la izquierda */
-    gap: 15px; /* Más espacio entre botones */
+    justify-content: flex-start;
+    gap: 15px;
 }
 
 .boton-solicitar {
@@ -95,7 +89,7 @@
 }
 
 .boton-solicitar.boton-modificacion {
-    background-color: #a37d45; /* Color de acento cálido */
+    background-color: #a37d45;
     color: white;
 }
 
@@ -103,8 +97,8 @@
     background-color: #8f6c3c;
 }
 
-.boton-solicitar:not(.boton-modificacion) { /* Aplica a "Solicitar Eliminación" */
-    background-color: #b53d3d; /* Rojo serio */
+.boton-solicitar:not(.boton-modificacion) {
+    background-color: #b53d3d;
 }
 
 .boton-solicitar:not(.boton-modificacion):hover {
@@ -117,7 +111,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /*transform: translateY(-50%);*/
     pointer-events: none;
 }
 
@@ -138,22 +131,18 @@
     transition: background-color 0.2s ease, color 0.2s ease;
     box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     text-decoration: none;
-
-    /* ESTA ES LA ALINEACIÓN HORIZONTAL CORRECTA */
     top: 50%;
     transform: translateY(-50%);
 }
 
-/* Flecha izquierda */
 .hecho-flechas .flecha-izq {
-    left: 150px;   /* ajustás esta distancia */
+    left: 400px;
     right: auto;
 }
 
-/* Flecha derecha */
 .hecho-flechas .flecha-der {
     left: auto;
-    right: 150px;  /* y esta también */
+    right: 400px;
 }
 
 .hecho-flechas .flecha:hover {
