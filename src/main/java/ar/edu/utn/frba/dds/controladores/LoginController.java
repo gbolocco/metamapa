@@ -43,7 +43,7 @@ public class LoginController {
     } else if (usuario.getRol() == Rol.ADMIN) {
       ctx.redirect("/admin/dashboard");
     } else if (usuario.getRol() == Rol.USER) {
-      ctx.redirect("/colecciones");
+      ctx.redirect("/");
     }
   }
 
