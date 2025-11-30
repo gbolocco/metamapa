@@ -1,0 +1,41 @@
+body {
+    background: linear-gradient(to bottom, #fefce8, #fef9c3);
+    font-family: "Segoe UI", Roboto, sans-serif;
+}
+h1 {
+    color: #7b341e;
+    font-weight: 600;
+    text-align: center;
+}
+.card {
+    background-color: #fffdf5;
+    border: 1px solid #d6b68a;
+    border-radius: 0.5rem;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+thead {
+    background-color: #8b5e34;
+    color: #fff;
+}
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+tbody tr:nth-child(even) {
+    background-color: #fefce8;
+}
+tbody tr:hover {
+    background-color: #f5f5dc;
+    transition: background-color 0.2s ease;
+}
+small {
+    color: #6b7280;
+}
+.checkbox-cell {
+    width: 50px;
+    text-align: center;
+}

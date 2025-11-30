@@ -1,27 +1,24 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>{{title}}</title>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
     <link rel="icon" type="image/png" href="/static/images/metamapa-logo.png">
-  <link rel="stylesheet" href="/static/css/style.css" />
-
+    <link rel="stylesheet" href="/static/css/style.css" />
 </head>
-<body class="{{bodyClass}}" >
-
-  {{> header}}
-    <div class="principal-grid {{#if isAdmin}}with-sidebar{{/if}}">
+<body class="{{bodyClass}}">
+{{> header}}
+<div class="principal-grid {{#if isAdmin}}with-sidebar{{/if}}">
     {{#if isAdmin}}
-    <aside class="grid-sidebar">
-      {{> partials/sidebar}}
-    </aside>
-  {{/if}}
+        <aside class="grid-sidebar">
+            {{> partials/sidebar}}
+        </aside>
+    {{/if}}
 
-  <main class="grid-main">
-    {{{body}}}
-  </main>
+    <main class="grid-main">
+        {{{body}}}
+    </main>
 </div>
-  {{> footer}}
-
+{{> footer}}
 </body>
 </html>

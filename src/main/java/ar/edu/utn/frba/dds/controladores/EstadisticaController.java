@@ -80,6 +80,8 @@ public class EstadisticaController {
 
     public void mostrarEstadisticas(Context ctx) {
         Map<String, Object> model = new HashMap<>();
+        model.put("bodyClass", "");  // o el que quieras
+        model.put("isAdmin", "ADMIN".equals(ctx.sessionAttribute("rol")));
         model.put("title", "Panel Admin");
         model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
         model.put("rol", ctx.sessionAttribute("rol"));
