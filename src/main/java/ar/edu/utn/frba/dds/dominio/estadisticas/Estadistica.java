@@ -47,4 +47,7 @@ public abstract class Estadistica {
       return this.publica;
     }
 
+    public LocalDateTime getFechaDeCalculo() {
+        return fechaDeCalculo;
+    }
 }

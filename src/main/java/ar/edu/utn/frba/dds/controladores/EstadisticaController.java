@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controladores;
 
+import ar.edu.utn.frba.dds.compartido.DataFormatter;
 import ar.edu.utn.frba.dds.dominio.estadisticas.*;
 import ar.edu.utn.frba.dds.dominio.estadisticas.EstadisticaCantidadPorCategoria;
 import ar.edu.utn.frba.dds.dominio.estadisticas.servicioCalculadorProvincia.CalculadorProvincia;
@@ -14,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class EstadisticaController {
-
+    private DataFormatter formateador = new DataFormatter();
 
     public EstadisticaController() {}
 
@@ -91,6 +92,12 @@ public class EstadisticaController {
         List<Estadistica> estadisticas = EstadisticasRepository.getInstancia().getEstadisticas();
 
         model.put("estadisticas", estadisticas);
+
+        if (estadisticas.stream().map(Estadistica::getFechaDeCalculo) != null) {
+            estadisticas.stream()
+                .map(Estadistica::getFechaDeCalculo)
+                .forEach(fecha -> model.put("fechaFormateada", formateador.formatearFecha(fecha)));
+        }
 
         ctx.render("estadisticas.hbs", model);
     }
