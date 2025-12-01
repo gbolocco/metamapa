@@ -43,7 +43,22 @@ public class HechosController implements WithSimplePersistenceUnit {
     model.put("user_id", ctx.sessionAttribute("user_id"));
     model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("hechos", servicioHechos.mostrarHechos());
-    
+
+    servicioHechos.mostrarHechos().stream().forEach(hecho -> {
+          if(hecho.getOrigenHecho() != null) {
+            model.put("origenHechoFormateado", formateador.formatearOrigen(hecho.getOrigenHecho()));
+          }
+
+          if(hecho.getFechaAcontecimiento() != null) {
+            model.put("fechaAcontecimientoFormateada", formateador.formatearFecha(hecho.getFechaAcontecimiento()));
+          }
+
+          if(hecho.getFechaDeCarga() != null) {
+            model.put("fechaDeCargaFormateada", formateador.formatearFecha(hecho.getFechaDeCarga()));
+          }
+        }
+    );
+
     String success = ctx.queryParam("success");
     if ("solicitud_creada".equals(success)) {
       model.put("successMessage", "Solicitud generada exitosamente");

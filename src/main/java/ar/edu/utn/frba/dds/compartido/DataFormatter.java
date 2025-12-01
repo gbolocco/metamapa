@@ -24,7 +24,10 @@ public class DataFormatter {
     switch (origen) {
       case PROVISTO_POR_CONTRIBUYENTE:
         return "Provisto por Contribuyente";
-      // Añade otros casos si hay más constantes
+      case FUENTE_PROXY:
+        return "Fuente Proxy";
+      case FUENTE_ESTATICA:
+        return "Fuente Estática";
       default:
         return origen.name();
     }
