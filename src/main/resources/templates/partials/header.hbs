@@ -39,6 +39,7 @@
     const tipoUsuario = "{{rol}}";
     const nombreUsuario = "{{user_name}}";
     const estaLogueado = "{{loggedIn}}" === "true";
+    const loginDropdown = document.querySelector('.login-dropdown');
 
     const menu = document.getElementById("dropDown-options");
     const misSolicitudes = document.getElementById("misSolicitudes");
@@ -51,6 +52,10 @@
         if (misHechos) {
             misHechos.style.display = "inline";
         }
+    }
+
+    if (loginDropdown && (tipoUsuario !== "ADMIN")) {
+        loginDropdown.classList.add('user-spacing');
     }
 
     if (estaLogueado && menu) {

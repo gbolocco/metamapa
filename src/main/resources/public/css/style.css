@@ -392,6 +392,11 @@ main {
   background-color: #f8fafc;
 }
 
+
+.login-dropdown.user-spacing {
+  margin-left: 30px; /* Ajusta este valor al que desees para mayor separación */
+}
+
 /* GRID debajo del header */
 .principal-grid {
   display: grid;
