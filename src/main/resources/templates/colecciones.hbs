@@ -22,21 +22,54 @@
     </div>
 
     <div class="paginacion">
-        <button class="flecha" id="prev"> &#9664; </button> <div class="paginas">
-
+        <button class="flecha" id="prev" data-page="{{resta paginaActual 1}}"> &#9664; </button>
+        <div class="paginas" id="pagina-numeros-container">
+        </div>
+        <button class="flecha" id="next" data-page="{{suma paginaActual 1}}"> &#9654; </button>
     </div>
-
-        <button class="flecha" id="next" > &#9654; </button> </div>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const prevBtn = document.getElementById("prev");
         const nextBtn = document.getElementById("next");
+        const paginaNumerosContainer = document.getElementById("pagina-numeros-container");
 
         // Asume que tienes un helper de Handlebars para 'if_eq' o usas una lógica similar en tu backend
         const paginaActual = parseInt("{{paginaActual}}") || 1;
         const totalPaginas = parseInt("{{totalPaginas}}") || 1;
+
+        function renderizarNumerosPagina() {
+            paginaNumerosContainer.innerHTML = ''; // Limpiar números existentes
+
+            // Definir un rango (ej: mostrar la página actual, las 2 anteriores y las 2 siguientes)
+            const rango = 2; // Mostrar 5 páginas en total si es posible (actual + 2 prev + 2 next)
+
+            let startPage = Math.max(1, paginaActual - rango);
+            let endPage = Math.min(totalPaginas, paginaActual + rango);
+
+            // Ajustar los límites si estamos cerca de los extremos
+            if (paginaActual - rango < 1) {
+                endPage = Math.min(totalPaginas, endPage + (1 - (paginaActual - rango)));
+            }
+            if (paginaActual + rango > totalPaginas) {
+                startPage = Math.max(1, startPage - ((paginaActual + rango) - totalPaginas));
+            }
+
+            // Generar enlaces
+            for (let i = startPage; i <= endPage; i++) {
+                const link = document.createElement('a');
+                link.href = `/colecciones?page=${i}`;
+                link.textContent = i;
+                // Marcar la página actual con la clase 'activo'
+                if (i === paginaActual) {
+                    link.classList.add('activo');
+                }
+                paginaNumerosContainer.appendChild(link);
+            }
+        }
+
+        renderizarNumerosPagina();
 
         // Deshabilitar botones al cargar la página si corresponde
         if (paginaActual <= 1) {
@@ -59,6 +92,7 @@
         });
     });
 
+    /*
     document.addEventListener("DOMContentLoaded", () => {
         const coleccion = document.getElementById("coleccion-card");
 
@@ -66,7 +100,7 @@
                 window.location.href = `/colecciones/${{id}}`;
             }
         )
-    });
+    });*/
 </script>
 
 
