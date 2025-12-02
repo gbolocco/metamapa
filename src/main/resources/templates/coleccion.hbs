@@ -296,7 +296,7 @@
 <section>
     <p><strong>Titulo:</strong> {{coleccion.titulo}}</p>
     <p><strong>Descripción:</strong> {{coleccion.descripcion}}</p>
-    <p><strong>Fecha de creación:</strong> {{coleccion.fechaDeCreacion}}</p>
+    <p><strong>Fecha de creación:</strong> {{fechaDeCreacion}}</p>
     <div id="map"></div>
 </section>
 
@@ -326,7 +326,7 @@
           <b>${h.titulo}</b><br>
           ${h.descripcion}<br>
           (${h.ubicacion.latitud}, ${h.ubicacion.longitud})<br>
-          <a href="/colecciones/${coleccionId}/hechos?id=${h.id}&hecho=${hechoJson}">
+          <a href="/colecciones/${coleccionId}/hechos?id=${h.id}">
             Ver detalle
           </a>
         `;

@@ -135,6 +135,7 @@ public class ColeccionController {
     String hechosJson = mapper.writeValueAsString(hechos);
 
     Map<String, Object> model = new HashMap<>();
+    model.put("fechaDeCreacion", formateador.formatearFecha(coleccion.getFechaDeCreacion()));
     model.put("coleccion", coleccion);
     model.put("hechosJson", hechosJson);
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
