@@ -9,34 +9,42 @@
     <h1>Colecciones</h1>
     <div class="colecciones-grid">
         {{#each colecciones}}
-            <div class="coleccion-card">
-                <a href="colecciones/{{id}}" id="coleccion-card">
-                    <h2>{{titulo}}</h2>
-                    <p>{{descripcion}}</p>
-                </a>
-            </div>
+            <a href="/colecciones/{{id}}" class="coleccion-card">
+                <h2>{{titulo}}</h2>
 
+                <div class="coleccion-card-details">
+                    <p><strong>Fuente:</strong> {{fuente}}</p>
+                    <p><strong>Fecha de creación:</strong> {{fechaDeCreacion}}</p>
+                </div>
+                <p class="descripcion">{{descripcion}}</p>
+            </a>
         {{/each}}
     </div>
 
     <div class="paginacion">
-        <button class="flecha" id="prev">⬅</button>
-        <div class="paginas">
-            {{#each paginas}}
-                <a href="/colecciones?page={{this}}">{{this}}</a>
-            {{/each}}
-        </div>
-        <button class="flecha" id="next" >➡</button>
+        <button class="flecha" id="prev"> &#9664; </button> <div class="paginas">
+
     </div>
+
+        <button class="flecha" id="next" > &#9654; </button> </div>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const prevBtn = document.getElementById("prev");
         const nextBtn = document.getElementById("next");
 
-        // Convertimos a número los valores de Handlebars
-        const paginaActual = {{paginaActual}} || 1;
-        const totalPaginas = {{totalPaginas}} || 1;
+        // Asume que tienes un helper de Handlebars para 'if_eq' o usas una lógica similar en tu backend
+        const paginaActual = parseInt("{{paginaActual}}") || 1;
+        const totalPaginas = parseInt("{{totalPaginas}}") || 1;
+
+        // Deshabilitar botones al cargar la página si corresponde
+        if (paginaActual <= 1) {
+            prevBtn.disabled = true;
+        }
+        if (paginaActual >= totalPaginas) {
+            nextBtn.disabled = true;
+        }
 
         prevBtn.addEventListener("click", () => {
             if (paginaActual > 1) {
@@ -50,19 +58,15 @@
             }
         });
     });
-</script>
 
-
-<script>
     document.addEventListener("DOMContentLoaded", () => {
         const coleccion = document.getElementById("coleccion-card");
 
         coleccion.addEventListener("click", ()=> {
                 window.location.href = `/colecciones/${{id}}`;
             }
-
         )
-
     });
 </script>
+
 

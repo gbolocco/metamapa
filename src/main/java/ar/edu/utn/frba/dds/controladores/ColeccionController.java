@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.controladores;
 
 
+import ar.edu.utn.frba.dds.compartido.DataFormatter;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
@@ -28,6 +29,7 @@ import java.util.stream.IntStream;
 
 public class ColeccionController {
   private ServicioColecciones servicioColecciones;
+  private DataFormatter formateador = new DataFormatter();
 
   public ColeccionController(ServicioColecciones servicioColecciones) {
     this.servicioColecciones = servicioColecciones;
@@ -59,8 +61,20 @@ public class ColeccionController {
 
     // Preparar modelo para la vista
     Map<String, Object> model = new HashMap<>();
-    model.put("colecciones", coleccionesPagina);
-    model.put("paginas", paginas);
+    List<Map<String, Object>> coleccionesFormateadas = coleccionesPagina.stream()
+        .map(coleccion -> {
+          Map<String, Object> coleccionData = new HashMap<>();
+          coleccionData.put("id", coleccion.getId()); // ID necesario para el enlace
+          coleccionData.put("titulo", coleccion.getTitulo());
+          coleccionData.put("descripcion", coleccion.getDescripcion());
+          // Agregamos las propiedades formateadas para la vista
+          coleccionData.put("fuente", formateador.formatearFuente(coleccion.getFuente().getTipoFuente()));
+          coleccionData.put("fechaDeCreacion", formateador.formatearFecha(coleccion.getFechaDeCreacion()));
+          return coleccionData;
+        })
+        .collect(Collectors.toList());
+    model.put("colecciones", coleccionesFormateadas);
+     model.put("paginas", paginas);
     model.put("paginaActual", paginaActual);
     model.put("totalPaginas", totalPaginas);
 

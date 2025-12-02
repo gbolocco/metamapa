@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.compartido;
 
+import ar.edu.utn.frba.dds.dominio.fuentes.TipoFuente;
 import ar.edu.utn.frba.dds.dominio.hechos.EstadoHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 
@@ -48,5 +49,22 @@ public class DataFormatter {
       default:
         return estado.name();
     }
+  }
+    public String formatearFuente(TipoFuente fuente) {
+      if (fuente == null) {
+        return "Desconocido";
+      }
+      switch (fuente) {
+        case FUENTE_DINAMICA:
+          return "Fuente Dinámica";
+        case FUENTE_PROXY:
+          return "Fuente Proxy";
+        case FUENTE_ESTATICA:
+          return "Fuente Estática";
+        case FUENTE_AGREGADORA:
+          return "Fuente Agregadora";
+        default:
+          return fuente.name();
+      }
   }
 }

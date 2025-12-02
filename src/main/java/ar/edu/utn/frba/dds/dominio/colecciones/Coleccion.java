@@ -69,9 +69,8 @@ public class Coleccion  {
 
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "tipo_consenso", nullable = false)
+  @Column(name = "tipo_consenso", nullable = true)
   private TipoConsenso tipoConsenso;
-
 
   private String handle;
 
