@@ -1,10 +1,17 @@
 <style>
+        :root {
+            --color-texto-oscuro: #4b2e05;    /* Marrón oscuro principal */
+            --color-marron-medio: #7a4a00;    /* Marrón medio */
+            --color-fondo-tarjeta: #fcf8e3;   /* Fondo de tarjeta/claro */
+            --color-fondo-suave: #fdf7e1;     /* Amarillo pálido para fondo */
+        }
+
         .solicitudes-container {
             max-width: 800px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
-        
+
         .solicitud-card {
             background: white;
             border: 1px solid #ddd;
@@ -12,7 +19,7 @@
             margin-bottom: 1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .solicitud-header {
             display: flex;
             justify-content: space-between;
@@ -24,40 +31,69 @@
         .solicitud-info {
             flex: 1;
         }
-        
+
         .solicitud-titulo {
             font-weight: bold;
             margin-bottom: 0.5rem;
         }
-        
+
         .solicitud-fecha {
             color: #666;
             font-size: 0.9rem;
         }
-        
+
         .solicitud-actions {
             display: flex;
             gap: 0.5rem;
         }
-        
+
+        .btn-rechazar, .btn-aceptar, .btn-confirmar, .btn-cancelar {
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
         .btn-rechazar {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
+            background: var(--color-marron-medio);
         }
-        
+
+        .btn-rechazar:hover {
+            background: #6a3e00;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancelar {
+            background: var(--color-marron-medio);
+        }
+
+        .btn-cancelar:hover {
+            background: #6a3e00;
+            transform: translateY(-1px);
+        }
+
         .btn-aceptar {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
+            background: var(--color-texto-oscuro);
         }
-        
+
+        .btn-aceptar:hover {
+            background: #362204;
+            transform: translateY(-1px);
+        }
+
+        .btn-confirmar {
+            background: var(--color-texto-oscuro);
+        }
+
+        .btn-confirmar:hover {
+            background: #362204;
+            transform: translateY(-1px);
+        }
+
         .collapse-toggle {
             background: none;
             border: none;
@@ -112,16 +148,6 @@
             cursor: pointer;
         }
         
-        .btn-confirmar {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-cancelar {
-            background: #6c757d;
-            color: white;
-        }
-        
         .pagination {
             text-align: center;
             margin-top: 2rem;
@@ -152,49 +178,75 @@
             margin-bottom: 2rem;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
-        
+
         .btn-filtro {
             padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
+            border: 2px solid var(--color-marron-medio); /* Añadimos un borde consistente */
+            border-radius: 8px; /* Bordes un poco más definidos */
             text-decoration: none;
             font-weight: bold;
-            color: white;
+            color: var(--color-texto-oscuro); /* Texto Marrón Oscuro */
             transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
-        
+
         .btn-carga {
-            background: #28a745;
+            background: #e9f5e3; /* Verde muy pálido, casi crema */
+            border-color: #5d9d4d; /* Borde verde oscuro */
         }
-        
+
         .btn-carga:hover {
-            background: #218838;
+            background: #d4e7cb;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        
+
         .btn-eliminacion {
-            background: #dc3545;
+            background: #f8e1e1; /* Rojo muy pálido, casi beige */
+            border-color: #a34141; /* Borde rojizo oscuro */
         }
-        
+
         .btn-eliminacion:hover {
-            background: #c82333;
+            background: #ebc4c4;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        
-        .btn-modificacion {
-            background: #ffc107;
-            color: #212529;
-        }
-        
+
         .btn-modificacion:hover {
-            background: #e0a800;
+            background: #fcf3d1; /* Un poco más de amarillo al pasar el ratón */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        
+
         .btn-todas {
-            background: #6f42c1;
+            background: var(--color-marron-medio); /* Color de botón principal */
+            color: white; /* Texto blanco para resaltar */
+            border-color: var(--color-marron-medio);
         }
-        
+
         .btn-todas:hover {
-            background: #5a32a3;
+            background: var(--color-texto-oscuro); /* Marrón más oscuro al pasar el ratón */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-filtro.activo {
+            opacity: 1;
+            transform: none; /* Quitamos la escala para que el activo sea prominente */
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); /* Sombra interna para indicar presión */
+            /* Aseguramos que el botón activo se vea diferente */
+        }
+
+        /* Ajuste específico para el botón activo 'Todas' */
+        .btn-todas.activo {
+            background: var(--color-texto-oscuro);
+            color: white;
+        }
+
+        .btn-carga.activo,
+        .btn-eliminacion.activo,
+        .btn-modificacion.activo {
+            /* Hacemos el fondo un poco más oscuro o usamos el color del borde para el fondo */
+            background: #e3e3c6; /* Un tono crema/beige unificado para el estado activo */
+            border-color: var(--color-texto-oscuro);
         }
         
         .tabla-container {
