@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controladores;
 
+import ar.edu.utn.frba.dds.compartido.DataFormatter;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class UserController {
   private ServicioUsuarios servicioUsuarios;
   private ServicioSolicitudes servicioSolicitudes;
+  private DataFormatter formateador = new DataFormatter();
 
   public UserController(ServicioUsuarios servicioUsuarios, ServicioSolicitudes servicioSolicitudes) {
     this.servicioUsuarios = servicioUsuarios;
@@ -107,9 +109,10 @@ public class UserController {
           hechoMap.put("titulo", h.getTitulo());
           hechoMap.put("descripcion", h.getDescripcion());
           hechoMap.put("categoria", h.getCategoria());
-          hechoMap.put("fechaAcontecimiento", h.getFechaAcontecimiento().toString());
-          hechoMap.put("fechaCarga", h.getFechaDeCarga().toString());
-          hechoMap.put("estado", h.getEstadoHecho().toString());
+          hechoMap.put("fechaAcontecimiento", formateador.formatearFecha(h.getFechaAcontecimiento()));
+          hechoMap.put("fechaCarga", formateador.formatearFecha(h.getFechaDeCarga()));
+          hechoMap.put("estado", h.getEstadoHecho());
+          hechoMap.put("estadoFormateado", formateador.formatearEstado(h.getEstadoHecho()));
           return hechoMap;
         })
         .collect(Collectors.toList());
@@ -120,6 +123,7 @@ public class UserController {
       model.put("user_name", ctx.sessionAttribute("user_name"));
       model.put("user_id", userId);
       model.put("hechos", hechos);
+
       
       ctx.render("mis-hechos.hbs", model);
     } catch (Exception e) {

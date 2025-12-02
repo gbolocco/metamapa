@@ -20,7 +20,7 @@
         <div class="hecho-card">
             <div class="card-header">
                 <h3>{{titulo}}</h3>
-                <span class="status-badge status-{{estado}}">{{estado}}</span>
+                <span class="status-badge status-{{estado}}">{{estadoFormateado}}</span>
             </div>
             <div class="card-body">
                 <p class="description">{{descripcion}}</p>
@@ -120,7 +120,7 @@
 }
 
 .stat-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(to top, #75501d 0%, #b48853 100%);
     color: white;
     padding: 20px;
     border-radius: 10px;
@@ -232,7 +232,7 @@
 
 .category {
     font-weight: 500;
-    color: #007bff;
+    color: #75501d;
     background: #e3f2fd;
     padding: 2px 8px;
     border-radius: 12px;
@@ -269,12 +269,13 @@
 }
 
 .btn-view {
-    background-color: #17a2b8;
-    color: white;
+    background-color: #75501d;
+    color: #ffffff;
 }
 
 .btn-view:hover {
-    background-color: #138496;
+    background-color: #4b2f0c;
+    transform: scale(1.03);
 }
 
 .btn-edit {
