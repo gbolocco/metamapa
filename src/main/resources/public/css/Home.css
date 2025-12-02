@@ -83,6 +83,11 @@
     color: inherit;
 }
 
+.coleccion-card a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
 .coleccion-card-details p {
     color: var(--color-texto-oscuro);
     margin: 6px 0;
@@ -94,6 +99,11 @@
     font-style: italic;
     color: #888;
     margin-top: 10px;
+}
+.coleccion-card p.descripcion {
+    color: #666;
+    text-decoration: none;
+    font-style: italic;
 }
 
 .coleccion-card-details strong {

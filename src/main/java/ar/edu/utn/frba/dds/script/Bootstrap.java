@@ -19,6 +19,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosRepository;
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,18 +81,79 @@ public class Bootstrap implements WithSimplePersistenceUnit {
 
 
       var colecciones = Arrays.asList(
+          new Coleccion(
+              "Grandes Batallas Medievales",
+              "Análisis detallado de las estrategias y consecuencias de los conflictos bélicos más importantes de la Edad Media.",
+              new ArrayList<>(),
+              fuente,
+              "760",
+              TipoConsenso.MULTIPLES_MENCIONES
+          ),
+          new Coleccion(
+              "Historia del Transporte Público en Buenos Aires (1880-1950)",
+              "Compilación de hechos clave sobre tranvías, subtes y colectivos que moldearon la ciudad.",
+              new ArrayList<>(),
+              fuente,
+              "65",
+              TipoConsenso.MAYORIA_SIMPLE
+          ),
+          new Coleccion(
+              "Revolución Industrial: Impacto Social",
+              "Hechos sobre las condiciones laborales, migración rural y el cambio de paradigma social en el siglo XIX.",
+              new ArrayList<>(),
+              fuente,
+              "78",
+              TipoConsenso.ABSOLUTA
+          ),
+          new Coleccion(
+              "Pioneros de la Computación",
+              "Breve recorrido por las figuras que sentaron las bases de la informática moderna, desde Turing hasta Wozniak.",
+              new ArrayList<>(),
+              fuente,
+              "2",
+              TipoConsenso.MAYORIA_SIMPLE
+          ),
+          new Coleccion(
+              "Arquitectura Racionalista en La Plata",
+              "Ejemplos y datos sobre edificios emblemáticos de esta corriente arquitectónica en la capital bonaerense.",
+              new ArrayList<>(),
+              fuente,
+              "23",
+              TipoConsenso.MAYORIA_SIMPLE
+          ),
+          new Coleccion(
+              "Eventos Astronómicos Inusuales",
+              "Hechos documentados sobre supernovas, cometas y lluvias de meteoros con alta visibilidad.",
+              new ArrayList<>(),
+              fuente,
+              "453",
+              TipoConsenso.ABSOLUTA
+          ),
+          new Coleccion(
+              "Derechos Civiles en América Latina",
+              "Cronología de las leyes y movimientos que impulsaron la igualdad y los derechos humanos en la región.",
+              new ArrayList<>(),
+              fuente,
+              "54",
+              TipoConsenso.MULTIPLES_MENCIONES
+          ),
+          new Coleccion(
+              "Colección de Prueba 8",
+              "Descripción corta para un test de paginación.",
+              new ArrayList<>(),
+              fuente,
+              "023",
+              TipoConsenso.MAYORIA_SIMPLE
+          ),
+          new Coleccion(
+              "Colección de Prueba 9",
+              "Ejemplo con un handle más largo.",
+              new ArrayList<>(),
+              fuente,
+              "01",
+              TipoConsenso.ABSOLUTA),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
           new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba","prueba",new ArrayList<>(), fuente,"prueba", TipoConsenso.ABSOLUTA),
-          new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2", TipoConsenso.ABSOLUTA),
           new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2", TipoConsenso.ABSOLUTA),
           new Coleccion("prueba2","prueba2",new ArrayList<>(), fuente,"prueba2", TipoConsenso.ABSOLUTA)
       );
