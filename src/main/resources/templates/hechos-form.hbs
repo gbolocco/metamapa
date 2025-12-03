@@ -5,6 +5,16 @@
     <meta charset="utf-8" />
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/style_form.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <div class="form-container">
     <h1>Cargar Hecho</h1>
@@ -21,13 +31,18 @@
         </div>
 
         <div class="form-group">
+            <label>Ubicación (Seleccione en el mapa):</label>
+            <div id="map"></div>
+        </div>
+
+        <div class="form-group">
             <label for="lat">Latitud:</label>
-            <input type="number" step="0.0001" id="lat" name="lat" required>
+            <input type="text" id="lat" name="lat" required readonly>
         </div>
 
         <div class="form-group">
             <label for="lon">Longitud:</label>
-            <input type="number" step="0.0001" id="lon" name="lon" required>
+            <input type="text" id="lon" name="lon" required readonly>
         </div>
 
         <div class="form-group">
@@ -58,6 +73,34 @@
 
     </form>
 </div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Inicializar el mapa centrado en Buenos Aires
+    const map = L.map('map').setView([-34.6037, -58.3816], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marker;
+
+    map.on('click', function (e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        // Actualizar inputs
+        document.getElementById('lat').value = lat;
+        document.getElementById('lon').value = lng;
+
+        // Actualizar o crear marcador
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+    });
+</script>
 
 <style>
     .form-actions {
