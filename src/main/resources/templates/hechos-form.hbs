@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8" />
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/style_form.css">
 </head>
 <div class="form-container">
-    <h1>Solicitar Carga de Hecho</h1>
+    <h1>Cargar Hecho</h1>
 
     <form method="post" action="/hechos">
         <div class="form-group">
@@ -36,62 +37,62 @@
 
         <div class="form-group">
             <label for="fecheOcurrencia">Fecha de ocurrencia:</label>
-            <input type="datetime-local"  name="fechaOcurrencia" required>
+            <input type="datetime-local" name="fechaOcurrencia" required>
         </div>
 
         <div class="form-group">
             <label for="foto">Foto:</label>
-              <input type="text" id="foto" name="foto" />
+            <input type="text" id="foto" name="foto" />
         </div>
 
         <div class="form-group">
             <label for="video">Video:</label>
-              <input type="text" id="video" name="video" />
+            <input type="text" id="video" name="video" />
         </div>
 
 
         <div class="form-actions">
             <a href="/" class="btn-link">Volver</a>
-            <button type="submit" class="btn-submit">Generar Solicitud de Carga</button>
+            <button type="submit" class="btn-submit">Cargar Hecho</button>
         </div>
 
     </form>
 </div>
 
 <style>
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
 
-.btn-link {
-    color: #007bff;
-    text-decoration: none;
-    font-size: 16px;
-}
+    .btn-link {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 16px;
+    }
 
-.btn-link:hover {
-    text-decoration: underline;
-    color: #0056b3;
-}
+    .btn-link:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
 
-.btn-submit {
-    background-color: #75501d;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+    .btn-submit {
+        background-color: #75501d;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-.btn-submit:hover {
-    font-weight: bold;
-    background-color: #4b2f0c;
-    transform: scale(1.03);
-}
+    .btn-submit:hover {
+        font-weight: bold;
+        background-color: #4b2f0c;
+        transform: scale(1.03);
+    }
 </style>

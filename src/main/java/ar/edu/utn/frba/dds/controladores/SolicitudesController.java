@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SolicitudesController {
-  
+
   private final ServicioSolicitudes servicioSolicitudes;
-  
+
   public SolicitudesController(ServicioSolicitudes servicioSolicitudes) {
     this.servicioSolicitudes = servicioSolicitudes;
   }
@@ -27,21 +27,22 @@ public class SolicitudesController {
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
-    
-    
+
     if (hechoId != null) {
       model.put("hechoIdPreseleccionado", hechoId);
     }
-    
+
     if (coleccionId != null) {
       model.put("coleccionId", coleccionId);
     }
-    
+
     if (tipoQuery != null) {
       try {
-        TipoSolicitud tipoSolicitud = TipoSolicitud.valueOf(tipoQuery.toUpperCase() + "_HECHO");
-        model.put("tipoPreseleccionado", tipoSolicitud.toString());
-        model.put("requiereJustificacion", tipoSolicitud == TipoSolicitud.ELIMINACION_HECHO);
+        if (!tipoQuery.equalsIgnoreCase("CARGA")) {
+          TipoSolicitud tipoSolicitud = TipoSolicitud.valueOf(tipoQuery.toUpperCase() + "_HECHO");
+          model.put("tipoPreseleccionado", tipoSolicitud.toString());
+          model.put("requiereJustificacion", tipoSolicitud == TipoSolicitud.ELIMINACION_HECHO);
+        }
       } catch (IllegalArgumentException e) {
         // Tipo inválido, ignorar
       }
@@ -56,7 +57,7 @@ public class SolicitudesController {
       String tipoSolicitudStr = ctx.formParam("tipoSolicitud");
       String justificacion = ctx.formParam("justificacion");
       Long coleccionId = Long.parseLong(ctx.formParam("coleccionId"));
-      
+
       TipoSolicitud tipoSolicitud = TipoSolicitud.valueOf(tipoSolicitudStr);
       var usuario = userId != null ? UsuariosRepository.INSTANCE.buscarPorId(userId) : null;
 
@@ -66,7 +67,7 @@ public class SolicitudesController {
         ctx.redirect(errorUrl);
         return;
       }
-      
+
       servicioSolicitudes.crearSolicitud(usuario, hecho, tipoSolicitud, justificacion);
 
       ctx.sessionAttribute("successMessage", "Solicitud creada exitosamente");
@@ -74,7 +75,7 @@ public class SolicitudesController {
       ctx.redirect(redirectUrl);
     } catch (Exception e) {
       e.printStackTrace();
-      
+
       Long coleccionId = Long.parseLong(ctx.formParam("coleccionId"));
       Long hechoId = Long.parseLong(ctx.formParam("hechoId"));
       ctx.sessionAttribute("errorMessage", "Error al crear solicitud: " + e.getMessage());
@@ -82,7 +83,5 @@ public class SolicitudesController {
       ctx.redirect(errorUrl);
     }
   }
-
-
 
 }

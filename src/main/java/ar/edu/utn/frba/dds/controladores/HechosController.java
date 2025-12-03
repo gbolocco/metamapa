@@ -4,13 +4,9 @@ import ar.edu.utn.frba.dds.compartido.DataFormatter;
 import ar.edu.utn.frba.dds.dominio.hechos.*;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.servicios.ServicioHechos;
-import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Usuario;
-import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
-import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,14 +19,12 @@ import java.time.LocalDateTime;
 
 public class HechosController implements WithSimplePersistenceUnit {
   private ServicioHechos servicioHechos;
-  private ServicioSolicitudes servicioSolicitudes;
   private ServicioUsuarios servicioUsuarios;
   private final ObjectMapper mapper = new ObjectMapper();
   private DataFormatter formateador = new DataFormatter();
 
-  public HechosController(ServicioHechos servicioHechos, ServicioSolicitudes servicioSolicitudes, ServicioUsuarios servicioUsuarios) {
+  public HechosController(ServicioHechos servicioHechos, ServicioUsuarios servicioUsuarios) {
     this.servicioHechos = servicioHechos;
-    this.servicioSolicitudes = servicioSolicitudes;
     this.servicioUsuarios = servicioUsuarios;
   }
 
@@ -45,30 +39,29 @@ public class HechosController implements WithSimplePersistenceUnit {
     model.put("hechos", servicioHechos.mostrarHechos());
 
     servicioHechos.mostrarHechos().stream().forEach(hecho -> {
-          if(hecho.getOrigenHecho() != null) {
-            model.put("origenHechoFormateado", formateador.formatearOrigen(hecho.getOrigenHecho()));
-          }
+      if (hecho.getOrigenHecho() != null) {
+        model.put("origenHechoFormateado", formateador.formatearOrigen(hecho.getOrigenHecho()));
+      }
 
-          if(hecho.getFechaAcontecimiento() != null) {
-            model.put("fechaAcontecimientoFormateada", formateador.formatearFecha(hecho.getFechaAcontecimiento()));
-          }
+      if (hecho.getFechaAcontecimiento() != null) {
+        model.put("fechaAcontecimientoFormateada", formateador.formatearFecha(hecho.getFechaAcontecimiento()));
+      }
 
-          if(hecho.getFechaDeCarga() != null) {
-            model.put("fechaDeCargaFormateada", formateador.formatearFecha(hecho.getFechaDeCarga()));
-          }
-        }
-    );
+      if (hecho.getFechaDeCarga() != null) {
+        model.put("fechaDeCargaFormateada", formateador.formatearFecha(hecho.getFechaDeCarga()));
+      }
+    });
 
     String success = ctx.queryParam("success");
-    if ("solicitud_creada".equals(success)) {
-      model.put("successMessage", "Solicitud generada exitosamente");
+    if ("hecho_creado".equals(success)) {
+      model.put("successMessage", "Hecho creado exitosamente");
     }
-    
+
     String error = ctx.queryParam("error");
     if (error != null) {
       model.put("errorMessage", "Error al crear solicitud: " + error);
     }
-    
+
     ctx.render("hechos.hbs", model);
   }
 
@@ -78,7 +71,7 @@ public class HechosController implements WithSimplePersistenceUnit {
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_name", ctx.sessionAttribute("user_name"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
-    ctx.render("hechos-form.hbs",model);
+    ctx.render("hechos-form.hbs", model);
   }
 
   public void crear(Context ctx) {
@@ -99,9 +92,8 @@ public class HechosController implements WithSimplePersistenceUnit {
           new Ubicacion(lat, lon),
           fechaOcurrencia,
           LocalDateTime.now(),
-          OrigenHecho.PROVISTO_POR_CONTRIBUYENTE
-      );
-      
+          OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
+
       // Obtener usuario si está logueado y asignarlo al hecho
       Long userId = ctx.sessionAttribute("user_id");
       Usuario usuario = null;
@@ -111,7 +103,7 @@ public class HechosController implements WithSimplePersistenceUnit {
           hecho.setUsuario(usuario);
         }
       }
-      
+
       hecho.addContenidoMultimedia(foto, TipoContenido.IMAGEN);
       hecho.addContenidoMultimedia(video, TipoContenido.VIDEO);
 
@@ -120,20 +112,15 @@ public class HechosController implements WithSimplePersistenceUnit {
       entityManager().flush();
       entityManager().getTransaction().commit();
       entityManager().clear();
-      
-      // Crear solicitud de carga pasándole el hecho
-      Usuario usuarioFinal = null;
-      if (userId != null) {
-        usuarioFinal = servicioUsuarios.buscarPorId(userId);
-      }
-      servicioSolicitudes.crearSolicitud(usuarioFinal, hecho, TipoSolicitud.CARGA_HECHO, null);
 
       if (userId != null) {
-        // Usuario logueado -> ir a mis solicitudes
-        ctx.redirect("/mis-solicitudes?success=solicitud_creada");
+        // Usuario logueado -> ir a mis solicitudes (o lista de hechos)
+        // El usuario pidió que se carguen directamente, así que mejor ir a la lista de
+        // hechos o mostrar éxito
+        ctx.redirect("/hechos?success=hecho_creado");
       } else {
         // Usuario anónimo -> ir a home
-        ctx.redirect("/home?success=solicitud_creada");
+        ctx.redirect("/home?success=hecho_creado");
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -172,20 +159,20 @@ public class HechosController implements WithSimplePersistenceUnit {
               model.put("rol", ctx.sessionAttribute("rol"));
               model.put("user_name", ctx.sessionAttribute("user_name"));
               model.put("user_id", ctx.sessionAttribute("user_id"));
-              
+
               // Manejar mensajes de sesión
               String successMessage = ctx.sessionAttribute("successMessage");
               if (successMessage != null) {
                 model.put("successMessage", successMessage);
                 ctx.sessionAttribute("successMessage", null);
               }
-              
+
               String errorMessage = ctx.sessionAttribute("errorMessage");
               if (errorMessage != null) {
                 model.put("errorMessage", errorMessage);
                 ctx.sessionAttribute("errorMessage", null);
               }
-              
+
               ctx.render("hecho.hbs", model);
               return;
             }
@@ -212,7 +199,7 @@ public class HechosController implements WithSimplePersistenceUnit {
             hecho.setContenidoMultimedia(hechoFromDB.getContenidoMultimedia());
           }
         }
-        
+
         if (hecho.getContenidoMultimedia() == null) {
           hecho.setContenidoMultimedia(new ArrayList<>());
         }
@@ -240,26 +227,26 @@ public class HechosController implements WithSimplePersistenceUnit {
       model.put("rol", ctx.sessionAttribute("rol"));
       model.put("user_name", ctx.sessionAttribute("user_name"));
       model.put("user_id", ctx.sessionAttribute("user_id"));
-      
+
       // Manejar mensajes de sesión
       String successMessage = ctx.sessionAttribute("successMessage");
       if (successMessage != null) {
         model.put("successMessage", successMessage);
         ctx.sessionAttribute("successMessage", null); // Limpiar mensaje
       }
-      
+
       String errorMessage = ctx.sessionAttribute("errorMessage");
       if (errorMessage != null) {
         model.put("errorMessage", errorMessage);
         ctx.sessionAttribute("errorMessage", null); // Limpiar mensaje
       }
-      
+
       // También manejar parámetros de URL (fallback)
       String success = ctx.queryParam("success");
-      if ("solicitud_creada".equals(success)) {
-        model.put("successMessage", "Solicitud creada exitosamente");
+      if ("hecho_creado".equals(success)) {
+        model.put("successMessage", "Hecho creado exitosamente");
       }
-      
+
       String error = ctx.queryParam("error");
       if (error != null) {
         model.put("errorMessage", "Error al crear solicitud: " + error);
@@ -273,7 +260,4 @@ public class HechosController implements WithSimplePersistenceUnit {
     }
   }
 
-
-
 }
-

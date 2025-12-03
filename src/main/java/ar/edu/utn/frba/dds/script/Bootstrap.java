@@ -138,10 +138,10 @@ public class Bootstrap implements WithSimplePersistenceUnit {
               TipoConsenso.MULTIPLES_MENCIONES
           ),
           new Coleccion(
-              "Colección de Prueba 8",
+              "Coleccion con fuente estatica",
               "Descripción corta para un test de paginación.",
               new ArrayList<>(),
-              fuente,
+              fuenteEstatica,
               "023",
               TipoConsenso.MAYORIA_SIMPLE
           ),

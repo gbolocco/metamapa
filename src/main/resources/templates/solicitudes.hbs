@@ -1,447 +1,472 @@
 <style>
-        :root {
-            --color-texto-oscuro: #4b2e05;    /* Marrón oscuro principal */
-            --color-marron-medio: #7a4a00;    /* Marrón medio */
-            --color-fondo-tarjeta: #fcf8e3;   /* Fondo de tarjeta/claro */
-            --color-fondo-suave: #fdf7e1;     /* Amarillo pálido para fondo */
-        }
+    :root {
+        --color-texto-oscuro: #4b2e05;
+        /* Marrón oscuro principal */
+        --color-marron-medio: #7a4a00;
+        /* Marrón medio */
+        --color-fondo-tarjeta: #fcf8e3;
+        /* Fondo de tarjeta/claro */
+        --color-fondo-suave: #fdf7e1;
+        /* Amarillo pálido para fondo */
+    }
 
-        .solicitudes-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
+    .solicitudes-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
 
-        .solicitud-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    .solicitud-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        .solicitud-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .solicitud-info {
-            flex: 1;
-        }
+    .solicitud-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+    }
 
-        .solicitud-titulo {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
+    .solicitud-info {
+        flex: 1;
+    }
 
-        .solicitud-fecha {
-            color: #666;
-            font-size: 0.9rem;
-        }
+    .solicitud-titulo {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
 
-        .solicitud-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
+    .solicitud-fecha {
+        color: #666;
+        font-size: 0.9rem;
+    }
 
-        .btn-rechazar, .btn-aceptar, .btn-confirmar, .btn-cancelar {
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
+    .solicitud-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
 
-        .btn-rechazar {
-            background: var(--color-marron-medio);
-        }
+    .btn-rechazar,
+    .btn-aceptar,
+    .btn-confirmar,
+    .btn-cancelar {
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s ease, transform 0.1s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 
-        .btn-rechazar:hover {
-            background: #6a3e00;
-            transform: translateY(-1px);
-        }
+    .btn-rechazar {
+        background: var(--color-marron-medio);
+    }
 
-        .btn-cancelar {
-            background: var(--color-marron-medio);
-        }
+    .btn-rechazar:hover {
+        background: #6a3e00;
+        transform: translateY(-1px);
+    }
 
-        .btn-cancelar:hover {
-            background: #6a3e00;
-            transform: translateY(-1px);
-        }
+    .btn-cancelar {
+        background: var(--color-marron-medio);
+    }
 
-        .btn-aceptar {
-            background: var(--color-texto-oscuro);
-        }
+    .btn-cancelar:hover {
+        background: #6a3e00;
+        transform: translateY(-1px);
+    }
 
-        .btn-aceptar:hover {
-            background: #362204;
-            transform: translateY(-1px);
-        }
+    .btn-aceptar {
+        background: var(--color-texto-oscuro);
+    }
 
-        .btn-confirmar {
-            background: var(--color-texto-oscuro);
-        }
+    .btn-aceptar:hover {
+        background: #362204;
+        transform: translateY(-1px);
+    }
 
-        .btn-confirmar:hover {
-            background: #362204;
-            transform: translateY(-1px);
-        }
+    .btn-confirmar {
+        background: var(--color-texto-oscuro);
+    }
 
-        .collapse-toggle {
-            background: none;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 0.5rem;
-        }
-        
-        .collapse-content {
-            display: none;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-top: 1px solid #eee;
-        }
-        
-        .collapse-content.show {
-            display: block;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 400px;
-            text-align: center;
-        }
-        
-        .modal-buttons {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        
-        .btn-modal {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .pagination {
-            text-align: center;
-            margin-top: 2rem;
-            padding: 1rem;
-        }
-        
-        .page-btn {
-            background: #007bff;
-            color: white;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 4px;
-            margin: 0 0.5rem;
-        }
-        
-        .page-btn:hover {
-            background: #0056b3;
-        }
-        
-        .page-info {
-            margin: 0 1rem;
-            font-weight: bold;
-        }
-        
-        .botones-filtro {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
+    .btn-confirmar:hover {
+        background: #362204;
+        transform: translateY(-1px);
+    }
 
-        .btn-filtro {
-            padding: 0.75rem 1.5rem;
-            border: 2px solid var(--color-marron-medio); /* Añadimos un borde consistente */
-            border-radius: 8px; /* Bordes un poco más definidos */
-            text-decoration: none;
-            font-weight: bold;
-            color: var(--color-texto-oscuro); /* Texto Marrón Oscuro */
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
+    .collapse-toggle {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        text-decoration: underline;
+        margin-top: 0.5rem;
+    }
 
-        .btn-carga {
-            background: #e9f5e3; /* Verde muy pálido, casi crema */
-            border-color: #5d9d4d; /* Borde verde oscuro */
-        }
+    .collapse-content {
+        display: none;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-top: 1px solid #eee;
+    }
 
-        .btn-carga:hover {
-            background: #d4e7cb;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
+    .collapse-content.show {
+        display: block;
+    }
 
-        .btn-eliminacion {
-            background: #f8e1e1; /* Rojo muy pálido, casi beige */
-            border-color: #a34141; /* Borde rojizo oscuro */
-        }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
 
-        .btn-eliminacion:hover {
-            background: #ebc4c4;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+        text-align: center;
+    }
 
-        .btn-modificacion:hover {
-            background: #fcf3d1; /* Un poco más de amarillo al pasar el ratón */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
+    .modal-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
 
-        .btn-todas {
-            background: var(--color-marron-medio); /* Color de botón principal */
-            color: white; /* Texto blanco para resaltar */
-            border-color: var(--color-marron-medio);
-        }
+    .btn-modal {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-        .btn-todas:hover {
-            background: var(--color-texto-oscuro); /* Marrón más oscuro al pasar el ratón */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+    .pagination {
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1rem;
+    }
 
-        .btn-filtro.activo {
-            opacity: 1;
-            transform: none; /* Quitamos la escala para que el activo sea prominente */
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); /* Sombra interna para indicar presión */
-            /* Aseguramos que el botón activo se vea diferente */
-        }
+    .page-btn {
+        background: #007bff;
+        color: white;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border-radius: 4px;
+        margin: 0 0.5rem;
+    }
 
-        /* Ajuste específico para el botón activo 'Todas' */
-        .btn-todas.activo {
-            background: var(--color-texto-oscuro);
-            color: white;
-        }
+    .page-btn:hover {
+        background: #0056b3;
+    }
 
-        .btn-carga.activo,
-        .btn-eliminacion.activo,
-        .btn-modificacion.activo {
-            /* Hacemos el fondo un poco más oscuro o usamos el color del borde para el fondo */
-            background: #e3e3c6; /* Un tono crema/beige unificado para el estado activo */
-            border-color: var(--color-texto-oscuro);
-        }
-        
-        .tabla-container {
-            overflow-x: auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .tabla-solicitudes {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .tabla-solicitudes th,
-        .tabla-solicitudes td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .tabla-solicitudes th {
-            background: #f8f9fa;
-            font-weight: bold;
-            color: #495057;
-        }
-        
-        .tabla-solicitudes tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .badge {
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: bold;
-        }
-        
-        .badge-Carga {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-        
-        .badge-Eliminacion {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .badge-Modificacion {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .badge-Pendiente {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .badge-Aceptada {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .badge-Rechazada {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .btn-filtro.activo {
-            opacity: 0.8;
-            transform: scale(0.98);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-        }
+    .page-info {
+        margin: 0 1rem;
+        font-weight: bold;
+    }
+
+    .botones-filtro {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .btn-filtro {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid var(--color-marron-medio);
+        /* Añadimos un borde consistente */
+        border-radius: 8px;
+        /* Bordes un poco más definidos */
+        text-decoration: none;
+        font-weight: bold;
+        color: var(--color-texto-oscuro);
+        /* Texto Marrón Oscuro */
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-carga {
+        background: #e9f5e3;
+        /* Verde muy pálido, casi crema */
+        border-color: #5d9d4d;
+        /* Borde verde oscuro */
+    }
+
+    .btn-carga:hover {
+        background: #d4e7cb;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-eliminacion {
+        background: #f8e1e1;
+        /* Rojo muy pálido, casi beige */
+        border-color: #a34141;
+        /* Borde rojizo oscuro */
+    }
+
+    .btn-eliminacion:hover {
+        background: #ebc4c4;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-modificacion:hover {
+        background: #fcf3d1;
+        /* Un poco más de amarillo al pasar el ratón */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-todas {
+        background: var(--color-marron-medio);
+        /* Color de botón principal */
+        color: white;
+        /* Texto blanco para resaltar */
+        border-color: var(--color-marron-medio);
+    }
+
+    .btn-todas:hover {
+        background: var(--color-texto-oscuro);
+        /* Marrón más oscuro al pasar el ratón */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-filtro.activo {
+        opacity: 1;
+        transform: none;
+        /* Quitamos la escala para que el activo sea prominente */
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+        /* Sombra interna para indicar presión */
+        /* Aseguramos que el botón activo se vea diferente */
+    }
+
+    /* Ajuste específico para el botón activo 'Todas' */
+    .btn-todas.activo {
+        background: var(--color-texto-oscuro);
+        color: white;
+    }
+
+    .btn-carga.activo,
+    .btn-eliminacion.activo,
+    .btn-modificacion.activo {
+        /* Hacemos el fondo un poco más oscuro o usamos el color del borde para el fondo */
+        background: #e3e3c6;
+        /* Un tono crema/beige unificado para el estado activo */
+        border-color: var(--color-texto-oscuro);
+    }
+
+    .tabla-container {
+        overflow-x: auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .tabla-solicitudes {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabla-solicitudes th,
+    .tabla-solicitudes td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .tabla-solicitudes th {
+        background: #f8f9fa;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .tabla-solicitudes tr:hover {
+        background: #f8f9fa;
+    }
+
+    .badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: bold;
+    }
+
+    .badge-Carga {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .badge-Eliminacion {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .badge-Modificacion {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-Pendiente {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-Aceptada {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-Rechazada {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn-filtro.activo {
+        opacity: 0.8;
+        transform: scale(0.98);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 </style>
 
 <div class="solicitudes-container">
-            {{#if mostrarBotones}}
-            <h1>Gestión de Solicitudes</h1>
-            <div class="botones-filtro">
-                <a href="/admin/solicitudes?tipo=carga" class="btn-filtro btn-carga {{#eq tipoActivo 'carga'}}activo{{/eq}}">Solicitudes de Carga</a>
-                <a href="/admin/solicitudes?tipo=eliminacion" class="btn-filtro btn-eliminacion {{#eq tipoActivo 'eliminacion'}}activo{{/eq}}">Solicitudes de Eliminación</a>
-                <a href="/admin/solicitudes?tipo=modificacion" class="btn-filtro btn-modificacion {{#eq tipoActivo 'modificacion'}}activo{{/eq}}">Solicitudes de Modificación</a>
-                <a href="/admin/solicitudes?tipo=todas" class="btn-filtro btn-todas {{#eq tipoActivo 'todas'}}activo{{/eq}}">Todas las Solicitudes</a>
+    {{#if mostrarBotones}}
+    <h1>Gestión de Solicitudes</h1>
+    <div class="botones-filtro">
+        <a href="/admin/solicitudes?tipo=eliminacion"
+            class="btn-filtro btn-eliminacion {{#eq tipoActivo 'eliminacion'}}activo{{/eq}}">Solicitudes de
+            Eliminación</a>
+        <a href="/admin/solicitudes?tipo=modificacion"
+            class="btn-filtro btn-modificacion {{#eq tipoActivo 'modificacion'}}activo{{/eq}}">Solicitudes de
+            Modificación</a>
+        <a href="/admin/solicitudes?tipo=todas"
+            class="btn-filtro btn-todas {{#eq tipoActivo 'todas'}}activo{{/eq}}">Todas las Solicitudes</a>
+    </div>
+    {{/if}}
+
+    {{#if mostrarTabla}}
+    <h1>{{titulo}}</h1>
+    <div class="tabla-container">
+        <table class="tabla-solicitudes">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Solicitante</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each todasSolicitudes}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{titulo}}</td>
+                    <td><span class="badge badge-{{tipo}}">{{tipo}}</span></td>
+                    <td>{{#if solicitante}}{{solicitante}}{{else}}ANONIMO{{/if}}</td>
+                    <td>{{fecha}}</td>
+                    <td><span class="badge badge-{{estado}}">{{estado}}</span></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <h1>{{titulo}}</h1>
+
+    {{#each solicitudes}}
+    <div class="solicitud-card">
+        <div class="solicitud-header">
+            <div class="solicitud-info">
+                <div class="solicitud-titulo">{{titulo}}</div>
+                <div class="solicitud-fecha">{{fecha}}</div>
+                <button class="collapse-toggle" onclick="toggleCollapse(this)">Ver detalles</button>
             </div>
-            {{/if}}
-            
-            {{#if mostrarTabla}}
-            <h1>{{titulo}}</h1>
-            <div class="tabla-container">
-                <table class="tabla-solicitudes">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Título</th>
-                            <th>Tipo</th>
-                            <th>Solicitante</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each todasSolicitudes}}
-                        <tr>
-                            <td>{{id}}</td>
-                            <td>{{titulo}}</td>
-                            <td><span class="badge badge-{{tipo}}">{{tipo}}</span></td>
-                            <td>{{#if solicitante}}{{solicitante}}{{else}}ANONIMO{{/if}}</td>
-                            <td>{{fecha}}</td>
-                            <td><span class="badge badge-{{estado}}">{{estado}}</span></td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+            <div class="solicitud-actions">
+                <button class="btn-rechazar" onclick="rechazar({{id}})">Rechazar</button>
+                <button class="btn-aceptar" onclick="aceptar({{id}})">Aceptar</button>
             </div>
-            {{else}}
-            <h1>{{titulo}}</h1>
-            
-            {{#each solicitudes}}
-            <div class="solicitud-card">
-                <div class="solicitud-header">
-                    <div class="solicitud-info">
-                        <div class="solicitud-titulo">{{titulo}}</div>
-                        <div class="solicitud-fecha">{{fecha}}</div>
-                        <button class="collapse-toggle" onclick="toggleCollapse(this)">Ver detalles</button>
-                    </div>
-                    <div class="solicitud-actions">
-                        <button class="btn-rechazar" onclick="rechazar({{id}})">Rechazar</button>
-                        <button class="btn-aceptar" onclick="aceptar({{id}})">Aceptar</button>
-                    </div>
-                </div>
-                <div class="collapse-content">
-                    {{#unless (eq tipo "CARGA_HECHO")}}
-                    <p><strong>Justificación:</strong> {{justificacion}}</p>
-                    {{/unless}}
-                    <p><strong>Solicitante:</strong> {{#if solicitante}}{{solicitante}}{{else}}ANONIMO{{/if}}</p>
-                    <p><strong>Tipo:</strong> {{tipo}}</p>
-                </div>
-            </div>
-            {{/each}}
-            
-            <!-- Paginación -->
-            <div class="pagination">
-                {{#if hasPrevious}}
-                    <a href="?page={{previousPage}}" class="page-btn">&laquo; Anterior</a>
-                {{/if}}
-                
-                <span class="page-info">Página {{currentPage}} de {{totalPages}}</span>
-                
-                {{#if hasNext}}
-                    <a href="?page={{nextPage}}" class="page-btn">Siguiente &raquo;</a>
-                {{/if}}
-            </div>
-            {{/if}}
+        </div>
+        <div class="collapse-content">
+            {{#unless (eq tipo "CARGA_HECHO")}}
+            <p><strong>Justificación:</strong> {{justificacion}}</p>
+            {{/unless}}
+            <p><strong>Solicitante:</strong> {{#if solicitante}}{{solicitante}}{{else}}ANONIMO{{/if}}</p>
+            <p><strong>Tipo:</strong> {{tipo}}</p>
+        </div>
+    </div>
+    {{/each}}
+
+    <!-- Paginación -->
+    <div class="pagination">
+        {{#if hasPrevious}}
+        <a href="?page={{previousPage}}" class="page-btn">&laquo; Anterior</a>
+        {{/if}}
+
+        <span class="page-info">Página {{currentPage}} de {{totalPages}}</span>
+
+        {{#if hasNext}}
+        <a href="?page={{nextPage}}" class="page-btn">Siguiente &raquo;</a>
+        {{/if}}
+    </div>
+    {{/if}}
 </div>
 
 <script>
-        function toggleCollapse(button) {
-            const content = button.closest('.solicitud-card').querySelector('.collapse-content');
-            content.classList.toggle('show');
-            button.textContent = content.classList.contains('show') ? 'Ocultar detalles' : 'Ver detalles';
-        }
-        
-        let currentAction = null;
-        let currentId = null;
-        
-        function aceptar(id) {
-            currentAction = 'aceptar';
-            currentId = id;
-            showModal('¿Está seguro de que desea ACEPTAR esta solicitud de eliminación?');
-        }
-        
-        function rechazar(id) {
-            currentAction = 'rechazar';
-            currentId = id;
-            showModal('¿Está seguro de que desea RECHAZAR esta solicitud de eliminación?');
-        }
-        
-        function showModal(message) {
-            document.getElementById('modalMessage').textContent = message;
-            document.getElementById('confirmModal').style.display = 'block';
-        }
-        
-        function closeModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-            currentAction = null;
-            currentId = null;
-        }
-        
-        function confirmarAccion() {
-            const endpoint = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
-            const accionTexto = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
-            
-            fetch(`/solicitudes/${currentId}/${endpoint}`, {
-                method: 'POST'
-            })
+    function toggleCollapse(button) {
+        const content = button.closest('.solicitud-card').querySelector('.collapse-content');
+        content.classList.toggle('show');
+        button.textContent = content.classList.contains('show') ? 'Ocultar detalles' : 'Ver detalles';
+    }
+
+    let currentAction = null;
+    let currentId = null;
+
+    function aceptar(id) {
+        currentAction = 'aceptar';
+        currentId = id;
+        showModal('¿Está seguro de que desea ACEPTAR esta solicitud de eliminación?');
+    }
+
+    function rechazar(id) {
+        currentAction = 'rechazar';
+        currentId = id;
+        showModal('¿Está seguro de que desea RECHAZAR esta solicitud de eliminación?');
+    }
+
+    function showModal(message) {
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('confirmModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+        currentAction = null;
+        currentId = null;
+    }
+
+    function confirmarAccion() {
+        const endpoint = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
+        const accionTexto = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
+
+        fetch(`/solicitudes/${currentId}/${endpoint}`, {
+            method: 'POST'
+        })
             .then(response => {
                 if (response.ok) {
                     location.reload();
@@ -453,9 +478,9 @@
                 console.error('Error:', error);
                 alert(`Error al ${accionTexto} la solicitud`);
             });
-            
-            closeModal();
-        }
+
+        closeModal();
+    }
 </script>
 
 <!-- Modal de confirmación -->
