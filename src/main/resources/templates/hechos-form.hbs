@@ -1,12 +1,23 @@
 <!doctype html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8" />
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/style_form.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <div class="form-container">
-    <h1>Solicitar Carga de Hecho</h1>
+    <h1>Cargar Hecho</h1>
 
     <form method="post" action="/hechos">
         <div class="form-group">
@@ -20,13 +31,18 @@
         </div>
 
         <div class="form-group">
+            <label>Ubicación (Seleccione en el mapa):</label>
+            <div id="map"></div>
+        </div>
+
+        <div class="form-group">
             <label for="lat">Latitud:</label>
-            <input type="number" step="0.0001" id="lat" name="lat" required>
+            <input type="text" id="lat" name="lat" required readonly>
         </div>
 
         <div class="form-group">
             <label for="lon">Longitud:</label>
-            <input type="number" step="0.0001" id="lon" name="lon" required>
+            <input type="text" id="lon" name="lon" required readonly>
         </div>
 
         <div class="form-group">
@@ -36,61 +52,90 @@
 
         <div class="form-group">
             <label for="fecheOcurrencia">Fecha de ocurrencia:</label>
-            <input type="datetime-local"  name="fechaOcurrencia" required>
+            <input type="datetime-local" name="fechaOcurrencia" required>
         </div>
 
         <div class="form-group">
             <label for="foto">Foto:</label>
-              <input type="text" id="foto" name="foto" />
+            <input type="text" id="foto" name="foto" />
         </div>
 
         <div class="form-group">
             <label for="video">Video:</label>
-              <input type="text" id="video" name="video" />
+            <input type="text" id="video" name="video" />
         </div>
 
 
         <div class="form-actions">
             <a href="/" class="btn-link">Volver</a>
-            <button type="submit" class="btn-submit">Generar Solicitud de Carga</button>
+            <button type="submit" class="btn-submit">Cargar Hecho</button>
         </div>
 
     </form>
 </div>
 
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Inicializar el mapa centrado en Buenos Aires
+    const map = L.map('map').setView([-34.6037, -58.3816], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marker;
+
+    map.on('click', function (e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        // Actualizar inputs
+        document.getElementById('lat').value = lat;
+        document.getElementById('lon').value = lng;
+
+        // Actualizar o crear marcador
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+    });
+</script>
+
 <style>
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
 
-.btn-link {
-    color: #007bff;
-    text-decoration: none;
-    font-size: 16px;
-}
+    .btn-link {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 16px;
+    }
 
-.btn-link:hover {
-    text-decoration: underline;
-    color: #0056b3;
-}
+    .btn-link:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
 
-.btn-submit {
-    background-color: #75501d;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+    .btn-submit {
+        background-color: #75501d;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-.btn-submit:hover {
-    background-color: #4b2f0c;
-    transform: scale(1.03);
-}
+    .btn-submit:hover {
+        font-weight: bold;
+        background-color: #4b2f0c;
+        transform: scale(1.03);
+    }
 </style>

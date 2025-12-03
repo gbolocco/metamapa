@@ -1,9 +1,7 @@
 package ar.edu.utn.frba.dds.dominio.servidor;
 
 import ar.edu.utn.frba.dds.controladores.*;
-import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
-import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
+
 import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
@@ -27,12 +25,11 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import io.javalin.http.staticfiles.Location;
 import java.io.IOException;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class WebApp {
-
 
   public static void main(String[] args) {
     WebApp app = new WebApp();
@@ -52,13 +49,13 @@ public class WebApp {
 
   private static void configureStaticFiles(JavalinConfig config) {
     config.staticFiles.add(staticFilesConfig -> {
-      staticFilesConfig.hostedPath = "/static"; 
+      staticFilesConfig.hostedPath = "/static";
       staticFilesConfig.directory = "/public";
       staticFilesConfig.location = Location.CLASSPATH;
     });
   }
 
-  private void configureRoutes(JavalinConfig config){
+  private void configureRoutes(JavalinConfig config) {
     var repoUsuarios = UsuariosRepository.INSTANCE;
     var repoColecciones = ColeccionRepository.getInstancia();
     var repoFuentes = FuentesRepository.getInstancia();
@@ -71,17 +68,19 @@ public class WebApp {
     var servicioHechos = new ServicioHechos(repoHechos);
     var servicioSolicitudes = new ServicioSolicitudes(repoSolicitudes);
 
-    HechosController hechos = new HechosController(servicioHechos, servicioSolicitudes, servicioUsuarios);
+    HechosController hechos = new HechosController(servicioHechos, servicioUsuarios);
 
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);
-    AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones, servicioSolicitudes);
+    AdminController admin = new AdminController(servicioFuente, servicioUsuarios, servicioColecciones,
+        servicioSolicitudes);
     UserController user = new UserController(servicioUsuarios, servicioSolicitudes);
     SolicitudesController solicitudesController = new SolicitudesController(servicioSolicitudes);
     HomeController home = new HomeController();
     EstadisticaController estadisticaController = new EstadisticaController();
 
-    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController,home,estadisticaController);
+    new Routes().configure(config, hechos, login, coleccion, user, admin, solicitudesController, home,
+        estadisticaController);
   }
 
   private void configureTemplating(JavalinConfig config) {
@@ -108,6 +107,7 @@ public class WebApp {
       if (userRole != null && userRole.equals(requiredRole)) {
         return options.fn(context);
       }
+
       return options.inverse(context);
     });
 
@@ -120,14 +120,13 @@ public class WebApp {
       return options.inverse(context);
     });
 
-
     FileRenderer handlebarsRenderer = (filePath,
-                                  model,
-                                  ctx) -> {
+        model,
+        ctx) -> {
       try {
         String templateName = filePath.replace(".hbs", "");
-        Template viewTpl   = handlebars.compile(templateName);
-        String body        = viewTpl.apply(model);   // model: Map<String, ? extends Object>
+        Template viewTpl = handlebars.compile(templateName);
+        String body = viewTpl.apply(model); // model: Map<String, ? extends Object>
 
         Map<String, Object> m = new HashMap<>(model);
 
