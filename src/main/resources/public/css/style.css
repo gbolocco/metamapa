@@ -421,7 +421,8 @@ main {
 }
 
 .dropdown-menu a.dropdown-item,
-.dropdown-menu form {
+.dropdown-menu form,
+.dropdown-menu button {
   /* Estas dos líneas son cruciales para el flujo vertical */
   display: block;
   width: 100%;

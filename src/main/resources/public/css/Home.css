@@ -112,6 +112,7 @@
 }
 
 /* --- Paginación --- */
+
 .paginacion {
     display: flex;
     justify-content: center;
@@ -121,39 +122,9 @@
     user-select: none;
 }
 
-.flecha, .paginas a {
-    background-color: var(--color-tarjeta-fondo);
-    border: 2px solid var(--color-tarjeta-borde);
-    color: var(--color-tarjeta-borde);
-    font-weight: bold;
-    border-radius: 10px; /* Bordes más redondeados */
-    transition: background-color 0.2s, color 0.2s, transform 0.2s;
-}
-
-.flecha {
-    padding: 10px 15px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.flecha:hover:not(:disabled) {
-    background-color: var(--color-tarjeta-borde);
-    color: white;
-    transform: scale(1.05);
-}
-
-.flecha:disabled {
-    opacity: 0.4;
-    cursor: default;
-    background-color: var(--color-fondo-suave);
-    color: #aaa;
-    border-color: #aaa;
-}
-
 .paginas {
     display: flex;
-    gap: 8px;
+    gap: 8px; /* Espacio entre los números */
 }
 
 .paginas a {
@@ -161,6 +132,13 @@
     padding: 8px 14px;
     min-width: 40px;
     text-align: center;
+    /* Usa los mismos estilos que las flechas para consistencia */
+    background-color: var(--color-tarjeta-fondo);
+    border: 2px solid var(--color-tarjeta-borde);
+    color: var(--color-tarjeta-borde);
+    font-weight: bold;
+    border-radius: 10px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
 }
 
 .paginas a:hover:not(.activo) {
@@ -169,9 +147,9 @@
 }
 
 .paginas a.activo {
-    background-color: var(--color-tarjeta-borde); /* Fondo del color principal */
+    background-color: var(--color-tarjeta-borde);
     color: white;
-    pointer-events: none; /* No se puede hacer clic en la página actual */
+    pointer-events: none;
     border-color: var(--color-tarjeta-borde);
 }
 

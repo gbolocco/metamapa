@@ -14,6 +14,7 @@ import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
 import ar.edu.utn.frba.dds.servicios.ServicioHechos;
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
+import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.CompositeTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
@@ -86,6 +87,18 @@ public class WebApp {
     TemplateLoader mainLoader = new ClassPathTemplateLoader("/templates", ".hbs");
     TemplateLoader partialsLoader = new ClassPathTemplateLoader("/templates/partials", ".hbs");
     Handlebars handlebars = new Handlebars(new CompositeTemplateLoader(mainLoader, partialsLoader));
+
+    handlebars.registerHelper("resta", (Helper<Integer>) (context, options ) -> {
+      // context es el primer argumento (paginaActual)
+      // options.param(0) es el segundo argumento (el número a restar, '1')
+      int valorArestar = options.param(0, 0); // Usar valor por defecto por seguridad
+      return context - valorArestar;
+    });
+
+    handlebars.registerHelper("suma", (Helper<Integer>) (context, options) -> {
+      int valorAsumar = options.param(0, 0); // Usar valor por defecto por seguridad
+      return context + valorAsumar;
+    });
 
     handlebars.registerHelper("ifRole", (context, options) -> {
       Map<String, Object> model = (Map<String, Object>) options.context;
