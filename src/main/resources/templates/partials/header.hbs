@@ -68,7 +68,7 @@
         const solicitudIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>';
         // Icono para 'Salir/Logout' (Ejemplo: Exit/Puerta)
         const salirIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M16 9v-4l8 7-8 7v-4h-8v-6h8zM14 19h-12v-14h12v-3h-14v20h14v-3z"/></svg>';
-
+        const hechoIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><<path fill="currentColor" d="M480 576L192 576C139 576 96 533 96 480L96 160C96 107 139 64 192 64L496 64C522.5 64 544 85.5 544 112L544 400C544 420.9 530.6 438.7 512 445.3L512 512C529.7 512 544 526.3 544 544C544 561.7 529.7 576 512 576L480 576zM192 448C174.3 448 160 462.3 160 480C160 497.7 174.3 512 192 512L448 512L448 448L192 448zM224 216C224 229.3 234.7 240 248 240L424 240C437.3 240 448 229.3 448 216C448 202.7 437.3 192 424 192L248 192C234.7 192 224 202.7 224 216zM248 288C234.7 288 224 298.7 224 312C224 325.3 234.7 336 248 336L424 336C437.3 336 448 325.3 448 312C448 298.7 437.3 288 424 288L248 288z"/></svg>'
 
         if (tipoUsuario === "ADMIN") {
             html += `
@@ -78,7 +78,8 @@
         </form>`;
         } else if (tipoUsuario === "USER") {
             html += `
-        <a href="/solicitudes" class="dropdown-item">${solicitudIcon} Solicitudes</a>
+        <a href="/mis-solicitudes" class="dropdown-item">${solicitudIcon} Solicitudes</a>
+        <a href="/mis-hechos" class="dropdown-item">${hechoIcon} Hechos</a>
         <form id="logoutForm" method="post" action="/logout">
           <button type="submit" class="dropdown-item">${salirIcon} Cerrar Sesión</button>
         </form>`;
