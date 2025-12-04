@@ -9,11 +9,7 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosRepository;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import ar.edu.utn.frba.dds.modelo.Rol;
 import ar.edu.utn.frba.dds.routes.Routes;
-import ar.edu.utn.frba.dds.servicios.ServicioColecciones;
-import ar.edu.utn.frba.dds.servicios.ServicioFuentes;
-import ar.edu.utn.frba.dds.servicios.ServicioHechos;
-import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
-import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
+import ar.edu.utn.frba.dds.servicios.*;
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.CompositeTemplateLoader;
@@ -67,8 +63,9 @@ public class WebApp {
     var servicioFuente = new ServicioFuentes(repoFuentes);
     var servicioHechos = new ServicioHechos(repoHechos);
     var servicioSolicitudes = new ServicioSolicitudes(repoSolicitudes);
+    var servicioMultimedia = new ServicioMultimedia();
 
-    HechosController hechos = new HechosController(servicioHechos, servicioUsuarios);
+    HechosController hechos = new HechosController(servicioHechos, servicioUsuarios, servicioMultimedia);
 
     LoginController login = new LoginController(servicioUsuarios);
     ColeccionController coleccion = new ColeccionController(servicioColecciones);

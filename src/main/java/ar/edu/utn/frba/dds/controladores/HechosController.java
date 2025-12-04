@@ -2,8 +2,10 @@ package ar.edu.utn.frba.dds.controladores;
 
 import ar.edu.utn.frba.dds.compartido.DataFormatter;
 import ar.edu.utn.frba.dds.dominio.hechos.*;
+import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.servicios.ServicioHechos;
+import ar.edu.utn.frba.dds.servicios.ServicioMultimedia;
 import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
 import ar.edu.utn.frba.dds.modelo.Usuario;
 
@@ -14,18 +16,21 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.http.Context;
+import io.javalin.http.UploadedFile;
 
 import java.time.LocalDateTime;
 
 public class HechosController implements WithSimplePersistenceUnit {
   private ServicioHechos servicioHechos;
   private ServicioUsuarios servicioUsuarios;
+  private ServicioMultimedia servicioMultimedia;
   private final ObjectMapper mapper = new ObjectMapper();
   private DataFormatter formateador = new DataFormatter();
 
-  public HechosController(ServicioHechos servicioHechos, ServicioUsuarios servicioUsuarios) {
+  public HechosController(ServicioHechos servicioHechos, ServicioUsuarios servicioUsuarios, ServicioMultimedia servicioMultimedia) {
     this.servicioHechos = servicioHechos;
     this.servicioUsuarios = servicioUsuarios;
+    this.servicioMultimedia = servicioMultimedia;
   }
 
   public void listar(Context ctx) {
@@ -74,6 +79,43 @@ public class HechosController implements WithSimplePersistenceUnit {
     ctx.render("hechos-form.hbs", model);
   }
 
+  // 🛑 MÉTODO PARA SERVIR EL BLOB
+  public void servirMultimedia(Context ctx) {
+    try {
+      // 1. Obtener el ID de la ruta (configurado en Routes.java como {id})
+      Long id = Long.parseLong(ctx.pathParam("id"));
+
+      // 2. Buscar la entidad en la base de datos
+      ContenidoMultimedia multimedia = servicioMultimedia.buscarPorId(id);
+
+      if (multimedia == null || multimedia.getDatosArchivo() == null) {
+        ctx.status(404).result("Contenido multimedia no encontrado o vacío.");
+        return;
+      }
+
+      byte[] datosArchivo = multimedia.getDatosArchivo();
+      String tipoMime = multimedia.getTipoMime();
+
+      // 3. Configurar la respuesta HTTP
+      ctx.res().setContentLength(datosArchivo.length);
+
+      // CRUCIAL: Establecer el Content-Type. Si no está, usa octet-stream.
+      ctx.res().setContentType(tipoMime != null ? tipoMime : "application/octet-stream");
+
+      // 4. Escribir los bytes directamente en el flujo de salida
+      ctx.res().getOutputStream().write(datosArchivo);
+
+      // Finalizar la solicitud sin llamar a ctx.result() ni ctx.render()
+
+    } catch (NumberFormatException e) {
+      ctx.status(400).result("ID de multimedia inválido.");
+    } catch (Exception e) {
+      // 🛑 REVISA TUS LOGS: Si esto se dispara, aquí está el error de conexión/data.
+      e.printStackTrace();
+      ctx.status(500).result("Error interno al servir el archivo: " + e.getMessage());
+    }
+  }
+
   public void crear(Context ctx) {
     try {
       String titulo = ctx.formParam("titulo");
@@ -82,8 +124,8 @@ public class HechosController implements WithSimplePersistenceUnit {
       double lat = Double.parseDouble(ctx.formParam("lat"));
       double lon = Double.parseDouble(ctx.formParam("lon"));
       LocalDateTime fechaOcurrencia = LocalDateTime.parse(ctx.formParam("fechaOcurrencia"));
-      String foto = ctx.formParam("foto");
-      String video = ctx.formParam("video");
+      UploadedFile fotoFile = ctx.uploadedFile("foto");
+      UploadedFile videoFile = ctx.uploadedFile("video");
 
       Hecho hecho = new Hecho(
           titulo,
@@ -104,8 +146,30 @@ public class HechosController implements WithSimplePersistenceUnit {
         }
       }
 
-      hecho.addContenidoMultimedia(foto, TipoContenido.IMAGEN);
-      hecho.addContenidoMultimedia(video, TipoContenido.VIDEO);
+      if (fotoFile != null && fotoFile.size() > 0) {
+        // Necesitas una forma de obtener los bytes del UploadedFile.
+        // El método content().readAllBytes() de InputStream es el más directo.
+        byte[] datosFoto = fotoFile.content().readAllBytes();
+
+        ContenidoMultimedia cmFoto = new ContenidoMultimedia();
+        cmFoto.setDatosArchivo(datosFoto);
+        cmFoto.setTipoMime(fotoFile.contentType());
+        cmFoto.setTipoContenido(TipoContenido.IMAGEN);
+
+        hecho.addContenidoMultimedia(cmFoto);
+      }
+
+      // 🎬 Lógica para procesar y adjuntar el Video
+      if (videoFile != null && videoFile.size() > 0) {
+        byte[] datosVideo = videoFile.content().readAllBytes();
+
+        ContenidoMultimedia cmVideo = new ContenidoMultimedia();
+        cmVideo.setDatosArchivo(datosVideo);
+        cmVideo.setTipoMime(videoFile.contentType());
+        cmVideo.setTipoContenido(TipoContenido.VIDEO);
+
+        hecho.addContenidoMultimedia(cmVideo);
+      }
 
       servicioHechos.cargarHecho(hecho);
       entityManager().getTransaction().begin();

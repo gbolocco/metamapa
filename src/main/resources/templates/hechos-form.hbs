@@ -19,7 +19,7 @@
 <div class="form-container">
     <h1>Cargar Hecho</h1>
 
-    <form method="post" action="/hechos">
+    <form method="post" action="/hechos" enctype="multipart/form-data">
         <div class="form-group">
             <label for="titulo">Título:</label>
             <input type="text" id="titulo" name="titulo" required>
@@ -57,12 +57,12 @@
 
         <div class="form-group">
             <label for="foto">Foto:</label>
-            <input type="text" id="foto" name="foto" />
+            <input type="file" id="foto" name="foto" accept="image/*" />
         </div>
 
         <div class="form-group">
             <label for="video">Video:</label>
-            <input type="text" id="video" name="video" />
+            <input type="file" id="video" name="video" accept="video/*" />
         </div>
 
 

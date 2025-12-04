@@ -42,7 +42,9 @@ public class Routes {
 
       get("/", ctx -> ctx.redirect("/home"));
       get("/home", homeController::mostrarHome);
-      
+
+      get("/multimedia/{id}", hechos::servirMultimedia);
+
       path("/", () -> {
           get("/login",login::mostrarLogin);
           get("/estadisticas" ,estadisticController::mostrarEstadisticas);

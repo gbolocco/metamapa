@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
 import ar.edu.utn.frba.dds.dominio.lectores.LectorCsv;
+import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
 import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
@@ -19,11 +20,13 @@ import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuariosRepository;
 import ar.edu.utn.frba.dds.servicios.ServicioSolicitudes;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +39,8 @@ public class Bootstrap implements WithSimplePersistenceUnit {
     var fuente = new FuenteDinamica();
     entityManager().persist(fuente);
 
+    Path pathImagen = Paths.get("./multimedia-examples/WhatsApp Image 2024-05-06 at 12.04.51 PM.jpeg");
+    Path pathVideo = Paths.get("./multimedia-examples/VID-20170211-WA0014.mp4");
     var fuenteEstatica = new FuenteEstatica("./datos/desastres_naturales_processed.csv",new LectorCsv());
 
 
@@ -73,12 +78,29 @@ public class Bootstrap implements WithSimplePersistenceUnit {
         usuarioFeli = UsuariosRepository.INSTANCE.buscarPorNombre("feli");
         usuarioDani = UsuariosRepository.INSTANCE.buscarPorNombre("dani");
       }
-      hechos.forEach(hecho -> hecho.addContenidoMultimedia("https://media.istockphoto.com/id/155666671/es/" +
-          "vector/ilustraci%C3%B3n-vectorial-de-red-house-icon.jpg?s=612x612&w=0&k=20&c=3IHzI5tgnVZQuE_4ZdJDIDyMGd44qWuketKv5EOvawQ=", TipoContenido.IMAGEN));
-      hechos.forEach(h-> h.addContenidoMultimedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", TipoContenido.VIDEO));
-      hechos.forEach((hecho) -> HechosRepository.getInstancia().cargarHecho(hecho));
+      try {
+        byte[] datosImagenReal = Files.readAllBytes(pathImagen);
+        byte[] datosVideoReal = Files.readAllBytes(pathVideo);
 
+        hechos.forEach(hecho -> {
+          ContenidoMultimedia cmImagen = new ContenidoMultimedia();
+          cmImagen.setDatosArchivo(datosImagenReal); // <-- Datos reales
+          cmImagen.setTipoMime("image/jpeg");
+          cmImagen.setTipoContenido(TipoContenido.IMAGEN);
+          hecho.addContenidoMultimedia(cmImagen);
 
+          ContenidoMultimedia cmVideo = new ContenidoMultimedia();
+          cmVideo.setDatosArchivo(datosVideoReal); // Asignamos el byte array
+          cmVideo.setTipoMime("video/mp4");
+          cmVideo.setTipoContenido(TipoContenido.VIDEO);
+          hecho.addContenidoMultimedia(cmVideo);
+        });
+
+        hechos.forEach(hecho -> entityManager().persist(hecho));
+
+      } catch (IOException e) {
+        System.err.println("Error al leer el archivo de prueba: " + e.getMessage());
+      }
 
       var colecciones = Arrays.asList(
           new Coleccion(

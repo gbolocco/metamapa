@@ -136,10 +136,9 @@ public class Hecho {
   }
 
 
-  public void addContenidoMultimedia(String url, TipoContenido tipo) {
-    ContenidoMultimedia nuevoContenido = new ContenidoMultimedia(url,tipo);
-    nuevoContenido.setHecho(this);
-    this.contenidoMultimedia.add(nuevoContenido);
+  public void addContenidoMultimedia(ContenidoMultimedia contenidoMultimedia) {
+    contenidoMultimedia.setHecho(this);
+    this.contenidoMultimedia.add(contenidoMultimedia);
   }
 
 

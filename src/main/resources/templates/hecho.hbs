@@ -57,13 +57,19 @@
 <script>
     const urlsMultimedia = [
         {{#each hecho.contenidoMultimedia}}
-            "{{this.urlArchivo}}"{{#unless @last}},{{/unless}}
+            "/multimedia/{{this.id}}"{{#unless @last}},{{/unless}}
         {{/each}}
     ];
 
     const tiposMultimedia = [
         {{#each hecho.contenidoMultimedia}}
             "{{this.tipoContenido}}"{{#unless @last}},{{/unless}}
+        {{/each}}
+    ];
+
+    const tiposMime = [
+        {{#each hecho.contenidoMultimedia}}
+            "{{this.tipoMime}}"{{#unless @last}},{{/unless}}
         {{/each}}
     ];
 
@@ -81,11 +87,12 @@
     function renderizarContenido() {
         const tipo = tiposMultimedia[indiceActual];
         const url = urlsMultimedia[indiceActual];
+        const tipoMimeReal = tiposMime[indiceActual];
 
         if(tipo === "VIDEO") {
             contenedor.innerHTML = `
                 <video id="imagenPrincipal" class="imagen-principal" controls preload="metadata">
-                    <source src="${url}" type="video/mp4">
+                    <source src="${url}" type="${tipoMimeReal}">
                     Tu navegador no soporta videos.
                 </video>
             `;
@@ -96,6 +103,7 @@
         }
         actualizarFlechas();
     }
+
     flechaSiguiente.addEventListener('click', e => {
         e.preventDefault();
         if(indiceActual < urlsMultimedia.length - 1){
@@ -120,7 +128,8 @@
         }
     } else {
         contenedor.innerHTML = '<div style="color: white; text-align: center; padding: 50px;">Sin contenido multimedia</div>';
-        contenedorPrincipal.classList.add("hecho-sin-multimedia");
+        // Aquí debes revisar el ID, ya que en el HTML tienes `<main class="hecho-main">` y `<div class="hecho-contenedor">`, no `hechoContenedor`.
+        // contenedorPrincipal.classList.add("hecho-sin-multimedia");
         flechaAnterior.style.display = 'none';
         flechaSiguiente.style.display = 'none';
     }
