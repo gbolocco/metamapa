@@ -79,7 +79,6 @@ public class HechosController implements WithSimplePersistenceUnit {
     ctx.render("hechos-form.hbs", model);
   }
 
-  // 🛑 MÉTODO PARA SERVIR EL BLOB
   public void servirMultimedia(Context ctx) {
     try {
       // 1. Obtener el ID de la ruta (configurado en Routes.java como {id})

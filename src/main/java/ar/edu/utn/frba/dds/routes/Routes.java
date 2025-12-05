@@ -69,12 +69,23 @@ public class Routes {
       path("usuarios",() -> {
         put("/{id}/rol",userController::actualizarRolUsuario);
       });
+
+      get("/hechos", ctx -> {
+        Rol rol = ctx.sessionAttribute("rol");
+
+        if (rol != null && rol == Rol.ADMIN) {
+          // Si es ADMIN, llama a hechos::listar (Asumiendo que existe en HechosController)
+          hechos.listar(ctx); // Cambia si el método se llama diferente, por ejemplo, hechos::mostrarListadoAdmin
+        } else {
+          // Si es USER o no tiene el rol, llama a userController::mostrarMisHechos
+          userController.mostrarMisHechos(ctx);
+        }
+      });
+
       path("/hechos", () -> {
-        get(hechos::listar);
         get("/nuevo", hechos::mostrarFormulario);
         get("/{id}", hechos::mostrar);
         post(hechos::crear);
-
       });
 
       path("/login", () -> {
@@ -98,14 +109,14 @@ public class Routes {
 
       post("/logout", login::logout);
       
-      before("/mis-solicitudes", ctx -> {
+      before("/solicitudes", ctx -> {
         if (ctx.sessionAttribute("user_id") == null) {
           ctx.redirect("/login?redirect=" + ctx.path());
           return;
         }
       });
       
-      before("/mis-hechos", ctx -> {
+      before("/hechos", ctx -> {
         if (ctx.sessionAttribute("user_id") == null) {
           ctx.redirect("/login?redirect=" + ctx.path());
           return;
@@ -113,9 +124,7 @@ public class Routes {
       });
       
       get("/mis-solicitudes", userController::mostrarMisSolicitudes);
-      get("/mis-hechos", userController::mostrarMisHechos);
-      
-      
+
     });
   }
 
