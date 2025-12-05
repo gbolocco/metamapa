@@ -86,6 +86,45 @@ public class ServicioSolicitudes {
     }
   }
 
+  public void crearSolicitudModificacion(Usuario usuario, Hecho hecho, String campo, String valor) {
+    // 1. Create Representation from original
+    var representacionDeHecho = new RepresentacionDeHecho(
+        hecho.getTitulo(),
+        hecho.getDescripcion(),
+        hecho.getCategoria(),
+        hecho.getUbicacion(),
+        hecho.getFechaAcontecimiento(),
+        hecho.getFechaDeCarga(),
+        OrigenHecho.PROVISTO_POR_CONTRIBUYENTE);
+
+    // 2. Apply change
+    if (campo != null && valor != null) {
+      switch (campo) {
+        case "titulo":
+          representacionDeHecho.setTitulo(valor);
+          break;
+        case "descripcion":
+          representacionDeHecho.setDescripcion(valor);
+          break;
+        case "categoria":
+          representacionDeHecho.setCategoria(valor);
+          break;
+      }
+    }
+
+    RepresentacionHechosRepository.getInstancia().cargarRepresentacionDeHecho(representacionDeHecho);
+
+    // 3. Create Request
+    SolicitudModificacion solicitudModificacion = new SolicitudModificacion();
+    solicitudModificacion.setRepresentacionDeHecho(representacionDeHecho);
+    solicitudModificacion.setIdHecho(hecho.getId());
+    solicitudModificacion.setUsuario(usuario);
+    solicitudModificacion.setEstadoSolicitud(EstadoSolicitud.PENDIENTE);
+    solicitudModificacion.setFechaSolicitud(new java.util.Date());
+
+    repositorioSolicitudes.agregar(solicitudModificacion);
+  }
+
   public void confirmarSolicitud(Long solicitudId) {
     var solicitud = repositorioSolicitudes.buscarSolicitudPorId(solicitudId);
     if (solicitud != null) {

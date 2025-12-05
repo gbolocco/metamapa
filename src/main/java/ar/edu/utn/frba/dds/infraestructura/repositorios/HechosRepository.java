@@ -69,12 +69,15 @@ public class HechosRepository implements WithSimplePersistenceUnit {
   }
 
   public void modificarHecho(Hecho hechoaModificar, RepresentacionDeHecho representacionDeHecho) {
-    hechoaModificar.setTitulo(representacionDeHecho.getTitulo());
-    hechoaModificar.setDescripcion(representacionDeHecho.getDescripcion());
-    hechoaModificar.setCategoria(representacionDeHecho.getCategoria());
-    hechoaModificar.setUbicacion(representacionDeHecho.getUbicacion());
-    hechoaModificar.setFechaDeCarga(LocalDateTime.now());
-    hechoaModificar.setFechaAcontecimiento(representacionDeHecho.getFechaAcontecimiento());
+    withTransaction(() -> {
+      hechoaModificar.setTitulo(representacionDeHecho.getTitulo());
+      hechoaModificar.setDescripcion(representacionDeHecho.getDescripcion());
+      hechoaModificar.setCategoria(representacionDeHecho.getCategoria());
+      hechoaModificar.setUbicacion(representacionDeHecho.getUbicacion());
+      hechoaModificar.setFechaDeCarga(LocalDateTime.now());
+      hechoaModificar.setFechaAcontecimiento(representacionDeHecho.getFechaAcontecimiento());
+      entityManager().merge(hechoaModificar);
+    });
   }
 
   public static boolean sonEquivalentes(Hecho h1, RepresentacionDeHecho h2) {

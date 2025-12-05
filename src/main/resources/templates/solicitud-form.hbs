@@ -34,10 +34,25 @@
         </div>
         {{/if}}
 
+        {{#if esModificacion}}
+        <div class="form-group">
+            <label for="campoModificar">Campo a Modificar</label>
+            <select id="campoModificar" name="campoModificar" required>
+                <option value="titulo">Título</option>
+                <option value="descripcion">Descripción</option>
+                <option value="categoria">Categoría</option>
+            </select>
+        </div>
+        <div class="form-group">
+             <label for="valorModificar">Nuevo Valor</label>
+             <input type="text" id="valorModificar" name="valorModificar" required placeholder="Ingresa el nuevo valor">
+        </div>
+        {{else}}
         <div class="form-group">
             <label for="justificacion">Justificación{{#if requiereJustificacion}} (Requerida){{/if}}</label>
             <textarea id="justificacion" name="justificacion" rows="4" {{#if requiereJustificacion}}required{{/if}} placeholder="Explica el motivo de tu solicitud..."></textarea>
         </div>
+        {{/if}}
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Crear Solicitud</button>
