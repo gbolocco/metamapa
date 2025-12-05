@@ -72,7 +72,7 @@ public class Routes {
       path("/hechos", () -> {
         get(hechos::listar);
         get("/nuevo", hechos::mostrarFormulario);
-
+        get("/{id}", hechos::mostrar);
         post(hechos::crear);
 
       });

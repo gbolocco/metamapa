@@ -194,7 +194,7 @@ public class HechosController implements WithSimplePersistenceUnit {
 
   public void mostrar(Context ctx) {
     try {
-      String idParam = ctx.queryParam("id");
+      String idParam = ctx.pathParam("id");
       String hechoJson = ctx.queryParam("hecho");
 
       if (hechoJson == null || hechoJson.isEmpty()) {
