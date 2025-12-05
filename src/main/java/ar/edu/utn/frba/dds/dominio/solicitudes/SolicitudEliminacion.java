@@ -49,7 +49,11 @@ public class SolicitudEliminacion  extends Solicitud {
       rechazar();
     }
   }
-
+    @Override
+    public TipoSolicitud getTipoSolicitud() {
+        return TipoSolicitud.ELIMINACION_HECHO;
+    }
+    
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;

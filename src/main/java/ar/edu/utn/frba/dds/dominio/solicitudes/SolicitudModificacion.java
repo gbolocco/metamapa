@@ -80,4 +80,10 @@ public class SolicitudModificacion extends Solicitud {
     this.idHecho = idHecho;
     this.aceptar();
   }
+
+
+    @Override
+    public TipoSolicitud getTipoSolicitud() {
+        return TipoSolicitud.MODIFICACION_HECHO;
+    }
 }
