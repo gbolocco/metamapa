@@ -3,6 +3,10 @@ body {
     background-color: #f4f4f9;
 }
 
+.users-item {
+    background-color: #f1f5f9;
+}
+
 .main-content {
     max-width: 800px;
     margin: 40px auto;
@@ -10,24 +14,6 @@ body {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Tabla */
-.tabla-usuarios {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.tabla-usuarios th, .tabla-usuarios td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-.tabla-usuarios th {
-    background-color: #007bff;
-    color: white;
 }
 
 /* Formulario y Select */

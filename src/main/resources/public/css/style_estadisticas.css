@@ -2,6 +2,7 @@ body {
     background: linear-gradient(to bottom, #fefce8, #fef9c3);
     font-family: "Segoe UI", Roboto, sans-serif;
 }
+
 h1 {
     color: #7b341e;
     font-weight: 600;
@@ -12,6 +13,7 @@ h1 {
     border: 1px solid #d6b68a;
     border-radius: 0.5rem;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;

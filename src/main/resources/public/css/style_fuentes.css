@@ -11,6 +11,10 @@ main {
     margin-bottom: 1.5rem;
 }
 
+.fuentes-item {
+    background-color: #f1f5f9;
+}
+
 .fuentes-header h1 {
     font-size: 1.8rem;
     color: #333;

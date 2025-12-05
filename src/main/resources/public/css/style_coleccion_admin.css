@@ -8,6 +8,10 @@
     margin: 50px auto 0 auto;
 }
 
+.colecciones-item {
+    background-color: #f1f5f9;
+}
+
 .form-container h1 {
     color: #5b3a0f;
     border-bottom: 2px solid #e9ecef;
@@ -93,7 +97,6 @@ button, .btn-secondary, a[type="submit"] {
     text-decoration: none;
     display: inline-block;
 }
-
 
 /* Principal */
 .save-colection {
