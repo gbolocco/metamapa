@@ -19,7 +19,6 @@ public class HechosRepository implements WithSimplePersistenceUnit {
 
   private static final HechosRepository instance = new HechosRepository();
 
-
   public static HechosRepository getInstancia() {
     return instance;
   }
@@ -43,7 +42,7 @@ public class HechosRepository implements WithSimplePersistenceUnit {
     return buscar(hechoId) != null;
   }
 
-  //NO HAY QUE USAR
+  // NO HAY QUE USAR
   public List<Hecho> mostrarHechos() {
     return entityManager()
         .createQuery("FROM Hecho h", Hecho.class)
@@ -56,14 +55,18 @@ public class HechosRepository implements WithSimplePersistenceUnit {
     }
   }
 
-  //TODO HACER QUERY
+  // TODO HACER QUERY
+  // TODO HACER QUERY
   public List<Hecho> filtrarHechos(List<Filtro> filtros, OrigenHecho origenHecho) {
+    List<RepresentacionDeHecho> hechosEliminados = RepresentacionHechosRepository.getInstancia()
+        .getRepHechosEliminados();
+
     return this.mostrarHechos().stream()
+        .filter(hecho -> hechosEliminados.stream().noneMatch(eliminado -> sonEquivalentes(hecho, eliminado)))
         .filter(hecho -> hecho.getOrigenHecho().equals(origenHecho))
         .filter(hecho -> filtros.stream().allMatch(filtro -> filtro.cumpleFiltro(hecho)))
         .toList();
   }
-
 
   public void modificarHecho(Hecho hechoaModificar, RepresentacionDeHecho representacionDeHecho) {
     hechoaModificar.setTitulo(representacionDeHecho.getTitulo());
@@ -74,7 +77,6 @@ public class HechosRepository implements WithSimplePersistenceUnit {
     hechoaModificar.setFechaAcontecimiento(representacionDeHecho.getFechaAcontecimiento());
   }
 
-
   public static boolean sonEquivalentes(Hecho h1, RepresentacionDeHecho h2) {
     return h1.getTitulo().equalsIgnoreCase(h2.getTitulo())
         && h1.getDescripcion().equals(h2.getDescripcion())
@@ -83,7 +85,6 @@ public class HechosRepository implements WithSimplePersistenceUnit {
         && h1.getUbicacion().getLongitud().equals(h2.getUbicacion().getLongitud())
         && h1.getFechaAcontecimiento().equals(h2.getFechaAcontecimiento());
   }
-
 
   public Hecho buscar(Long id) {
     return entityManager().find(Hecho.class, id);
