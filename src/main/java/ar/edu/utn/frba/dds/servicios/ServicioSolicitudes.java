@@ -61,8 +61,10 @@ public class ServicioSolicitudes {
         solicitud.setRepresentacionDeHecho(representacionDeHecho);
         break;
       case MODIFICACION_HECHO:
-        solicitud = new SolicitudModificacion();
-        solicitud.setRepresentacionDeHecho(representacionDeHecho);
+        SolicitudModificacion solicitudModificacion = new SolicitudModificacion();
+        solicitudModificacion.setRepresentacionDeHecho(representacionDeHecho);
+        solicitudModificacion.setIdHecho(hecho.getId());
+        solicitud = solicitudModificacion;
         break;
       default:
         throw new IllegalArgumentException("Tipo de solicitud no soportado: " + tipoSolicitud);
