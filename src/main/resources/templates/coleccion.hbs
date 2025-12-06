@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Colección {{coleccion.nombre}}</title>
@@ -25,7 +26,7 @@
             max-width: 800px;
             margin: 0 auto 30px auto;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         section p {
@@ -69,7 +70,7 @@
             margin: 20px auto;
             max-width: 800px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .filtros-container {
@@ -150,6 +151,7 @@
             background-color: #4b2f0c;
             transform: scale(1.03);
         }
+
         .toggle-container {
             display: flex;
             align-items: center;
@@ -194,11 +196,11 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: #0077ff;
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(24px);
         }
 
@@ -221,9 +223,11 @@
             .filtros-container {
                 padding: 1rem;
             }
+
             .filtros-form {
                 grid-template-columns: 1fr;
             }
+
             .form-actions {
                 flex-direction: column;
             }
@@ -239,6 +243,7 @@
             cursor: pointer;
             font-size: 0.9rem;
         }
+
         .as-link:hover {
             color: #0056b3;
         }
@@ -246,106 +251,113 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
+
 <body>
 
-<header>
-    <h1>{{coleccion.nombre}}</h1>
-</header>
+    <header>
+        <h1>{{coleccion.nombre}}</h1>
+    </header>
 
-<div class="filtros-container">
-    <h2>Filtrar Hechos</h2>
+    <div class="filtros-container">
+        <h2>Filtrar Hechos</h2>
 
-<form method="get" action="/colecciones/{{coleccion.id}}" class="filtros-form">
-    <div class="form-group">
-        <label for="campoTexto">Buscar por:</label>
-        <select name="campoTexto" id="campoTexto">
-            <option value="titulo">Título</option>
-            <option value="descripcion">Descripción</option>
-        </select>
+        <form method="get" action="/colecciones/{{coleccion.id}}" class="filtros-form">
+            <div class="form-group">
+                <label for="campoTexto">Buscar por:</label>
+                <select name="campoTexto" id="campoTexto">
+                    <option value="titulo">Título</option>
+                    <option value="descripcion">Descripción</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="textoFiltro">Texto contiene:</label>
+                <input type="text" id="textoFiltro" name="textoFiltro" placeholder="Palabra clave...">
+            </div>
+
+            <div class="form-group">
+                <label for="fechaDesde">Fecha desde:</label>
+                <input type="datetime-local" id="fechaDesde" name="fechaDesde">
+            </div>
+
+            <div class="form-group">
+                <label for="fechaHasta">Fecha hasta:</label>
+                <input type="datetime-local" id="fechaHasta" name="fechaHasta">
+            </div>
+
+            <div class="form-group toggle-container">
+                <label for="navegacionCurada">Modo de navegación curada:</label>
+                <label class="switch">
+                    <input type="checkbox" id="navegacionCurada" name="navegacionCurada" value="true">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">Aplicar filtros</button>
+            </div>
+        </form>
     </div>
 
-    <div class="form-group">
-        <label for="textoFiltro">Texto contiene:</label>
-        <input type="text" id="textoFiltro" name="textoFiltro" placeholder="Palabra clave...">
-    </div>
+    <section>
+        <p><strong>Titulo:</strong> {{coleccion.titulo}}</p>
+        <p><strong>Descripción:</strong> {{coleccion.descripcion}}</p>
+        <p><strong>Fecha de creación:</strong> {{fechaDeCreacion}}</p>
+        <div id="map"></div>
+    </section>
 
-    <div class="form-group">
-        <label for="fechaDesde">Fecha desde:</label>
-        <input type="datetime-local" id="fechaDesde" name="fechaDesde">
-    </div>
+    <footer>
+        <a href="/colecciones">← Volver a todas las colecciones</a>
+    </footer>
 
-    <div class="form-group">
-        <label for="fechaHasta">Fecha hasta:</label>
-        <input type="datetime-local" id="fechaHasta" name="fechaHasta">
-    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const hechos = {{{ hechosJson }}};
+        const coleccionId = {{ coleccion.id }};
 
-    <div class="form-group toggle-container">
-        <label for="navegacionCurada">Modo de navegación curada:</label>
-        <label class="switch">
-            <input type="checkbox" id="navegacionCurada" name="navegacionCurada" value="true">
-            <span class="slider round"></span>
-        </label>
-    </div>
+        const map = L.map('map').setView([-34.6037, -58.3816], 5);
 
-    <div class="form-actions">
-        <button type="submit">Aplicar filtros</button>
-    </div>
-</form>
-</div>
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-<section>
-    <p><strong>Titulo:</strong> {{coleccion.titulo}}</p>
-    <p><strong>Descripción:</strong> {{coleccion.descripcion}}</p>
-    <p><strong>Fecha de creación:</strong> {{fechaDeCreacion}}</p>
-    <div id="map"></div>
-</section>
+        if (hechos && hechos.length > 0) {
+            const coords = [];
 
-<footer>
-    <a href="/colecciones">← Volver a todas las colecciones</a>
-</footer>
+            hechos.forEach(h => {
+                if (h.ubicacion && h.ubicacion.latitud && h.ubicacion.longitud) {
+                    const hechoJson = encodeURIComponent(JSON.stringify(h));
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    const hechos = {{{hechosJson}}};
-    const coleccionId = {{coleccion.id}};
+                    let link = `/colecciones/${coleccionId}/hechos?id=${h.id}`;
+                    if (!h.id) {
+                        link = `/colecciones/${coleccionId}/hechos?hecho=${hechoJson}`;
+                    }
 
-    const map = L.map('map').setView([-34.6037, -58.3816], 5);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    if (hechos && hechos.length > 0) {
-        const coords = [];
-
-        hechos.forEach(h => {
-            if (h.ubicacion && h.ubicacion.latitud && h.ubicacion.longitud) {
-                const hechoJson = encodeURIComponent(JSON.stringify(h));
-
-                const popupHtml = `
+                    const popupHtml = `
           <b>${h.titulo}</b><br>
           ${h.descripcion}<br>
           (${h.ubicacion.latitud}, ${h.ubicacion.longitud})<br>
-          <a href="/colecciones/${coleccionId}/hechos?id=${h.id}">
+          <a href="${link}">
             Ver detalle
           </a>
         `;
 
-                L.marker([h.ubicacion.latitud, h.ubicacion.longitud])
+                    L.marker([h.ubicacion.latitud, h.ubicacion.longitud])
                         .addTo(map)
                         .bindPopup(popupHtml);
 
-                coords.push([h.ubicacion.latitud, h.ubicacion.longitud]);
-            }
-        });
+                    coords.push([h.ubicacion.latitud, h.ubicacion.longitud]);
+                }
+            });
 
-        if (coords.length > 0) {
-            const bounds = L.latLngBounds(coords);
-            map.fitBounds(bounds);
+            if (coords.length > 0) {
+                const bounds = L.latLngBounds(coords);
+                map.fitBounds(bounds);
+            }
+        } else {
+            console.log("No hay hechos con coordenadas");
         }
-    } else {
-        console.log("No hay hechos con coordenadas");
-    }
-</script>
+    </script>
 </body>
+
 </html>

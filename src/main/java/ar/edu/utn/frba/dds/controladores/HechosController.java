@@ -267,9 +267,12 @@ public class HechosController implements WithSimplePersistenceUnit {
       Hecho hecho = mapper.readValue(hechoJson, Hecho.class);
 
       Long id = null;
+      // ONLY use queryId here. Ignore pathParam("id") to avoid Collection ID
+      // conflict.
       try {
-        if (idParam != null && !idParam.equals("null")) {
-          id = Long.parseLong(idParam);
+        String queryId = ctx.queryParam("id");
+        if (queryId != null && !queryId.isEmpty() && !queryId.equals("null")) {
+          id = Long.parseLong(queryId);
           var hechoFromDB = servicioHechos.buscar(id);
           if (hechoFromDB != null) {
             hecho.setContenidoMultimedia(hechoFromDB.getContenidoMultimedia());
