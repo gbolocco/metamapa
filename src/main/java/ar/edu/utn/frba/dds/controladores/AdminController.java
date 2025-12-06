@@ -281,17 +281,7 @@ public class AdminController {
         .obtenerSolicitudesPendientesPorTipo(TipoSolicitud.MODIFICACION_HECHO);
 
     List<Map<String, Object>> solicitudes;
-    if (solicitudesRepo.isEmpty()) {
-      solicitudes = List.of(
-          Map.of("id", 201, "titulo", "Solicitud de Modificación - Huracán Categoría", "fecha", "2025-10-30 11:45",
-              "justificacion",
-              "Solicitud para modificar la categoría del huracán registrado, se detectó error en la clasificación inicial.",
-              "solicitante", "Centro Meteorológico", "tipo", "Modificación"),
-          Map.of("id", 202, "titulo", "Solicitud de Modificación - Coordenadas Incendio", "fecha", "2025-10-29 14:20",
-              "justificacion",
-              "Solicitud para corregir las coordenadas del incendio forestal, se registraron coordenadas incorrectas.",
-              "solicitante", "Bomberos Voluntarios", "tipo", "Modificación"));
-    } else {
+
       solicitudes = solicitudesRepo.stream()
           .map(s -> {
             Map<String, Object> solicitudMap = new HashMap<>();
@@ -306,7 +296,6 @@ public class AdminController {
             return solicitudMap;
           })
           .collect(Collectors.toList());
-    }
 
     renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Modificación", "modificacion");
   }
