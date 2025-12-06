@@ -16,11 +16,9 @@ public class SolicitudModificacion extends Solicitud {
   private Long idHecho;
 
   public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long idHecho) {
-
+    super(representacionDeHecho);
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
-    this.representacionDeHecho = representacionDeHecho;
     this.idHecho = idHecho;
-    SolicitudesRepository.getInstancia().agregar(this);
   }
 
   public Long getIdHecho() {

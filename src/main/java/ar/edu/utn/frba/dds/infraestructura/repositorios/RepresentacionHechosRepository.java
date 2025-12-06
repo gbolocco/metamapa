@@ -27,7 +27,9 @@ public class RepresentacionHechosRepository implements WithSimplePersistenceUnit
   }
 
   public void cargarRepresentacionDeHecho(RepresentacionDeHecho representacionDeHecho) {
-    entityManager().persist(representacionDeHecho);
+    withTransaction(() -> {
+      entityManager().persist(representacionDeHecho);
+    });
   }
 
 }

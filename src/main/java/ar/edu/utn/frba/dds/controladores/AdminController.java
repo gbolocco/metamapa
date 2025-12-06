@@ -241,9 +241,10 @@ public class AdminController {
           Map<String, Object> solicitudMap = new HashMap<>();
           solicitudMap.put("id", s.getId());
           solicitudMap.put("titulo", "Solicitud de " + (s.getTipoSolicitud() != null ? s.getTipoSolicitud() : "N/A"));
-          solicitudMap.put("fecha", s.getFechaSolicitud().toString());
+          solicitudMap.put("fecha",
+              s.getFechaSolicitud() != null ? s.getFechaSolicitud().toString() : "Fecha Desconocida");
           solicitudMap.put("justificacion", s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
-          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
+          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : "Anónimo");
           solicitudMap.put("tipo", s.getTipoSolicitud() != null ? s.getTipoSolicitud().toString() : "N/A");
           return solicitudMap;
         })
@@ -282,20 +283,21 @@ public class AdminController {
 
     List<Map<String, Object>> solicitudes;
 
-      solicitudes = solicitudesRepo.stream()
-          .map(s -> {
-            Map<String, Object> solicitudMap = new HashMap<>();
-            solicitudMap.put("id", s.getId());
-            solicitudMap.put("titulo", "Solicitud de Modificación - "
-                + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
-            solicitudMap.put("fecha", s.getFechaSolicitud().toString());
-            solicitudMap.put("justificacion",
-                s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
-            solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
-            solicitudMap.put("tipo", "Modificación");
-            return solicitudMap;
-          })
-          .collect(Collectors.toList());
+    solicitudes = solicitudesRepo.stream()
+        .map(s -> {
+          Map<String, Object> solicitudMap = new HashMap<>();
+          solicitudMap.put("id", s.getId());
+          solicitudMap.put("titulo", "Solicitud de Modificación - "
+              + (s.getRepresentacionDeHecho() != null ? s.getRepresentacionDeHecho().getId() : "N/A"));
+          solicitudMap.put("fecha",
+              s.getFechaSolicitud() != null ? s.getFechaSolicitud().toString() : "Fecha Desconocida");
+          solicitudMap.put("justificacion",
+              s.getJustificacion() != null ? s.getJustificacion() : "Sin justificación");
+          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : "Anónimo");
+          solicitudMap.put("tipo", "Modificación");
+          return solicitudMap;
+        })
+        .collect(Collectors.toList());
 
     renderizarSolicitudes(ctx, solicitudes, "Solicitudes de Modificación", "modificacion");
   }
@@ -311,11 +313,13 @@ public class AdminController {
           solicitudMap.put("id", s.getId());
           solicitudMap.put("titulo", "Solicitud de "
               + (s.getTipoSolicitud() != null ? s.getTipoSolicitud().toString().replace("_", " ") : "N/A"));
-          solicitudMap.put("fecha", s.getFechaSolicitud().toString());
-          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : null);
+          solicitudMap.put("fecha",
+              s.getFechaSolicitud() != null ? s.getFechaSolicitud().toString() : "Fecha Desconocida");
+          solicitudMap.put("solicitante", s.getUsuario() != null ? s.getUsuario().getNombre() : "Anónimo");
           solicitudMap.put("tipo",
               s.getTipoSolicitud() != null ? s.getTipoSolicitud().toString().replace("_", " ") : "N/A");
-          solicitudMap.put("estado", s.getEstadoSolicitud().toString());
+          solicitudMap.put("estado",
+              s.getEstadoSolicitud() != null ? s.getEstadoSolicitud().toString() : "Desconocido");
           return solicitudMap;
         })
         .collect(Collectors.toList()));

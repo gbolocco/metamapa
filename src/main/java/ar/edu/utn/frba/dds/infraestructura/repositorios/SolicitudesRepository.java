@@ -19,7 +19,9 @@ public class SolicitudesRepository implements
   }
 
   public void agregar(Solicitud solicitud) {
-    entityManager().persist(solicitud);
+    withTransaction(() -> {
+      entityManager().persist(solicitud);
+    });
   }
 
   public List<Solicitud> pendientes() {
