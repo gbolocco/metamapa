@@ -27,7 +27,8 @@ public class HechosController implements WithSimplePersistenceUnit {
   private final ObjectMapper mapper = new ObjectMapper();
   private DataFormatter formateador = new DataFormatter();
 
-  public HechosController(ServicioHechos servicioHechos, ServicioUsuarios servicioUsuarios, ServicioMultimedia servicioMultimedia) {
+  public HechosController(ServicioHechos servicioHechos, ServicioUsuarios servicioUsuarios,
+      ServicioMultimedia servicioMultimedia) {
     this.servicioHechos = servicioHechos;
     this.servicioUsuarios = servicioUsuarios;
     this.servicioMultimedia = servicioMultimedia;
@@ -197,50 +198,62 @@ public class HechosController implements WithSimplePersistenceUnit {
       String hechoJson = ctx.queryParam("hecho");
 
       if (hechoJson == null || hechoJson.isEmpty()) {
-        // Si no hay hechoJson pero sí hay id, buscar el hecho en la BD
-        if (idParam != null && !idParam.equals("null")) {
+        // Prioritize query param 'id' (used in collections view) over path param 'id'
+        String queryId = ctx.queryParam("id");
+        Long idToSearch = null;
+
+        if (queryId != null && !queryId.isEmpty()) {
           try {
-            Long id = Long.parseLong(idParam);
-            var hechoFromDB = servicioHechos.buscar(id);
-            if (hechoFromDB != null) {
-              Map<String, Object> model = new HashMap<>();
-              model.put("hecho", hechoFromDB);
-
-              if (hechoFromDB.getOrigenHecho() != null) {
-                model.put("origenFormateado", formateador.formatearOrigen(hechoFromDB.getOrigenHecho()));
-              }
-
-              if (hechoFromDB.getEstadoHecho() != null) {
-                model.put("estadoFormateado", formateador.formatearEstado(hechoFromDB.getEstadoHecho()));
-              }
-
-              if (hechoFromDB.getFechaAcontecimiento() != null) {
-                model.put("fechaFormateada", formateador.formatearFecha(hechoFromDB.getFechaAcontecimiento()));
-              }
-
-              model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
-              model.put("rol", ctx.sessionAttribute("rol"));
-              model.put("user_name", ctx.sessionAttribute("user_name"));
-              model.put("user_id", ctx.sessionAttribute("user_id"));
-
-              // Manejar mensajes de sesión
-              String successMessage = ctx.sessionAttribute("successMessage");
-              if (successMessage != null) {
-                model.put("successMessage", successMessage);
-                ctx.sessionAttribute("successMessage", null);
-              }
-
-              String errorMessage = ctx.sessionAttribute("errorMessage");
-              if (errorMessage != null) {
-                model.put("errorMessage", errorMessage);
-                ctx.sessionAttribute("errorMessage", null);
-              }
-
-              ctx.render("hecho.hbs", model);
-              return;
-            }
+            idToSearch = Long.parseLong(queryId);
           } catch (NumberFormatException e) {
-            System.err.println("⚠️ id inválido: " + idParam);
+            System.err.println("⚠️ query id inválido: " + queryId);
+          }
+        } else if (idParam != null && !idParam.equals("null")) {
+          try {
+            idToSearch = Long.parseLong(idParam);
+          } catch (NumberFormatException e) {
+            System.err.println("⚠️ path id inválido: " + idParam);
+          }
+        }
+
+        if (idToSearch != null) {
+          var hechoFromDB = servicioHechos.buscar(idToSearch);
+          if (hechoFromDB != null) {
+            Map<String, Object> model = new HashMap<>();
+            model.put("hecho", hechoFromDB);
+
+            if (hechoFromDB.getOrigenHecho() != null) {
+              model.put("origenFormateado", formateador.formatearOrigen(hechoFromDB.getOrigenHecho()));
+            }
+
+            if (hechoFromDB.getEstadoHecho() != null) {
+              model.put("estadoFormateado", formateador.formatearEstado(hechoFromDB.getEstadoHecho()));
+            }
+
+            if (hechoFromDB.getFechaAcontecimiento() != null) {
+              model.put("fechaFormateada", formateador.formatearFecha(hechoFromDB.getFechaAcontecimiento()));
+            }
+
+            model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
+            model.put("rol", ctx.sessionAttribute("rol"));
+            model.put("user_name", ctx.sessionAttribute("user_name"));
+            model.put("user_id", ctx.sessionAttribute("user_id"));
+
+            // Manejar mensajes de sesión
+            String successMessage = ctx.sessionAttribute("successMessage");
+            if (successMessage != null) {
+              model.put("successMessage", successMessage);
+              ctx.sessionAttribute("successMessage", null);
+            }
+
+            String errorMessage = ctx.sessionAttribute("errorMessage");
+            if (errorMessage != null) {
+              model.put("errorMessage", errorMessage);
+              ctx.sessionAttribute("errorMessage", null);
+            }
+
+            ctx.render("hecho.hbs", model);
+            return;
           }
         }
         ctx.status(400).result("Falta el parámetro 'hecho' o 'id' válido");
