@@ -10,16 +10,15 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
   public void configure(
-    JavalinConfig config,
-    HechosController hechos,
-    LoginController login,
-    ColeccionController coleccionController,
-    UserController userController,
-    AdminController admin,
-    SolicitudesController solicitudesController,
-    HomeController homeController,
-    EstadisticaController estadisticController
-    ) {
+      JavalinConfig config,
+      HechosController hechos,
+      LoginController login,
+      ColeccionController coleccionController,
+      UserController userController,
+      AdminController admin,
+      SolicitudesController solicitudesController,
+      HomeController homeController,
+      EstadisticaController estadisticController) {
 
     config.router.apiBuilder(() -> {
 
@@ -46,36 +45,38 @@ public class Routes {
       get("/multimedia/{id}", hechos::servirMultimedia);
 
       path("/", () -> {
-          get("/login",login::mostrarLogin);
-          get("/estadisticas" ,estadisticController::mostrarEstadisticas);
-          post("/estadisticas",estadisticController::crearEstadistica);
-          post("/estadisticas/descargar", estadisticController::descargarSeleccionadas);
-          post("/estadisticas/calcular",estadisticController::calcularEstadisticas);
+        get("/login", login::mostrarLogin);
+        get("/estadisticas", estadisticController::mostrarEstadisticas);
+        post("/estadisticas", estadisticController::crearEstadistica);
+        post("/estadisticas/descargar", estadisticController::descargarSeleccionadas);
+        post("/estadisticas/calcular", estadisticController::calcularEstadisticas);
       });
 
       path("/admin", () -> {
-        get("/dashboard",admin::mostrarDashboard);
-        get("/coleccion",admin::mostrarFormColeccion);
-        post("/coleccion",admin::crearColeccion);
-        get("/usuarios",admin::mostrarUsuarios);
+        get("/dashboard", admin::mostrarDashboard);
+        get("/coleccion", admin::mostrarFormColeccion);
+        post("/coleccion", admin::crearColeccion);
+        get("/usuarios", admin::mostrarUsuarios);
         get("/solicitudes", admin::mostrarSolicitudes);
         post("/solicitudes/{id}/confirmar", admin::confirmar);
         post("/solicitudes/{id}/rechazar", admin::rechazar);
         get("/fuentes", admin::mostrarFuentes);
-          delete("/fuentes/{id}", admin::eliminarFuente);
-          post("/fuentes/nueva", admin::crearFuente);
-        });
+        delete("/fuentes/{id}", admin::eliminarFuente);
+        post("/fuentes/nueva", admin::crearFuente);
+      });
 
-      path("usuarios",() -> {
-        put("/{id}/rol",userController::actualizarRolUsuario);
+      path("usuarios", () -> {
+        put("/{id}/rol", userController::actualizarRolUsuario);
       });
 
       get("/hechos", ctx -> {
         Rol rol = ctx.sessionAttribute("rol");
 
         if (rol != null && rol == Rol.ADMIN) {
-          // Si es ADMIN, llama a hechos::listar (Asumiendo que existe en HechosController)
-          hechos.listar(ctx); // Cambia si el método se llama diferente, por ejemplo, hechos::mostrarListadoAdmin
+          // Si es ADMIN, llama a hechos::listar (Asumiendo que existe en
+          // HechosController)
+          hechos.listar(ctx); // Cambia si el método se llama diferente, por ejemplo,
+                              // hechos::mostrarListadoAdmin
         } else {
           // Si es USER o no tiene el rol, llama a userController::mostrarMisHechos
           userController.mostrarMisHechos(ctx);
@@ -92,13 +93,13 @@ public class Routes {
         get(login::mostrarLogin);
         post(login::login);
       });
-      
+
       get("/registro", login::mostrarRegistro);
       post("/registro", login::registrar);
 
       path("/colecciones", () -> {
         get(coleccionController::mostrarColecciones);
-        get("/{id}",coleccionController::mostrarColeccion);
+        get("/{id}", coleccionController::mostrarColeccion);
         get("/{id}/hechos", hechos::mostrar);
       });
 
@@ -108,22 +109,27 @@ public class Routes {
       });
 
       post("/logout", login::logout);
-      
+
       before("/solicitudes", ctx -> {
         if (ctx.sessionAttribute("user_id") == null) {
           ctx.redirect("/login?redirect=" + ctx.path());
           return;
         }
       });
-      
+
       before("/hechos", ctx -> {
         if (ctx.sessionAttribute("user_id") == null) {
           ctx.redirect("/login?redirect=" + ctx.path());
           return;
         }
       });
-      
+
       get("/mis-solicitudes", userController::mostrarMisSolicitudes);
+
+      after(ctx -> {
+        ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository.getInstancia().entityManager().clear();
+        ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository.getInstancia().entityManager().close();
+      });
 
     });
   }
