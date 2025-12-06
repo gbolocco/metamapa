@@ -7,8 +7,7 @@ import java.util.List;
 
 public class RepresentacionHechosRepository implements WithSimplePersistenceUnit {
 
-  private static final RepresentacionHechosRepository instance =
-      new RepresentacionHechosRepository();
+  private static final RepresentacionHechosRepository instance = new RepresentacionHechosRepository();
 
   public static RepresentacionHechosRepository getInstancia() {
     return instance;
@@ -21,12 +20,11 @@ public class RepresentacionHechosRepository implements WithSimplePersistenceUnit
 
   public List<RepresentacionDeHecho> getRepHechosEliminados() {
     return entityManager()
-        .createQuery("FROM RepresentacionDeHecho r where r.estadoRepresentacionHecho=: eliminado",
-        RepresentacionDeHecho.class)
+        .createQuery("FROM RepresentacionDeHecho r where r.estadoRepresentacionHecho=:eliminado",
+            RepresentacionDeHecho.class)
         .setParameter("eliminado", EstadoRepresentacionHecho.ELIMINADO)
         .getResultList();
   }
-
 
   public void cargarRepresentacionDeHecho(RepresentacionDeHecho representacionDeHecho) {
     entityManager().persist(representacionDeHecho);

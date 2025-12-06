@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -25,7 +26,7 @@ import lombok.Setter;
 @DiscriminatorColumn(name = "tipo_fuente", discriminatorType = DiscriminatorType.STRING)
 @Setter
 @Getter
-public abstract class  Fuente {
+public abstract class Fuente {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "id_Fuente")
@@ -36,21 +37,21 @@ public abstract class  Fuente {
   public String url;
 
   @Transient
-  public List<Hecho> hechos;
+  public List<Hecho> hechos = new ArrayList<>();
 
   public abstract List<Hecho> obtenerHechos(List<Filtro> criterios);
 
-
   public abstract TipoFuente getTipoFuente();
 
-
   public void actualizarLista(List<RepresentacionDeHecho> representaciones) {
+    if (this.hechos == null) {
+      this.hechos = new ArrayList<>();
+    }
     this.hechos = this.hechos.stream()
         .filter(h -> representaciones
             .stream()
             .noneMatch(r -> HechosRepository.sonEquivalentes(h, r)))
         .toList();
   }
-
 
 }

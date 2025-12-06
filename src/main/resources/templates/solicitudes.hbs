@@ -468,7 +468,7 @@
         const endpoint = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
         const accionTexto = currentAction === 'aceptar' ? 'confirmar' : 'rechazar';
 
-        fetch(`/solicitudes/${currentId}/${endpoint}`, {
+        fetch(`/admin/solicitudes/${currentId}/${endpoint}`, {
             method: 'POST'
         })
             .then(response => {

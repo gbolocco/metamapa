@@ -42,6 +42,7 @@ public class SolicitudesController {
           TipoSolicitud tipoSolicitud = TipoSolicitud.valueOf(tipoQuery.toUpperCase() + "_HECHO");
           model.put("tipoPreseleccionado", tipoSolicitud.toString());
           model.put("requiereJustificacion", tipoSolicitud == TipoSolicitud.ELIMINACION_HECHO);
+          model.put("esModificacion", tipoSolicitud == TipoSolicitud.MODIFICACION_HECHO);
         }
       } catch (IllegalArgumentException e) {
         // Tipo inválido, ignorar
@@ -68,7 +69,13 @@ public class SolicitudesController {
         return;
       }
 
-      servicioSolicitudes.crearSolicitud(usuario, hecho, tipoSolicitud, justificacion);
+      if (tipoSolicitud == TipoSolicitud.MODIFICACION_HECHO) {
+        String campo = ctx.formParam("campoModificar");
+        String valor = ctx.formParam("valorModificar");
+        servicioSolicitudes.crearSolicitudModificacion(usuario, hecho, campo, valor);
+      } else {
+        servicioSolicitudes.crearSolicitud(usuario, hecho, tipoSolicitud, justificacion);
+      }
 
       ctx.sessionAttribute("successMessage", "Solicitud creada exitosamente");
       String redirectUrl = "/colecciones/" + coleccionId + "/hechos?id=" + hechoId;
