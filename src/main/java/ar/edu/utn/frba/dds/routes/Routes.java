@@ -103,7 +103,7 @@ public class Routes {
         get("/{id}/hechos", hechos::mostrar);
       });
 
-      path("/solicitudes", () -> {
+      path("/solicitudes/nuevo", () -> {
         get(solicitudesController::mostrarFormulario);
         post(solicitudesController::crear);
       });
@@ -124,7 +124,7 @@ public class Routes {
         }
       });
 
-      get("/mis-solicitudes", userController::mostrarMisSolicitudes);
+      get("/solicitudes", userController::mostrarMisSolicitudes);
 
       after(ctx -> {
         ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository.getInstancia().entityManager().clear();

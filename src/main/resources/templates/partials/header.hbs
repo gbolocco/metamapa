@@ -9,7 +9,7 @@
       <a href="/colecciones" class="colecciones-nav" >Navegar Colecciones</a>
       <a href="/hechos/nuevo" class="nuevo-hecho-nav">Subí tu Hecho</a>
       <a href="/hechos" id="misHechos" class="hechos-nav" style="display: none;">Mis Hechos</a>
-      <a href="/mis-solicitudes" id="misSolicitudes" class="solicitudes-nav" style="display: none;">Mis Solicitudes</a>
+      <a href="/solicitudes" id="misSolicitudes" class="solicitudes-nav" style="display: none;">Mis Solicitudes</a>
         <a href="/estadisticas" id="estadisticas" class="estadisticas-nav">Estadisticas</a>
     </nav>
 
@@ -78,7 +78,7 @@
         </form>`;
         } else if (tipoUsuario === "USER") {
             html += `
-        <a href="/mis-solicitudes" class="dropdown-item">${solicitudIcon} Solicitudes</a>
+        <a href="/solicitudes" class="dropdown-item">${solicitudIcon} Solicitudes</a>
         <a href="/hechos" class="dropdown-item">${hechoIcon} Hechos</a>
         <form id="logoutForm" method="post" action="/logout">
           <button type="submit" class="dropdown-item">${salirIcon} Cerrar Sesión</button>

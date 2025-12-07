@@ -1,7 +1,7 @@
 <div class="container">
     <h1>Crear Solicitud</h1>
     
-    <form action="/solicitudes" method="post" class="solicitud-form">
+    <form action="/solicitudes/nuevo" method="post" class="solicitud-form">
         {{#if coleccionId}}
         <input type="hidden" name="coleccionId" value="{{coleccionId}}">
         {{/if}}

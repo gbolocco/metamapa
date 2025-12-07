@@ -141,11 +141,11 @@
     const coleccionId = {{#if hecho.coleccion.id}}{{hecho.coleccion.id}}{{else}}1{{/if}};
     
     function solicitarEliminacion() {
-        window.location.href = `/solicitudes?tipo=eliminacion&hechoId=${hechoId}&coleccionId=${coleccionId}`;
+        window.location.href = `/solicitudes/nuevo?tipo=eliminacion&hechoId=${hechoId}&coleccionId=${coleccionId}`;
     }
     
     function solicitarModificacion() {
-        window.location.href = `/solicitudes?tipo=modificacion&hechoId=${hechoId}&coleccionId=${coleccionId}`;
+        window.location.href = `/solicitudes/nuevo?tipo=modificacion&hechoId=${hechoId}&coleccionId=${coleccionId}`;
     }
 </script>
 
