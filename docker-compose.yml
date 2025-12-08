@@ -5,15 +5,15 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./tpa-2025-02:/workspace
+      - .:/workspace
       - ~/.m2:/root/.m2
     working_dir: /workspace
     depends_on:
       - mysql_db
     environment:
-      - DB_URL=${DB_URL}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_URL=jdbc:mysql://localhost:3306/metamapa
+      - DB_USER=root
+      - DB_PASSWORD=12345678
     command: bash
     ports:
       - "8080:8080"
