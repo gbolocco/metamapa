@@ -178,17 +178,20 @@ public class HechosController implements WithSimplePersistenceUnit {
       entityManager().clear();
 
       if (userId != null) {
-        // Usuario logueado -> ir a mis solicitudes (o lista de hechos)
-        // El usuario pidió que se carguen directamente, así que mejor ir a la lista de
-        // hechos o mostrar éxito
-        ctx.redirect("/hechos?success=hecho_creado");
+        // Usuario logueado -> ir a colecciones
+        ctx.redirect("/colecciones?success=hecho_creado");
       } else {
-        // Usuario anónimo -> ir a home
-        ctx.redirect("/home?success=hecho_creado");
+        // Usuario anónimo -> ir a colecciones
+        ctx.redirect("/colecciones?success=hecho_creado");
       }
     } catch (Exception e) {
       e.printStackTrace();
-      ctx.redirect("/hechos?error=" + e.getMessage());
+      String errorMsg = e.getMessage() != null ? e.getMessage() : "Error desconocido";
+      if (e.getCause() != null) {
+        errorMsg += " | Cause: "
+            + (e.getCause().getMessage() != null ? e.getCause().getMessage() : e.getCause().toString());
+      }
+      ctx.redirect("/colecciones?error=" + errorMsg);
     }
   }
 

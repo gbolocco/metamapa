@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.controladores;
 
-
 import ar.edu.utn.frba.dds.compartido.DataFormatter;
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.filtros.CampoDeHecho;
@@ -35,25 +34,19 @@ public class ColeccionController {
     this.servicioColecciones = servicioColecciones;
   }
 
-
   public void mostrarColecciones(Context ctx) {
     int coleccionesPorPagina = 15;
 
-
     List<Coleccion> colecciones = servicioColecciones.obtenerColecciones();
-
 
     int totalPaginas = (int) Math.ceil((double) colecciones.size() / coleccionesPorPagina);
 
     int paginaActual = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
 
-
     int desde = (paginaActual - 1) * coleccionesPorPagina;
     int hasta = Math.min(desde + coleccionesPorPagina, colecciones.size());
 
-
     List<Coleccion> coleccionesPagina = colecciones.subList(desde, hasta);
-
 
     List<Integer> paginas = IntStream.rangeClosed(1, totalPaginas)
         .boxed()
@@ -74,18 +67,28 @@ public class ColeccionController {
         })
         .collect(Collectors.toList());
     model.put("colecciones", coleccionesFormateadas);
-     model.put("paginas", paginas);
+    model.put("paginas", paginas);
     model.put("paginaActual", paginaActual);
     model.put("totalPaginas", totalPaginas);
 
     model.put("loggedIn", ctx.sessionAttribute("loggedIn"));
     model.put("rol", ctx.sessionAttribute("rol"));
     model.put("user_id", ctx.sessionAttribute("user_id"));
+    model.put("user_id", ctx.sessionAttribute("user_id"));
     model.put("user_name", ctx.sessionAttribute("user_name"));
+
+    String success = ctx.queryParam("success");
+    if ("hecho_creado".equals(success)) {
+      model.put("successMessage", "Hecho creado exitosamente");
+    }
+
+    String error = ctx.queryParam("error");
+    if (error != null) {
+      model.put("errorMessage", "Error: " + error);
+    }
 
     ctx.render("colecciones.hbs", model);
   }
-
 
   public void mostrarColeccion(Context ctx) throws JsonProcessingException {
     String idParam = ctx.pathParam("id");
@@ -118,8 +121,8 @@ public class ColeccionController {
     if (textoFiltro != null) {
 
       CampoDeHecho campo = campoTexto != null && campoTexto.equals("descripcion")
-            ? CampoDeHecho.DESCRIPCION
-            : CampoDeHecho.TITULO;
+          ? CampoDeHecho.DESCRIPCION
+          : CampoDeHecho.TITULO;
       filtros.add(new FiltroContieneTexto(textoFiltro, campo));
     }
 
@@ -145,6 +148,5 @@ public class ColeccionController {
 
     ctx.render("coleccion.hbs", model);
   }
-
 
 }

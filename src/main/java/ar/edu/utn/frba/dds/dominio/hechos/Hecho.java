@@ -53,7 +53,6 @@ public class Hecho {
   @Embedded
   private Ubicacion ubicacion;
 
-
   @Column(columnDefinition = "DATE")
   private LocalDateTime fechaAcontecimiento;
 
@@ -67,19 +66,18 @@ public class Hecho {
   @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
-
   @Setter
   @Enumerated(EnumType.STRING)
   private EstadoHecho estadoHecho;
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   @ManyToOne
+  @javax.persistence.JoinColumn(name = "usuario_id", nullable = true)
   private Usuario usuario;
 
   public Hecho() {
 
   }
-
 
   public Hecho(
       String titulo,
@@ -88,14 +86,14 @@ public class Hecho {
       Ubicacion ubicacion,
       LocalDateTime fechaAcontecimiento,
       LocalDateTime fechaDeCarga,
-      OrigenHecho origenHecho
-  ) {
+      OrigenHecho origenHecho) {
     /*
-    Validacion.validarStringNoVacio(titulo, "título");
-    Validacion.validarNoNulo(ubicacion, "ubicacion");
-    Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
-    Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    Validacion.validarNoNulo(origenHecho, "origenHecho");*/
+     * Validacion.validarStringNoVacio(titulo, "título");
+     * Validacion.validarNoNulo(ubicacion, "ubicacion");
+     * Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
+     * Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
+     * Validacion.validarNoNulo(origenHecho, "origenHecho");
+     */
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
@@ -122,7 +120,6 @@ public class Hecho {
     return resumen;
   }
 
-
   public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
@@ -135,13 +132,10 @@ public class Hecho {
 
   }
 
-
   public void addContenidoMultimedia(ContenidoMultimedia contenidoMultimedia) {
     contenidoMultimedia.setHecho(this);
     this.contenidoMultimedia.add(contenidoMultimedia);
   }
-
-
 
   public List<String> getUrlsMultimedia() {
     List<String> urls = this.getContenidoMultimedia().stream()
@@ -151,5 +145,3 @@ public class Hecho {
   }
 
 }
-
-
