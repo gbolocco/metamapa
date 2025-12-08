@@ -2,13 +2,14 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.colecciones.Coleccion;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import ar.edu.utn.frba.dds.config.EntityManagerProvider;
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ColeccionRepository implements WithSimplePersistenceUnit {
+public class ColeccionRepository {
 
   private static final ColeccionRepository instance = new ColeccionRepository();
 
@@ -19,6 +20,10 @@ public class ColeccionRepository implements WithSimplePersistenceUnit {
 
   public static ColeccionRepository getInstancia() {
     return instance;
+  }
+
+  private EntityManager entityManager() {
+    return EntityManagerProvider.getEntityManager();
   }
 
   public void agregarColeccion(Coleccion coleccion) {
@@ -49,11 +54,9 @@ public class ColeccionRepository implements WithSimplePersistenceUnit {
 
   public List<String> getHandleList() {
     return colecciones
-            .stream()
-            .map(Coleccion::getHandle)
-            .toList();
+        .stream()
+        .map(Coleccion::getHandle)
+        .toList();
   }
 
 }
-
-

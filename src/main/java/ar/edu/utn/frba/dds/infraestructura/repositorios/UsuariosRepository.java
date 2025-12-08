@@ -1,14 +1,18 @@
 package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.modelo.Usuario;
-import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
+import ar.edu.utn.frba.dds.config.EntityManagerProvider;
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.NoResultException;
 
-
-public class UsuariosRepository implements SimplePersistenceTest {
+public class UsuariosRepository {
   public static UsuariosRepository INSTANCE = new UsuariosRepository();
+
+  private EntityManager entityManager() {
+    return EntityManagerProvider.getEntityManager();
+  }
 
   public void registrar(Usuario usuario) {
     entityManager().persist(usuario);
@@ -46,7 +50,7 @@ public class UsuariosRepository implements SimplePersistenceTest {
     entityManager().merge(usuario);
     entityManager().getTransaction().commit();
   }
-  
+
   public void agregarUsuario(Usuario usuario) {
     entityManager().getTransaction().begin();
     entityManager().persist(usuario);

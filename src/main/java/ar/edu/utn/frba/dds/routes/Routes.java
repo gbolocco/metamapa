@@ -71,7 +71,6 @@ public class Routes {
 
       get("/hechos", userController::mostrarMisHechos);
 
-
       path("/hechos", () -> {
         get("/nuevo", hechos::mostrarFormulario);
         get("/{id}", hechos::mostrar);
@@ -106,20 +105,18 @@ public class Routes {
         }
       });
 
-    /*
-      before("/mis-hechos", ctx -> {
-        if (ctx.sessionAttribute("user_id") == null) {
-          ctx.redirect("/login?redirect=" + ctx.path());
-          return;
-        }
-      });
-     */
+      /*
+       * before("/mis-hechos", ctx -> {
+       * if (ctx.sessionAttribute("user_id") == null) {
+       * ctx.redirect("/login?redirect=" + ctx.path());
+       * return;
+       * }
+       * });
+       */
       get("/solicitudes", userController::mostrarMisSolicitudes);
 
-
       after(ctx -> {
-        ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository.getInstancia().entityManager().clear();
-        ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository.getInstancia().entityManager().close();
+        ar.edu.utn.frba.dds.config.EntityManagerProvider.closeEntityManager();
       });
 
     });

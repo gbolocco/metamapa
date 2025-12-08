@@ -5,14 +5,15 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.modelo.Usuario;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import ar.edu.utn.frba.dds.config.EntityManagerProvider;
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 
-public class HechosRepository implements WithSimplePersistenceUnit {
+public class HechosRepository {
 
   private HechosRepository() {
   }
@@ -21,6 +22,10 @@ public class HechosRepository implements WithSimplePersistenceUnit {
 
   public static HechosRepository getInstancia() {
     return instance;
+  }
+
+  private EntityManager entityManager() {
+    return EntityManagerProvider.getEntityManager();
   }
 
   public void cargarHecho(Hecho hecho) {
@@ -69,7 +74,7 @@ public class HechosRepository implements WithSimplePersistenceUnit {
   }
 
   public void modificarHecho(Hecho hechoaModificar, RepresentacionDeHecho representacionDeHecho) {
-    withTransaction(() -> {
+    EntityManagerProvider.withTransaction(() -> {
       hechoaModificar.setTitulo(representacionDeHecho.getTitulo());
       hechoaModificar.setDescripcion(representacionDeHecho.getDescripcion());
       hechoaModificar.setCategoria(representacionDeHecho.getCategoria());

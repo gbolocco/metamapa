@@ -2,15 +2,20 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.hechos.EstadoRepresentacionHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import ar.edu.utn.frba.dds.config.EntityManagerProvider;
+import javax.persistence.EntityManager;
 import java.util.List;
 
-public class RepresentacionHechosRepository implements WithSimplePersistenceUnit {
+public class RepresentacionHechosRepository {
 
   private static final RepresentacionHechosRepository instance = new RepresentacionHechosRepository();
 
   public static RepresentacionHechosRepository getInstancia() {
     return instance;
+  }
+
+  private EntityManager entityManager() {
+    return EntityManagerProvider.getEntityManager();
   }
 
   public List<RepresentacionDeHecho> getRepHechos() {
@@ -27,7 +32,7 @@ public class RepresentacionHechosRepository implements WithSimplePersistenceUnit
   }
 
   public void cargarRepresentacionDeHecho(RepresentacionDeHecho representacionDeHecho) {
-    withTransaction(() -> {
+    EntityManagerProvider.withTransaction(() -> {
       entityManager().persist(representacionDeHecho);
     });
   }

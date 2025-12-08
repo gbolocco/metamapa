@@ -33,8 +33,12 @@ public class WebApp {
   }
 
   public void start() {
-    var app = Javalin.create(this::configureJavalin).start(8080);
-
+    int port = 8080;
+    if (System.getenv("PORT") != null) {
+      port = Integer.parseInt(System.getenv("PORT"));
+    }
+    System.out.println("Starting server on port " + port);
+    var app = Javalin.create(this::configureJavalin).start(port);
   }
 
   private void configureJavalin(JavalinConfig config) {
@@ -85,7 +89,7 @@ public class WebApp {
     TemplateLoader partialsLoader = new ClassPathTemplateLoader("/templates/partials", ".hbs");
     Handlebars handlebars = new Handlebars(new CompositeTemplateLoader(mainLoader, partialsLoader));
 
-    handlebars.registerHelper("resta", (Helper<Integer>) (context, options ) -> {
+    handlebars.registerHelper("resta", (Helper<Integer>) (context, options) -> {
       // context es el primer argumento (paginaActual)
       // options.param(0) es el segundo argumento (el número a restar, '1')
       int valorArestar = options.param(0, 0); // Usar valor por defecto por seguridad

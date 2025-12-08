@@ -5,12 +5,13 @@ import ar.edu.utn.frba.dds.dominio.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.dominio.solicitudes.TipoSolicitud;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import ar.edu.utn.frba.dds.config.EntityManagerProvider;
+import javax.persistence.EntityManager;
 
 import java.util.List;
 
 public class SolicitudesRepository implements
-    ar.edu.utn.frba.dds.dominio.solicitudes.contratos.SolicitudesRepository, WithSimplePersistenceUnit {
+    ar.edu.utn.frba.dds.dominio.solicitudes.contratos.SolicitudesRepository {
 
   private static final SolicitudesRepository instance = new SolicitudesRepository();
 
@@ -18,8 +19,12 @@ public class SolicitudesRepository implements
     return instance;
   }
 
+  private EntityManager entityManager() {
+    return EntityManagerProvider.getEntityManager();
+  }
+
   public void agregar(Solicitud solicitud) {
-    withTransaction(() -> {
+    EntityManagerProvider.withTransaction(() -> {
       entityManager().persist(solicitud);
     });
   }
@@ -68,7 +73,7 @@ public class SolicitudesRepository implements
   }
 
   public List<Solicitud> todas() {
-    return withTransaction(() -> {
+    return EntityManagerProvider.withTransaction(() -> {
       return entityManager()
           .createQuery("FROM Solicitud s ORDER BY s.fechaSolicitud DESC", Solicitud.class)
           .getResultList();
@@ -76,7 +81,7 @@ public class SolicitudesRepository implements
   }
 
   public void actualizar(Solicitud solicitud) {
-    withTransaction(() -> {
+    EntityManagerProvider.withTransaction(() -> {
       entityManager().merge(solicitud);
     });
   }

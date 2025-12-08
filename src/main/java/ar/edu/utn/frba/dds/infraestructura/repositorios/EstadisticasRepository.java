@@ -2,13 +2,14 @@ package ar.edu.utn.frba.dds.infraestructura.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.estadisticas.Estadistica;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import ar.edu.utn.frba.dds.config.EntityManagerProvider;
+import javax.persistence.EntityManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class EstadisticasRepository implements WithSimplePersistenceUnit {
+public class EstadisticasRepository {
 
     private static final EstadisticasRepository instance = new EstadisticasRepository();
 
@@ -21,6 +22,9 @@ public class EstadisticasRepository implements WithSimplePersistenceUnit {
         return instance;
     }
 
+    private EntityManager entityManager() {
+        return EntityManagerProvider.getEntityManager();
+    }
 
     public void addEstadistica(Estadistica estadistica) {
         this.estadisticasPendientes.add(estadistica);
@@ -33,10 +37,8 @@ public class EstadisticasRepository implements WithSimplePersistenceUnit {
                 .setParameter("id", estadistica.getId());
     }
 
-
-
     public void persistirEstadistica(Estadistica estadistica) {
-        withTransaction(() -> entityManager().persist(estadistica));
+        EntityManagerProvider.withTransaction(() -> entityManager().persist(estadistica));
     }
 
     public List<Estadistica> getEstadisticas() {
@@ -49,9 +51,8 @@ public class EstadisticasRepository implements WithSimplePersistenceUnit {
         return this.estadisticasPendientes;
     }
 
-
     public void calcular(List<Hecho> hechos) {
-        withTransaction(() -> {
+        EntityManagerProvider.withTransaction(() -> {
             for (Estadistica estadistica : estadisticasPendientes) {
                 estadistica.calcular(hechos);
                 entityManager().persist(estadistica);
