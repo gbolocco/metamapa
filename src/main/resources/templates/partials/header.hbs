@@ -77,14 +77,14 @@
             html += `
         <a href="/admin/dashboard" class="dropdown-item">${adminIcon} Panel admin</a>
         <a href="/solicitudes" class="dropdown-item">${solicitudIcon} Solicitudes</a>
-        <a href="/mis-hechos" class="dropdown-item">${hechoIcon} Mis Hechos</a>
+        <a href="/hechos" class="dropdown-item">${hechoIcon} Mis Hechos</a>
         <form id="logoutForm" method="post" action="/logout">
           <button type="submit" class="dropdown-item">${salirIcon} Cerrar Sesión</button>
         </form>`;
         } else if (tipoUsuario === "USER") {
             html += `
         <a href="/solicitudes" class="dropdown-item">${solicitudIcon} Solicitudes</a>
-        <a href="/mis-hechos" class="dropdown-item">${hechoIcon} Mis Hechos</a>
+        <a href="/hechos" class="dropdown-item">${hechoIcon} Mis Hechos</a>
         <form id="logoutForm" method="post" action="/logout">
           <button type="submit" class="dropdown-item">${salirIcon} Cerrar Sesión</button>
         </form>`;

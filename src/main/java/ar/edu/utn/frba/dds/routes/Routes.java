@@ -69,19 +69,8 @@ public class Routes {
         put("/{id}/rol", userController::actualizarRolUsuario);
       });
 
-      get("/hechos", ctx -> {
-        Rol rol = ctx.sessionAttribute("rol");
+      get("/hechos", userController::mostrarMisHechos);
 
-        if (rol != null && rol == Rol.ADMIN) {
-          // Si es ADMIN, llama a hechos::listar (Asumiendo que existe en
-          // HechosController)
-          hechos.listar(ctx); // Cambia si el método se llama diferente, por ejemplo,
-                              // hechos::mostrarListadoAdmin
-        } else {
-          // Si es USER o no tiene el rol, llama a userController::mostrarMisHechos
-          userController.mostrarMisHechos(ctx);
-        }
-      });
 
       path("/hechos", () -> {
         get("/nuevo", hechos::mostrarFormulario);
@@ -117,22 +106,16 @@ public class Routes {
         }
       });
 
+    /*
       before("/mis-hechos", ctx -> {
         if (ctx.sessionAttribute("user_id") == null) {
           ctx.redirect("/login?redirect=" + ctx.path());
           return;
         }
       });
-
-      before("/hechos", ctx -> {
-        if (ctx.sessionAttribute("user_id") == null) {
-          // ctx.redirect("/login?redirect=" + ctx.path());
-          return;
-        }
-      });
-
+     */
       get("/solicitudes", userController::mostrarMisSolicitudes);
-      get("/mis-hechos", userController::mostrarMisHechos);
+
 
       after(ctx -> {
         ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository.getInstancia().entityManager().clear();
