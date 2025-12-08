@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/static/css/Home.css">
+</head>
+<div class="colecciones-container">
+    <h1>Colecciones</h1>
+
+    {{#if successMessage}}
+    <div class="alert alert-success">
+        {{successMessage}}
+    </div>
+    {{/if}}
+
+    {{#if errorMessage}}
+    <div class="alert alert-error">
+        {{errorMessage}}
+    </div>
+    {{/if}}
+
+    <div class="colecciones-grid">
+        {{#each colecciones}}
+        <a href="/colecciones/{{id}}" class="coleccion-card">
+            <h2>{{titulo}}</h2>
+
+            <div class="coleccion-card-details">
+                <p><strong>Fuente:</strong> {{fuente}}</p>
+                <p><strong>Fecha de creación:</strong> {{fechaDeCreacion}}</p>
+            </div>
+            <p class="descripcion">{{descripcion}}</p>
+        </a>
+        {{/each}}
+    </div>
+
+    <div class="paginacion">
+        <button class="flecha" id="prev" data-page="{{resta paginaActual 1}}"> &#9664; </button>
+        <div class="paginas" id="pagina-numeros-container">
+        </div>
+        <button class="flecha" id="next" data-page="{{suma paginaActual 1}}"> &#9654; </button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const prevBtn = document.getElementById("prev");
+        const nextBtn = document.getElementById("next");
+        const paginaNumerosContainer = document.getElementById("pagina-numeros-container");
+
+        // Asume que tienes un helper de Handlebars para 'if_eq' o usas una lógica similar en tu backend
+        const paginaActual = parseInt("{{paginaActual}}") || 1;
+        const totalPaginas = parseInt("{{totalPaginas}}") || 1;
+
+        function renderizarNumerosPagina() {
+            paginaNumerosContainer.innerHTML = ''; // Limpiar números existentes
+
+            // Definir un rango (ej: mostrar la página actual, las 2 anteriores y las 2 siguientes)
+            const rango = 2; // Mostrar 5 páginas en total si es posible (actual + 2 prev + 2 next)
+
+            let startPage = Math.max(1, paginaActual - rango);
+            let endPage = Math.min(totalPaginas, paginaActual + rango);
+
+            // Ajustar los límites si estamos cerca de los extremos
+            if (paginaActual - rango < 1) {
+                endPage = Math.min(totalPaginas, endPage + (1 - (paginaActual - rango)));
+            }
+            if (paginaActual + rango > totalPaginas) {
+                startPage = Math.max(1, startPage - ((paginaActual + rango) - totalPaginas));
+            }
+
+            // Generar enlaces
+            for (let i = startPage; i <= endPage; i++) {
+                const link = document.createElement('a');
+                link.href = `/colecciones?page=${i}`;
+                link.textContent = i;
+                // Marcar la página actual con la clase 'activo'
+                if (i === paginaActual) {
+                    link.classList.add('activo');
+                }
+                paginaNumerosContainer.appendChild(link);
+            }
+        }
+
+        renderizarNumerosPagina();
+
+        // Deshabilitar botones al cargar la página si corresponde
+        if (paginaActual <= 1) {
+            prevBtn.disabled = true;
+        }
+        if (paginaActual >= totalPaginas) {
+            nextBtn.disabled = true;
+        }
+
+        prevBtn.addEventListener("click", () => {
+            if (paginaActual > 1) {
+                window.location.href = `/colecciones?page=${paginaActual - 1}`;
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            if (paginaActual < totalPaginas) {
+                window.location.href = `/colecciones?page=${paginaActual + 1}`;
+            }
+        });
+    });
+
+    /*
+    document.addEventListener("DOMContentLoaded", () => {
+        const coleccion = document.getElementById("coleccion-card");
+
+        coleccion.addEventListener("click", ()=> {
+                window.location.href = `/colecciones/${{id}}`;
+            }
+        )
+    });*/
+</script>
+
+<style>
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .alert-success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .alert-error {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+</style>

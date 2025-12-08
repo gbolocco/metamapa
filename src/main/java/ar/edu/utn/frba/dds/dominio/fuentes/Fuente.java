@@ -3,12 +3,12 @@ package ar.edu.utn.frba.dds.dominio.fuentes;
 import ar.edu.utn.frba.dds.dominio.filtros.Filtro;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,29 +26,32 @@ import lombok.Setter;
 @DiscriminatorColumn(name = "tipo_fuente", discriminatorType = DiscriminatorType.STRING)
 @Setter
 @Getter
-public abstract class  Fuente {
+public abstract class Fuente {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false, name = "id_Fuente")
   private Long id;
 
+  String nombre;
+
+  public String url;
 
   @Transient
-  public List<Hecho> hechos;
+  public List<Hecho> hechos = new ArrayList<>();
 
   public abstract List<Hecho> obtenerHechos(List<Filtro> criterios);
 
-
   public abstract TipoFuente getTipoFuente();
 
-
   public void actualizarLista(List<RepresentacionDeHecho> representaciones) {
+    if (this.hechos == null) {
+      this.hechos = new ArrayList<>();
+    }
     this.hechos = this.hechos.stream()
         .filter(h -> representaciones
             .stream()
-            .noneMatch(r -> HechosRepositoryMemory.sonEquivalentes(h, r)))
+            .noneMatch(r -> HechosRepository.sonEquivalentes(h, r)))
         .toList();
   }
-
 
 }

@@ -1,0 +1,498 @@
+:root{  /* ajustá a la altura real del header */
+  --footer-h: 25px;   /* ajustá a la altura real del footer */
+  --sidebar-w: 260px;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #333333;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background-color: #75501d;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+main {
+  /*background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);*/
+  /*border-radius: 8px;*/
+  flex: 1;
+
+}
+
+/* Header Styles */
+.site-header {
+  background-color: #75501d;
+  color: white;
+  padding: 1.7rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 20px;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  height: 40px;
+
+}
+.logo {
+  background-image: url('../images/metamapa-logo.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+  height: 40px; 
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.icon, .icon-btn, .mic-btn, .profile-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease;
+}
+
+.icon svg, .icon-btn svg, .mic-btn svg, .profile-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  stroke: white;
+}
+
+.profile-btn svg path {
+  stroke: white;
+  fill: white;
+}
+
+.dropdown-menu a.login-btn svg path {
+  /* Forzamos el color deseado, incluso si el fondo es blanco */
+  stroke: #75501d !important; /* Usamos el color de marca para que sea visible */
+  fill: #75501d !important;
+}
+
+.icon-btn:hover, .mic-btn:hover {
+  transform: translateY(-1px);
+  opacity: .9;
+}
+
+.filter-btn {
+  grid-column: 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.15);
+  border: 1px solid rgba(0,0,0,.25);
+}
+
+.main-nav {
+  grid-column: 2;
+  display: flex;
+  gap: 36px;
+  justify-content: center;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  white-space: nowrap;
+  transition: opacity .12s ease;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background: #f1f1f1; /* Fondo gris muy sutil en hover */
+  transform: none; /* Quitamos la animación de translateX para un look más estático */
+  color: #75501d; /* Color de marca en hover */
+}
+
+.dropdown-menu a:hover svg,
+.dropdown-menu button:hover svg {
+  color: #75501d; /* El icono también se colorea en hover */
+}
+
+.dropdown-menu svg {
+  width: 18px;
+  height: 18px;
+  /* Color de los iconos para que coincida con el texto sutil */
+  color: #555555;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.dropdown-menu .user_name {
+  /* El nombre del usuario debe ser un bloque de texto que no es un ítem de menú */
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 16px;
+  color: #75501d; /* Color de marca */
+  border-bottom: 1px dashed #e0e0e0; /* Separador de puntos sutil */
+  margin-bottom: 8px;
+  padding-bottom: 10px; /* Espacio después del separador */
+  display: block !important;
+}
+
+.dropdown-menu .user_name:hover {
+  background: none;
+}
+
+.main-nav a:hover {
+  opacity: .85;
+}
+
+.login-dropdown {
+  grid-column: 3;
+  justify-self: end;
+  position: relative;
+}
+
+.login-wrapper .profile-btn svg {
+  fill: #75501d; /* ¡Esto lo haría marrón! */
+}
+
+.profile-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(3px);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: transform .15s ease, opacity .2s ease;
+}
+
+.profile-btn:hover {
+  transform: translateY(-1px);
+  opacity: .85;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: block;
+
+  /* CAMBIO CLAVE 1: Fondo Blanco Sólido */
+  background: #ffffff;
+  backdrop-filter: none; /* ELIMINAR el efecto de vidrio esmerilado */
+
+  /* CAMBIO CLAVE 2: Borde y Sombra de Tarjeta Limpia */
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra más sutil */
+  border-radius: 14px;
+
+  padding: 8px 0; /* Padding interno más ajustado */
+  width: 250px; /* Un poco más de ancho para el texto y los iconos */
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(5px); /* Animación sutil de entrada */
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 1000;
+}
+
+.login-dropdown:hover .dropdown-menu,
+.dropdown-menu.open { /* Usamos la clase 'open' de tu JS para mejor control */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  flex-direction: row; /* Asegura que el icono y texto estén en fila */
+  padding: 0; /* El padding lo ponemos en los <a> y <button> */
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Footer Styles */
+.main-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: auto;
+  width: 100%;
+  height: var(--footer-h); 
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.footer-content p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+
+
+/*                  SIDEBAR               */
+
+/* contenedor debajo del header y encima del footer */
+.admin-shell{
+  display: flex;
+  min-height: calc(100vh - var(--footer-h));
+  background: transparent; /* deja ver tu degradado del body si querés */
+}
+
+.sidebar-wrapper {
+  display: flex;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  min-height: calc(100vh - 60px); /* 60px = altura del header */
+}
+
+/* Sidebar lateral */
+.sidebar {
+  width: var(--sidebar-w);
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 0;
+  box-shadow: 0 1px 0 rgba(0,0,0,.03), 1px 0 0 rgba(0,0,0,.06);
+}
+
+/* Encabezado */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.logo-admin {
+  background-color: #0f172a;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Navegación */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #334155;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.nav-item:hover {
+  background-color: #f1f5f9;
+}
+
+.nav-item.active {
+  background-color: #0f172a;
+  color: #fff;
+}
+
+/* Botón de logout */
+.logout-form button.dropdown-item {
+  /* Asegura que el botón se comporte como un bloque y elimine cualquier margen/padding raro */
+  display: flex !important; /* Usamos flex solo dentro del botón para alinear el icono y el texto */
+  align-items: center;
+  width: auto;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  margin-left: -16px;
+  margin-right: -16px;
+  background-clip: padding-box;
+}
+
+.dropdown-menu form {
+  padding: 0;
+}
+
+.logout-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #475569;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #f1f5f9;
+}
+
+/* Área principal a la derecha del sidebar */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f8fafc;
+}
+
+
+.login-dropdown.user-spacing {
+  margin-left: 30px; /* Ajusta este valor al que desees para mayor separación */
+}
+
+/* GRID debajo del header */
+.principal-grid {
+  display: grid;
+  grid-row: 2;
+  grid-template-columns: 1fr;
+  grid-template-areas: "main";
+  min-height: 100%;
+}
+
+/* Cuando sí hay sidebar: 2 columnas */
+.principal-grid.with-sidebar{
+  grid-template-columns: 240px 1fr;
+  grid-template-areas: "sidebar main";
+}
+
+/* Sidebar */
+.grid-sidebar {
+  grid-area: sidebar;
+  background: #fff;
+  border-right: 1px solid #e2e8f0;
+  padding: 1rem 0;
+}
+
+.dropdown-menu a.dropdown-item,
+.dropdown-menu form,
+.dropdown-menu button {
+  /* Estas dos líneas son cruciales para el flujo vertical */
+  display: block;
+  width: 100%;
+}
+
+.dropdown-item,
+.dropdown-menu a,
+.dropdown-menu button {
+  display: flex; /* Usamos Flexbox para alinear el icono y el texto */
+  align-items: center;
+  gap: 12px; /* Espacio entre el icono y el texto */
+
+  padding: 10px 16px; /* Padding ajustado a la imagen */
+  text-decoration: none;
+  font-size: 15px;
+
+  /* Color de texto oscuro para contraste en fondo blanco */
+  color: #333333;
+  background: none; /* Aseguramos que no haya fondo por defecto */
+  border: none;
+  border-radius: 0; /* Quitamos el border-radius en el ítem, solo el contenedor lo tiene */
+  transition: background-color .15s ease, color .15s ease;
+  text-align: left;
+}
+
+.user_name{
+  font-size: 20px;
+}
+/* Contenido principal */
+.grid-main {
+  grid-area: main;
+  padding: 0.5rem;
+  background: linear-gradient(to bottom, #fefce8, #fef9c3);
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cuando NO hay sidebar (por ejemplo, login, home pública) */
+body:not(.admin) .admin-grid {
+  grid-template-columns: 1fr;
+  grid-template-areas: "main";
+}
+
+header, .site-header {
+  grid-row: 1;
+}
+
+footer, .main-footer {
+  grid-row: 3;
+}
+
+ #map {
+            height: 600px;
+            width: 90%;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+@media (max-width: 768px){
+  .admin-shell{
+    display: block;
+    min-height: auto;
+  }
+  .sidebar{
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+}
+
+
+

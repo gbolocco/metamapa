@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+.users-item {
+    background-color: #f1f5f9;
+}
+
+.main-content {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Formulario y Select */
+.form-rol-update {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.select-rol {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.btn-guardar-rol {
+    padding: 8px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-guardar-rol:hover:not(:disabled) {
+    background-color: #1e7e34;
+}
+
+.btn-guardar-rol:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+/* Feedback */
+.feedback {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}

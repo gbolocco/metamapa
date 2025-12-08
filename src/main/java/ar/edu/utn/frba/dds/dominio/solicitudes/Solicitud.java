@@ -1,7 +1,8 @@
 package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepositoryMemory;
+import ar.edu.utn.frba.dds.modelo.Usuario;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.RepresentacionHechosRepository;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -34,8 +36,10 @@ public abstract class Solicitud {
   @Enumerated(EnumType.STRING)
   protected EstadoSolicitud estadoSolicitud;
   @ManyToOne
-
   protected RepresentacionDeHecho representacionDeHecho;
+  @ManyToOne
+  @JoinColumn(nullable = true)
+  protected Usuario usuario;
   protected Date fechaSolicitud;
   @Enumerated(EnumType.STRING)
   protected TipoSolicitud tipoSolicitud;
@@ -46,7 +50,7 @@ public abstract class Solicitud {
     this.estadoSolicitud = EstadoSolicitud.PENDIENTE;
     this.representacionDeHecho = representacionDeHecho;
     this.fechaSolicitud = new Date();
-    RepresentacionHechosRepositoryMemory
+    RepresentacionHechosRepository
         .getInstancia().cargarRepresentacionDeHecho(representacionDeHecho);
   }
 
@@ -62,25 +66,4 @@ public abstract class Solicitud {
 
   public abstract void rechazar();
 
-
-  /*
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public Hecho getHecho() {
-    return hecho;
-  }
-  public EstadoSolicitud getEstadoSolicitud() {
-    return estadoSolicitud;
-  }
-    public Date getFechaSolicitud() {
-    return (fechaSolicitud == null) ? null : new Date(fechaSolicitud.getTime());
-  }
-
-    */
 }

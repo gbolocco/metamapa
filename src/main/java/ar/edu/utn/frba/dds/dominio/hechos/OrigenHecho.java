@@ -9,23 +9,6 @@ public enum OrigenHecho {
   FUENTE_PROXY,
   PROVISTO_POR_CONTRIBUYENTE;
 
-  private Contribuyente contribuyente;
-
-  public void setContribuyenteHecho(Contribuyente contribuyente) {
-    if (this == PROVISTO_POR_CONTRIBUYENTE) {
-      this.contribuyente = contribuyente;
-    } else {
-      throw new UnsupportedOperationException("Unicamente se puede asignar a un usuario");
-
-    }
-  }
-
-  public Contribuyente getContribuyenteHecho() {
-    if (this == PROVISTO_POR_CONTRIBUYENTE) {
-      return contribuyente;
-    }
-    return null;
-  }
 }
 
 /*

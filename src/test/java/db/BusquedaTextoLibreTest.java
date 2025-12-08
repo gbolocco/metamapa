@@ -4,16 +4,13 @@ import ar.edu.utn.frba.dds.dominio.archivos.FileUtils;
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BusquedaTextoLibreTest implements SimplePersistenceTest {
@@ -23,7 +20,7 @@ public class BusquedaTextoLibreTest implements SimplePersistenceTest {
 
   @BeforeEach
   void persistir2Hechos() {
-    HechosRepositoryMemory repo = HechosRepositoryMemory.getInstancia();
+    HechosRepository repo = HechosRepository.getInstancia();
     repo.cargarHecho(hecho);
     repo.cargarHecho(hecho2);
 
@@ -38,19 +35,19 @@ public class BusquedaTextoLibreTest implements SimplePersistenceTest {
 
   @Test
   void buscarHecho1() {
-    List<Hecho> hechosEncontrados = HechosRepositoryMemory.getInstancia().buscarPorTexto("Prueba1");
+    List<Hecho> hechosEncontrados = HechosRepository.getInstancia().buscarPorTexto("Prueba1");
     Assertions.assertNotNull(hechosEncontrados);
   }
 
   @Test
   void buscarHecho2() {
-    List<Hecho> hechosEncontrados = HechosRepositoryMemory.getInstancia().buscarPorTexto("Prueba2");
+    List<Hecho> hechosEncontrados = HechosRepository.getInstancia().buscarPorTexto("Prueba2");
     Assertions.assertNotNull(hechosEncontrados);
   }
 
   @Test
   void busquedaHechoFail() {
-    List<Hecho> hechosEncontrados = HechosRepositoryMemory.getInstancia().buscarPorTexto("Cualquier cosa");
+    List<Hecho> hechosEncontrados = HechosRepository.getInstancia().buscarPorTexto("Cualquier cosa");
     Assertions.assertTrue(hechosEncontrados.isEmpty());
   }
 }

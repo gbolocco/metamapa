@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/static/css/style_hecho.css">
+</head>
+<body>
+
+{{#if successMessage}}
+<div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 15px; margin: 20px; border: 1px solid #c3e6cb; border-radius: 5px; text-align: center; position: relative;">
+    <button onclick="this.parentElement.style.display='none'" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 18px; cursor: pointer; color: #155724;">&times;</button>
+    {{successMessage}}
+</div>
+{{/if}}
+
+{{#if errorMessage}}
+<div class="alert alert-error" style="background-color: #f8d7da; color: #721c24; padding: 15px; margin: 20px; border: 1px solid #f5c6cb; border-radius: 5px; text-align: center; position: relative;">
+    <button onclick="this.parentElement.style.display='none'" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 18px; cursor: pointer; color: #721c24;">&times;</button>
+    {{errorMessage}}
+</div>
+{{/if}}
+
+<main class="hecho-main">
+    <div class="hecho-contenedor">
+
+        <div class="hecho-contenido-superior">
+            <div class="hecho-imagen" id="contenedorMultimedia">
+
+            </div>
+
+            <div class="hecho-flechas">
+                <a href="#" id="flechaAnterior" class="flecha flecha-izq">⬅</a>
+                <a href="#" id="flechaSiguiente" class="flecha flecha-der">➡</a>
+            </div>
+
+            <div class="hecho-datos">
+                <h1>{{hecho.titulo}}</h1>
+
+                <p><strong>Categoría:</strong> {{hecho.categoria}}</p>
+                <p class="hecho-descripcion"><strong>Descripción:</strong> {{hecho.descripcion}}</p>
+                <p><strong>Estado:</strong> {{estadoFormateado}}</p>
+                <p><strong>Fecha del hecho:</strong> {{fechaFormateada}}</p>
+                <p><strong>Origen:</strong> {{origenFormateado}}</p>
+
+                <div class="hecho-acciones">
+                    <button type="button" class="boton-solicitar" onclick="solicitarEliminacion()">Solicitar Eliminación</button>
+                    {{#if loggedIn}}
+                    <button type="button" class="boton-solicitar boton-modificacion" onclick="solicitarModificacion()">Solicitar Modificación</button>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    const urlsMultimedia = [
+        {{#each hecho.contenidoMultimedia}}
+            "/multimedia/{{this.id}}"{{#unless @last}},{{/unless}}
+        {{/each}}
+    ];
+
+    const tiposMultimedia = [
+        {{#each hecho.contenidoMultimedia}}
+            "{{this.tipoContenido}}"{{#unless @last}},{{/unless}}
+        {{/each}}
+    ];
+
+    const tiposMime = [
+        {{#each hecho.contenidoMultimedia}}
+            "{{this.tipoMime}}"{{#unless @last}},{{/unless}}
+        {{/each}}
+    ];
+
+    const contenedor = document.getElementById('contenedorMultimedia');
+    const contenedorPrincipal = document.getElementById('hechoContenedor');
+    const flechaAnterior = document.getElementById('flechaAnterior');
+    const flechaSiguiente = document.getElementById('flechaSiguiente');
+    let indiceActual = 0;
+
+    function actualizarFlechas() {
+        flechaAnterior.style.opacity = (indiceActual === 0) ? 0.5 : 1;
+        flechaSiguiente.style.opacity = (indiceActual === urlsMultimedia.length - 1) ? 0.5 : 1;
+    }
+
+    function renderizarContenido() {
+        const tipo = tiposMultimedia[indiceActual];
+        const url = urlsMultimedia[indiceActual];
+        const tipoMimeReal = tiposMime[indiceActual];
+
+        if(tipo === "VIDEO") {
+            contenedor.innerHTML = `
+                <video id="imagenPrincipal" class="imagen-principal" controls preload="metadata">
+                    <source src="${url}" type="${tipoMimeReal}">
+                    Tu navegador no soporta videos.
+                </video>
+            `;
+        } else {
+            contenedor.innerHTML = `
+                <img id="imagenPrincipal" src="${url}" class="imagen-principal">
+            `;
+        }
+        actualizarFlechas();
+    }
+
+    flechaSiguiente.addEventListener('click', e => {
+        e.preventDefault();
+        if(indiceActual < urlsMultimedia.length - 1){
+            indiceActual++;
+            renderizarContenido();
+        }
+    });
+
+    flechaAnterior.addEventListener('click', e => {
+        e.preventDefault();
+        if(indiceActual > 0){
+            indiceActual--;
+            renderizarContenido();
+        }
+    });
+
+    if(urlsMultimedia.length > 0){
+        renderizarContenido();
+        if(urlsMultimedia.length === 1){
+            flechaAnterior.style.display = 'none';
+            flechaSiguiente.style.display = 'none';
+        }
+    } else {
+        contenedor.innerHTML = '<div style="color: white; text-align: center; padding: 50px;">Sin contenido multimedia</div>';
+        // Aquí debes revisar el ID, ya que en el HTML tienes `<main class="hecho-main">` y `<div class="hecho-contenedor">`, no `hechoContenedor`.
+        // contenedorPrincipal.classList.add("hecho-sin-multimedia");
+        flechaAnterior.style.display = 'none';
+        flechaSiguiente.style.display = 'none';
+    }
+    
+    // Obtener IDs de parámetros URL o del hecho
+    const urlParams = new URLSearchParams(window.location.search);
+    const hechoIdFromUrl = urlParams.get('id');
+    const hechoId = hechoIdFromUrl || {{hecho.id}};
+    const coleccionId = {{#if hecho.coleccion.id}}{{hecho.coleccion.id}}{{else}}1{{/if}};
+    
+    function solicitarEliminacion() {
+        window.location.href = `/solicitudes/nuevo?tipo=eliminacion&hechoId=${hechoId}&coleccionId=${coleccionId}`;
+    }
+    
+    function solicitarModificacion() {
+        window.location.href = `/solicitudes/nuevo?tipo=modificacion&hechoId=${hechoId}&coleccionId=${coleccionId}`;
+    }
+</script>
+
+</body>
+</html>

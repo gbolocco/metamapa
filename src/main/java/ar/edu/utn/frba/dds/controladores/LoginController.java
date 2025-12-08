@@ -1,0 +1,137 @@
+package ar.edu.utn.frba.dds.controladores;
+
+import ar.edu.utn.frba.dds.modelo.Rol;
+import ar.edu.utn.frba.dds.modelo.Usuario;
+import io.javalin.http.Context;
+import ar.edu.utn.frba.dds.servicios.ServicioUsuarios;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
+public class LoginController {
+
+  private final ServicioUsuarios servicio;
+
+  public LoginController(ServicioUsuarios servicio) {
+    this.servicio = servicio;
+  }
+
+  public void login(Context ctx) {
+    String nombre = ctx.formParam("nombre");
+    String password = ctx.formParam("password");
+
+    if (nombre == null || password == null) {
+      ctx.redirect("/login?error=Completa usuario y contraseña");
+      return;
+    }
+    Usuario usuario = servicio.autenticar(nombre, password);
+    if (usuario == null) {
+      String mensaje = "Usuario o contraseña inválidos";
+      ctx.redirect("/login?error=" + URLEncoder.encode(mensaje, StandardCharsets.UTF_8));
+      return;
+    }
+    ctx.sessionAttribute("user_id", usuario.getId());
+    ctx.sessionAttribute("user_name", nombre);
+    ctx.sessionAttribute("loggedIn", true);
+    ctx.sessionAttribute("rol", usuario.getRol());
+
+    String redirectUrl = ctx.queryParam("redirect");
+    if (redirectUrl != null && !redirectUrl.isEmpty()) {
+      ctx.redirect(redirectUrl);
+    } else if (usuario.getRol() == Rol.ADMIN) {
+      ctx.redirect("/admin/dashboard");
+    } else if (usuario.getRol() == Rol.USER) {
+      ctx.redirect("/");
+    }
+  }
+
+  public void logout(Context ctx) {
+    var session = ctx.req().getSession(false);
+    if (session != null) {
+      System.out.println("Session before invalidate - user_id: " + ctx.sessionAttribute("user_id") +
+          ", loggedIn: " + ctx.sessionAttribute("loggedIn") +
+          ", rol: " + ctx.sessionAttribute("rol"));
+      session.invalidate();
+      System.out.println("Session invalidated");
+    }
+    ctx.redirect("/login");
+  }
+
+  public void mostrarLogin(Context ctx) {
+    if (ctx.sessionAttribute("user_id") != null) {
+      ctx.redirect("/");
+    }
+
+    Map<String, Object> model = new HashMap<>();
+
+    String errorMsg = ctx.queryParam("error");
+    if (errorMsg != null && !errorMsg.isEmpty()) {
+      model.put("error", errorMsg);
+    }
+    
+    String successMsg = ctx.queryParam("success");
+    if (successMsg != null && !successMsg.isEmpty()) {
+      model.put("success", successMsg);
+    }
+    
+    String redirectUrl = ctx.queryParam("redirect");
+    if (redirectUrl != null && !redirectUrl.isEmpty()) {
+      model.put("redirect", redirectUrl);
+    }
+
+    ctx.render("login.hbs", model);
+  }
+  
+  public void mostrarRegistro(Context ctx) {
+    if (ctx.sessionAttribute("user_id") != null) {
+      ctx.redirect("/");
+      return;
+    }
+
+    Map<String, Object> model = new HashMap<>();
+    String errorMsg = ctx.queryParam("error");
+    if (errorMsg != null && !errorMsg.isEmpty()) {
+      model.put("error", errorMsg);
+    }
+
+    ctx.render("registro.hbs", model);
+  }
+  
+  public void registrar(Context ctx) {
+    try {
+      String nombre = ctx.formParam("nombre");
+      String password = ctx.formParam("password");
+      String confirmPassword = ctx.formParam("confirmPassword");
+
+      if (nombre == null || password == null || confirmPassword == null) {
+        ctx.redirect("/registro?error=" + URLEncoder.encode("Todos los campos son obligatorios", StandardCharsets.UTF_8));
+        return;
+      }
+
+      if (!password.equals(confirmPassword)) {
+        ctx.redirect("/registro?error=" + URLEncoder.encode("Las contraseñas no coinciden", StandardCharsets.UTF_8));
+        return;
+      }
+
+      if (servicio.existeUsuario(nombre)) {
+        ctx.redirect("/registro?error=" + URLEncoder.encode("El nombre de usuario ya existe", StandardCharsets.UTF_8));
+        return;
+      }
+
+      Usuario nuevoUsuario = new Usuario();
+      nuevoUsuario.setNombre(nombre);
+      nuevoUsuario.setPassword(password);
+      nuevoUsuario.setRol(Rol.USER);
+
+      servicio.crearUsuario(nuevoUsuario);
+
+      ctx.redirect("/login?success=" + URLEncoder.encode("Usuario creado exitosamente. Inicia sesión", StandardCharsets.UTF_8));
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.redirect("/registro?error=" + URLEncoder.encode("Error al crear el usuario", StandardCharsets.UTF_8));
+    }
+  }
+
+}

@@ -4,15 +4,14 @@ import ar.edu.utn.frba.dds.compartido.validaciones.Validacion;
 import ar.edu.utn.frba.dds.dominio.hechos.EstadoRepresentacionHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.spam.DetectorDeSpam;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.FuentesRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Entity
 @DiscriminatorValue("eliminacion")
@@ -38,7 +37,7 @@ public class SolicitudEliminacion  extends Solicitud {
 
 
   public void agregarSolicitud() {
-    SolicitudesRepositoryMemory.getInstancia().agregar(this);
+    SolicitudesRepository.getInstancia().agregar(this);
   }
 
   public SolicitudEliminacion() {
@@ -50,22 +49,24 @@ public class SolicitudEliminacion  extends Solicitud {
       rechazar();
     }
   }
-
+    @Override
+    public TipoSolicitud getTipoSolicitud() {
+        return TipoSolicitud.ELIMINACION_HECHO;
+    }
+    
   @Override
   public void aceptar() {
     estadoSolicitud = EstadoSolicitud.ACEPTADA;
     this.representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.ELIMINADO);
-    FuentesRepositoryMemory.getInstancia().actualizarListasFuentes();
-    //HechosRepositoryMemory
-    // .getInstancia().buscar(this.idHechoAEliminar).setEstadoHecho(EstadoHecho.ELIMINADO);
-
+    FuentesRepository.getInstancia().actualizarListasFuentes();
+    SolicitudesRepository.getInstancia().actualizar(this);
   }
 
   @Override
   public void rechazar() {
     estadoSolicitud = EstadoSolicitud.RECHAZADA;
     representacionDeHecho.setEstadoRepresentacionHecho(EstadoRepresentacionHecho.RECHAZADO);
-
+    SolicitudesRepository.getInstancia().actualizar(this);
   }
   
 }

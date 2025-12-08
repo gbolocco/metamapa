@@ -1,0 +1,151 @@
+.hecho-main {
+    padding: 20px;
+    background-color: #fcf7e3; /* Fondo de la página en crema */
+}
+
+.hecho-contenedor {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    padding: 0;
+}
+
+.hecho-imagen {
+    width: 100%;
+    min-height: 250px;
+    max-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    overflow: hidden;
+    position: relative;
+}
+
+.imagen-principal {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ajusta el video o imagen sin cortarlo */
+    display: block;
+}
+
+.hecho-descripcion {
+    max-width: 95%;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.hecho-datos {
+    width: 100%;
+    padding: 1.8rem 2rem;
+    color: #333;
+    background-color: #fff;
+}
+
+.hecho-datos h1 {
+    font-size: clamp(1.8rem, 3vw + 1rem, 2.5rem);
+    color: #75501d;
+    text-align: left;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eeeeee;
+    word-wrap: normal;
+    overflow-wrap: normal;
+    line-height: 1.2;
+    max-width: 95%;
+}
+
+.hecho-datos p {
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.hecho-datos strong {
+    color: #555555;
+    font-weight: 600;
+}
+
+.hecho-acciones {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0f0f0;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.boton-solicitar {
+    color: white;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.boton-solicitar.boton-modificacion {
+    background-color: #a37d45;
+    color: white;
+}
+
+.boton-solicitar.boton-modificacion:hover {
+    background-color: #8f6c3c;
+}
+
+.boton-solicitar:not(.boton-modificacion) {
+    background-color: #b53d3d;
+}
+
+.boton-solicitar:not(.boton-modificacion):hover {
+    background-color: #993333;
+}
+
+.hecho-flechas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.hecho-flechas .flecha {
+    position: absolute;
+    pointer-events: auto;
+    font-size: 2rem;
+    color: #a37d45;
+    background: #ffffff;
+    border: 1px solid #d4d4d4;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    text-decoration: none;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hecho-flechas .flecha-izq {
+    left: 400px;
+    right: auto;
+}
+
+.hecho-flechas .flecha-der {
+    left: auto;
+    right: 400px;
+}
+
+.hecho-flechas .flecha:hover {
+    background-color: #f0f0f0;
+    color: #8f6c3c;
+}

@@ -1,0 +1,135 @@
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 140px);
+     background: linear-gradient(to top, #b48853 0%, #e2c58a 100%);
+    flex-wrap: wrap;
+    align-content: space-around;
+}
+
+.login-container {
+    background-color: white;
+    padding: 2.5rem; /* Más padding para que respire */
+    border-radius: 12px; /* Bordes más suaves */
+    /* Sombra más profesional */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    width: 350px; /* Un poco más ancho para mejor espaciado */
+}
+
+h2 {
+    text-align: center;
+    /* Color de marca para el título */
+    color: #75501d;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+/* Forzamos centrado perfecto del icono en el botón (solución robusta) */
+.login-dropdown .profile-btn {
+    display: inline-grid !important;  /* grid centrado pero manteniendo el flow inline */
+    place-items: center !important;    /* centra horizontal y vertical */
+    padding: 0 !important;
+    margin: 0;
+    box-sizing: border-box;
+    line-height: 0 !important;         /* evita offset vertical por baseline */
+    vertical-align: middle;            /* para que se alinee con texto/inline siblings */
+    width: 40px;                       /* asegurar tamaño esperado */
+    height: 40px;
+}
+
+/* Aseguramos que el SVG no genere espacio extra y tenga el tamaño correcto */
+.login-dropdown .profile-btn svg {
+    display: block;    /* quita el gap de línea base del inline-svg */
+    width: 20px;       /* tamaño visual deseado */
+    height: 20px;
+}
+
+/* Si algo sigue pisando reglas: versión con más especificidad */
+body .login-dropdown .profile-btn {
+    display: inline-grid;
+    place-items: center;
+    line-height: 0;
+}
+
+
+.profile-btn svg path {
+    stroke: white !important;
+    fill: white !important;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.success {
+    color: green;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.register-section {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.register-section p {
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+button {
+    width: 100%;
+    padding: 0.7rem;
+    /* CAMBIO CLAVE: Usar el color principal de la marca (Marrón Oscuro) */
+    background-color: #75501d;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    /* Usar el color de acento cálido para el hover */
+    background-color: #a37d45;
+}
+
+/* --- Botón de Registro --- */
+
+.btn-register {
+    /* Usar el color principal de la marca para el enlace de registro */
+    color: #75501d;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: normal;
+    transition: color 0.2s ease;
+}
+
+.btn-register:hover {
+    text-decoration: underline;
+    /* Usar el color de acento cálido para el hover */
+    color: #a37d45;
+}

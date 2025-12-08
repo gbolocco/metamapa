@@ -1,0 +1,65 @@
+
+    <main>
+        <h1>Lista de Hechos</h1>
+        
+        {{#if successMessage}}
+        <div class="alert alert-success">
+            {{successMessage}}
+        </div>
+        {{/if}}
+        
+        {{#if errorMessage}}
+        <div class="alert alert-error">
+            {{errorMessage}}
+        </div>
+        {{/if}}
+        
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Ubicación</th>
+                <th>Fecha Acontecimiento</th>
+                <th>Fecha de Carga</th>
+                <th>Origen</th>
+                <th>Contribuyente</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each hechos}}
+            <tr>
+                <td>{{titulo}}</td>
+                <td>{{descripcion}}</td>
+                <td>({{ubicacion.latitud}}, {{ubicacion.longitud}})</td>
+                <td>{{fechaAcontecimientoFormateada}}</td>
+                <td>{{fechaDeCargaFormateada}}</td>
+                <td>{{origenHechoFormateado}}</td>
+                <td>{{contribuyente}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    </main>
+
+<style>
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+</style>

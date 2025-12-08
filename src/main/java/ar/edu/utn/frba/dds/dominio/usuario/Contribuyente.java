@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.OrigenHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
 import ar.edu.utn.frba.dds.dominio.hechos.Ubicacion;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.UsuarioRepositoryMemory;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -30,34 +29,12 @@ public class Contribuyente {
     }
     this.nombre = nombre;
     this.edad = edad;
-    UsuarioRepositoryMemory.getInstance().agregar(this);
   }
 
   public Contribuyente() {
 
   }
 
-  public RepresentacionDeHecho crearHecho(
-      String titulo,
-      String descripcion,
-      String categoria,
-      Ubicacion ubicacion,
-      LocalDateTime fechaAcontecimiento,
-      LocalDateTime fechaDeCarga) {
-
-
-    return new RepresentacionDeHecho(
-        titulo,
-        descripcion,
-        categoria,
-        ubicacion,
-        fechaAcontecimiento,
-        fechaDeCarga,
-        OrigenHecho.PROVISTO_POR_CONTRIBUYENTE,
-        this
-    );
-
-  }
 
   public void setId(Long id) {
     this.id = id;

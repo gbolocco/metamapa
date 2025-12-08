@@ -1,12 +1,20 @@
 package ar.edu.utn.frba.dds.dominio.hechos;
 
 import ar.edu.utn.frba.dds.compartido.AppLogger;
-import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
+import ar.edu.utn.frba.dds.dominio.multimedia.ContenidoMultimedia;
+import ar.edu.utn.frba.dds.dominio.multimedia.TipoContenido;
+import ar.edu.utn.frba.dds.modelo.Usuario;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -44,7 +53,6 @@ public class Hecho {
   @Embedded
   private Ubicacion ubicacion;
 
-
   @Column(columnDefinition = "DATE")
   private LocalDateTime fechaAcontecimiento;
 
@@ -54,6 +62,9 @@ public class Hecho {
   @Enumerated(EnumType.STRING)
   private OrigenHecho origenHecho;
 
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
   @Setter
   @Enumerated(EnumType.STRING)
@@ -61,12 +72,12 @@ public class Hecho {
   private static final Logger logger = AppLogger.getLogger(Hecho.class);
 
   @ManyToOne
-  private Contribuyente contribuyente;
+  @javax.persistence.JoinColumn(name = "usuario_id", nullable = true)
+  private Usuario usuario;
 
   public Hecho() {
 
   }
-
 
   public Hecho(
       String titulo,
@@ -75,14 +86,14 @@ public class Hecho {
       Ubicacion ubicacion,
       LocalDateTime fechaAcontecimiento,
       LocalDateTime fechaDeCarga,
-      OrigenHecho origenHecho
-  ) {
+      OrigenHecho origenHecho) {
     /*
-    Validacion.validarStringNoVacio(titulo, "título");
-    Validacion.validarNoNulo(ubicacion, "ubicacion");
-    Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
-    Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
-    Validacion.validarNoNulo(origenHecho, "origenHecho");*/
+     * Validacion.validarStringNoVacio(titulo, "título");
+     * Validacion.validarNoNulo(ubicacion, "ubicacion");
+     * Validacion.validarNoNulo(fechaAcontecimiento, "fechaAcontecimiento");
+     * Validacion.validarNoNulo(fechaDeCarga, "fechaDeCarga");
+     * Validacion.validarNoNulo(origenHecho, "origenHecho");
+     */
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.categoria = categoria;
@@ -91,7 +102,7 @@ public class Hecho {
     this.fechaDeCarga = fechaDeCarga;
     this.origenHecho = Objects.requireNonNull(origenHecho, "origenHecho no puede ser nulo");
     this.estadoHecho = EstadoHecho.VISUALIZABLE;
-    this.contribuyente = null;
+    this.usuario = null;
   }
 
   public OrigenHecho getOrigenHecho() {
@@ -109,7 +120,6 @@ public class Hecho {
     return resumen;
   }
 
-
   public void imprimirHecho() {
     logger.info("Título: {}", this.titulo);
     logger.info("Descripción: {}", this.descripcion);
@@ -122,6 +132,16 @@ public class Hecho {
 
   }
 
+  public void addContenidoMultimedia(ContenidoMultimedia contenidoMultimedia) {
+    contenidoMultimedia.setHecho(this);
+    this.contenidoMultimedia.add(contenidoMultimedia);
+  }
+
+  public List<String> getUrlsMultimedia() {
+    List<String> urls = this.getContenidoMultimedia().stream()
+        .map(ContenidoMultimedia::getUrlArchivo)
+        .collect(Collectors.toList());
+    return new ArrayList<>(urls);
+  }
+
 }
-
-

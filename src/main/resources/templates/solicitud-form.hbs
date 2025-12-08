@@ -1,0 +1,172 @@
+<div class="container">
+    <h1>Crear Solicitud</h1>
+    
+    <form action="/solicitudes/nuevo" method="post" class="solicitud-form">
+        {{#if coleccionId}}
+        <input type="hidden" name="coleccionId" value="{{coleccionId}}">
+        {{/if}}
+        {{#if tipoPreseleccionado}}
+        <input type="hidden" name="tipoSolicitud" value="{{tipoPreseleccionado}}">
+        {{/if}}
+        
+        <div class="form-group">
+            <label for="hechoId">ID del Hecho</label>
+            <input type="number" id="hechoId" name="hechoId" value="{{hechoIdPreseleccionado}}" required>
+            <small class="form-text">Ingresa el ID del hecho sobre el cual quieres crear la solicitud</small>
+        </div>
+
+        {{#if tipoPreseleccionado}}
+        <div class="form-group">
+            <label>Tipo de Solicitud</label>
+            <div class="tipo-readonly">
+                {{tipoPreseleccionado}}
+            </div>
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label for="tipoSolicitud">Tipo de Solicitud</label>
+            <select id="tipoSolicitud" name="tipoSolicitud" required>
+                <option value="">Seleccionar tipo</option>
+                <option value="CARGA_HECHO">Creación de Hecho</option>
+                <option value="ELIMINACION_HECHO">Eliminación de Hecho</option>
+                <option value="MODIFICACION_HECHO">Modificación de Hecho</option>
+            </select>
+        </div>
+        {{/if}}
+
+        {{#if esModificacion}}
+        <div class="form-group">
+            <label for="campoModificar">Campo a Modificar</label>
+            <select id="campoModificar" name="campoModificar" required>
+                <option value="titulo">Título</option>
+                <option value="descripcion">Descripción</option>
+                <option value="categoria">Categoría</option>
+            </select>
+        </div>
+        <div class="form-group">
+             <label for="valorModificar">Nuevo Valor</label>
+             <input type="text" id="valorModificar" name="valorModificar" required placeholder="Ingresa el nuevo valor">
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label for="justificacion">Justificación{{#if requiereJustificacion}} (Requerida){{/if}}</label>
+            <textarea id="justificacion" name="justificacion" rows="4" {{#if requiereJustificacion}}required{{/if}} placeholder="Explica el motivo de tu solicitud..."></textarea>
+        </div>
+        {{/if}}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Crear Solicitud</button>
+        </div>
+    </form>
+</div>
+
+<style>
+.container {
+    width: 600px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.solicitud-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-text {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #75501d;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #4b2f0c;
+    transform: scale(1.03);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-modificacion {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-modificacion:hover {
+    background-color: #e0a800;
+}
+
+.tipo-readonly {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-weight: 500;
+    color: #495057;
+    text-align: center;
+}
+</style>

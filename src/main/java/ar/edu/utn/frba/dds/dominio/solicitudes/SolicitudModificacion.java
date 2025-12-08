@@ -2,19 +2,12 @@ package ar.edu.utn.frba.dds.dominio.solicitudes;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.dominio.hechos.RepresentacionDeHecho;
-import ar.edu.utn.frba.dds.dominio.usuario.Contribuyente;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepositoryMemory;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepositoryMemory;
-import java.time.LocalDateTime;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.SolicitudesRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
 
 @Entity
 @DiscriminatorValue("modificacion")
@@ -23,11 +16,17 @@ public class SolicitudModificacion extends Solicitud {
   private Long idHecho;
 
   public SolicitudModificacion(RepresentacionDeHecho representacionDeHecho, Long idHecho) {
-
+    super(representacionDeHecho);
     this.tipoSolicitud = TipoSolicitud.MODIFICACION_HECHO;
-    this.representacionDeHecho = representacionDeHecho;
     this.idHecho = idHecho;
-    SolicitudesRepositoryMemory.getInstancia().agregar(this);
+  }
+
+  public Long getIdHecho() {
+    return idHecho;
+  }
+
+  public void setIdHecho(Long idHecho) {
+    this.idHecho = idHecho;
   }
 
   public SolicitudModificacion() {
@@ -35,7 +34,7 @@ public class SolicitudModificacion extends Solicitud {
   }
 
   public boolean sePuedeModificar() {
-    Hecho hecho = HechosRepositoryMemory.getInstancia().buscar(this.idHecho);
+    Hecho hecho = HechosRepository.getInstancia().buscar(this.idHecho);
     return this.cumpleCondicionDias(hecho.getFechaDeCarga(), LocalDateTime.now());
   }
 
@@ -44,50 +43,32 @@ public class SolicitudModificacion extends Solicitud {
     return dias >= 0 && dias <= 7;
   }
 
-  /*public LocalDateTime getFechaDeCarga() {
-    return hecho.getFechaDeCarga();
-  }*/
-
   @Override
   public void aceptar() {
     this.estadoSolicitud = EstadoSolicitud.ACEPTADA;
-    //this.hechoModificado.marcarComoEditado();
-    HechosRepositoryMemory
+    // this.hechoModificado.marcarComoEditado();
+    HechosRepository
         .getInstancia()
-        .modificarHecho(HechosRepositoryMemory
+        .modificarHecho(HechosRepository
             .getInstancia()
             .buscar(idHecho), representacionDeHecho);
-    /*
-    String hql = "UPDATE Hecho SET titulo = :titulo, descripcion = :descripcion " +
-        "categoria =: categoria latidud:=
-        latitud longitud:=longitud fechaAcontecimiento:= fechaAcontecimiento " +
-        "WHERE id = :userId";
-
-    Query query = entityManager().createQuery(hql);
-    query.setParameter("titulo", this.representacionDeHecho.getTitulo());
-    query.setParameter("descripcion", this.representacionDeHecho.getDescripcion());
-    query.setParameter("categoria", this.representacionDeHecho.getCategoria());
-    query.setParameter("latitud", this.representacionDeHecho.getUbicacion().getLatitud());
-    query.setParameter("latitud", this.representacionDeHecho.getUbicacion().getLongitud());
-    query.setParameter("latitud", this.representacionDeHecho.getFechaAcontecimiento());
-    HechosRepositoryMemory
-    .getInstancia().modificarHecho(this.hecho, this.hechoModificado);
-
-
-    entityManager()
-    .createQuery("FROM Solicitud s WHERE s.tipoSolicitud =:tipoSolicitud", Solicitud.class)
-        .setParameter("tipoSolicitud", tipoSolicitud)
-        .getResultList();*/
+    SolicitudesRepository.getInstancia().actualizar(this);
   }
 
   @Override
   public void rechazar() {
     this.estadoSolicitud = EstadoSolicitud.RECHAZADA;
+    SolicitudesRepository.getInstancia().actualizar(this);
   }
 
   public void aceptarConSugerenciaDeCambio(Hecho hechoSugerido) {
-    //hechoSugerido.marcarComoEditado();
+    // hechoSugerido.marcarComoEditado();
     this.idHecho = idHecho;
     this.aceptar();
+  }
+
+  @Override
+  public TipoSolicitud getTipoSolicitud() {
+    return TipoSolicitud.MODIFICACION_HECHO;
   }
 }

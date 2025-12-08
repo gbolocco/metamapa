@@ -1,0 +1,199 @@
+<div class="container">
+    <h1>Mis Solicitudes</h1>
+
+    {{#if successMessage}}
+    <div class="alert alert-success">
+        {{successMessage}}
+    </div>
+    {{/if}}
+
+    <div class="solicitudes-grid">
+        {{#each solicitudes}}
+        <div class="solicitud-card">
+            <div class="card-header">
+                <h3>Solicitud de {{tipo}}</h3>
+                <span class="status-badge status-{{estado}}">{{estado}}</span>
+            </div>
+            <div class="card-body">
+                <h4>Solicitud #{{id}}</h4>
+                <p class="description">{{justificacion}}</p>
+                <div class="card-meta">
+                    <span class="date">Creada: {{fecha}}</span>
+                    <span class="type">Tipo: {{tipo}}</span>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="no-solicitudes">
+            <p>No tienes solicitudes creadas aún.</p>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<style>
+    .actions-bar {
+        margin: 20px 0;
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #218838;
+    }
+
+    .btn-secondary {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .btn-secondary:hover {
+        background-color: #e0a800;
+    }
+
+    .solicitudes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .solicitud-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+    }
+
+    .solicitud-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 16px;
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .status-pendiente {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-aceptada {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-rechazada,
+    .status-RECHAZADA {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .solicitudes-nav {
+        /* Texto más grueso */
+        font-weight: bold;
+
+        /* Un ligero efecto 3D con una sombra de texto */
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Sombra blanca sutil */
+
+        /* También puedes cambiar el color del texto si el contraste lo permite */
+        /* color: #f2c75b; */
+    }
+
+    .status-PENDIENTE {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-ACEPTADA {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .no-solicitudes {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 40px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .card-body h4 {
+        margin: 0 0 10px 0;
+        color: #333;
+        font-size: 18px;
+    }
+
+    .description {
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+
+    .card-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .card-meta span {
+        font-size: 12px;
+        color: #888;
+    }
+
+    .date {
+        font-weight: 500;
+    }
+
+    .type {
+        font-style: italic;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .alert-success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+</style>

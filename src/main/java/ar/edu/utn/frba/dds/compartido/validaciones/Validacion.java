@@ -1,7 +1,8 @@
 package ar.edu.utn.frba.dds.compartido.validaciones;
 
 import ar.edu.utn.frba.dds.dominio.hechos.excepciones.CoordenadaInvalidaException;
-import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepositoryMemory;
+import ar.edu.utn.frba.dds.infraestructura.repositorios.ColeccionRepository;
+
 import java.util.List;
 
 public class Validacion {
@@ -50,7 +51,7 @@ public class Validacion {
   }
 
   public static void validarHandleValorUnico(String handle) {
-    ColeccionRepositoryMemory coleccionRepository = ColeccionRepositoryMemory.getInstancia();
+    ColeccionRepository coleccionRepository = ColeccionRepository.getInstancia();
     if (coleccionRepository.getHandleList().contains(handle)) {
       throw new IllegalArgumentException("El valor del handle ya existe");
     }

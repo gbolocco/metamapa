@@ -1,0 +1,113 @@
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">
+    Resultados de Estadísticas
+    </h1>
+
+    <form method="post" action="/estadisticas/descargar">
+        <div class="card-custom">
+
+            {{#if estadisticas}}
+        <table class="table align-middle">
+        <thead>
+        <tr>
+        <th></th>
+        <th>Descripción</th>
+        <th>Fecha de cálculo</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each estadisticas}}
+        <tr>
+        <td>
+            <input type="checkbox" class="form-check-input" name="seleccionadas" value="{{id}}">
+        </td>
+        <td><strong>{{respuesta}}</strong></td>
+        <td><small>{{fechaFormateada}}</small></td>
+        </tr>
+        {{/each}}
+        </tbody>
+        </table>
+
+<div class="text-center mt-3">
+<button type="submit" class="btn btn-primary">
+Descargar seleccionadas en CSV
+</button>
+</div>
+
+{{else}}
+
+<p class="no-stats-message">No hay estadísticas disponibles.</p>
+
+{{/if}}
+
+</div>
+</form>
+</div>
+<style>
+    .card-custom {
+        /* Color de fondo del cuadro (similar al blanco/crema de la imagen) */
+        background-color: #ffffff;
+        /* Padding interno */
+        padding: 20px;
+        /* Borde redondeado sutil */
+        border-radius: 8px;
+        /* Sombra suave (similar a .shadow-sm) */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        /* Borde sutil (opcional, para definir mejor los límites) */
+        border: 1px solid #e0e0e0;
+        /* Asegura que el contenido interno (el texto) se centre verticalmente si el padding fuera mayor */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80px; /* Altura mínima para el cuadro vacío */
+    }
+
+   /* Estilos para el mensaje "No hay estadísticas disponibles." */
+    .no-stats-message {
+        /* Centrado del texto (similar a .text-center) */
+        text-align: center;
+        /* Color gris tenue (similar a .text-muted) */
+        color: #6c757d;
+        /* Tamaño de fuente ligeramente mayor (similar a .fs-5) */
+        font-size: 1.25rem; /* ~20px */
+        /* Eliminar margen inferior para un mejor centrado dentro del div flex */
+        margin-bottom: 0;
+        /* Estilo de la fuente */
+        font-family: sans-serif; /* O la fuente que uses en tu proyecto */
+    }
+    .form-actions {
+        display: flex; justify-content: space-between; align-items: center; margin-top: 20px;
+    }
+    .btn-link {
+        color: #007bff; text-decoration: none; font-size: 16px;
+    }
+    .btn-link:hover {
+        text-decoration: underline; color: #0056b3;
+    }
+
+    .estadisticas-nav {
+        /* Texto más grueso */
+        font-weight: bold;
+
+        /* Un ligero efecto 3D con una sombra de texto */
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Sombra blanca sutil */
+
+        /* También puedes cambiar el color del texto si el contraste lo permite */
+        /* color: #f2c75b; */
+    }
+
+    .btn-submit { background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btn-submit:hover {
+        background-color: #218838;
+    }
+</style>
+
