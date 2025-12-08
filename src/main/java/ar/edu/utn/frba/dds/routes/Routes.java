@@ -117,14 +117,22 @@ public class Routes {
         }
       });
 
-      before("/hechos", ctx -> {
+      before("/mis-hechos", ctx -> {
         if (ctx.sessionAttribute("user_id") == null) {
           ctx.redirect("/login?redirect=" + ctx.path());
           return;
         }
       });
 
+      before("/hechos", ctx -> {
+        if (ctx.sessionAttribute("user_id") == null) {
+          // ctx.redirect("/login?redirect=" + ctx.path());
+          return;
+        }
+      });
+
       get("/solicitudes", userController::mostrarMisSolicitudes);
+      get("/mis-hechos", userController::mostrarMisHechos);
 
       after(ctx -> {
         ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository.getInstancia().entityManager().clear();

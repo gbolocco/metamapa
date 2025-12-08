@@ -30,34 +30,29 @@
         <class>ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudEliminacion</class>
         <class>ar.edu.utn.frba.dds.dominio.solicitudes.SolicitudModificacion</class>
         <class>ar.edu.utn.frba.dds.modelo.Usuario</class>
+
         <properties>
-            <!--property name="hibernate.search.default.indexBase" value="./indexes"/-->
-            <property name="hibernate.search.backend.directory.root"
-                      value="./indexes"/>
-            <property name="hibernate.archive.autodetection" value="class"/>
 
+            <!-- Hibernate Search (Lucene) -->
+            <property name="hibernate.search.backend.directory.root" value="./indexes"/>
+            <property name="hibernate.search.backend.lucene_version" value="8.11.2"/>
 
-            <!--
-            setup de juan no borrar
-            /-->
-         <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/metamapa" />
-            <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="1209" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
-            <!--
-                     <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
-                     <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:app-db"/>
-                     <property name="hibernate.connection.username" value="sa"/>
-                     <property name="hibernate.connection.password" value=""/>
-                     <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>-->
+            <!-- setup de juan no borrar -->
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/metamapa"/>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="1209"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
 
-           <property name="hibernate.show_sql" value="true"/>
-           <property name="hibernate.format_sql" value="true"/>
-           <property name="use_sql_comments" value="true"/>
-           <property name="hibernate.hbm2ddl.auto" value="update" />
-       </properties>
+            <!-- debug SQL -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
 
-   </persistence-unit>
+            <!-- auto schema -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+
+    </persistence-unit>
 
 </persistence>
