@@ -1,33 +1,32 @@
 services:
   app:
     build: .
-    container_name: tp-dds   # 👈 esto es string plano
-    stdin_open: true
-    tty: true
+    container_name: tp-dds
+    # Eliminados: stdin_open, tty, command: bash (el CMD del Dockerfile se hará cargo)
     volumes:
       - .:/workspace
-      - ~/.m2:/root/.m2
+      - ~/.m2:/root/.m2 # Útil si necesitas la caché local, pero innecesario con el Multi-Stage Build
     working_dir: /workspace
     depends_on:
       - mysql_db
     environment:
-      - DB_URL=jdbc:mysql://localhost:3306/metamapa
-      - DB_USER=root
-      - DB_PASSWORD=12345678
-    command: bash
+      # CRÍTICO: Cambiado localhost por el nombre del servicio (mysql_db)
+      - DB_URL=jdbc:mysql://mysql_db:3306/metamapa 
+      - DB_USER=root # Usando root por simplicidad, pero mejor usar el appuser de abajo
+      - DB_PASSWORD=1234 # Contraseña de root configurada en mysql_db
     ports:
       - "8080:8080"
     networks:
       - appnet
 
-  mysql_db:   # 👈 este tiene que estar dentro de services:
+  mysql_db:
     image: mysql:8.0
     container_name: mysql_db
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: metamapa
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: 1234
+      MYSQL_USER: appuser # <-- Usuario para la app
+      MYSQL_PASSWORD: 1234 # <-- Contraseña del appuser
       TZ: UTC
     command: [
       "--character-set-server=utf8mb4",
