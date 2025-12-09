@@ -8,12 +8,13 @@ COPY src /app/src
 RUN mvn clean package -DskipTests # Compilar y generar el JAR
 
 # --- STAGE 2: RUNTIME ---
-# Usar una imagen más ligera para la ejecución
-FROM openjdk:17-jre-slim
+# Usar una imagen más ligera y soportada para la ejecución
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # Copiar el JAR generado de la etapa 'build'
-COPY --from=build /app/target/tp-dds-1.0-SNAPSHOT.jar /app/app.jar 
+# NOTA: Asegúrate de que el nombre coincida con tu artifactId-version en pom.xml
+COPY --from=build /app/target/ejercicio-1.0-SNAPSHOT.jar /app/app.jar 
 
 # Exponer el puerto de Javalin (8080)
 EXPOSE 8080
