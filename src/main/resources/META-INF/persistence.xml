@@ -38,11 +38,12 @@
             <property name="hibernate.search.backend.lucene_version" value="8.11.2"/>
 
             <!-- setup de juan no borrar -->
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.url" value="mysql://root:NRfsNBOrXuIiKnaGQimpiKrHsiHngMIT@mysql.railway.internal:3306/railway"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://trolley.proxy.rlwy.net:48159/railway"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="NRfsNBOrXuIiKnaGQimpiKrHsiHngMIT"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+
 
             <!-- debug SQL -->
             <property name="hibernate.show_sql" value="true"/>
