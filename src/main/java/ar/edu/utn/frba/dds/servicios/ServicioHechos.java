@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.servicios;
 
 import ar.edu.utn.frba.dds.dominio.hechos.Hecho;
 import ar.edu.utn.frba.dds.infraestructura.repositorios.HechosRepository;
+import ar.edu.utn.frba.dds.config.EntityManagerProvider;
 import java.util.List;
 
 public class ServicioHechos {
@@ -20,8 +21,9 @@ public class ServicioHechos {
   }
 
   public void cargarHecho(Hecho hecho) {
-    this.hechosRepository.cargarHecho(hecho);
+    EntityManagerProvider.withTransaction(() -> {
+      this.hechosRepository.cargarHecho(hecho);
+    });
   }
-
 
 }

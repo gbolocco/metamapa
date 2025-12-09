@@ -15,6 +15,7 @@ WORKDIR /app
 # Copiar el JAR generado de la etapa 'build'
 # NOTA: Asegúrate de que el nombre coincida con tu artifactId-version en pom.xml
 COPY --from=build /app/target/ejercicio-1.0-SNAPSHOT.jar /app/app.jar 
+COPY datos /app/datos 
 
 # Exponer el puerto de Javalin (8080)
 EXPOSE 8080

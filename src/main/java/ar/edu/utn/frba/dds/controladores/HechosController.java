@@ -172,10 +172,7 @@ public class HechosController implements WithSimplePersistenceUnit {
       }
 
       servicioHechos.cargarHecho(hecho);
-      entityManager().getTransaction().begin();
-      entityManager().flush();
-      entityManager().getTransaction().commit();
-      entityManager().clear();
+      // Transaction handled by service now
 
       if (userId != null) {
         // Usuario logueado -> ir a colecciones
